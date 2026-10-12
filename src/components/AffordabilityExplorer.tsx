@@ -73,13 +73,12 @@ function Range(props: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "clas
   const min = Number(props.min ?? 0);
   const max = Number(props.max ?? 100);
   const pct = max > min ? ((Number(props.value ?? 0) - min) / (max - min)) * 100 : 0;
+  // The fill is set on a wrapper and inherited by the track; React reports a spurious hydration
+  // mismatch for custom properties set directly on <input type="range">.
   return (
-    <input
-      type="range"
-      {...props}
-      className="range mt-4 text-ink"
-      style={{ "--fill": `${Math.min(100, Math.max(0, pct))}%` } as CSSProperties}
-    />
+    <span className="mt-4 block" style={{ "--fill": `${Math.min(100, Math.max(0, pct)).toFixed(2)}%` } as CSSProperties}>
+      <input type="range" {...props} className="range text-ink [--thumb:var(--color-paper)]" />
+    </span>
   );
 }
 
@@ -146,7 +145,7 @@ function Donut({ principal, interest }: { principal: number; interest: number })
   const c = 2 * Math.PI * r;
   return (
     <svg viewBox="0 0 140 140" className="size-36 shrink-0 -rotate-90 sm:size-40" aria-hidden>
-      <circle cx="70" cy="70" r={r} fill="none" stroke="var(--color-sunshine)" strokeWidth="14" />
+      <circle cx="70" cy="70" r={r} fill="none" stroke="var(--color-brass)" strokeWidth="14" />
       <circle
         cx="70"
         cy="70"
@@ -155,7 +154,7 @@ function Donut({ principal, interest }: { principal: number; interest: number })
         stroke="var(--color-paper)"
         strokeWidth="14"
         strokeDasharray={`${c * share} ${c}`}
-        className="transition-[stroke-dasharray] duration-700 ease-out-soft"
+        className="transition-[stroke-dasharray] duration-700 ease-out-expo"
       />
     </svg>
   );
@@ -176,7 +175,7 @@ function YearChart({ rows }: { rows: { year: number; principalPaid: number; inte
         return (
           <g key={r.year}>
             <title>{`Year ${r.year}: principal ${formatINR(r.principalPaid)}, interest ${formatINR(r.interestPaid)}`}</title>
-            <rect x={x} y={H - hp - hi} width={bw} height={hi} fill="var(--color-sunshine)" />
+            <rect x={x} y={H - hp - hi} width={bw} height={hi} fill="var(--color-brass)" />
             <rect x={x} y={H - hp} width={bw} height={hp} fill="var(--color-paper)" />
             {(r.year === 1 || r.year % 5 === 0) && (
               <text x={x + bw / 2} y={H + 16} textAnchor="middle" fontSize="11" fill="currentColor" opacity=".55">
@@ -258,8 +257,8 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 type="button"
                 disabled={!Number.isFinite(input.price)}
                 onClick={() => set("down")(String(Math.round((input.price * pct) / 100)))}
-                className={`min-h-9 rounded-full border px-4 text-xs font-medium transition-colors disabled:opacity-40 ${
-                  downPct === pct ? "border-ink bg-ink text-paper" : "border-ink/20 text-mute hover:border-ink"
+                className={`label min-h-9 border px-4 transition-colors disabled:opacity-40 ${
+                  downPct === pct ? "border-ink bg-ink text-paper" : "border-ink/20 text-mute hover:border-ink hover:text-ink"
                 }`}
               >
                 {pct}%
@@ -353,13 +352,12 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
 
       {/* Results */}
       <div
-        data-tone="dark"
-        className="relative overflow-hidden rounded-[4px] bg-ink p-6 text-paper sm:p-10 lg:col-span-7 lg:p-12"
+        className="surface-forest grain relative overflow-hidden p-6 [--em:var(--color-brass)] sm:p-10 lg:col-span-7 lg:p-12"
       >
         <div aria-live="polite" aria-atomic="true">
           {result ? (
             <>
-              <p className="label text-sunshine">Estimated monthly EMI</p>
+              <p className="label text-cyan">Estimated monthly EMI</p>
               <p className="serif mt-4 text-[3.6rem] leading-none sm:text-[5rem] xl:text-[6rem]">
                 {formatINR(result.emi)}
                 <span className="ml-2 align-middle font-sans text-sm font-normal tracking-normal text-paper/60">/ month</span>
@@ -371,7 +369,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
             </>
           ) : (
             <>
-              <p className="label text-sunshine">Estimated monthly EMI</p>
+              <p className="label text-cyan">Estimated monthly EMI</p>
               <p className="serif mt-4 text-[3rem] leading-none text-paper/40">—</p>
               <p className="mt-4 max-w-md text-sm text-paper/70">Adjust the highlighted details to see an estimate.</p>
             </>
@@ -385,7 +383,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
               <dl className="grid flex-1 gap-5">
                 {[
                   ["Loan principal", result.principal, "bg-paper"],
-                  ["Total interest", result.totalInterest, "bg-sunshine"],
+                  ["Total interest", result.totalInterest, "bg-brass"],
                   ["Total repaid", result.totalRepaid, null],
                 ].map(([label, value, swatch]) => (
                   <div key={label as string} className="flex items-baseline justify-between gap-4 border-b border-paper/10 pb-3">
@@ -412,7 +410,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 </div>
                 <div className="mt-3 h-1 bg-paper/15" aria-hidden>
                   <div
-                    className="h-full bg-sunshine transition-[width] duration-700 ease-out-soft"
+                    className="h-full bg-brass transition-[width] duration-700 ease-out-expo"
                     style={{ width: `${Math.min(100, result.emiToIncome * 100)}%` }}
                   />
                 </div>
@@ -432,7 +430,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                     Principal
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="size-2 bg-sunshine" />
+                    <span className="size-2 bg-brass" />
                     Interest
                   </span>
                 </p>
@@ -452,7 +450,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 <div className="mt-3 max-h-72 overflow-auto border-t border-paper/10">
                   <table className="w-full min-w-[26rem] text-left text-xs tabular-nums">
                     <caption className="sr-only">Estimated yearly repayment schedule</caption>
-                    <thead className="sticky top-0 bg-ink text-paper/55">
+                    <thead className="sticky top-0 bg-forest text-paper/55">
                       <tr>
                         <th scope="col" className="py-2 pr-3 font-medium">Year</th>
                         <th scope="col" className="px-3 py-2 font-medium">Principal</th>

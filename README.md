@@ -36,33 +36,36 @@ npm run lint
 | `/homes/pursuit-of-the-elements` | The project on sale now: facts, homes, gallery, amenities, construction updates, RERA, enquiry |
 | `/homes/[slug]` | Each community: full-bleed hero, facts band, timeline, location, gallery and lightbox; amenities and specifications where published; homeowner words; enquiry; next/previous |
 | `/plan` | Home Affordability Explorer, with notes on how the estimates are made |
-| `/story` | Journey, the “Black & White” manifesto, founders, community timeline, brand film |
+| `/story` | Journey, “Our core” manifesto, founders, community timeline, brand film |
 | `/contact` | Office, phones, email, socials, enquiry form, community addresses |
 
-**Concept — “Black & White”.** Taken from Disha’s own manifesto (“Our promises are inked in Black. Our approach is
-clear White. Bring in your own colours.”). The interface is strictly ink and paper; colour arrives only through the
-photographs, which develop from black & white into colour as they are reached, and through each community’s
-signature hue (Windsor palm green, Central Park dusk blue, Park West mustard, Courtyard terracotta, Sunshine gold).
+**Concept — “The Line Home”.** Built from Disha’s own logo film: on deep forest green a single cyan line draws a roof,
+and the name resolves beneath it. Forest and charcoal give depth; ivory and stone give light; the logo’s cyan is the
+drawn line (active states, progress, focus, the seam in the hero); brass is the warm metal of the film’s ribbon; earth
+is the terracotta of the buildings. Each community keeps a signature hue for data and card accents.
 
-**Homepage sequence** — answers a first-time visitor’s questions in order, with no scroll-locked sequences:
+**Homepage sequence**
 
-1. Hero — who Disha is and what they build, in one sentence; the time-of-day photograph; a “Now selling” card.
-2. Now selling — Disha Pursuit of the Elements, Gunjur: facts, renders, call and visit buttons, RERA numbers.
-3. Where we began — the founding line and the team.
-4. Delivered — five black-and-white panels; hover or focus opens one into colour.
-5. Every dot is a home — 1,102 dots light up community by community when the section comes into view (Replay button).
-6. Homeowners — each journey from hometown to Disha community; open a row for their words.
-7. Our core — the Black & White manifesto, set still.
-8. EMI calculator — four plain sliders and a live estimate.
-9. “Let’s meet for coffee.” — book a site visit, over the brand film.
+0. Logo film — once per visit, home page only. The supplied 8-second film plays; as its logo settles the official SVG
+   logo is laid exactly over it, the film dissolves, and the logo glides into the header while the hero rises
+   (`src/components/Intro.tsx`). Skip at any time (button, key, click, scroll); never shown with reduced motion.
+1. Hero — split composition: type on forest, Disha’s brand film framed beside it, a cyan line between; “Now selling” line.
+2. Featured project — Pursuit of the Elements at full bleed, an ivory facts panel overlapping it, five elements, renders.
+3. Where we began — the founding line with layered team photographs; then “Our core”, set large on charcoal.
+4. The record — every home handed over as a square in its community’s colour; choose a community to light it.
+5. Delivered — card hierarchy: a large interactive card, an offset tall card, an editorial spread, compact rows.
+6. Life between the buildings — a photographic essay of real community photographs, varied crops, gentle parallax.
+7. Homeowners — a map of home towns; choosing one draws the journey to a cyan roof at Bengaluru.
+8. Home Affordability Explorer — price, down payment, rate, tenure and optional income; EMI, totals, ratio, yearly chart.
+9. Project explorer — filter by status, sort by published figures, select a community, then visit it or enquire.
+10. “Let’s meet for coffee.” — enquiry over Central Park at night.
 
-Inner pages: `/homes` (index, time-to-build chart, comparison table), each community (scaled timeline, gallery,
-specs, next-community morph), `/story` (to-scale chart of all five builds 2014–2025, manifesto, founders, film),
-`/plan`, `/contact`.
-
-**Design system** (`src/app/globals.css`): Fraunces (display, light, optical sizing), Geist (text and labels);
-ink `#0c0c0b`, paper `#f3f1ec`, five community hues. Motion is limited to one gentle fade per element, opacity and transform only; nothing is tied to scroll position. Under
-`prefers-reduced-motion` everything is static; video never autoplays for reduced-motion or Save-Data visitors.
+**Design system** (`src/app/globals.css`): Gloock (display; emphasis by colour, never a faked italic) and Archivo
+(text; its width axis gives the expanded capitals of the HABITAT wordmark for labels). Surfaces: `surface-forest`,
+`surface-deep`, `surface-charcoal`, `surface-earth`, `surface-ivory`, `surface-stone`, with a fine grain on dark ones.
+Cards: `src/components/ProjectCards.tsx` (interactive, editorial, compact); data from `src/lib/portfolio.ts`.
+Motion: shutter reveals for images, rising lines for headlines, hairlines that draw, CSS scroll-driven parallax where
+supported; under `prefers-reduced-motion` everything is static and no video autoplays.
 
 Stack: Next.js 16 (App Router, fully static), TypeScript, Tailwind CSS v4 and `lucide-react`. Nothing else is needed at
 runtime.

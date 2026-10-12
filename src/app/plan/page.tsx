@@ -38,13 +38,13 @@ export default function PlanPage() {
         intro="Enter a home price, down payment, interest rate and tenure. The estimate updates as you type, and your figures never leave your browser."
       />
 
-      <section data-tone="light" aria-label="EMI calculator" className="bg-paper py-12 md:py-16">
+      <section data-tone="light" aria-label="EMI calculator" className="surface-ivory py-12 md:py-16">
         <div className="shell">
           <AffordabilityExplorer />
         </div>
       </section>
 
-      <section data-tone="light" aria-labelledby="notes-title" className="bg-paper-2 py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="notes-title" className="surface-stone py-20 md:py-28">
         <div className="shell">
           <Label n="01" className="text-mute">
             The fine print

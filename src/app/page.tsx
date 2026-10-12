@@ -1,29 +1,33 @@
+import { Intro } from "@/components/Intro";
 import { Hero } from "@/components/home/Hero";
-import { NowSelling } from "@/components/home/NowSelling";
-import { Manifesto } from "@/components/home/Manifesto";
-import { Collection } from "@/components/home/Collection";
+import { Featured } from "@/components/home/Featured";
+import { Origins } from "@/components/home/Origins";
 import { HomesField } from "@/components/home/HomesField";
+import { Delivered } from "@/components/home/Delivered";
+import { LifeEssay } from "@/components/home/LifeEssay";
 import { Journeys } from "@/components/home/Journeys";
-import { BlackWhite } from "@/components/home/BlackWhite";
-import { PlanTeaser } from "@/components/home/PlanTeaser";
+import { PlanSection } from "@/components/home/PlanSection";
+import { ProjectExplorer } from "@/components/home/ProjectExplorer";
 import { EnquirySection } from "@/components/home/EnquirySection";
 
 /*
- * Order answers a first-time visitor's questions in turn: who is this and what do they build
- * (hero) → what can I buy now (01) → who are they (02) → what have they delivered (03, 04)
- * → what do owners say (05) → what do they stand for (06) → can I afford it (07) → how do I visit (08).
+ * The home page, in sequence: the logo film hands over to the brand film; the community on sale;
+ * where Disha began and what it promises; the record; the delivered communities; life between
+ * the buildings; homeowners' journeys; the affordability explorer; the project explorer; a visit.
  */
 export default function HomePage() {
   return (
     <>
+      <Intro />
       <Hero />
-      <NowSelling />
-      <Manifesto />
-      <Collection />
+      <Featured />
+      <Origins />
       <HomesField />
+      <Delivered />
+      <LifeEssay />
       <Journeys />
-      <BlackWhite />
-      <PlanTeaser />
+      <PlanSection />
+      <ProjectExplorer />
       <EnquirySection />
     </>
   );

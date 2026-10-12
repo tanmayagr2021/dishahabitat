@@ -90,7 +90,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
             </Link>
             <span aria-hidden className="mx-3 inline-block h-px w-6 bg-current align-middle opacity-40" />
             <span className="inline-flex items-center gap-2">
-              <span aria-hidden className="size-2 rounded-full bg-[var(--accent)]" />
+              <span aria-hidden className="size-2 bg-[var(--accent)]" />
               {p.index} · {p.locality}
             </span>
           </>
@@ -124,7 +124,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
       />
 
       {/* Overview: the facts and a timeline drawn to scale */}
-      <section data-tone="light" aria-labelledby="overview-title" className="bg-[color-mix(in_oklab,var(--accent)_84%,white)] py-24 md:py-36">
+      <section data-tone="light" aria-labelledby="overview-title" className="surface-ivory py-24 md:py-36">
         <div className="shell grid gap-16 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
             <Label n="01" className="text-ink/70">
@@ -161,7 +161,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               <div className="relative h-24">
                 <div className="absolute inset-x-0 top-1/2 h-px bg-ink/20" />
                 <div
-                  className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-ink"
+                  className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 bg-[var(--accent)]"
                   style={{ width: `${(marks[2].at / span) * 100}%` }}
                 />
                 {years.map((y) => (
@@ -178,7 +178,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                   <span
                     key={m.k}
                     aria-hidden
-                    className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-paper bg-ink"
+                    className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 border-2 border-paper bg-ink"
                     style={{ left: `${(m.at / span) * 100}%`, zIndex: 3 - n }}
                   />
                 ))}
@@ -219,7 +219,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Gallery */}
       {p.gallery.length > 0 && (
-        <section data-tone="light" aria-labelledby="gallery-title" className="bg-paper-2 py-24 md:py-32">
+        <section data-tone="light" aria-labelledby="gallery-title" className="surface-stone py-24 md:py-32">
           <div className="shell">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -256,7 +256,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Signature spaces (Pursuit of Sunshine) */}
       {p.highlights && (
-        <section data-tone="dark" aria-labelledby="highlights-title" className="relative bg-ink py-24 text-paper md:py-36">
+        <section data-tone="dark" aria-labelledby="highlights-title" className="surface-forest grain relative py-24 md:py-36">
           <div className="shell">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
@@ -278,7 +278,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               {p.highlights.map((h, n) => (
                 <Reveal as="li" key={h.name} delay={(n % 3) * 80} className="group border-t border-paper/15 py-8">
                   <span className="label flex items-center gap-3 text-paper/50">
-                    <span className="h-[3px] w-6 rounded-full bg-[var(--accent)] transition-[width] duration-500 group-hover:w-12" />
+                    <span className="h-[3px] w-6 bg-[var(--accent)] transition-[width] duration-500 group-hover:w-12" />
                     {String(n + 1).padStart(2, "0")}
                   </span>
                   <h3 className="serif mt-4 text-[1.9rem] leading-tight">{h.name}</h3>
@@ -291,7 +291,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 <h3 className="label text-paper/50">Also in the community</h3>
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {p.otherAmenities.map((a) => (
-                    <li key={a} className="rounded-full border border-paper/20 px-4 py-2 text-sm text-paper/80">
+                    <li key={a} className="border border-paper/20 px-4 py-2 text-sm text-paper/80">
                       {a}
                     </li>
                   ))}
@@ -304,7 +304,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Specifications */}
       {p.specifications && (
-        <section data-tone="light" aria-labelledby="specs-title" className="bg-paper py-24 md:py-32">
+        <section data-tone="light" aria-labelledby="specs-title" className="surface-ivory py-24 md:py-32">
           <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-4">
               <Label n="05" className="text-mute">
@@ -325,14 +325,14 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 <details key={s.group} className="group border-t border-ink/20 last:border-b" open={n === 0}>
                   <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-6 [&::-webkit-details-marker]:hidden">
                     <span className="serif text-[1.9rem] leading-none">{s.group}</span>
-                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-ink/20 transition-[transform,background-color,color] duration-500 group-open:rotate-45 group-open:bg-ink group-open:text-paper">
+                    <span className="inline-flex size-10 items-center justify-center border border-ink/20 transition-[transform,background-color,color] duration-500 group-open:rotate-45 group-open:bg-ink group-open:text-paper">
                       <Plus aria-hidden className="size-4" strokeWidth={1.5} />
                     </span>
                   </summary>
                   <ul className="space-y-2.5 pb-8 text-mute">
                     {s.items.map((item) => (
                       <li key={item} className="flex gap-3 leading-relaxed">
-                        <span aria-hidden className="mt-[0.7em] size-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                        <span aria-hidden className="mt-[0.7em] size-1.5 shrink-0 bg-[var(--accent)]" />
                         {item}
                       </li>
                     ))}
@@ -354,7 +354,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Homeowner words */}
       {words.length > 0 && (
-        <section data-tone="light" aria-labelledby="words-title" className="bg-paper-2 py-24 md:py-32">
+        <section data-tone="light" aria-labelledby="words-title" className="surface-stone py-24 md:py-32">
           <div className="shell">
             <Label className="text-mute">Homeowners at {p.shortName}</Label>
             <h2 id="words-title" className="sr-only">
@@ -378,7 +378,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
       <EnquirySection defaultInterest={p.name} n="—" />
 
       {/* Next community: the photograph carries through to its page. */}
-      <nav aria-label="Next community" className="bg-ink text-paper" data-tone="dark">
+      <nav aria-label="Next community" className="surface-deep" data-tone="dark">
         <Link href={`/homes/${next.slug}`} className="bloom-on-hover group relative flex min-h-[70svh] items-end overflow-hidden">
           <ViewTransition name={`cover-${next.slug}`} share="morph" default="none">
             <span className="absolute inset-0 block">
@@ -395,12 +395,12 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
           <span className="shell relative flex w-full items-end justify-between gap-6 pb-12 md:pb-16">
             <span>
               <span className="label flex items-center gap-3 text-paper/70">
-                <span className="size-2 rounded-full" style={{ background: next.hue }} />
+                <span className="size-2 " style={{ background: next.hue }} />
                 Next community · {next.locality}
               </span>
               <span className="serif mt-4 block text-[clamp(2.8rem,6.4vw,6.4rem)] leading-[0.95]">{next.shortName}</span>
             </span>
-            <span className="mb-3 inline-flex size-16 shrink-0 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-500 group-hover:translate-x-2 md:size-20">
+            <span className="mb-3 inline-flex size-16 shrink-0 items-center justify-center bg-paper text-ink transition-transform duration-500 group-hover:translate-x-2 md:size-20">
               <ArrowRight aria-hidden className="size-6" strokeWidth={1.25} />
             </span>
           </span>

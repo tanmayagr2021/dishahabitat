@@ -34,7 +34,7 @@ export default function ElementsPage() {
       <PageHero
         label={
           <span className="inline-flex items-center gap-2">
-            <span aria-hidden className="size-2 rounded-full bg-elements" />
+            <span aria-hidden className="size-2 bg-cyan" />
             {e.status} · {e.locality}
           </span>
         }
@@ -65,15 +65,15 @@ export default function ElementsPage() {
       />
 
       {/* At a glance */}
-      <section data-tone="light" aria-labelledby="glance-title" className="bg-elements py-20 md:py-28">
+      <section data-tone="dark" aria-labelledby="glance-title" className="surface-forest grain py-20 md:py-28">
         <div className="shell">
           <h2 id="glance-title" className="sr-only">
             At a glance
           </h2>
           <dl className="grid grid-cols-2 gap-x-6 md:grid-cols-3 lg:grid-cols-6">
             {e.facts.map((f, i) => (
-              <Reveal key={f.label} delay={i * 60} className="border-t border-ink py-5">
-                <dt className="label text-ink/70">{f.label}</dt>
+              <Reveal key={f.label} delay={i * 60} className="border-t border-paper/25 py-5">
+                <dt className="label text-paper/65">{f.label}</dt>
                 <dd className="serif mt-2 text-[1.9rem] leading-tight">{f.value}</dd>
               </Reveal>
             ))}
@@ -81,7 +81,7 @@ export default function ElementsPage() {
 
           <div className="mt-20 grid gap-10 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-4">
-              <Label n="01" className="text-ink/70">
+              <Label n="01" className="text-paper/65">
                 The idea
               </Label>
               <Lines
@@ -95,12 +95,12 @@ export default function ElementsPage() {
                 {e.fiveElements.map((el, i) => (
                   <li key={el} className="serif text-[clamp(1.7rem,3vw,2.8rem)] leading-tight">
                     {el}
-                    {i < e.fiveElements.length - 1 && <span aria-hidden className="ml-6 text-ink/40">·</span>}
+                    {i < e.fiveElements.length - 1 && <span aria-hidden className="ml-6 text-cyan">·</span>}
                   </li>
                 ))}
               </ul>
-              <p className="mt-8 max-w-2xl text-[1.12rem] leading-relaxed text-ink">{e.intro}</p>
-              <p className="mt-4 max-w-2xl text-[1.12rem] leading-relaxed text-ink">
+              <p className="mt-8 max-w-2xl text-[1.12rem] leading-relaxed text-paper/85">{e.intro}</p>
+              <p className="mt-4 max-w-2xl text-[1.12rem] leading-relaxed text-paper/85">
                 Come home to Disha Pursuit of the Elements and let it all come to you.
               </p>
             </div>
@@ -109,7 +109,7 @@ export default function ElementsPage() {
       </section>
 
       {/* The homes */}
-      <section data-tone="dark" aria-labelledby="homes-title" className="bg-ink py-20 text-paper md:py-28">
+      <section data-tone="dark" aria-labelledby="homes-title" className="surface-charcoal grain py-20 md:py-28">
         <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="02" className="text-paper/60">
@@ -140,7 +140,7 @@ export default function ElementsPage() {
       </section>
 
       {/* Gallery */}
-      <section data-tone="light" aria-labelledby="gallery-title" className="bg-paper-2 py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="gallery-title" className="surface-stone py-20 md:py-28">
         <div className="shell">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -165,7 +165,7 @@ export default function ElementsPage() {
       </section>
 
       {/* Amenities */}
-      <section data-tone="light" aria-labelledby="amenities-title" className="bg-paper py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="amenities-title" className="surface-ivory py-20 md:py-28">
         <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="04" className="text-mute">
@@ -187,7 +187,7 @@ export default function ElementsPage() {
             <ul className="mt-5 grid gap-x-8 sm:grid-cols-2">
               {e.clubhouse.map((a) => (
                 <li key={a} className="flex items-center gap-3 border-t border-ink/12 py-3">
-                  <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-elements" />
+                  <span aria-hidden className="size-1.5 shrink-0 bg-earth" />
                   {a}
                 </li>
               ))}
@@ -195,7 +195,7 @@ export default function ElementsPage() {
             <h3 className="serif mt-12 text-[1.9rem]">Outdoors</h3>
             <ul className="mt-5 flex flex-wrap gap-2">
               {e.outdoor.map((a) => (
-                <li key={a} className="rounded-full border border-ink/15 px-4 py-2 text-[0.95rem]">
+                <li key={a} className="border border-ink/15 px-4 py-2 text-[0.95rem]">
                   {a}
                 </li>
               ))}
@@ -205,7 +205,7 @@ export default function ElementsPage() {
       </section>
 
       {/* Progress and paperwork */}
-      <section data-tone="light" aria-labelledby="progress-title" className="bg-paper-2 py-20 md:py-24">
+      <section data-tone="light" aria-labelledby="progress-title" className="surface-stone py-20 md:py-24">
         <div className="shell grid gap-8 md:grid-cols-3">
           <div>
             <Label n="05" className="text-mute">
@@ -272,7 +272,7 @@ export default function ElementsPage() {
 
       <EnquirySection defaultInterest={e.name} n="—" />
 
-      <nav aria-label="Our delivered communities" data-tone="light" className="bg-paper py-12">
+      <nav aria-label="Our delivered communities" data-tone="light" className="surface-ivory py-12">
         <div className="shell flex flex-wrap items-center justify-between gap-4">
           <p className="text-mute">Five communities delivered since 2014.</p>
           <Link href="/homes" className="font-medium underline decoration-ink/30 underline-offset-4 hover:decoration-ink">

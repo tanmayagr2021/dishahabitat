@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui";
 import { homeowners } from "@/lib/site";
@@ -89,24 +89,23 @@ export function Journeys() {
   return (
     <section
       id="homeowners"
-      data-tone="light"
+      data-tone="dark"
       aria-labelledby="journeys-title"
-      className="relative overflow-hidden py-24 text-ink transition-[background-color] duration-700 ease-out-expo md:py-32"
-      style={{ backgroundColor: `color-mix(in oklab, ${s.hue} 86%, white)` } as CSSProperties}
+      className="surface-earth grain relative overflow-hidden py-24 md:py-36"
     >
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <Label n="05" className="text-ink/70">
+            <Label n="06" className="text-paper/70">
               Homeowners
             </Label>
-            <h2 id="journeys-title" className="serif mt-5 text-[clamp(2.4rem,5vw,5rem)]">
+            <h2 id="journeys-title" className="serif mt-8 text-[clamp(2.8rem,6vw,6.4rem)] leading-[0.92] tracking-[-0.025em]">
               From across India,
               <br />
               <em>to a place called home.</em>
             </h2>
           </div>
-          <p className="max-w-xs text-[0.95rem] leading-relaxed text-ink/75">
+          <p className="max-w-xs text-[1rem] leading-relaxed text-paper/80">
             Choose a home town to follow a family’s journey to Bengaluru.
           </p>
         </div>
@@ -117,14 +116,14 @@ export function Journeys() {
             <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" aria-hidden>
               <g aria-hidden>
                 {field.map((d) => (
-                  <circle key={`${d.x}-${d.y}`} cx={d.x} cy={d.y} r={1.3} className="fill-ink/15" />
+                  <circle key={`${d.x}-${d.y}`} cx={d.x} cy={d.y} r={1.3} className="fill-paper/20" />
                 ))}
                 {[10, 15, 20, 25].map((lat) => {
                   const y = project([bounds.west, lat]).y;
                   return (
                     <g key={lat}>
-                      <line x1={0} x2={W} y1={y} y2={y} className="stroke-ink/15" strokeDasharray="2 5" />
-                      <text x={4} y={y - 8} className="fill-ink/45 text-[13px] tabular-nums">
+                      <line x1={0} x2={W} y1={y} y2={y} className="stroke-paper/20" strokeDasharray="2 5" />
+                      <text x={4} y={y - 8} className="fill-paper/55 text-[13px] tabular-nums">
                         {lat}°N
                       </text>
                     </g>
@@ -135,7 +134,7 @@ export function Journeys() {
                     key={st.name}
                     d={st.path}
                     fill="none"
-                    className="stroke-ink/25"
+                    className="stroke-paper/35"
                     strokeWidth={1.2}
                     strokeDasharray="3 6"
                     opacity={i === active ? 0 : 1}
@@ -146,19 +145,21 @@ export function Journeys() {
                   key={`arc-${active}`}
                   d={s.path}
                   fill="none"
-                  className="journey-arc stroke-ink"
+                  className="journey-arc stroke-paper"
                   strokeWidth={2.4}
                   strokeLinecap="round"
                   pathLength={1}
                 />
-                <circle key={`dot-${active}`} r={6} className="journey-traveller fill-ink">
+                <circle key={`dot-${active}`} r={6} className="journey-traveller fill-cyan">
                   <animateMotion dur="1.4s" begin="0s" fill="freeze" path={s.path} keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" />
                 </circle>
                 {/* Bengaluru */}
-                <circle cx={home.x} cy={home.y} r={22} className="journey-pulse fill-ink/10" />
-                <circle cx={home.x} cy={home.y} r={9} className="fill-ink" />
-                <circle cx={home.x} cy={home.y} r={3.5} className="fill-paper" />
-                <text x={home.x + 18} y={home.y + 34} className="serif fill-ink text-[26px] italic">
+                <circle cx={home.x} cy={home.y} r={26} className="journey-pulse fill-cyan/25" />
+                {/* Home is the roof of the Disha mark. */}
+                <g transform={`translate(${home.x - 22} ${home.y - 26}) scale(1.8)`} className="fill-cyan">
+                  <path d="M43.64,8.93l-1.46-.57s-.06-.03-.08-.04l-9.42-3.73V1.18c0-.46-.37-.83-.83-.83s-.83.37-.83.83v3.42l-10.94,4.33c-.2.08-.37.24-.45.45-.08.2-.09.43,0,.64.13.32.43.52.77.52.11,0,.2-.02.3-.06l.37-.14v3.31c0,.89.73,1.62,1.62,1.62h8.39c.89,0,1.62-.73,1.62-1.62v-7.26l8.32,3.29v4.76c0,.46.37.83.83.83s.83-.37.83-.83v-4.1l.37.15c.42.17.9-.04,1.07-.47s-.04-.9-.47-1.07M31.02,6.38v7.22h-8.32v-3.93s8.32-3.29,8.32-3.29Z" transform="translate(-20.5 0)" />
+                </g>
+                <text x={home.x + 26} y={home.y + 40} className="serif fill-paper text-[30px]">
                   Bengaluru
                 </text>
               </g>
@@ -177,14 +178,14 @@ export function Journeys() {
                       cx={st.from.x}
                       cy={st.from.y}
                       r={on ? 8 : 5.5}
-                      className={`transition-all duration-500 ${on ? "fill-ink" : "fill-paper stroke-ink"}`}
+                      className={`transition-all duration-500 ${on ? "fill-paper" : "fill-transparent stroke-paper"}`}
                       strokeWidth={1.5}
                     />
                     <text
                       x={st.from.x + (right ? 16 : -16)}
                       y={st.from.y + 6}
                       textAnchor={right ? "start" : "end"}
-                      className={`text-[17px] transition-opacity duration-500 ${on ? "fill-ink font-medium" : "fill-ink/60"}`}
+                      className={`text-[17px] transition-opacity duration-500 ${on ? "fill-paper font-semibold" : "fill-paper/65"}`}
                     >
                       {st.town}
                     </text>
@@ -215,8 +216,8 @@ export function Journeys() {
                     }
                   }}
                   tabIndex={i === active ? 0 : -1}
-                  className={`shrink-0 rounded-full border px-4 py-2 text-[0.92rem] transition-colors ${
-                    i === active ? "border-ink bg-ink text-paper" : "border-ink/25 hover:border-ink hover:bg-ink/5"
+                  className={`label shrink-0 border px-4 py-2.5 transition-colors ${
+                    i === active ? "border-paper bg-paper text-ink" : "border-paper/30 hover:border-paper"
                   }`}
                 >
                   {st.town}
@@ -229,7 +230,7 @@ export function Journeys() {
               role="tabpanel"
               aria-labelledby={`journey-tab-${active}`}
               key={active}
-              className="journey-card mt-6 flex flex-1 flex-col overflow-hidden rounded-[8px] bg-paper shadow-[0_40px_80px_-40px_rgb(0_0_0/0.45)]"
+              className="journey-card mt-6 flex flex-1 flex-col overflow-hidden bg-paper text-ink shadow-[0_50px_100px_-50px_rgb(0_0_0/0.6)]"
             >
               <div className="grid flex-1 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
                 <div className="relative aspect-[4/3] sm:aspect-auto sm:min-h-[22rem]">
@@ -238,7 +239,7 @@ export function Journeys() {
                 <blockquote className="flex flex-col justify-between gap-8 p-6 md:p-8">
                   <div>
                     <p className="label flex items-center gap-2 text-mute">
-                      <span className="whitespace-nowrap tabular-nums text-ink">≈ {s.km.toLocaleString("en-IN")} km</span>
+                      <span className="whitespace-nowrap tabular-nums text-earth">≈ {s.km.toLocaleString("en-IN")} km</span>
                       <span aria-hidden className="h-px w-5 bg-current opacity-40" />
                       from {s.town} to Bengaluru
                     </p>
@@ -261,7 +262,7 @@ export function Journeys() {
             </div>
 
             <div className="mt-5 flex items-center justify-between gap-4">
-              <p className="text-sm tabular-nums text-ink/70">
+              <p className="label tabular-nums text-paper/70">
                 {String(active + 1).padStart(2, "0")} / {String(stories.length).padStart(2, "0")}
               </p>
               <div className="flex gap-2">
@@ -269,7 +270,7 @@ export function Journeys() {
                   type="button"
                   onClick={() => go(-1)}
                   aria-label="Previous story"
-                  className="inline-flex size-11 items-center justify-center rounded-full border border-ink/25 transition-colors hover:bg-ink hover:text-paper"
+                  className="inline-flex size-12 items-center justify-center border border-paper/35 transition-colors hover:bg-paper hover:text-ink"
                 >
                   <ArrowLeft aria-hidden className="size-4" strokeWidth={1.6} />
                 </button>
@@ -277,7 +278,7 @@ export function Journeys() {
                   type="button"
                   onClick={() => go(1)}
                   aria-label="Next story"
-                  className="inline-flex size-11 items-center justify-center rounded-full bg-ink text-paper transition-transform hover:scale-105"
+                  className="inline-flex size-12 items-center justify-center bg-paper text-ink transition-colors hover:bg-cyan hover:text-forest-deep"
                 >
                   <ArrowRight aria-hidden className="size-4" strokeWidth={1.6} />
                 </button>
@@ -285,7 +286,7 @@ export function Journeys() {
             </div>
           </div>
         </div>
-        <p className="mt-8 text-xs text-ink/60">Home towns are plotted at approximate positions; distances are as the crow flies.</p>
+        <p className="mt-10 text-xs text-paper/60">Home towns are plotted at approximate positions; distances are as the crow flies.</p>
       </div>
     </section>
   );

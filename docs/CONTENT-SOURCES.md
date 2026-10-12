@@ -41,7 +41,8 @@ template’s Pexels stock and the checklist stock photos were deliberately exclu
 | `images/pursuit-of-sunshine/master-plan.webp` | Master plan | Plan — labelled “Plan” |
 | `images/courtyard/`, `central-park/`, `park-west/`, `windsor-gardens/` | Project photography | Photographs |
 | `images/community/` | Team, gardening with children, Independence Day | Photographs |
-| `media/brand-film.mp4` | Homepage background film from dishahabitat.com (30 s, 720p, ~7 MB) | Video |
+| `media/brand-film.mp4` | Brand film from dishahabitat.com (30 s, 720p, ~7 MB), framed in the homepage hero | Video |
+| `media/logo-intro.mp4` | Logo animation supplied by the client (`DISHA_HABITAT_logo_animation_1080p_…mp4`, 8 s, 1080p, 2.2 MB); a generator’s sparkle mark in the lower right is softened with a vignette | Video |
 | `brand/` + `components/Logo.tsx` | Official logo SVG (master file kept for reference), paths inlined unchanged | Logo |
 
 Each image is assigned to a project by the page it appeared on. Captions describe only what is visible.
@@ -88,3 +89,7 @@ project site and are labelled artist’s impressions; the master plan is labelle
 22. **Homeowners map.** The home towns on the homepage map are plotted at approximate town
     centres (Govindapur, Odisha is ambiguous — several towns share the name), and the distances
     shown are straight-line estimates rounded to 50 km. Confirm the towns with the homeowners.
+
+23. **Logo film.** The supplied logo animation appears to be AI-generated (it carries a generator’s sparkle mark in
+    the lower right, which the site softens). Its logo matches the official artwork closely, and the site always hands
+    over to the official SVG logo. Confirm the client is happy to publish the film, ideally with a clean export.

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AmbientFilm } from "@/components/AmbientFilm";
 import { PageHero } from "@/components/PageHero";
-import { BlackWhite } from "@/components/home/BlackWhite";
+import { CoreBand } from "@/components/home/Origins";
 import { ArrowLink, Label, Lines, Reveal } from "@/components/ui";
 import { company, homemakers } from "@/lib/site";
 import { projectsByHandover } from "@/lib/projects";
@@ -44,7 +44,7 @@ export default function StoryPage() {
       />
 
       {/* Journey */}
-      <section data-tone="light" aria-labelledby="journey-title" className="bg-paper py-28 md:py-40">
+      <section data-tone="light" aria-labelledby="journey-title" className="surface-ivory py-28 md:py-40">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="01" className="text-mute">
@@ -85,7 +85,7 @@ export default function StoryPage() {
       </section>
 
       {/* Twelve years, five builds, drawn to scale */}
-      <section data-tone="dark" aria-labelledby="builds-title" className="relative bg-ink py-28 text-paper md:py-40">
+      <section data-tone="dark" aria-labelledby="builds-title" className="surface-forest grain relative py-28 md:py-40">
         <div className="shell">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
@@ -123,7 +123,7 @@ export default function StoryPage() {
                         ))}
                         <span
                           aria-hidden
-                          className="absolute inset-y-1 rounded-full"
+                          className="absolute inset-y-1 "
                           style={{ left: `${pct(a)}%`, width: `${pct(b) - pct(a)}%`, background: p.hue }}
                         />
                         <span className="sr-only">
@@ -151,10 +151,10 @@ export default function StoryPage() {
         </div>
       </section>
 
-      <BlackWhite n="03" full />
+      <CoreBand full />
 
       {/* Homemakers */}
-      <section data-tone="light" aria-labelledby="homemakers-title" className="bg-paper py-28 md:py-40">
+      <section data-tone="light" aria-labelledby="homemakers-title" className="surface-ivory py-28 md:py-40">
         <div className="shell">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
@@ -189,7 +189,7 @@ export default function StoryPage() {
           </div>
 
           <div className="mt-24 grid gap-3 md:grid-cols-12">
-            <Reveal variant="bloom" className="relative aspect-[16/11] overflow-hidden rounded-[3px] md:col-span-7">
+            <Reveal variant="bloom" className="relative aspect-[16/11] overflow-hidden md:col-span-7">
               <Image
                 src="/images/community/leadership-team.jpg"
                 alt="Members of the Disha Habitat team reviewing plans together, one wearing a hard hat"
@@ -201,7 +201,7 @@ export default function StoryPage() {
             <Reveal
               variant="bloom"
               delay={150}
-              className="relative aspect-[16/11] overflow-hidden rounded-[3px] md:col-span-5 md:aspect-auto"
+              className="relative aspect-[16/11] overflow-hidden md:col-span-5 md:aspect-auto"
             >
               <Image
                 src="/images/community/sales-team.jpg"
@@ -217,7 +217,7 @@ export default function StoryPage() {
       </section>
 
       {/* Film */}
-      <section data-tone="light" aria-labelledby="film-title" className="bg-paper-2 py-24 md:py-32">
+      <section data-tone="light" aria-labelledby="film-title" className="surface-stone py-24 md:py-32">
         <div className="shell grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="05" className="text-mute">
@@ -235,7 +235,7 @@ export default function StoryPage() {
               Watch with sound on YouTube
             </ArrowLink>
           </div>
-          <Reveal variant="bloom" className="relative aspect-video overflow-hidden rounded-[3px] bg-ink lg:col-span-8">
+          <Reveal variant="bloom" className="relative aspect-video overflow-hidden bg-ink lg:col-span-8">
             <AmbientFilm label="Disha Habitat brand film, playing silently" />
           </Reveal>
         </div>

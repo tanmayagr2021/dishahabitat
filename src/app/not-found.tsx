@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <section
       data-tone="dark"
-      className="relative flex min-h-[100svh] items-end bg-ink pb-20 pt-36 text-paper md:pb-28"
+      className="surface-deep grain relative flex min-h-[100svh] items-end pb-20 pt-36 md:pb-28"
     >
       <div className="shell">
         <Label className="text-paper/60">Page not found</Label>

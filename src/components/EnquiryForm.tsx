@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
 import { buttonClass, ButtonInner } from "@/components/ui";
 import { elements } from "@/lib/elements";
@@ -75,6 +75,16 @@ export function EnquiryForm({
   const [touched, setTouched] = useState(false);
   const [submitted, setSubmitted] = useState<string | null>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
+
+  // The project explorer can pre-select a community ("Enquire about this community").
+  useEffect(() => {
+    const onInterest = (e: Event) => {
+      const name = (e as CustomEvent<string>).detail;
+      if (interests.includes(name)) setValues((v) => ({ ...v, interest: name }));
+    };
+    window.addEventListener("disha:interest", onInterest);
+    return () => window.removeEventListener("disha:interest", onInterest);
+  }, []);
   const successRef = useRef<HTMLDivElement>(null);
 
   const dark = tone === "dark";

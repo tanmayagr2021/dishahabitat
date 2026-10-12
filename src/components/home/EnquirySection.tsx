@@ -1,21 +1,29 @@
-import { AmbientFilm } from "@/components/AmbientFilm";
+import Image from "next/image";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { Label, Lines, Reveal } from "@/components/ui";
 import { company, homemakers } from "@/lib/site";
 
-export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?: string; n?: string }) {
+export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?: string; n?: string }) {
   const guna = homemakers[0];
   return (
     <section
       id="enquire"
       data-tone="dark"
       aria-labelledby="enquire-title"
-      className="relative isolate overflow-hidden bg-ink text-paper"
+      className="surface-forest relative isolate overflow-hidden"
     >
       <div className="absolute inset-0 -z-10">
-        <AmbientFilm label="Brand film: gardens, sports courts and residents at home in Disha Habitat communities" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-ink/55" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink via-ink/75 to-ink/20" />
+        <div className="parallax absolute inset-0">
+          <Image
+            src="/images/central-park/clubhouse-night.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-[60%_50%]"
+          />
+        </div>
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-forest-deep/60" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-r from-forest-deep via-forest-deep/80 to-forest-deep/20" />
       </div>
 
       <div className="shell pointer-events-none relative grid gap-16 py-28 md:py-40 lg:grid-cols-12 lg:gap-8 [&>*]:pointer-events-auto">
@@ -26,7 +34,7 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
             </Label>
             <Lines
               id="enquire-title"
-              className="serif mt-6 text-[clamp(2.8rem,6vw,6rem)] leading-[0.98]"
+              className="serif mt-8 text-[clamp(3rem,6.6vw,7rem)] leading-[0.9] tracking-[-0.025em]"
               lines={["“Let’s meet", <em key="c">for coffee.”</em>]}
             />
             <Reveal delay={200} className="mt-8 max-w-md">
@@ -46,7 +54,7 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
                 <dt className="label text-paper/50">Call</dt>
                 <dd className="mt-2 space-y-1">
                   {company.phones.map((p) => (
-                    <a key={p.href} href={p.href} className="block py-0.5 text-[1.05rem] text-paper hover:opacity-70">
+                    <a key={p.href} href={p.href} className="block py-0.5 text-[1.1rem] text-paper transition-colors hover:text-cyan">
                       {p.display}
                     </a>
                   ))}
@@ -55,7 +63,7 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
               <div>
                 <dt className="label text-paper/50">Write</dt>
                 <dd className="mt-2">
-                  <a href={`mailto:${company.email}`} className="text-[1.05rem] text-paper hover:opacity-70">
+                  <a href={`mailto:${company.email}`} className="text-[1.1rem] text-paper transition-colors hover:text-cyan">
                     {company.email}
                   </a>
                 </dd>
@@ -65,8 +73,9 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
         </div>
 
         <Reveal delay={150} className="lg:col-span-5 lg:col-start-8">
-          <div className="rounded-[4px] bg-paper p-6 text-ink shadow-[0_60px_120px_-40px_rgb(0_0_0/0.6)] sm:p-10">
-            <p className="serif text-[2rem] leading-tight">Book a site visit</p>
+          <div className="relative bg-paper p-6 text-ink shadow-[0_60px_120px_-40px_rgb(0_0_0/0.7)] sm:p-10">
+            <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] bg-cyan" />
+            <p className="serif text-[2.4rem] leading-none">Book a site visit</p>
             <p className="mb-8 mt-2 text-sm text-mute">Tell us a little about what you’re looking for and we’ll call you back. Fields marked * are required.</p>
             <EnquiryForm defaultInterest={defaultInterest} />
           </div>

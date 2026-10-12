@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { ButtonLink } from "@/components/ui";
 import { company } from "@/lib/site";
 import { projects, projectsByHandover } from "@/lib/projects";
 import { elements } from "@/lib/elements";
@@ -9,22 +10,18 @@ export function Footer() {
   const sunshine = projects.find((p) => p.slug === "disha-pursuit-of-sunshine");
 
   return (
-    <footer data-tone="dark" className="relative overflow-hidden bg-ink text-paper">
+    <footer data-tone="dark" className="surface-deep grain relative overflow-hidden">
       <div className="shell pt-24 md:pt-32">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7">
-            <p className="serif text-[clamp(3.4rem,8.6vw,9rem)] leading-[0.9]">
-              Come <em>home.</em>
+            <p className="serif text-[clamp(4rem,11vw,12rem)] leading-[0.84] tracking-[-0.035em]">
+              Come
+              <br />
+              <em>home.</em>
             </p>
-            <Link
-              href="/contact#enquire"
-              className="group mt-10 inline-flex min-h-12 items-center gap-4 rounded-full bg-paper py-1.5 pl-6 pr-1.5 text-[0.9rem] font-medium text-ink"
-            >
+            <ButtonLink href="/contact#enquire" variant="paper" className="mt-10">
               Plan a visit
-              <span className="inline-flex size-9 items-center justify-center rounded-full bg-ink text-paper transition-transform duration-500 group-hover:rotate-45">
-                <ArrowUpRight aria-hidden className="size-4" strokeWidth={1.5} />
-              </span>
-            </Link>
+            </ButtonLink>
           </div>
 
           <div className="grid gap-10 sm:grid-cols-2 lg:col-span-5">
@@ -33,9 +30,9 @@ export function Footer() {
               <ul className="mt-5 space-y-1">
                 <li>
                   <Link href={elements.href} className="group inline-flex min-h-9 items-center gap-3 text-[0.95rem] text-paper hover:text-paper">
-                    <span aria-hidden className="size-1.5 rounded-full bg-elements" />
+                    <span aria-hidden className="size-1.5 bg-cyan" />
                     {elements.shortName}
-                    <span className="rounded-full bg-paper/10 px-2 py-0.5 text-[0.7rem] text-paper/80">Now selling</span>
+                    <span className="label bg-cyan/15 px-2 py-0.5 text-[0.55rem] text-cyan">Now selling</span>
                   </Link>
                 </li>
                 {projectsByHandover.map((p) => (
@@ -46,7 +43,7 @@ export function Footer() {
                     >
                       <span
                         aria-hidden
-                        className="size-1.5 rounded-full transition-transform duration-500 group-hover:scale-[2]"
+                        className="size-1.5 transition-transform duration-500 group-hover:scale-[2]"
                         style={{ background: p.hue }}
                       />
                       {p.shortName}
@@ -131,11 +128,13 @@ export function Footer() {
         </div>
 
         {/* The wordmark, set full width. */}
-        <div className="mt-20 flex items-end justify-between gap-6 border-t border-paper/12 pt-10 md:mt-28">
-          <Logo className="h-14 w-auto md:h-20" />
-          <div aria-hidden className="flex h-1.5 w-40 gap-1 md:w-64">
+        <div className="relative mt-20 flex items-end justify-between gap-6 pt-12 md:mt-28">
+          <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-paper/12" />
+          <span aria-hidden data-reveal="rule" className="absolute left-0 top-0 h-px w-1/3 bg-cyan" />
+          <Logo className="h-16 w-auto md:h-28" />
+          <div aria-hidden className="flex h-1 w-40 gap-1 md:w-64">
             {projectsByHandover.map((p) => (
-              <span key={p.slug} className="flex-1 rounded-full" style={{ background: p.hue }} />
+              <span key={p.slug} className="flex-1" style={{ background: p.hue }} />
             ))}
           </div>
         </div>

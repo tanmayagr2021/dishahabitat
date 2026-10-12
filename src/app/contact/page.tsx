@@ -35,7 +35,7 @@ export default function ContactPage() {
         }
       />
 
-      <section data-tone="light" className="bg-paper py-24 md:py-32">
+      <section data-tone="light" className="surface-ivory py-24 md:py-32">
         <div className="shell grid gap-16 lg:grid-cols-12 lg:gap-8">
           <div className="space-y-12 lg:col-span-4">
             <Reveal>
@@ -92,7 +92,7 @@ export default function ContactPage() {
           </div>
 
           <Reveal delay={120} className="lg:col-span-7 lg:col-start-6">
-            <div id="enquire" className="rounded-[4px] bg-paper-2 p-6 sm:p-10 lg:p-14">
+            <div id="enquire" className="relative bg-paper-2 p-6 sm:p-10 lg:p-14">
               <h2 className="serif text-[clamp(2.4rem,4vw,3.6rem)] leading-none">
                 Send an <em>enquiry</em>
               </h2>
@@ -103,7 +103,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section data-tone="dark" aria-labelledby="sites-title" className="relative bg-ink py-24 text-paper md:py-32">
+      <section data-tone="dark" aria-labelledby="sites-title" className="surface-forest grain relative py-24 md:py-32">
         <div className="shell">
           <Label n="02" className="text-paper/60">
             Our communities
@@ -113,7 +113,7 @@ export default function ContactPage() {
             {projectsByHandover.map((p, i) => (
               <Reveal as="li" key={p.slug} delay={i * 80}>
                 <Link href={`/homes/${p.slug}`} className="bloom-on-hover group block">
-                  <span className="relative block aspect-[4/5] overflow-hidden rounded-[3px] bg-ink-3">
+                  <span className="relative block aspect-[4/5] overflow-hidden bg-ink-3">
                     <Image
                       src={p.cover.src}
                       alt=""
@@ -123,7 +123,7 @@ export default function ContactPage() {
                     />
                   </span>
                   <span className="mt-4 flex items-center gap-2.5">
-                    <span aria-hidden className="size-2 rounded-full" style={{ background: p.hue }} />
+                    <span aria-hidden className="size-2 " style={{ background: p.hue }} />
                     <span className="serif text-[1.8rem] leading-none">{p.shortName}</span>
                   </span>
                   <span className="mt-2 block text-sm leading-relaxed text-paper/60">{p.address ?? p.locality}</span>

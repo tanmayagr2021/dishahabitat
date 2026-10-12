@@ -99,28 +99,32 @@ export function Header() {
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${dark ? "text-paper" : "text-ink"} ${
           scrolled && !open
             ? dark
-              ? "bg-ink/92 shadow-[0_1px_0_rgb(255_255_255/0.08)]"
-              : "bg-paper/94 shadow-[0_1px_0_rgb(0_0_0/0.08)]"
+              ? "bg-forest-deep/88 shadow-[0_1px_0_rgb(255_255_255/0.07)] backdrop-blur-md"
+              : "bg-paper/90 shadow-[0_1px_0_rgb(0_0_0/0.08)] backdrop-blur-md"
             : ""
         }`}
       >
-        <div className="shell flex h-16 items-center justify-between gap-6 md:h-[4.5rem]">
+        <div className="shell flex h-16 items-center justify-between gap-6 md:h-[5rem]">
           <Link href="/" className="relative z-10 -ml-1 p-1" aria-label="Disha Habitat — home">
-            <Logo className="h-9 w-auto md:h-10" />
+            <span data-header-logo className="block">
+              <Logo className="block h-9 w-auto md:h-11" />
+            </span>
           </Link>
 
           <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-1">
+            <ul className="flex items-center gap-2">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className={`inline-flex h-10 items-center rounded-full px-4 text-[0.95rem] transition-colors aria-[current=page]:font-medium ${
-                      dark ? "hover:bg-paper/10" : "hover:bg-ink/6"
-                    } ${isActive(item.href) ? (dark ? "bg-paper/10" : "bg-ink/6") : ""}`}
+                    className="group relative inline-flex h-11 items-center px-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] [font-stretch:118%]"
                   >
                     {item.label}
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-3 bottom-2 h-px origin-left scale-x-0 bg-cyan transition-transform duration-500 ease-out-expo group-hover:scale-x-100 group-aria-[current=page]:scale-x-100"
+                    />
                   </Link>
                 </li>
               ))}
@@ -130,8 +134,8 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Link
               href="/contact#enquire"
-              className={`hidden h-10 items-center rounded-full px-5 text-[0.95rem] font-medium transition-colors sm:inline-flex ${
-                dark ? "bg-paper text-ink hover:bg-paper/85" : "bg-ink text-paper hover:bg-ink/85"
+              className={`hidden h-11 items-center gap-3 rounded-[2px] px-5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition-colors [font-stretch:118%] sm:inline-flex ${
+                dark ? "bg-paper text-ink hover:bg-cyan hover:text-forest-deep" : "bg-ink text-paper hover:bg-cyan hover:text-forest-deep"
               }`}
             >
               Book a visit
@@ -139,7 +143,7 @@ export function Header() {
             <button
               ref={toggleRef}
               type="button"
-              className={`relative z-10 inline-flex h-10 items-center gap-3 rounded-full pl-4 pr-3.5 text-[0.95rem] lg:hidden ${
+              className={`relative z-10 inline-flex h-11 items-center gap-3 rounded-[2px] pl-4 pr-3.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] [font-stretch:118%] lg:hidden ${
                 dark ? "bg-paper/10" : "bg-ink/6"
               }`}
               aria-expanded={open}
@@ -170,7 +174,7 @@ export function Header() {
         ref={panelRef}
         hidden={!open}
         data-tone="dark"
-        className="fixed inset-0 z-40 overflow-y-auto bg-ink text-paper lg:hidden"
+        className="surface-forest fixed inset-0 z-40 overflow-y-auto lg:hidden"
       >
         <nav aria-label="Menu" className="shell flex min-h-full flex-col gap-10 pb-10 pt-24">
           <ul className="flex flex-col">
@@ -182,7 +186,7 @@ export function Header() {
                   aria-current={pathname === item.href ? "page" : undefined}
                   className="group flex items-center justify-between py-3.5"
                 >
-                  <span className="serif text-[2.4rem] leading-tight group-aria-[current=page]:italic">{item.label}</span>
+                  <span className="serif text-[2.4rem] leading-tight group-aria-[current=page]:text-brass">{item.label}</span>
                   <span aria-hidden className="text-paper/40">
                     →
                   </span>
@@ -191,12 +195,12 @@ export function Header() {
             ))}
           </ul>
 
-          <Link href={elements.href} onClick={() => setOpen(false)} className="flex items-center gap-4 rounded-[4px] bg-paper/6 p-3">
-            <span className="relative block aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-[3px]">
+          <Link href={elements.href} onClick={() => setOpen(false)} className="flex items-center gap-4 border border-paper/12 bg-forest-deep/40 p-3">
+            <span className="relative block aspect-[4/3] w-28 shrink-0 overflow-hidden">
               <Image src={elements.cover.src} alt="" fill sizes="112px" className="object-cover" />
             </span>
             <span>
-              <span className="label text-elements">{elements.status}</span>
+              <span className="label text-cyan">{elements.status}</span>
               <span className="serif mt-1 block text-[1.5rem] leading-tight">{elements.shortName}</span>
               <span className="mt-0.5 block text-sm text-paper/60">{elements.locality}</span>
             </span>

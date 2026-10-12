@@ -67,21 +67,25 @@ export function HomesField() {
       ref={ref}
       data-tone="dark"
       aria-labelledby="field-title"
-      className="relative bg-ink text-paper"
+      className="surface-forest grain relative overflow-hidden"
     >
       <div className="py-24 md:py-32">
         <div className="shell grid w-full gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Narrative column */}
           <div className="flex flex-col justify-between gap-6 lg:col-span-4 lg:gap-8">
             <div>
-              <Label n="04" className="text-paper/60">
-                Every dot is a home
+              <Label n="03" className="text-paper/60">
+                The record
               </Label>
-              <h2 id="field-title" className="sr-only">
-                {formatIndian(total)} homes across five communities, built between 2014 and {groups.at(-1)?.year}
+              <h2 id="field-title" className="serif mt-6 text-[clamp(2.4rem,4vw,4rem)] leading-[0.95]">
+                Every square is a home <em>we have handed over.</em>
+                <span className="sr-only">
+                  {" "}
+                  {formatIndian(total)} homes across five communities, built between 2014 and {groups.at(-1)?.year}.
+                </span>
               </h2>
-              <div aria-hidden className="mt-5 flex items-end gap-5 lg:mt-6 lg:block">
-                <p className="serif text-[clamp(4rem,9vw,8.5rem)] leading-[0.85] tabular-nums">{year}</p>
+              <div aria-hidden className="mt-8 flex items-end gap-5 border-t border-paper/15 pt-6 lg:block">
+                <p className="serif text-[clamp(4rem,8vw,7.5rem)] leading-[0.85] tabular-nums text-brass">{year}</p>
                 <p className="min-h-[2.6em] max-w-xs pb-1 text-[0.95rem] leading-snug text-paper/70 lg:mt-4 lg:min-h-[3.2em] lg:pb-0 lg:text-[1.05rem]">
                   {current ? (
                     <>
@@ -108,13 +112,13 @@ export function HomesField() {
                       }}
                       onMouseEnter={() => stage >= groups.length && setFocus(g.slug)}
                       onMouseLeave={() => setFocus(null)}
-                      className={`flex w-full items-center justify-between gap-4 rounded-full border px-4 py-2.5 text-left text-[0.95rem] transition-[opacity,background-color,border-color,color] duration-500 ${
+                      className={`flex w-full items-center justify-between gap-4 border-l-2 px-4 py-2.5 text-left text-[0.95rem] transition-[opacity,background-color,border-color,color] duration-500 ${
                         i < stage ? "opacity-100" : "opacity-35"
-                      } ${on ? "border-transparent text-ink" : "border-paper/15 hover:border-paper/40"}`}
+                      } ${on ? "border-cyan text-forest-deep" : "border-paper/15 hover:border-paper/50 hover:bg-paper/[0.04]"}`}
                       style={on ? { background: g.hue } : undefined}
                     >
                       <span className="flex items-center gap-2.5">
-                        <span className="size-2.5 rounded-full" style={{ background: on ? "var(--color-ink)" : g.hue }} />
+                        <span className="size-2.5" style={{ background: on ? "var(--color-ink)" : g.hue }} />
                         {g.name}
                       </span>
                       <span className="tabular-nums opacity-70">
@@ -139,7 +143,7 @@ export function HomesField() {
                 return Array.from({ length: g.homes }, (_, k) => (
                   <span
                     key={`${g.slug}-${k}`}
-                    className="aspect-square rounded-full transition-[background-color,transform,opacity] duration-500 ease-out"
+                    className="aspect-square rounded-[1px] transition-[background-color,transform,opacity] duration-500 ease-out"
                     style={
                       {
                         background: on ? g.hue : "rgb(243 241 236 / 0.1)",
@@ -159,7 +163,7 @@ export function HomesField() {
                 <button
                   type="button"
                   onClick={play}
-                  className="inline-flex h-8 items-center gap-1.5 rounded-full border border-paper/20 px-3 text-xs text-paper/80 hover:bg-paper/10"
+                  className="label inline-flex h-9 items-center gap-1.5 border border-paper/20 px-3 text-[0.6rem] text-paper/80 hover:border-cyan hover:text-paper"
                 >
                   <RotateCcw aria-hidden className="size-3" strokeWidth={1.8} />
                   Replay

@@ -36,12 +36,12 @@ export default function HomesPage() {
       />
 
       {/* The index */}
-      <section data-tone="dark" aria-label="All communities" className="relative bg-ink pb-28 text-paper md:pb-40">
+      <section data-tone="dark" aria-label="All communities" className="surface-deep grain relative pb-28 md:pb-40">
         <div className="shell">
           {/* On sale now */}
           <Link
             href={elements.href}
-            className="group mb-16 grid overflow-hidden rounded-[6px] bg-paper text-ink md:grid-cols-12"
+            className="group mb-16 grid overflow-hidden bg-paper text-ink md:grid-cols-12"
           >
             <span className="relative block aspect-[16/10] md:col-span-7 md:aspect-auto md:min-h-[26rem]">
               <Image
@@ -57,7 +57,7 @@ export default function HomesPage() {
             <span className="flex flex-col justify-between gap-8 p-6 md:col-span-5 md:p-10">
               <span>
                 <span className="label inline-flex items-center gap-2 text-mute">
-                  <span className="size-2 rounded-full bg-elements" />
+                  <span className="size-2 bg-elements" />
                   {elements.status} · {elements.locality}
                 </span>
                 <span className="serif mt-4 block text-[clamp(2.2rem,3.6vw,3.4rem)] leading-[1.02]">
@@ -69,7 +69,7 @@ export default function HomesPage() {
               </span>
               <span className="inline-flex items-center gap-3 font-medium">
                 Explore the project
-                <span className="inline-flex size-10 items-center justify-center rounded-full bg-ink text-paper transition-transform duration-300 group-hover:rotate-45">
+                <span className="inline-flex size-10 items-center justify-center bg-ink text-paper transition-transform duration-300 group-hover:rotate-45">
                   <ArrowUpRight aria-hidden className="size-4" strokeWidth={1.6} />
                 </span>
               </span>
@@ -91,7 +91,7 @@ export default function HomesPage() {
                     style={{ background: p.hue }}
                   />
                   <span className="label col-span-12 flex items-center gap-3 text-paper/55 md:col-span-1">
-                    <span className="size-2 rounded-full" style={{ background: p.hue }} />
+                    <span className="size-2 " style={{ background: p.hue }} />
                     {p.index}
                   </span>
                   <span className="col-span-12 md:col-span-5">
@@ -112,7 +112,7 @@ export default function HomesPage() {
                       </div>
                     ))}
                   </dl>
-                  <span className="relative col-span-12 block aspect-[16/10] overflow-hidden rounded-[3px] bg-ink-3 md:col-span-3 md:aspect-[4/3]">
+                  <span className="relative col-span-12 block aspect-[16/10] overflow-hidden bg-ink-3 md:col-span-3 md:aspect-[4/3]">
                     <ViewTransition name={`cover-${p.slug}`} share="morph" default="none">
                       <span className="absolute inset-0 block">
                         <Image
@@ -125,7 +125,7 @@ export default function HomesPage() {
                         />
                       </span>
                     </ViewTransition>
-                    <span className="absolute bottom-3 right-3 inline-flex size-10 items-center justify-center rounded-full bg-paper text-ink opacity-0 transition-[opacity,transform] duration-500 group-hover:rotate-45 group-hover:opacity-100">
+                    <span className="absolute bottom-3 right-3 inline-flex size-10 items-center justify-center bg-paper text-ink opacity-0 transition-[opacity,transform] duration-500 group-hover:rotate-45 group-hover:opacity-100">
                       <ArrowUpRight aria-hidden className="size-4" strokeWidth={1.5} />
                     </span>
                   </span>
@@ -137,7 +137,7 @@ export default function HomesPage() {
       </section>
 
       {/* Time to build */}
-      <section data-tone="light" aria-labelledby="pace-title" className="bg-paper py-28 md:py-40">
+      <section data-tone="light" aria-labelledby="pace-title" className="surface-ivory py-28 md:py-40">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="01" className="text-mute">
@@ -164,9 +164,9 @@ export default function HomesPage() {
                   </span>
                 </div>
                 <div className="mt-4 flex items-center gap-4">
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-ink/8">
+                  <div className="h-2 flex-1 overflow-hidden bg-ink/8">
                     <div
-                      className="h-full rounded-full"
+                      className="h-full "
                       style={{ width: `${(p.timeline.months / maxMonths) * 100}%`, background: p.hue }}
                     />
                   </div>
@@ -182,7 +182,7 @@ export default function HomesPage() {
       </section>
 
       {/* At a glance */}
-      <section data-tone="light" aria-labelledby="glance-title" className="bg-paper-2 py-24 md:py-32">
+      <section data-tone="light" aria-labelledby="glance-title" className="surface-stone py-24 md:py-32">
         <div className="shell">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -214,7 +214,7 @@ export default function HomesPage() {
                   <tr key={p.slug} className="border-b border-ink/12 transition-colors hover:bg-paper">
                     <th scope="row" className="py-5 pr-4 font-normal">
                       <Link href={`/homes/${p.slug}`} className="flex items-center gap-3">
-                        <span aria-hidden className="size-2 rounded-full" style={{ background: p.hue }} />
+                        <span aria-hidden className="size-2 " style={{ background: p.hue }} />
                         <span className="serif text-[1.6rem] leading-none">{p.shortName}</span>
                       </Link>
                     </th>

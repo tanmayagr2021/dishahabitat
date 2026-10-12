@@ -53,7 +53,7 @@ export function DayInTheSun() {
   const t = phase / (phases.length - 2); // the sun sets at Dusk; at Night it is gone
 
   return (
-    <section data-tone="light" aria-labelledby="sun-title" className="bg-paper py-24 md:py-32">
+    <section data-tone="light" aria-labelledby="sun-title" className="surface-ivory py-24 md:py-32">
       <div className="shell grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-5">
           <Label n="03" className="text-mute">
@@ -91,7 +91,7 @@ export function DayInTheSun() {
                 aria-selected={i === phase}
                 aria-controls="sun-panel"
                 onClick={() => setPhase(i)}
-                className={`h-10 rounded-full px-4 text-[0.92rem] transition-colors ${
+                className={`h-10 px-4 text-[0.92rem] transition-colors ${
                   i === phase ? "bg-ink text-paper" : "border border-ink/15 hover:bg-ink/5"
                 }`}
               >
@@ -106,7 +106,7 @@ export function DayInTheSun() {
           id="sun-panel"
           role="tabpanel"
           aria-labelledby={`sun-tab-${phase}`}
-          className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-paper-3 lg:col-span-7"
+          className="relative aspect-[4/3] overflow-hidden bg-paper-3 lg:col-span-7"
         >
           {phases.map((ph, i) => (
             <div

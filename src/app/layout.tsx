@@ -1,22 +1,24 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Fraunces, Geist } from "next/font/google";
+import { Archivo, Gloock } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RevealObserver } from "@/components/RevealObserver";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+/* Display: Gloock, a dense high-contrast serif for statements. */
+const gloock = Gloock({
+  variable: "--font-gloock",
+  weight: "400",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
   display: "swap",
 });
 
-const geist = Geist({
-  variable: "--font-geist",
+/* Text and labels: Archivo, whose width axis gives the expanded capitals of the HABITAT wordmark. */
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  axes: ["wdth"],
   display: "swap",
 });
 
@@ -39,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0c0c0b",
+  themeColor: "#08160f",
   width: "device-width",
   initialScale: 1,
 };
@@ -47,15 +49,17 @@ export const viewport: Viewport = {
 /*
  * Runs before paint:
  *  1. marks the page for scroll reveals (removed after 3s if the app never hydrates);
- *  2. picks the hero photograph for the time of day in Bengaluru (IST).
+ *  2. picks the hero photograph for the time of day in Bengaluru (IST);
+ *  3. decides whether the logo film plays: once per visit, never with reduced motion — and if it
+ *     will, starts fetching it straight away rather than waiting for hydration.
  */
-const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}})();`;
+const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var seen=sessionStorage.getItem('disha-intro');var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;d.dataset.intro=(location.pathname==='/'&&!seen&&!rm)?'on':'off';if(d.dataset.intro==='on'&&window.fetch)fetch('/media/logo-intro.mp4').catch(function(){})}catch(e){d.dataset.intro='off'}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
-      className={`${fraunces.variable} ${geist.variable} antialiased`}
+      className={`${gloock.variable} ${archivo.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh flex-col">

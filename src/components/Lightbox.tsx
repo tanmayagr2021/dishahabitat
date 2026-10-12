@@ -74,7 +74,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               }}
               type="button"
               onClick={() => open(i)}
-              className="group relative block size-full overflow-hidden rounded-[3px] bg-paper-3 text-left"
+              className="group relative block size-full overflow-hidden bg-paper-3 text-left"
               aria-label={`View larger: ${item.caption}${item.project ? `, ${item.project}` : ""}`}
             >
               <MediaBadge kind={item.kind} />
@@ -111,7 +111,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               <button
                 type="button"
                 onClick={close}
-                className="inline-flex size-12 items-center justify-center rounded-full text-paper hover:bg-paper/10"
+                className="inline-flex size-12 items-center justify-center text-paper hover:bg-paper/10"
                 aria-label="Close image viewer"
                 autoFocus
               >
@@ -141,7 +141,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               <button
                 type="button"
                 onClick={() => step(-1)}
-                className="pointer-events-auto inline-flex size-12 items-center justify-center rounded-full border border-paper/25 text-paper hover:bg-paper hover:text-ink"
+                className="pointer-events-auto inline-flex size-12 items-center justify-center border border-paper/25 text-paper hover:bg-paper hover:text-ink"
                 aria-label="Previous image"
               >
                 <ChevronLeft className="size-5" strokeWidth={1.5} />
@@ -149,7 +149,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               <button
                 type="button"
                 onClick={() => step(1)}
-                className="pointer-events-auto inline-flex size-12 items-center justify-center rounded-full border border-paper/25 text-paper hover:bg-paper hover:text-ink"
+                className="pointer-events-auto inline-flex size-12 items-center justify-center border border-paper/25 text-paper hover:bg-paper hover:text-ink"
                 aria-label="Next image"
               >
                 <ChevronRight className="size-5" strokeWidth={1.5} />
