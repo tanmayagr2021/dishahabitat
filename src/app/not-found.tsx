@@ -8,7 +8,7 @@ export default function NotFound() {
     >
       <div className="shell">
         <Label className="text-paper/60">Page not found</Label>
-        <h1 className="serif mt-6 text-[clamp(3rem,7vw,7rem)] leading-[0.95]">
+        <h1 className="serif mt-6 text-[clamp(2.5rem,4.8vw,4.8rem)] leading-[0.95]">
           This path doesn’t <em className="text-paper/55">lead home.</em>
         </h1>
         <div className="mt-12 flex flex-col gap-6 border-t border-paper/20 pt-8 sm:flex-row sm:items-center sm:justify-between">

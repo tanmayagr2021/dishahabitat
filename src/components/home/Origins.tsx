@@ -17,7 +17,7 @@ export function Origins() {
             </Label>
             <Lines
               id="origins-title"
-              className="serif mt-8 text-[clamp(2.8rem,6.2vw,6.6rem)] leading-[0.92] tracking-[-0.025em]"
+              className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]"
               lines={["We began exactly", "where you are", <em key="e">right now.</em>]}
             />
             <div className="mt-12 grid gap-8 md:grid-cols-2 md:gap-10">
@@ -37,7 +37,7 @@ export function Origins() {
               </Reveal>
             </div>
 
-            <figure className="mt-16 max-w-xl border-l-2 border-cyan pl-6">
+            <figure className="mt-16 max-w-xl border-l-2 border-ink/20 pl-6">
               <blockquote className="serif text-[clamp(1.6rem,2.4vw,2.2rem)] leading-[1.1]">{homemakers[0].signature}</blockquote>
               <figcaption className="label mt-4 text-mute">
                 {homemakers[0].name} · {homemakers[0].role}
@@ -45,34 +45,21 @@ export function Origins() {
             </figure>
           </div>
 
-          {/* Layered photographs: the team at work, and the people on site. */}
-          <div className="relative lg:col-span-5 lg:pt-6">
-            <Reveal variant="mask" className="parallax relative aspect-[4/5] overflow-hidden">
-              <Image
-                src="/images/community/leadership-team.jpg"
-                alt="Members of the Disha Habitat team reviewing plans together, one wearing a hard hat"
-                fill
-                sizes="(min-width: 1024px) 38vw, 100vw"
-                className="object-cover object-[58%_50%]"
-              />
-            </Reveal>
-            <Reveal
-              variant="mask"
-              delay={250}
-              className="relative -mt-24 ml-auto w-[62%] border-[10px] border-paper md:-mt-32 lg:-ml-20 lg:mr-auto"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
+          {/* The team at work. */}
+          <figure className="lg:col-span-5">
+            <Reveal variant="mask">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
                 <Image
-                  src="/images/community/site-team.jpg"
-                  alt="The Disha Habitat site team seated together outdoors"
+                  src="/images/community/leadership-team.jpg"
+                  alt="Members of the Disha Habitat team reviewing plans together, one wearing a hard hat"
                   fill
-                  sizes="(min-width: 1024px) 24vw, 60vw"
-                  className="object-cover"
+                  sizes="(min-width: 1024px) 38vw, 100vw"
+                  className="object-cover object-[58%_50%]"
                 />
               </div>
             </Reveal>
-            <p className="label mt-4 text-mute lg:pl-4">The people who build every Disha home</p>
-          </div>
+            <figcaption className="mt-3 text-sm text-mute">The Disha Habitat team, reviewing plans on site.</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -85,13 +72,12 @@ export function Origins() {
 export function CoreBand({ full = false }: { full?: boolean }) {
   return (
     <section data-tone="dark" aria-labelledby="core-title" className="surface-charcoal grain overflow-hidden py-24 md:py-36">
-      <div aria-hidden className="gridlines absolute inset-0 -z-10 text-paper" />
       <div className="shell">
         <div className="flex items-center gap-4 text-paper/60">
           <RoofMark className="h-4 w-auto text-cyan" />
           <p className="label">Our core</p>
         </div>
-        <h2 id="core-title" className="serif mt-10 text-[clamp(2.8rem,7.4vw,8.4rem)] leading-[0.9] tracking-[-0.03em]">
+        <h2 id="core-title" className="serif mt-10 text-[clamp(2.4rem,5vw,5.2rem)] leading-[0.9]">
           <Reveal as="span" className="block">
             Our promises are
           </Reveal>

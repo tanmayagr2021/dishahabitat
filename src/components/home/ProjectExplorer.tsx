@@ -36,7 +36,7 @@ function Segmented<T extends string>({
 }) {
   return (
     <div role="group" aria-label={label} className="flex flex-wrap items-center gap-x-1 gap-y-2">
-      <span className="label mr-3 text-paper/50">{label}</span>
+      <span className="mr-3 text-[0.92rem] text-paper/55">{label}</span>
       {options.map((o) => {
         const on = o.value === value;
         return (
@@ -45,7 +45,7 @@ function Segmented<T extends string>({
             type="button"
             aria-pressed={on}
             onClick={() => onChange(o.value)}
-            className={`label inline-flex h-10 items-center gap-2 border px-3.5 transition-colors ${
+            className={`inline-flex h-10 items-center gap-2 rounded-lg border px-3.5 text-[0.92rem] transition-colors ${
               on ? "border-paper bg-paper text-ink" : "border-paper/20 text-paper/75 hover:border-paper/60 hover:text-paper"
             }`}
           >
@@ -64,8 +64,8 @@ function Selected({ p }: { p: PortfolioItem }) {
   const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : "#enquire";
 
   return (
-    <article key={p.slug} aria-labelledby="explorer-name" className="swap-in" style={{ "--hue": p.hue } as CSSProperties}>
-      <div className="relative aspect-[16/10] overflow-hidden bg-forest-deep">
+    <article key={p.slug} aria-labelledby="explorer-name" className="swap-in card-dark overflow-hidden p-3 md:p-4" style={{ "--hue": p.hue } as CSSProperties}>
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-forest-deep">
         {p.gallery.map((g, i) => (
           <Image
             key={g.src}
@@ -90,14 +90,14 @@ function Selected({ p }: { p: PortfolioItem }) {
             aria-pressed={i === shot}
             aria-label={`Show: ${g.caption}`}
             onClick={() => setShot(i)}
-            className={`relative aspect-[4/3] overflow-hidden transition-opacity ${i === shot ? "opacity-100 ring-2 ring-cyan ring-offset-2 ring-offset-forest-deep" : "opacity-55 hover:opacity-100"}`}
+            className={`relative aspect-[4/3] overflow-hidden rounded-lg transition-opacity ${i === shot ? "opacity-100 ring-2 ring-cyan ring-offset-2 ring-offset-forest-deep" : "opacity-55 hover:opacity-100"}`}
           >
             <Image src={g.src} alt="" fill sizes="120px" className="object-cover" />
           </button>
         ))}
       </div>
 
-      <div className="mt-8 grid gap-8 md:grid-cols-12">
+      <div className="grid gap-8 px-2 pb-3 pt-8 md:grid-cols-12 md:px-4">
         <div className="md:col-span-7">
           <p className="label flex items-center gap-2 text-paper/70">
             <span aria-hidden className="size-2" style={{ background: p.hue }} />
@@ -113,7 +113,7 @@ function Selected({ p }: { p: PortfolioItem }) {
           <dl className="border-t border-paper/15">
             {p.facts.map((f) => (
               <div key={f.label} className="flex items-baseline justify-between gap-4 border-b border-paper/10 py-3">
-                <dt className="label text-[0.6rem] text-paper/55">{f.label}</dt>
+                <dt className="label text-[0.8rem] text-paper/55">{f.label}</dt>
                 <dd className="serif text-[1.5rem] leading-none">{f.value}</dd>
               </div>
             ))}
@@ -155,7 +155,7 @@ export function ProjectExplorer() {
             <Label n="08" className="text-paper/60">
               Project explorer
             </Label>
-            <h2 id="explore-title" className="serif mt-8 text-[clamp(2.8rem,6vw,6.4rem)] leading-[0.92] tracking-[-0.025em]">
+            <h2 id="explore-title" className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]">
               Every Disha community, <em>side by side.</em>
             </h2>
           </div>
@@ -165,7 +165,7 @@ export function ProjectExplorer() {
           </p>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-y border-paper/15 py-5 md:flex-row md:items-center md:justify-between">
+        <div className="card-dark mt-12 flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-5">
           <Segmented
             label="Status"
             options={statuses.map((s) => ({ value: s, label: s }))}
@@ -183,7 +183,7 @@ export function ProjectExplorer() {
 
         <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
-            <p className="label mb-3 text-paper/50" aria-live="polite">
+            <p className="mb-3 text-[0.92rem] text-paper/55" aria-live="polite">
               {list.length} {list.length === 1 ? "community" : "communities"}
             </p>
             <ul className="flex flex-col gap-1">

@@ -99,7 +99,7 @@ export function Journeys() {
             <Label n="06" className="text-paper/70">
               Homeowners
             </Label>
-            <h2 id="journeys-title" className="serif mt-8 text-[clamp(2.8rem,6vw,6.4rem)] leading-[0.92] tracking-[-0.025em]">
+            <h2 id="journeys-title" className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]">
               From across India,
               <br />
               <em>to a place called home.</em>
@@ -216,8 +216,8 @@ export function Journeys() {
                     }
                   }}
                   tabIndex={i === active ? 0 : -1}
-                  className={`label shrink-0 border px-4 py-2.5 transition-colors ${
-                    i === active ? "border-paper bg-paper text-ink" : "border-paper/30 hover:border-paper"
+                  className={`shrink-0 rounded-full border px-4 py-2 text-[0.92rem] transition-colors ${
+                    i === active ? "border-paper bg-paper text-ink" : "border-paper/30 bg-white/[0.04] hover:border-paper"
                   }`}
                 >
                   {st.town}
@@ -230,16 +230,16 @@ export function Journeys() {
               role="tabpanel"
               aria-labelledby={`journey-tab-${active}`}
               key={active}
-              className="journey-card mt-6 flex flex-1 flex-col overflow-hidden bg-paper text-ink shadow-[0_50px_100px_-50px_rgb(0_0_0/0.6)]"
+              className="journey-card card-dark mt-6 flex flex-1 flex-col overflow-hidden text-paper"
             >
               <div className="grid flex-1 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-                <div className="relative aspect-[4/3] sm:aspect-auto sm:min-h-[22rem]">
+                <div className="relative m-3 aspect-[4/3] overflow-hidden rounded-xl sm:mr-0 sm:aspect-auto sm:min-h-[22rem]">
                   <Image src={s.photo.src} alt={s.photo.alt} fill sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw" className="object-cover" />
                 </div>
                 <blockquote className="flex flex-col justify-between gap-8 p-6 md:p-8">
                   <div>
-                    <p className="label flex items-center gap-2 text-mute">
-                      <span className="whitespace-nowrap tabular-nums text-earth">≈ {s.km.toLocaleString("en-IN")} km</span>
+                    <p className="flex items-center gap-2 text-sm text-paper/65">
+                      <span className="whitespace-nowrap tabular-nums text-paper">≈ {s.km.toLocaleString("en-IN")} km</span>
                       <span aria-hidden className="h-px w-5 bg-current opacity-40" />
                       from {s.town} to Bengaluru
                     </p>
@@ -247,11 +247,11 @@ export function Journeys() {
                   </div>
                   <footer className="text-[0.95rem]">
                     <cite className="block font-medium not-italic">{s.name}</cite>
-                    <span className="mt-1 block text-mute">
+                    <span className="mt-1 block text-paper/65">
                       From {s.native} · now at{" "}
                       <Link
                         href={`/homes/${s.slug}`}
-                        className="text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+                        className="text-paper underline decoration-paper/40 underline-offset-4 hover:decoration-paper"
                       >
                         {s.resident}
                       </Link>
@@ -262,7 +262,7 @@ export function Journeys() {
             </div>
 
             <div className="mt-5 flex items-center justify-between gap-4">
-              <p className="label tabular-nums text-paper/70">
+              <p className="text-sm tabular-nums text-paper/70">
                 {String(active + 1).padStart(2, "0")} / {String(stories.length).padStart(2, "0")}
               </p>
               <div className="flex gap-2">
@@ -270,7 +270,7 @@ export function Journeys() {
                   type="button"
                   onClick={() => go(-1)}
                   aria-label="Previous story"
-                  className="inline-flex size-12 items-center justify-center border border-paper/35 transition-colors hover:bg-paper hover:text-ink"
+                  className="inline-flex size-12 items-center justify-center rounded-full border border-paper/35 transition-colors hover:bg-paper hover:text-ink"
                 >
                   <ArrowLeft aria-hidden className="size-4" strokeWidth={1.6} />
                 </button>
@@ -278,7 +278,7 @@ export function Journeys() {
                   type="button"
                   onClick={() => go(1)}
                   aria-label="Next story"
-                  className="inline-flex size-12 items-center justify-center bg-paper text-ink transition-colors hover:bg-cyan hover:text-forest-deep"
+                  className="inline-flex size-12 items-center justify-center rounded-full bg-paper text-ink transition-colors hover:bg-white"
                 >
                   <ArrowRight aria-hidden className="size-4" strokeWidth={1.6} />
                 </button>

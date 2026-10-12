@@ -398,7 +398,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 <span className="size-2 " style={{ background: next.hue }} />
                 Next community · {next.locality}
               </span>
-              <span className="serif mt-4 block text-[clamp(2.8rem,6.4vw,6.4rem)] leading-[0.95]">{next.shortName}</span>
+              <span className="serif mt-4 block text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[0.95]">{next.shortName}</span>
             </span>
             <span className="mb-3 inline-flex size-16 shrink-0 items-center justify-center bg-paper text-ink transition-transform duration-500 group-hover:translate-x-2 md:size-20">
               <ArrowRight aria-hidden className="size-6" strokeWidth={1.25} />

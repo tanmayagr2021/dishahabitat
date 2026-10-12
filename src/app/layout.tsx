@@ -1,24 +1,24 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Archivo, Gloock } from "next/font/google";
+import { Hanken_Grotesk, Newsreader } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RevealObserver } from "@/components/RevealObserver";
 import "./globals.css";
 
-/* Display: Gloock, a dense high-contrast serif for statements. */
-const gloock = Gloock({
-  variable: "--font-gloock",
-  weight: "400",
+/* Headlines: Newsreader, an editorial serif with optical sizes and a true italic. */
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
   display: "swap",
 });
 
-/* Text and labels: Archivo, whose width axis gives the expanded capitals of the HABITAT wordmark. */
-const archivo = Archivo({
-  variable: "--font-archivo",
+/* Text, labels and figures: Hanken Grotesk, a calm grotesque with clear numerals and ₹. */
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin"],
-  axes: ["wdth"],
   display: "swap",
 });
 
@@ -59,7 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
-      className={`${gloock.variable} ${archivo.variable} antialiased`}
+      className={`${newsreader.variable} ${hanken.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh flex-col">

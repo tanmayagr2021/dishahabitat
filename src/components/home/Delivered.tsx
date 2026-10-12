@@ -23,7 +23,7 @@ export function Delivered() {
             </Label>
             <Lines
               id="delivered-title"
-              className="serif mt-8 text-[clamp(2.8rem,6vw,6.4rem)] leading-[0.92] tracking-[-0.025em]"
+              className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]"
               lines={["Five communities,", <em key="e">handed over.</em>]}
             />
           </div>
@@ -33,22 +33,29 @@ export function Delivered() {
           </p>
         </div>
 
-        <div className="mt-16 grid gap-6 md:mt-20 lg:grid-cols-12 lg:gap-8">
+        <div className="mt-14 grid gap-6 md:mt-16 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-8">
             <InteractiveProjectCard p={sunshine} morph />
           </div>
-          <div className="lg:col-span-4 lg:mt-32">
-            <InteractiveProjectCard p={courtyard} aspect="aspect-[3/4]" sizes="(min-width: 1024px) 30vw, 100vw" morph delay={150} />
+          <div className="lg:col-span-4">
+            <InteractiveProjectCard
+              p={courtyard}
+              aspect="aspect-[3/4] lg:aspect-auto lg:h-full"
+              className="lg:h-full"
+              sizes="(min-width: 1024px) 30vw, 100vw"
+              morph
+              delay={100}
+            />
           </div>
         </div>
 
         <div className="mt-20 md:mt-32">
-          <EditorialProjectCard p={centralPark} index="03" />
+          <EditorialProjectCard p={centralPark} />
         </div>
 
         <div className="mt-20 border-t border-ink/15 pt-6 md:mt-28">
           <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <p className="label text-mute">Where it started</p>
+            <p className="text-[0.95rem] text-mute">Where it started</p>
             <ArrowLink href="/homes" className="text-ink">
               All our homes, side by side
             </ArrowLink>

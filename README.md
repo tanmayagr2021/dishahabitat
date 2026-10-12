@@ -49,19 +49,23 @@ is the terracotta of the buildings. Each community keeps a signature hue for dat
 0. Logo film — once per visit, home page only. The supplied 8-second film plays; as its logo settles the official SVG
    logo is laid exactly over it, the film dissolves, and the logo glides into the header while the hero rises
    (`src/components/Intro.tsx`). Skip at any time (button, key, click, scroll); never shown with reduced motion.
-1. Hero — split composition: type on forest, Disha’s brand film framed beside it, a cyan line between; “Now selling” line.
+1. Hero — a day at a Disha community. A centred headline inside the sun’s arc; drag the sun (or the time line, or use
+   the arrow keys) and the full-bleed photograph moves through the day — morning yoga at Courtyard, the pool court at
+   noon, the Sunshine sundial, Central Park at dusk and after dark. After the intro the sun rises once from dawn to the
+   current hour in Bengaluru, so the interaction shows itself.
 2. Featured project — Pursuit of the Elements at full bleed, an ivory facts panel overlapping it, five elements, renders.
 3. Where we began — the founding line with layered team photographs; then “Our core”, set large on charcoal.
 4. The record — every home handed over as a square in its community’s colour; choose a community to light it.
 5. Delivered — card hierarchy: a large interactive card, an offset tall card, an editorial spread, compact rows.
 6. Life between the buildings — a photographic essay of real community photographs, varied crops, gentle parallax.
 7. Homeowners — a map of home towns; choosing one draws the journey to a cyan roof at Bengaluru.
-8. Home Affordability Explorer — price, down payment, rate, tenure and optional income; EMI, totals, ratio, yearly chart.
+8. EMI calculator — price, down payment, rate, tenure and optional income; EMI rounded to the rupee, the final instalment adjusted so every total is the exact sum of payments (tested in `src/lib/emi.test.ts`).
 9. Project explorer — filter by status, sort by published figures, select a community, then visit it or enquire.
 10. “Let’s meet for coffee.” — enquiry over Central Park at night.
 
-**Design system** (`src/app/globals.css`): Gloock (display; emphasis by colour, never a faked italic) and Archivo
-(text; its width axis gives the expanded capitals of the HABITAT wordmark for labels). Surfaces: `surface-forest`,
+**Design system** (`src/app/globals.css`): Newsreader (headlines, optical sizes, true italic for emphasis) and Hanken
+Grotesk (text, labels and figures — clear numerals and ₹). Labels are plain sentence case. Translucent cards: `.card`
+(light) and `.card-dark`. Surfaces: `surface-forest`,
 `surface-deep`, `surface-charcoal`, `surface-earth`, `surface-ivory`, `surface-stone`, with a fine grain on dark ones.
 Cards: `src/components/ProjectCards.tsx` (interactive, editorial, compact); data from `src/lib/portfolio.ts`.
 Motion: shutter reveals for images, rising lines for headlines, hairlines that draw, CSS scroll-driven parallax where

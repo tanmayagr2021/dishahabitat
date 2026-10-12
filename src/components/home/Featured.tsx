@@ -26,81 +26,61 @@ export function Featured() {
           </Label>
           <Lines
             id="featured-title"
-            className="serif mt-5 max-w-[14ch] text-[clamp(3.2rem,8.6vw,9.5rem)] leading-[0.88] tracking-[-0.03em]"
+            className="serif mt-5 max-w-[14ch] text-[clamp(2.8rem,6vw,6rem)] leading-[1.02]"
             lines={["Pursuit of", "the Elements"]}
           />
         </div>
       </div>
 
-      <div className="shell relative z-10 -mt-36 grid gap-10 md:-mt-44 lg:grid-cols-12 lg:gap-8">
-        {/* The five elements, set as a vertical index */}
-        <div className="order-2 lg:order-1 lg:col-span-4 lg:pt-56">
-          <p className="serif text-[clamp(1.8rem,2.6vw,2.4rem)] leading-tight text-brass">{elements.tagline}</p>
-          <ol className="mt-8 border-t border-paper/15" aria-label="Inspired by the five elements">
-            {elements.fiveElements.map((el, i) => (
-              <Reveal as="li" key={el} delay={i * 70} className="flex items-baseline justify-between border-b border-paper/15 py-3">
-                <span className="serif text-[clamp(1.6rem,2.2vw,2.1rem)] leading-none">{el}</span>
-                <span className="label text-cyan">0{i + 1}</span>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-
-        {/* The verified facts, on ivory, overlapping the render */}
-        <Reveal className="order-1 bg-paper p-6 text-ink shadow-[0_60px_120px_-60px_rgb(0_0_0/0.8)] md:p-10 lg:order-2 lg:col-span-8 xl:col-span-7 xl:col-start-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="label flex items-center gap-2 text-earth">
-              <span className="size-2 bg-earth" />
-              {elements.offer}
+      {/* The verified facts, on a translucent card over the render's lower edge */}
+      <div className="shell relative z-10 -mt-36 md:-mt-44">
+        <Reveal className="card-dark grid gap-10 p-6 md:p-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-6">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.95rem]">
+              <span className="font-medium text-brass">{elements.offer}</span>
+              <span className="text-paper/55">RERA registered, Phases I & II</span>
             </p>
-            <p className="label text-mute">RERA registered · Phases I & II</p>
+            <p className="mt-5 text-[1.1rem] leading-relaxed text-paper/85">{elements.intro}</p>
+            <p className="serif mt-6 text-[1.6rem] text-paper">
+              <em>{elements.tagline}</em>
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href={elements.href} variant="paper">
+                Explore the project
+              </ButtonLink>
+              <ButtonLink href={`${elements.href}#enquire`} variant="outline-light">
+                Book a site visit
+              </ButtonLink>
+            </div>
           </div>
-          <p className="mt-6 max-w-2xl text-[1.12rem] leading-relaxed text-ink/80">{elements.intro}</p>
-          <dl className="mt-8 grid grid-cols-2 border-t border-ink/15 sm:grid-cols-3">
+          <dl className="grid grid-cols-2 content-start gap-px overflow-hidden rounded-xl border border-paper/10 bg-paper/10 lg:col-span-6">
             {elements.facts.map((f) => (
-              <div key={f.label} className="flex flex-col-reverse border-b border-ink/10 py-5 pr-4">
-                <dt className="label mt-2 text-[0.6rem] text-mute">{f.label}</dt>
-                <dd className="serif text-[clamp(1.6rem,2.4vw,2.2rem)] leading-none">{f.value}</dd>
+              <div key={f.label} className="flex flex-col-reverse bg-forest/80 p-5">
+                <dt className="mt-1.5 text-sm text-paper/60">{f.label}</dt>
+                <dd className="serif text-[clamp(1.5rem,2.2vw,2rem)] leading-tight">{f.value}</dd>
               </div>
             ))}
           </dl>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={elements.href}>Explore the project</ButtonLink>
-            <ButtonLink href={`${elements.href}#enquire`} variant="outline-dark">
-              Book a site visit
-            </ButtonLink>
-          </div>
-          <p className="mt-6 text-xs leading-relaxed text-mute">
-            {elements.rera.map((r) => `${r.phase}: ${r.no}`).join(" · ")}
-          </p>
         </Reveal>
+        <p className="mt-4 text-xs leading-relaxed text-paper/50">{elements.rera.map((r) => `${r.phase}: ${r.no}`).join(" · ")}</p>
       </div>
 
-      {/* Detail crops, deliberately unequal */}
-      <div className="shell mt-16 grid grid-cols-2 gap-3 md:mt-24 md:grid-cols-12 md:gap-5">
-        {details.map((m, i) => (
-          <Reveal
-            as="figure"
-            key={m.src}
-            variant="mask"
-            delay={i * 120}
-            className={
-              i === 0
-                ? "col-span-2 md:col-span-6"
-                : i === 1
-                  ? "md:col-span-3 md:mt-24"
-                  : "md:col-span-3 md:-mt-10"
-            }
-          >
-            <div className={`relative overflow-hidden ${i === 0 ? "aspect-[16/10]" : "aspect-[3/4]"}`}>
-              <Image src={m.src} alt={m.alt} fill sizes="(min-width: 768px) 40vw, 50vw" className="object-cover" />
-            </div>
-            <figcaption className="mt-3 flex items-baseline justify-between gap-3 text-sm text-paper/65">
-              <span>{m.caption}</span>
-              <span className="label text-[0.55rem] text-paper/45">Render</span>
-            </figcaption>
-          </Reveal>
-        ))}
+      {/* Three renders, one row, same size */}
+      <div className="shell mt-16 md:mt-24">
+        <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <p className="text-[0.95rem] text-paper/70">Inspired by the five elements — space, fire, air, water and earth.</p>
+          <p className="text-sm text-paper/50">Artist’s impressions</p>
+        </div>
+        <div className="mt-5 grid gap-4 sm:grid-cols-3 md:gap-6">
+          {details.map((m, i) => (
+            <Reveal as="figure" key={m.src} variant="mask" delay={i * 100}>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                <Image src={m.src} alt={m.alt} fill sizes="(min-width: 640px) 33vw, 100vw" className="object-cover" />
+              </div>
+              <figcaption className="mt-3 text-sm text-paper/70">{m.caption}</figcaption>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );

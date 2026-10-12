@@ -25,7 +25,7 @@ function Arrow({ className = "" }: { className?: string }) {
 function StatusLine({ p, className = "" }: { p: PortfolioItem; className?: string }) {
   return (
     <span className={`label flex items-center gap-2 ${className}`}>
-      <span aria-hidden className="size-2" style={{ background: p.hue }} />
+      <span aria-hidden className="size-2 rounded-full" style={{ background: p.hue }} />
       {p.status === "Now selling" ? "Now selling" : `Delivered ${p.handoverYear}`} · {p.locality.replace(", Bengaluru", "")}
     </span>
   );
@@ -37,12 +37,14 @@ export function InteractiveProjectCard({
   sizes = "(min-width: 1024px) 60vw, 100vw",
   morph = false,
   delay = 0,
+  className = "",
 }: {
   p: PortfolioItem;
   aspect?: string;
   sizes?: string;
   morph?: boolean;
   delay?: number;
+  className?: string;
 }) {
   const image = (
     <Image
@@ -55,10 +57,10 @@ export function InteractiveProjectCard({
     />
   );
   return (
-    <Reveal variant="mask" delay={delay}>
+    <Reveal variant="mask" delay={delay} className={className}>
       <Link
         href={p.href}
-        className={`group relative block overflow-hidden bg-forest text-paper ${aspect}`}
+        className={`group relative block overflow-hidden rounded-xl bg-forest text-paper ${aspect}`}
         style={{ "--hue": p.hue } as CSSProperties}
       >
         {morph ? (
@@ -83,7 +85,7 @@ export function InteractiveProjectCard({
             <dl className="flex gap-8 overflow-hidden pt-4">
               {p.facts.map((f) => (
                 <div key={f.label} className="flex flex-col-reverse">
-                  <dt className="label mt-1 text-[0.58rem] text-paper/60">{f.label}</dt>
+                  <dt className="label mt-1 text-[0.8rem] text-paper/60">{f.label}</dt>
                   <dd className="text-[1.05rem] tabular-nums">{f.value}</dd>
                 </div>
               ))}
@@ -95,10 +97,10 @@ export function InteractiveProjectCard({
   );
 }
 
-export function EditorialProjectCard({ p, index, flip = false }: { p: PortfolioItem; index: string; flip?: boolean }) {
+export function EditorialProjectCard({ p, flip = false }: { p: PortfolioItem; index?: string; flip?: boolean }) {
   return (
     <Link href={p.href} className="group grid items-center gap-8 md:grid-cols-12 md:gap-10">
-      <Reveal variant="mask" className={`relative aspect-[4/3] overflow-hidden md:col-span-7 ${flip ? "md:order-2" : ""}`}>
+      <Reveal variant="mask" className={`relative aspect-[4/3] overflow-hidden rounded-xl md:col-span-7 ${flip ? "md:order-2" : ""}`}>
         <Image
           src={p.image.src}
           alt={p.image.alt}
@@ -110,16 +112,13 @@ export function EditorialProjectCard({ p, index, flip = false }: { p: PortfolioI
         <MediaBadge kind={p.image.kind} />
       </Reveal>
       <div className={`relative md:col-span-5 ${flip ? "md:order-1 md:pr-4" : "md:pl-4"}`}>
-        <span aria-hidden className="serif block text-[clamp(5rem,9vw,9rem)] leading-[0.8] text-ink/[0.07]">
-          {index}
-        </span>
-        <StatusLine p={p} className="-mt-6 text-mute" />
+        <StatusLine p={p} className="text-mute" />
         <h3 className="serif mt-4 text-[clamp(2.4rem,4vw,4rem)] leading-[0.95]">{p.shortName}</h3>
         <p className="mt-5 max-w-md leading-relaxed text-ink/75">{p.intro}</p>
         <dl className="mt-7 grid max-w-md grid-cols-3 border-t border-ink/15">
           {p.facts.map((f) => (
             <div key={f.label} className="flex flex-col-reverse border-r border-ink/10 py-4 pr-3 last:border-r-0 [&:not(:first-child)]:pl-4">
-              <dt className="label mt-1 text-[0.58rem] text-mute">{f.label}</dt>
+              <dt className="label mt-1 text-[0.8rem] text-mute">{f.label}</dt>
               <dd className="serif text-[1.6rem] leading-none">{f.value}</dd>
             </div>
           ))}
@@ -146,11 +145,11 @@ export function CompactProjectCard({
 }) {
   const body = (
     <>
-      <span className="relative block aspect-square w-16 shrink-0 overflow-hidden md:w-20">
+      <span className="relative block aspect-square w-16 shrink-0 overflow-hidden rounded-lg md:w-20">
         <Image src={p.image.src} alt="" fill sizes="80px" className="object-cover" style={{ objectPosition: p.image.position }} />
       </span>
       <span className="min-w-0 flex-1 text-left">
-        <StatusLine p={p} className={`text-[0.6rem] ${selected ? "text-paper/70" : "text-current/60"}`} />
+        <StatusLine p={p} className={selected ? "text-paper/70" : "opacity-60"} />
         <span className="serif mt-1 block text-[1.45rem] leading-tight">{p.shortName}</span>
         <span className={`mt-0.5 block text-sm ${selected ? "text-paper/65" : "opacity-60"}`}>
           {[p.homes && `${p.homes} homes`, `${p.acres} acres`].filter(Boolean).join(" · ")}
@@ -158,12 +157,12 @@ export function CompactProjectCard({
       </span>
       <span
         aria-hidden
-        className={`h-full w-[3px] self-stretch transition-colors ${selected ? "bg-cyan" : "bg-transparent"}`}
+        className={`mr-3 h-8 w-[3px] self-center rounded-full transition-colors ${selected ? "bg-cyan" : "bg-transparent"}`}
       />
     </>
   );
-  const cls = `group flex w-full items-center gap-4 p-2.5 pr-0 transition-colors duration-300 ${
-    selected ? "bg-forest-2 text-paper" : "hover:bg-paper/[0.06]"
+  const cls = `group flex w-full items-center gap-4 rounded-xl border p-2.5 pr-0 transition-colors duration-300 ${
+    selected ? "card-dark text-paper" : "border-current/10 hover:border-current/25 hover:bg-current/[0.04]"
   }`;
   if (onSelect) {
     return (

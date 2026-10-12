@@ -13,7 +13,7 @@ export function PlanSection() {
             </Label>
             <Lines
               id="plan-title"
-              className="serif mt-8 text-[clamp(2.8rem,6vw,6.4rem)] leading-[0.92] tracking-[-0.025em]"
+              className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]"
               lines={["What would your", <em key="e">monthly EMI be?</em>]}
             />
           </div>

@@ -34,7 +34,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
             </Label>
             <Lines
               id="enquire-title"
-              className="serif mt-8 text-[clamp(3rem,6.6vw,7rem)] leading-[0.9] tracking-[-0.025em]"
+              className="serif mt-8 text-[clamp(2.5rem,4.8vw,4.8rem)] leading-[0.9]"
               lines={["“Let’s meet", <em key="c">for coffee.”</em>]}
             />
             <Reveal delay={200} className="mt-8 max-w-md">
@@ -73,11 +73,10 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
         </div>
 
         <Reveal delay={150} className="lg:col-span-5 lg:col-start-8">
-          <div className="relative bg-paper p-6 text-ink shadow-[0_60px_120px_-40px_rgb(0_0_0/0.7)] sm:p-10">
-            <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] bg-cyan" />
+          <div className="card-dark relative p-6 text-paper sm:p-10">
             <p className="serif text-[2.4rem] leading-none">Book a site visit</p>
-            <p className="mb-8 mt-2 text-sm text-mute">Tell us a little about what you’re looking for and we’ll call you back. Fields marked * are required.</p>
-            <EnquiryForm defaultInterest={defaultInterest} />
+            <p className="mb-8 mt-2 text-sm text-paper/65">Tell us a little about what you’re looking for and we’ll call you back. Fields marked * are required.</p>
+            <EnquiryForm defaultInterest={defaultInterest} tone="dark" />
           </div>
         </Reveal>
       </div>

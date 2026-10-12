@@ -1,22 +1,19 @@
 import Link from "next/link";
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 type LinkProps = ComponentProps<typeof Link>;
 
-/*
- * Buttons: square-cornered, set in wide capitals. On hover a fill wipes across from the left
- * and the drawn line in front of the arrow lengthens — the brand's single line, extending.
- */
+/* Buttons: plain words, soft corners, an arrow that steps forward on hover. */
 const buttonBase =
-  "group relative isolate inline-flex min-h-[3.25rem] items-center justify-between gap-6 overflow-hidden rounded-[2px] py-2 pl-6 pr-5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] [font-stretch:118%] transition-colors duration-500";
+  "group relative isolate inline-flex min-h-12 items-center justify-between gap-5 overflow-hidden rounded-lg py-2 pl-5 pr-4 text-[0.95rem] font-medium transition-colors duration-300";
 
 const buttonVariants = {
-  ink: "bg-ink text-paper hover:text-forest-deep [--fill:var(--color-cyan)]",
-  paper: "bg-paper text-ink hover:text-forest-deep [--fill:var(--color-cyan)]",
-  brass: "bg-brass text-forest-deep hover:text-forest-deep [--fill:var(--color-paper)]",
-  "outline-light": "border border-paper/35 text-paper hover:text-ink [--fill:var(--color-paper)]",
-  "outline-dark": "border border-ink/30 text-ink hover:text-paper [--fill:var(--color-ink)]",
+  ink: "bg-ink text-paper hover:bg-forest",
+  paper: "bg-paper text-ink hover:bg-white",
+  brass: "bg-brass text-forest-deep hover:bg-paper",
+  "outline-light": "border border-paper/30 bg-white/[0.04] text-paper backdrop-blur-sm hover:border-paper/60 hover:bg-white/10",
+  "outline-dark": "border border-ink/20 bg-white/30 text-ink backdrop-blur-sm hover:border-ink/45 hover:bg-white/60",
 } as const;
 
 export type ButtonVariant = keyof typeof buttonVariants;
@@ -28,16 +25,13 @@ export function buttonClass(variant: ButtonVariant = "ink", className = "") {
 export function ButtonInner({ children, icon = true }: { children: ReactNode; icon?: boolean }) {
   return (
     <>
-      <span
-        aria-hidden
-        className="absolute inset-0 -z-10 origin-left scale-x-0 bg-[var(--fill)] transition-transform duration-700 ease-out-expo group-hover:scale-x-100"
-      />
       <span className="relative">{children}</span>
       {icon && (
-        <span aria-hidden className="relative flex items-center">
-          <span className="h-px w-5 bg-current transition-[width] duration-700 ease-out-expo group-hover:w-9" />
-          <span className="-ml-[7px] size-[7px] rotate-45 border-r border-t border-current" />
-        </span>
+        <ArrowRight
+          aria-hidden
+          className="relative size-4 transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+          strokeWidth={1.75}
+        />
       )}
     </>
   );
@@ -66,7 +60,7 @@ export function ArrowLink({
 }: LinkProps & { external?: boolean }) {
   return (
     <Link
-      className={`group inline-flex min-h-11 items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.18em] [font-stretch:118%] ${className}`}
+      className={`group inline-flex min-h-11 items-center gap-2 text-[0.95rem] font-medium ${className}`}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...props}
     >
@@ -80,10 +74,7 @@ export function ArrowLink({
           strokeWidth={1.5}
         />
       ) : (
-        <span aria-hidden className="flex items-center">
-          <span className="h-px w-4 bg-current transition-[width] duration-700 ease-out-expo group-hover:w-8" />
-          <span className="-ml-[7px] size-[7px] rotate-45 border-r border-t border-current" />
-        </span>
+        <ArrowRight aria-hidden className="size-4 transition-transform duration-300 ease-out-expo group-hover:translate-x-1" strokeWidth={1.75} />
       )}
       {external && <span className="sr-only">(opens in a new tab)</span>}
     </Link>
@@ -99,7 +90,7 @@ export function RoofMark({ className = "", style }: { className?: string; style?
   );
 }
 
-/* Section marker: the roof glyph, a number, a drawn line and a name — "01 —— Now selling". */
+/* Small section label: plain words. (`n` is accepted for compatibility and not shown.) */
 export function Label({
   children,
   n,
@@ -112,10 +103,8 @@ export function Label({
   as?: "p" | "span" | "h2" | "h3";
 }) {
   return (
-    <Tag className={`label flex items-center gap-3 ${className}`}>
-      {n && <span className="tabular-nums">{n}</span>}
-      {n && <span aria-hidden className="h-px w-8 bg-current opacity-50" />}
-      <span>{children}</span>
+    <Tag className={`label ${className}`} data-n={n}>
+      {children}
     </Tag>
   );
 }
@@ -174,7 +163,7 @@ export function MediaBadge({ kind, className = "" }: { kind: "photo" | "render" 
   if (kind === "photo") return null;
   return (
     <span
-      className={`label absolute left-3 top-3 z-10 bg-forest-deep/75 px-2.5 py-1.5 text-[0.56rem] text-paper backdrop-blur-sm ${className}`}
+      className={`absolute left-3 top-3 z-10 rounded-md bg-forest-deep/60 px-2 py-1 text-[0.72rem] font-medium text-paper backdrop-blur-sm ${className}`}
     >
       {kind === "render" ? "Artist’s impression" : "Plan"}
     </span>

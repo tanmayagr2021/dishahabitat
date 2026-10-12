@@ -16,25 +16,38 @@ test("EMI matches published reference values", () => {
 test("zero interest divides principal evenly", () => {
   assert.equal(monthlyEmi(12_00_000, 0, 10), 10_000);
   const r = calculateLoan({ price: 12_00_000, downPayment: 0, annualRate: 0, years: 10 });
+  assert.equal(r.emi, 10_000);
+  assert.equal(r.totalRepaid, 12_00_000);
   assert.equal(r.totalInterest, 0);
 });
 
-test("totals and income ratio", () => {
+test("EMI is rounded to the rupee and every total is the exact sum of payments", () => {
   const r = calculateLoan({ price: 75_00_000, downPayment: 15_00_000, annualRate: 8.5, years: 20, monthlyIncome: 2_00_000 });
   assert.equal(r.principal, 60_00_000);
-  close(r.emi, 52069.39);
-  close(r.totalRepaid, 12496654.56, 0.5);
-  close(r.totalInterest, 6496654.56, 0.5);
-  close(r.emiToIncome!, 52069.39 / 2_00_000, 1e-6);
+  assert.equal(r.emi, 52069);
+  close(r.emiExact, 52069.39);
+  assert.equal(r.months, 240);
+  // 239 EMIs of ₹52,069 plus a final instalment that clears the balance.
+  close(r.totalRepaid, 52069 * 239 + r.finalEmi, 0.001);
+  // Rounding the EMI by up to ₹0.50 a month compounds; the last instalment absorbs it. The bound is
+  // 0.5 × the annuity factor ((1+r)^n − 1) / r, about ₹310 here; the actual adjustment is ₹247.18.
+  const rm = 8.5 / 1200;
+  assert.ok(Math.abs(r.finalEmi - r.emi) <= (0.5 * (Math.pow(1 + rm, 240) - 1)) / rm, "final instalment within the rounding bound");
+  close(r.finalEmi, 52316.18, 0.001);
+  close(r.totalInterest, r.totalRepaid - 60_00_000, 0.001);
+  close(r.emiToIncome!, 52069 / 2_00_000, 1e-9);
   assert.equal(calculateLoan({ price: 75_00_000, downPayment: 0, annualRate: 8.5, years: 20 }).emiToIncome, null);
 });
 
-test("schedule repays the full principal and sums to total interest", () => {
+test("schedule repays exactly the principal and sums to the totals", () => {
+  for (const [p, rate, y] of [[60_00_000, 8.5, 20], [10_00_000, 10, 10], [1_00_000, 12, 1], [3_00_00_000, 9.15, 30], [7_77_777, 0, 7]] as const) {
+    const r = calculateLoan({ price: p, downPayment: 0, annualRate: rate, years: y });
+    assert.equal(r.schedule.length, y);
+    assert.equal(r.schedule.at(-1)!.balance, 0);
+    close(r.schedule.reduce((s, row) => s + row.principalPaid, 0), p, 0.001);
+    close(r.schedule.reduce((s, row) => s + row.interestPaid, 0), r.totalInterest, 0.001);
+  }
   const rows = yearlySchedule(60_00_000, 8.5, 20);
-  assert.equal(rows.length, 20);
-  assert.equal(rows.at(-1)!.balance, 0);
-  close(rows.reduce((s, r) => s + r.principalPaid, 0), 60_00_000, 1);
-  close(rows.reduce((s, r) => s + r.interestPaid, 0), 6496654.56, 1);
   assert.ok(rows[0].interestPaid > rows[0].principalPaid, "early years are interest-heavy");
 });
 

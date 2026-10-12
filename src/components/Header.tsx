@@ -118,7 +118,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className="group relative inline-flex h-11 items-center px-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] [font-stretch:118%]"
+                    className="group relative inline-flex h-11 items-center px-3 text-[0.95rem]"
                   >
                     {item.label}
                     <span
@@ -134,7 +134,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Link
               href="/contact#enquire"
-              className={`hidden h-11 items-center gap-3 rounded-[2px] px-5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition-colors [font-stretch:118%] sm:inline-flex ${
+              className={`hidden h-11 items-center gap-3 rounded-lg px-5 text-[0.95rem] font-medium transition-colors sm:inline-flex ${
                 dark ? "bg-paper text-ink hover:bg-cyan hover:text-forest-deep" : "bg-ink text-paper hover:bg-cyan hover:text-forest-deep"
               }`}
             >
@@ -143,7 +143,7 @@ export function Header() {
             <button
               ref={toggleRef}
               type="button"
-              className={`relative z-10 inline-flex h-11 items-center gap-3 rounded-[2px] pl-4 pr-3.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] [font-stretch:118%] lg:hidden ${
+              className={`relative z-10 inline-flex h-11 items-center gap-3 rounded-lg pl-4 pr-3.5 text-[0.95rem] lg:hidden ${
                 dark ? "bg-paper/10" : "bg-ink/6"
               }`}
               aria-expanded={open}
@@ -195,7 +195,7 @@ export function Header() {
             ))}
           </ul>
 
-          <Link href={elements.href} onClick={() => setOpen(false)} className="flex items-center gap-4 border border-paper/12 bg-forest-deep/40 p-3">
+          <Link href={elements.href} onClick={() => setOpen(false)} className="card-dark flex items-center gap-4 p-3">
             <span className="relative block aspect-[4/3] w-28 shrink-0 overflow-hidden">
               <Image src={elements.cover.src} alt="" fill sizes="112px" className="object-cover" />
             </span>

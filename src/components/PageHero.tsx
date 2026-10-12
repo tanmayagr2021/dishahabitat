@@ -74,7 +74,7 @@ export function PageHero({
         <Label className="anim-fade text-paper/70" as="p">
           {label}
         </Label>
-        <h1 className={`serif ${compact ? "mt-5 text-[clamp(2.6rem,5vw,4.8rem)] leading-[0.95]" : "mt-6 max-w-[16ch] text-[clamp(3.2rem,8.4vw,9.5rem)] leading-[0.9] tracking-[-0.03em]"}`}>
+        <h1 className={`serif ${compact ? "mt-5 text-[clamp(2.6rem,5vw,4.8rem)] leading-[0.95]" : "mt-6 max-w-[16ch] text-[clamp(2.8rem,5.8vw,6rem)] leading-[0.9]"}`}>
           <span className="line">
             <span className="anim-rise" style={d(150)}>
               {title}

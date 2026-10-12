@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type InputHTMLAttributes, type ReactNode } from "react";
-import { Info, RotateCcw } from "lucide-react";
-import { buttonClass, ButtonInner } from "@/components/ui";
 import { calculateLoan, formatINR, formatINRShort, LIMITS, validateLoan, type LoanErrors } from "@/lib/emi";
 
 /*
- * ILLUSTRATIVE PLANNING TOOL — not a Disha Habitat financing, eligibility or loan service.
- * The defaults are neutral example figures, not Disha Habitat prices.
+ * Home loan EMI calculator. ILLUSTRATIVE — not a Disha Habitat financing, eligibility or loan
+ * service. The defaults are neutral example figures, not Disha Habitat prices. All arithmetic is
+ * in lib/emi.ts (tested): EMI rounded to the rupee, a month-by-month schedule in paise, and a final
+ * instalment that clears the loan exactly, so every total is the true sum of the payments.
  */
 const EXAMPLE = { price: "7500000", down: "1500000", rate: "8.5", years: "20", income: "" };
 
@@ -16,7 +16,7 @@ const digits = (s: string) => s.replace(/[^\d]/g, "");
 const decimal = (s: string) => s.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1");
 const toNum = (s: string) => (s.trim() === "" ? Number.NaN : Number(s));
 
-/* Price slider runs on a log scale so ₹10 lakh and ₹10 crore are both reachable. */
+/* The price slider runs on a log scale so ₹10 lakh and ₹10 crore are both easy to reach. */
 const PRICE_SLIDER = { min: 10_00_000, max: 10_00_00_000 };
 const toSlider = (v: number) =>
   Math.round((1000 * Math.log(Math.min(Math.max(v, PRICE_SLIDER.min), PRICE_SLIDER.max) / PRICE_SLIDER.min)) /
@@ -30,59 +30,72 @@ const fromSlider = (s: number) => {
 function Field({
   id,
   label,
+  note,
   hint,
   error,
   children,
-  aside,
 }: {
   id: string;
   label: string;
-  hint?: ReactNode;
+  note?: ReactNode;
+  hint?: string;
   error?: string;
   children: ReactNode;
-  aside?: ReactNode;
 }) {
   return (
-    <div className="border-t border-ink/15 py-6">
+    <div>
       <div className="flex items-baseline justify-between gap-4">
-        <label htmlFor={id} className="label text-mute">
+        <label htmlFor={id} className="text-[0.95rem] font-medium text-ink">
           {label}
         </label>
-        {aside}
+        {note && <span className="text-sm tabular-nums text-mute">{note}</span>}
       </div>
-      {children}
-      {hint && !error && (
-        <p id={`${id}-hint`} className="mt-2 text-xs text-mute">
-          {hint}
-        </p>
-      )}
-      {error && (
+      <div className="mt-2">{children}</div>
+      {error ? (
         <p id={`${id}-error`} className="mt-2 text-sm text-error">
           {error}
         </p>
+      ) : (
+        hint && (
+          <p id={`${id}-hint`} className="mt-2 text-xs text-mute">
+            {hint}
+          </p>
+        )
       )}
     </div>
   );
 }
 
-const inputBase =
-  "w-full border-0 border-b border-ink/25 bg-transparent px-0 pb-2 pt-3 font-serif text-[2.1rem] leading-none text-ink outline-none transition-colors focus:border-ink focus:ring-0 aria-[invalid=true]:border-error placeholder:text-[1.25rem] placeholder:text-ink/35 sm:text-[2.4rem]";
+/* An input box with a unit on either side. */
+function Box({ prefix, suffix, invalid, children }: { prefix?: string; suffix?: string; invalid?: boolean; children: ReactNode }) {
+  return (
+    <div
+      className={`flex h-12 items-center gap-2 rounded-lg border bg-white/70 px-3.5 transition-[border-color,box-shadow] focus-within:border-ink focus-within:shadow-[0_0_0_3px_rgb(57_170_225/0.25)] ${
+        invalid ? "border-error" : "border-ink/15"
+      }`}
+    >
+      {prefix && <span className="text-mute">{prefix}</span>}
+      {children}
+      {suffix && <span className="shrink-0 text-sm text-mute">{suffix}</span>}
+    </div>
+  );
+}
 
-/* Range input with a track that fills up to the handle (styles in globals.css). */
+const inputCls = "w-full min-w-0 border-0 bg-transparent p-0 text-[1.1rem] font-medium tabular-nums text-ink outline-none focus:ring-0";
+
+/* Slider: the fill is set on a wrapper and inherited by the track (styles in globals.css). */
 function Range(props: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "className">) {
   const min = Number(props.min ?? 0);
   const max = Number(props.max ?? 100);
   const pct = max > min ? ((Number(props.value ?? 0) - min) / (max - min)) * 100 : 0;
-  // The fill is set on a wrapper and inherited by the track; React reports a spurious hydration
-  // mismatch for custom properties set directly on <input type="range">.
   return (
-    <span className="mt-4 block" style={{ "--fill": `${Math.min(100, Math.max(0, pct)).toFixed(2)}%` } as CSSProperties}>
-      <input type="range" {...props} className="range text-ink [--thumb:var(--color-paper)]" />
+    <span className="mt-2 block" style={{ "--fill": `${Math.min(100, Math.max(0, pct)).toFixed(2)}%` } as CSSProperties}>
+      <input type="range" {...props} className="range text-ink" />
     </span>
   );
 }
 
-/* Money input: always shows Indian grouping; the caret keeps its place among the digits as commas move. */
+/* Money input: Indian digit grouping as you type; the caret keeps its place among the digits. */
 function MoneyInput({
   id,
   value,
@@ -114,10 +127,7 @@ function MoneyInput({
   }, [shown]);
 
   return (
-    <div className="flex items-baseline gap-2">
-      <span aria-hidden className="font-serif text-[2rem] text-mute">
-        ₹
-      </span>
+    <Box prefix="₹" invalid={!!error}>
       <input
         ref={ref}
         id={id}
@@ -132,60 +142,9 @@ function MoneyInput({
         }}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : `${id}-hint`}
-        className={inputBase}
+        className={`${inputCls} placeholder:font-normal placeholder:text-mute/70`}
       />
-    </div>
-  );
-}
-
-function Donut({ principal, interest }: { principal: number; interest: number }) {
-  const total = principal + interest;
-  const share = total > 0 ? principal / total : 1;
-  const r = 54;
-  const c = 2 * Math.PI * r;
-  return (
-    <svg viewBox="0 0 140 140" className="size-36 shrink-0 -rotate-90 sm:size-40" aria-hidden>
-      <circle cx="70" cy="70" r={r} fill="none" stroke="var(--color-brass)" strokeWidth="14" />
-      <circle
-        cx="70"
-        cy="70"
-        r={r}
-        fill="none"
-        stroke="var(--color-paper)"
-        strokeWidth="14"
-        strokeDasharray={`${c * share} ${c}`}
-        className="transition-[stroke-dasharray] duration-700 ease-out-expo"
-      />
-    </svg>
-  );
-}
-
-function YearChart({ rows }: { rows: { year: number; principalPaid: number; interestPaid: number }[] }) {
-  const max = Math.max(...rows.map((r) => r.principalPaid + r.interestPaid));
-  const W = 600;
-  const H = 180;
-  const gap = rows.length > 20 ? 3 : 5;
-  const bw = (W - gap * (rows.length - 1)) / rows.length;
-  return (
-    <svg viewBox={`0 0 ${W} ${H + 22}`} className="h-auto w-full" aria-hidden>
-      {rows.map((r, i) => {
-        const x = i * (bw + gap);
-        const hp = (r.principalPaid / max) * H;
-        const hi = (r.interestPaid / max) * H;
-        return (
-          <g key={r.year}>
-            <title>{`Year ${r.year}: principal ${formatINR(r.principalPaid)}, interest ${formatINR(r.interestPaid)}`}</title>
-            <rect x={x} y={H - hp - hi} width={bw} height={hi} fill="var(--color-brass)" />
-            <rect x={x} y={H - hp} width={bw} height={hp} fill="var(--color-paper)" />
-            {(r.year === 1 || r.year % 5 === 0) && (
-              <text x={x + bw / 2} y={H + 16} textAnchor="middle" fontSize="11" fill="currentColor" opacity=".55">
-                {r.year}
-              </text>
-            )}
-          </g>
-        );
-      })}
-    </svg>
+    </Box>
   );
 }
 
@@ -206,25 +165,27 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
   const valid = Object.keys(errors).length === 0;
   const result = valid ? calculateLoan(input) : null;
 
-  const downPct = Number.isFinite(input.price) && input.price > 0 && Number.isFinite(input.downPayment)
-    ? Math.round((input.downPayment / input.price) * 100)
-    : null;
+  const downPct =
+    Number.isFinite(input.price) && input.price > 0 && Number.isFinite(input.downPayment)
+      ? (input.downPayment / input.price) * 100
+      : null;
   const H = headingLevel === 2 ? "h3" : "h4";
+  const principalShare = result ? (result.principal / result.totalRepaid) * 100 : 0;
 
   return (
-    <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+    <div className="card grid overflow-hidden lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
       {/* Inputs */}
-      <form className="lg:col-span-5" onSubmit={(e) => e.preventDefault()} aria-label="Loan details">
+      <form className="space-y-7 p-6 sm:p-8 lg:p-10" onSubmit={(e) => e.preventDefault()} aria-label="Loan details">
         <Field
           id={id("price")}
           label="Property price"
           error={errors.price}
-          hint="Illustrative example — not a Disha Habitat price."
-          aside={Number.isFinite(input.price) && <span className="text-sm text-mute">{formatINRShort(input.price)}</span>}
+          hint="An example figure — not a Disha Habitat price."
+          note={Number.isFinite(input.price) && input.price > 0 ? formatINRShort(input.price) : undefined}
         >
           <MoneyInput id={id("price")} value={v.price} onChange={set("price")} error={errors.price} />
           <Range
-            aria-label="Property price slider"
+            aria-label="Property price"
             min={0}
             max={1000}
             value={toSlider(Number.isFinite(input.price) ? input.price : PRICE_SLIDER.min)}
@@ -237,39 +198,34 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
           id={id("down")}
           label="Down payment"
           error={errors.downPayment}
-          hint="The amount you pay upfront from your own funds."
-          aside={downPct !== null && downPct >= 0 && <span className="text-sm text-mute">{downPct}% of price</span>}
+          hint="The part of the price you pay from your own funds."
+          note={downPct !== null && downPct >= 0 && downPct < 100 ? `${Number(downPct.toFixed(1))}% of price` : undefined}
         >
           <MoneyInput id={id("down")} value={v.down} onChange={set("down")} error={errors.downPayment} />
-          <Range
-            aria-label="Down payment slider"
-            min={0}
-            max={Number.isFinite(input.price) ? input.price : 0}
-            step={10_000}
-            value={Number.isFinite(input.downPayment) ? Math.min(input.downPayment, input.price || 0) : 0}
-            onChange={(e) => set("down")(e.target.value)}
-            aria-valuetext={Number.isFinite(input.downPayment) ? formatINRShort(input.downPayment) : undefined}
-          />
-          <div className="mt-3 flex gap-2" role="group" aria-label="Quick down payment">
-            {[10, 20, 30].map((pct) => (
-              <button
-                key={pct}
-                type="button"
-                disabled={!Number.isFinite(input.price)}
-                onClick={() => set("down")(String(Math.round((input.price * pct) / 100)))}
-                className={`label min-h-9 border px-4 transition-colors disabled:opacity-40 ${
-                  downPct === pct ? "border-ink bg-ink text-paper" : "border-ink/20 text-mute hover:border-ink hover:text-ink"
-                }`}
-              >
-                {pct}%
-              </button>
-            ))}
+          <div className="mt-2.5 flex gap-2" role="group" aria-label="Set down payment to a share of the price">
+            {[10, 20, 30].map((pct) => {
+              const on = downPct !== null && Math.abs(downPct - pct) < 0.05;
+              return (
+                <button
+                  key={pct}
+                  type="button"
+                  disabled={!Number.isFinite(input.price)}
+                  aria-pressed={on}
+                  onClick={() => set("down")(String(Math.round((input.price * pct) / 100)))}
+                  className={`h-9 rounded-md border px-3.5 text-sm font-medium transition-colors disabled:opacity-40 ${
+                    on ? "border-ink bg-ink text-paper" : "border-ink/15 bg-white/50 text-ink hover:border-ink/40"
+                  }`}
+                >
+                  {pct}%
+                </button>
+              );
+            })}
           </div>
         </Field>
 
-        <div className="grid gap-x-8 sm:grid-cols-2">
-          <Field id={id("rate")} label="Interest rate" error={errors.annualRate} hint="Annual, % p.a.">
-            <div className="flex items-baseline gap-2">
+        <div className="grid gap-7 sm:grid-cols-2 sm:gap-5">
+          <Field id={id("rate")} label="Interest rate" error={errors.annualRate} hint="Per year">
+            <Box suffix="% p.a." invalid={!!errors.annualRate}>
               <input
                 id={id("rate")}
                 inputMode="decimal"
@@ -278,25 +234,22 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 onChange={(e) => set("rate")(decimal(e.target.value).slice(0, 5))}
                 aria-invalid={!!errors.annualRate}
                 aria-describedby={errors.annualRate ? `${id("rate")}-error` : `${id("rate")}-hint`}
-                className={inputBase}
+                className={inputCls}
               />
-              <span aria-hidden className="font-serif text-[1.6rem] text-mute">
-                %
-              </span>
-            </div>
+            </Box>
             <Range
-              aria-label="Interest rate slider"
+              aria-label="Interest rate"
               min={LIMITS.annualRate.min}
               max={15}
               step={0.05}
               value={Number.isFinite(input.annualRate) ? Math.min(input.annualRate, 15) : 0}
               onChange={(e) => set("rate")(String(Number(e.target.value)))}
               aria-valuetext={`${v.rate}% per year`}
-              />
+            />
           </Field>
 
           <Field id={id("years")} label="Loan tenure" error={errors.years} hint="1 to 30 years">
-            <div className="flex items-baseline gap-2">
+            <Box suffix="years" invalid={!!errors.years}>
               <input
                 id={id("years")}
                 inputMode="numeric"
@@ -305,186 +258,149 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 onChange={(e) => set("years")(digits(e.target.value).slice(0, 2))}
                 aria-invalid={!!errors.years}
                 aria-describedby={errors.years ? `${id("years")}-error` : `${id("years")}-hint`}
-                className={inputBase}
+                className={inputCls}
               />
-              <span aria-hidden className="font-serif text-[1.6rem] text-mute">
-                years
-              </span>
-            </div>
+            </Box>
             <Range
-              aria-label="Loan tenure slider"
+              aria-label="Loan tenure"
               min={LIMITS.years.min}
               max={LIMITS.years.max}
               step={1}
               value={Number.isFinite(input.years) ? input.years : 1}
               onChange={(e) => set("years")(e.target.value)}
               aria-valuetext={`${v.years} years`}
-              />
+            />
           </Field>
         </div>
 
         <Field
           id={id("income")}
-          label="Monthly household income (optional)"
+          label="Monthly household income"
+          note="Optional"
           error={errors.monthlyIncome}
-          hint="Optional. Used only to show what share of it the EMI would be. Nothing is stored or sent."
+          hint="Only used to show what share of it the EMI would be. Nothing is stored or sent."
         >
-          <MoneyInput
-            id={id("income")}
-            value={v.income}
-            onChange={set("income")}
-            error={errors.monthlyIncome}
-            placeholder="Leave blank to skip"
-          />
+          <MoneyInput id={id("income")} value={v.income} onChange={set("income")} error={errors.monthlyIncome} placeholder="Leave blank to skip" />
         </Field>
 
-        <div className="border-t border-ink/15 pt-6">
-          <button
-            type="button"
-            onClick={() => setV(EXAMPLE)}
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-mute hover:text-ink"
-          >
-            <RotateCcw aria-hidden className="size-4" strokeWidth={1.5} />
-            Reset to example values
-          </button>
-        </div>
+        <button type="button" onClick={() => setV(EXAMPLE)} className="text-sm font-medium text-mute underline underline-offset-4 hover:text-ink">
+          Reset to the example
+        </button>
       </form>
 
       {/* Results */}
-      <div
-        className="surface-forest grain relative overflow-hidden p-6 [--em:var(--color-brass)] sm:p-10 lg:col-span-7 lg:p-12"
-      >
+      <div className="flex flex-col border-t border-ink/10 bg-white/30 p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
         <div aria-live="polite" aria-atomic="true">
+          <H className="text-[0.95rem] font-medium text-mute">Your monthly EMI</H>
           {result ? (
             <>
-              <p className="label text-cyan">Estimated monthly EMI</p>
-              <p className="serif mt-4 text-[3.6rem] leading-none sm:text-[5rem] xl:text-[6rem]">
+              <p className="mt-2 text-[clamp(2.6rem,5vw,3.6rem)] font-semibold leading-none tabular-nums text-ink">
                 {formatINR(result.emi)}
-                <span className="ml-2 align-middle font-sans text-sm font-normal tracking-normal text-paper/60">/ month</span>
               </p>
-              <p className="mt-4 max-w-lg text-sm leading-relaxed text-paper/70">
-                Estimate for a loan of {formatINRShort(result.principal)} over {input.years} years at {input.annualRate}%
-                a year, using the standard reducing-balance formula.
+              <p className="mt-3 text-sm text-mute">
+                for {result.months} months
+                {Math.round(result.finalEmi) !== result.emi && <> · last EMI {formatINR(result.finalEmi)}, adjusted for rounding</>}
               </p>
             </>
           ) : (
             <>
-              <p className="label text-cyan">Estimated monthly EMI</p>
-              <p className="serif mt-4 text-[3rem] leading-none text-paper/40">—</p>
-              <p className="mt-4 max-w-md text-sm text-paper/70">Adjust the highlighted details to see an estimate.</p>
+              <p className="mt-2 text-[clamp(2.6rem,5vw,3.6rem)] font-semibold leading-none text-ink/25">—</p>
+              <p className="mt-3 text-sm text-mute">Correct the highlighted details to see your estimate.</p>
             </>
           )}
         </div>
 
         {result && (
           <>
-            <div className="mt-10 flex flex-col gap-8 border-t border-paper/15 pt-8 sm:flex-row sm:items-center">
-              <Donut principal={result.principal} interest={result.totalInterest} />
-              <dl className="grid flex-1 gap-5">
-                {[
-                  ["Loan principal", result.principal, "bg-paper"],
-                  ["Total interest", result.totalInterest, "bg-brass"],
-                  ["Total repaid", result.totalRepaid, null],
-                ].map(([label, value, swatch]) => (
-                  <div key={label as string} className="flex items-baseline justify-between gap-4 border-b border-paper/10 pb-3">
-                    <dt className="flex items-center gap-2.5 text-sm text-paper/70">
-                      {swatch ? <span aria-hidden className={`size-2.5 ${swatch}`} /> : <span aria-hidden className="size-2.5" />}
-                      {label as string}
-                      {swatch && (
-                        <span className="text-paper/45">
-                          {Math.round(((value as number) / result.totalRepaid) * 100)}%
-                        </span>
-                      )}
-                    </dt>
-                    <dd className="font-serif text-[1.6rem] leading-none">{formatINR(value as number)}</dd>
-                  </div>
-                ))}
-              </dl>
+            <dl className="mt-8 divide-y divide-ink/10 border-y border-ink/10 text-[0.98rem]">
+              {[
+                ["Loan amount", result.principal],
+                ["Down payment", input.downPayment],
+                ["Total interest", result.totalInterest],
+              ].map(([label, value]) => (
+                <div key={label as string} className="flex items-baseline justify-between gap-4 py-3">
+                  <dt className="text-ink/75">{label as string}</dt>
+                  <dd className="font-medium tabular-nums text-ink">{formatINR(value as number)}</dd>
+                </div>
+              ))}
+              <div className="flex items-baseline justify-between gap-4 py-3">
+                <dt className="font-medium text-ink">Total you repay</dt>
+                <dd className="font-semibold tabular-nums text-ink">{formatINR(result.totalRepaid)}</dd>
+              </div>
+            </dl>
+
+            {/* Principal against interest */}
+            <div className="mt-6">
+              <div className="flex h-2.5 overflow-hidden rounded-full bg-ink/10" aria-hidden>
+                <span className="h-full bg-forest transition-[width] duration-500" style={{ width: `${principalShare}%` }} />
+                <span className="h-full flex-1 bg-brass" />
+              </div>
+              <p className="mt-2.5 flex justify-between gap-4 text-sm text-mute">
+                <span className="flex items-center gap-2">
+                  <span aria-hidden className="size-2.5 rounded-sm bg-forest" />
+                  Principal {Math.round(principalShare)}%
+                </span>
+                <span className="flex items-center gap-2">
+                  <span aria-hidden className="size-2.5 rounded-sm bg-brass" />
+                  Interest {100 - Math.round(principalShare)}%
+                </span>
+              </p>
             </div>
 
             {result.emiToIncome !== null && (
-              <div className="mt-8 border-t border-paper/15 pt-8">
-                <div className="flex items-baseline justify-between gap-4">
-                  <H className="text-sm text-paper/70">EMI as a share of the income you entered</H>
-                  <p className="font-serif text-[2rem] leading-none">{(result.emiToIncome * 100).toFixed(1)}%</p>
-                </div>
-                <div className="mt-3 h-1 bg-paper/15" aria-hidden>
-                  <div
-                    className="h-full bg-brass transition-[width] duration-700 ease-out-expo"
-                    style={{ width: `${Math.min(100, result.emiToIncome * 100)}%` }}
-                  />
-                </div>
-                <p className="mt-3 text-xs leading-relaxed text-paper/55">
-                  An indicative calculation only — not financial advice and not an assessment of eligibility or
-                  affordability.
-                </p>
-              </div>
+              <p className="mt-6 rounded-lg border border-ink/10 bg-white/50 px-4 py-3 text-[0.95rem] text-ink">
+                The EMI would be <strong className="font-semibold tabular-nums">{(result.emiToIncome * 100).toFixed(1)}%</strong> of the
+                monthly income you entered.
+              </p>
             )}
 
-            <div className="mt-8 border-t border-paper/15 pt-8">
-              <div className="flex flex-wrap items-baseline justify-between gap-3">
-                <H className="text-sm text-paper/70">Where each year’s payments go</H>
-                <p className="flex items-center gap-4 text-xs text-paper/60" aria-hidden>
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 bg-paper" />
-                    Principal
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 bg-brass" />
-                    Interest
-                  </span>
-                </p>
-              </div>
-              <div className="mt-5">
-                <YearChart rows={result.schedule} />
-              </div>
-              <p className="sr-only">
-                In year 1, {formatINR(result.schedule[0].interestPaid)} goes to interest and{" "}
-                {formatINR(result.schedule[0].principalPaid)} to principal. By the final year, most of each payment
-                repays principal.
-              </p>
-              <details className="group mt-4 text-sm">
-                <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-2 text-sm font-medium text-paper/75 hover:text-paper [&::-webkit-details-marker]:hidden">
-                  <span className="transition-transform group-open:rotate-90">›</span> Year-by-year schedule
-                </summary>
-                <div className="mt-3 max-h-72 overflow-auto border-t border-paper/10">
-                  <table className="w-full min-w-[26rem] text-left text-xs tabular-nums">
-                    <caption className="sr-only">Estimated yearly repayment schedule</caption>
-                    <thead className="sticky top-0 bg-forest text-paper/55">
-                      <tr>
-                        <th scope="col" className="py-2 pr-3 font-medium">Year</th>
-                        <th scope="col" className="px-3 py-2 font-medium">Principal</th>
-                        <th scope="col" className="px-3 py-2 font-medium">Interest</th>
-                        <th scope="col" className="py-2 pl-3 font-medium">Balance</th>
+            <details className="group mt-6">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[0.95rem] font-medium text-ink [&::-webkit-details-marker]:hidden">
+                Year-by-year breakdown
+                <span aria-hidden className="text-mute transition-transform group-open:rotate-180">
+                  ⌄
+                </span>
+              </summary>
+              <div className="mt-2 max-h-72 overflow-auto rounded-lg border border-ink/10">
+                <table className="w-full min-w-[24rem] text-left text-sm tabular-nums">
+                  <caption className="sr-only">Estimated repayment for each year of the loan</caption>
+                  <thead className="sticky top-0 bg-paper text-mute">
+                    <tr>
+                      <th scope="col" className="px-3 py-2 font-medium">Year</th>
+                      <th scope="col" className="px-3 py-2 text-right font-medium">Principal</th>
+                      <th scope="col" className="px-3 py-2 text-right font-medium">Interest</th>
+                      <th scope="col" className="px-3 py-2 text-right font-medium">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.schedule.map((r) => (
+                      <tr key={r.year} className="border-t border-ink/8">
+                        <th scope="row" className="px-3 py-1.5 font-normal">{r.year}</th>
+                        <td className="px-3 py-1.5 text-right">{formatINR(r.principalPaid)}</td>
+                        <td className="px-3 py-1.5 text-right">{formatINR(r.interestPaid)}</td>
+                        <td className="px-3 py-1.5 text-right">{formatINR(r.balance)}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {result.schedule.map((r) => (
-                        <tr key={r.year} className="border-t border-paper/8 text-paper/85">
-                          <th scope="row" className="py-1.5 pr-3 font-normal">{r.year}</th>
-                          <td className="px-3 py-1.5">{formatINR(r.principalPaid)}</td>
-                          <td className="px-3 py-1.5">{formatINR(r.interestPaid)}</td>
-                          <td className="py-1.5 pl-3">{formatINR(r.balance)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </details>
-            </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
           </>
         )}
 
-        <div className="mt-10 flex flex-col gap-6 border-t border-paper/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/contact#enquire" className={buttonClass("paper")}>
-            <ButtonInner>Talk to us about Disha homes</ButtonInner>
+        <div className="mt-auto pt-8">
+          <Link
+            href="/contact#enquire"
+            className="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-5 text-[0.95rem] font-medium text-paper transition-colors hover:bg-forest"
+          >
+            Talk to us about a Disha home
           </Link>
+          <p className="mt-4 text-xs leading-relaxed text-mute">
+            An estimate for planning only, using the standard reducing-balance method with monthly rests. It is not an offer
+            of finance or an eligibility check by Disha Habitat or any lender. Fees, insurance and floating-rate changes are not
+            included.
+          </p>
         </div>
-        <p className="mt-6 flex gap-2 text-xs leading-relaxed text-paper/55">
-          <Info aria-hidden className="mt-0.5 size-3.5 shrink-0" />
-          Illustrative planning tool. All figures are estimates. This is not an offer of finance, a loan approval or an
-          eligibility check by Disha Habitat or any lender; actual EMIs depend on each lender’s terms, fees and rate type.
-        </p>
       </div>
     </div>
   );

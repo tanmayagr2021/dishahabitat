@@ -85,7 +85,7 @@ export function HomesField() {
                 </span>
               </h2>
               <div aria-hidden className="mt-8 flex items-end gap-5 border-t border-paper/15 pt-6 lg:block">
-                <p className="serif text-[clamp(4rem,8vw,7.5rem)] leading-[0.85] tabular-nums text-brass">{year}</p>
+                <p className="serif text-[clamp(3.2rem,5.6vw,5.4rem)] leading-[1.02] tabular-nums text-brass">{year}</p>
                 <p className="min-h-[2.6em] max-w-xs pb-1 text-[0.95rem] leading-snug text-paper/70 lg:mt-4 lg:min-h-[3.2em] lg:pb-0 lg:text-[1.05rem]">
                   {current ? (
                     <>
@@ -163,7 +163,7 @@ export function HomesField() {
                 <button
                   type="button"
                   onClick={play}
-                  className="label inline-flex h-9 items-center gap-1.5 border border-paper/20 px-3 text-[0.6rem] text-paper/80 hover:border-cyan hover:text-paper"
+                  className="label inline-flex h-9 items-center gap-1.5 border border-paper/20 px-3 text-[0.8rem] text-paper/80 hover:border-cyan hover:text-paper"
                 >
                   <RotateCcw aria-hidden className="size-3" strokeWidth={1.8} />
                   Replay

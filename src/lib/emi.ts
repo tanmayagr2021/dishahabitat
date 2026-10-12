@@ -49,50 +49,80 @@ export function monthlyEmi(principal: number, annualRate: number, years: number)
 
 export type YearRow = { year: number; principalPaid: number; interestPaid: number; balance: number };
 
-/* Year-by-year amortisation; the final payment absorbs rounding so the balance ends at exactly 0. */
-export function yearlySchedule(principal: number, annualRate: number, years: number): YearRow[] {
-  const r = annualRate / 12 / 100;
-  const payment = monthlyEmi(principal, annualRate, years);
-  const rows: YearRow[] = [];
-  let balance = principal;
-  for (let y = 1; y <= years; y++) {
-    let principalPaid = 0;
-    let interestPaid = 0;
-    for (let m = 0; m < 12; m++) {
-      const interest = balance * r;
-      const toPrincipal = Math.min(payment - interest, balance);
-      interestPaid += interest;
-      principalPaid += toPrincipal;
-      balance -= toPrincipal;
-    }
-    if (y === years) balance = 0;
-    rows.push({ year: y, principalPaid, interestPaid, balance: Math.max(0, balance) });
-  }
-  return rows;
-}
-
 export type LoanResult = {
   principal: number;
+  /* The monthly instalment, rounded to the rupee as lenders quote it. */
   emi: number;
+  /* The formula's unrounded value, for reference. */
+  emiExact: number;
+  /* The last instalment, adjusted by a few rupees so the loan ends at exactly zero. */
+  finalEmi: number;
+  months: number;
   totalRepaid: number;
   totalInterest: number;
   emiToIncome: number | null;
   schedule: YearRow[];
 };
 
+/*
+ * Month-by-month repayment, worked in whole paise so no floating-point drift accumulates:
+ * each month's interest is the outstanding balance × r (rounded to the paisa), the rest of the
+ * rupee-rounded EMI repays principal, and the final instalment clears whatever remains.
+ * Every total shown is therefore the exact sum of the payments in the schedule.
+ */
 export function calculateLoan(input: LoanInput): LoanResult {
   const principal = input.price - input.downPayment;
-  const emi = monthlyEmi(principal, input.annualRate, input.years);
-  const totalRepaid = emi * input.years * 12;
+  const months = input.years * 12;
+  const r = input.annualRate / 12 / 100;
+  const emiExact = monthlyEmi(principal, input.annualRate, input.years);
+  const emi = Math.round(emiExact);
+
+  let balance = Math.round(principal * 100); // paise
+  const payment = emi * 100;
+  let totalPaid = 0;
+  let finalEmi = emi;
+  const schedule: YearRow[] = [];
+  let yPrincipal = 0;
+  let yInterest = 0;
+
+  for (let m = 1; m <= months; m++) {
+    const interest = Math.round(balance * r);
+    let pay = payment;
+    if (m === months || pay >= balance + interest) {
+      pay = balance + interest; // the final instalment clears the loan exactly
+      finalEmi = pay / 100;
+    }
+    const toPrincipal = pay - interest;
+    balance -= toPrincipal;
+    totalPaid += pay;
+    yPrincipal += toPrincipal;
+    yInterest += interest;
+    if (m % 12 === 0 || balance === 0) {
+      schedule.push({ year: Math.ceil(m / 12), principalPaid: yPrincipal / 100, interestPaid: yInterest / 100, balance: balance / 100 });
+      yPrincipal = 0;
+      yInterest = 0;
+    }
+    if (balance === 0) break;
+  }
+
+  const totalRepaid = totalPaid / 100;
   const income = input.monthlyIncome ?? null;
   return {
     principal,
     emi,
+    emiExact,
+    finalEmi,
+    months,
     totalRepaid,
     totalInterest: totalRepaid - principal,
     emiToIncome: income && income > 0 ? emi / income : null,
-    schedule: yearlySchedule(principal, input.annualRate, input.years),
+    schedule,
   };
+}
+
+/* Kept for callers that only need the yearly rows. */
+export function yearlySchedule(principal: number, annualRate: number, years: number): YearRow[] {
+  return calculateLoan({ price: principal, downPayment: 0, annualRate, years }).schedule;
 }
 
 const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });

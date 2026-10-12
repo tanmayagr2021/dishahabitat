@@ -14,7 +14,7 @@ export function Footer() {
       <div className="shell pt-24 md:pt-32">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7">
-            <p className="serif text-[clamp(4rem,11vw,12rem)] leading-[0.84] tracking-[-0.035em]">
+            <p className="serif text-[clamp(3rem,6.4vw,6.4rem)] leading-[1.02]">
               Come
               <br />
               <em>home.</em>
@@ -32,7 +32,7 @@ export function Footer() {
                   <Link href={elements.href} className="group inline-flex min-h-9 items-center gap-3 text-[0.95rem] text-paper hover:text-paper">
                     <span aria-hidden className="size-1.5 bg-cyan" />
                     {elements.shortName}
-                    <span className="label bg-cyan/15 px-2 py-0.5 text-[0.55rem] text-cyan">Now selling</span>
+                    <span className="label bg-cyan/15 px-2 py-0.5 text-[0.8rem] text-cyan">Now selling</span>
                   </Link>
                 </li>
                 {projectsByHandover.map((p) => (
