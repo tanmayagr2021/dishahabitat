@@ -4,7 +4,8 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
-import { Label, Lines, Reveal } from "@/components/ui";
+import { Label, Lines, MediaBadge, Reveal } from "@/components/ui";
+import { elements } from "@/lib/elements";
 import { projects, projectsByHandover } from "@/lib/projects";
 import { formatIndian } from "@/lib/site";
 
@@ -26,17 +27,56 @@ export default function HomesPage() {
         label="Our homes"
         title={
           <>
-            Five communities.
+            Five delivered.
             <br />
-            <em className="text-paper/55">{formatIndian(totalHomes)} homes.</em>
+            <em className="text-paper/55">One being built.</em>
           </>
         }
-        intro="Every Disha Habitat community, from our first 92 homes on Panathur–Varthur Road to Pursuit of Sunshine on Budigere Road. All figures as published by Disha Habitat."
+        intro={`${formatIndian(totalHomes)} homes handed over across five communities since 2014 — and Pursuit of the Elements, now selling in Gunjur. All figures as published by Disha Habitat.`}
       />
 
       {/* The index */}
-      <section data-tone="dark" aria-label="All communities" className="grain relative bg-ink pb-28 text-paper md:pb-40">
+      <section data-tone="dark" aria-label="All communities" className="relative bg-ink pb-28 text-paper md:pb-40">
         <div className="shell">
+          {/* On sale now */}
+          <Link
+            href={elements.href}
+            className="group mb-16 grid overflow-hidden rounded-[6px] bg-paper text-ink md:grid-cols-12"
+          >
+            <span className="relative block aspect-[16/10] md:col-span-7 md:aspect-auto md:min-h-[26rem]">
+              <Image
+                src={elements.cover.src}
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 768px) 58vw, 100vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              />
+              <MediaBadge kind="render" />
+            </span>
+            <span className="flex flex-col justify-between gap-8 p-6 md:col-span-5 md:p-10">
+              <span>
+                <span className="label inline-flex items-center gap-2 text-mute">
+                  <span className="size-2 rounded-full bg-elements" />
+                  {elements.status} · {elements.locality}
+                </span>
+                <span className="serif mt-4 block text-[clamp(2.2rem,3.6vw,3.4rem)] leading-[1.02]">
+                  {elements.shortName}
+                </span>
+                <span className="mt-4 block leading-relaxed text-mute">
+                  {elements.offer} and 4 & 5 BHK villas, on 20 acres with over 40 amenities.
+                </span>
+              </span>
+              <span className="inline-flex items-center gap-3 font-medium">
+                Explore the project
+                <span className="inline-flex size-10 items-center justify-center rounded-full bg-ink text-paper transition-transform duration-300 group-hover:rotate-45">
+                  <ArrowUpRight aria-hidden className="size-4" strokeWidth={1.6} />
+                </span>
+              </span>
+            </span>
+          </Link>
+
+          <p className="label mb-6 text-paper/60">Delivered communities</p>
           <ol className="border-b border-paper/15">
             {newestFirst.map((p, i) => (
               <li key={p.slug} className="border-t border-paper/15">
@@ -55,7 +95,7 @@ export default function HomesPage() {
                     {p.index}
                   </span>
                   <span className="col-span-12 md:col-span-5">
-                    <span className="serif block text-[clamp(2.8rem,5.6vw,5.6rem)] leading-[0.9] transition-transform duration-700 ease-out-expo group-hover:translate-x-3">
+                    <span className="serif block text-[clamp(2.3rem,4.2vw,4.2rem)] leading-[1] transition-transform duration-700 ease-out-expo group-hover:translate-x-3">
                       {p.shortName}
                     </span>
                     <span className="mt-3 block text-sm text-paper/60">{p.locality}</span>

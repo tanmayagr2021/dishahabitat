@@ -3,6 +3,7 @@
 import { useId, useRef, useState, type FormEvent } from "react";
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
 import { buttonClass, ButtonInner } from "@/components/ui";
+import { elements } from "@/lib/elements";
 import { projects } from "@/lib/projects";
 
 /*
@@ -22,6 +23,7 @@ type Values = {
 type Errors = Partial<Record<keyof Values, string>>;
 
 const interests = [
+  elements.name,
   "Upcoming Disha Habitat launches",
   ...projects.map((p) => p.name),
   "Something else",

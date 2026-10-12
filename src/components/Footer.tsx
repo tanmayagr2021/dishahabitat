@@ -3,16 +3,17 @@ import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { company } from "@/lib/site";
 import { projects, projectsByHandover } from "@/lib/projects";
+import { elements } from "@/lib/elements";
 
 export function Footer() {
   const sunshine = projects.find((p) => p.slug === "disha-pursuit-of-sunshine");
 
   return (
-    <footer data-tone="dark" className="grain relative overflow-hidden bg-ink text-paper">
+    <footer data-tone="dark" className="relative overflow-hidden bg-ink text-paper">
       <div className="shell pt-24 md:pt-32">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7">
-            <p className="serif text-[clamp(4.6rem,12vw,12.5rem)] leading-[0.8]">
+            <p className="serif text-[clamp(3.4rem,8.6vw,9rem)] leading-[0.9]">
               Come <em>home.</em>
             </p>
             <Link
@@ -30,6 +31,13 @@ export function Footer() {
             <div>
               <h2 className="label text-paper/50">The communities</h2>
               <ul className="mt-5 space-y-1">
+                <li>
+                  <Link href={elements.href} className="group inline-flex min-h-9 items-center gap-3 text-[0.95rem] text-paper hover:text-paper">
+                    <span aria-hidden className="size-1.5 rounded-full bg-elements" />
+                    {elements.shortName}
+                    <span className="rounded-full bg-paper/10 px-2 py-0.5 text-[0.7rem] text-paper/80">Now selling</span>
+                  </Link>
+                </li>
                 {projectsByHandover.map((p) => (
                   <li key={p.slug}>
                     <Link

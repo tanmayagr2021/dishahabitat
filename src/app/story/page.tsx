@@ -52,7 +52,7 @@ export default function StoryPage() {
             </Label>
             <Lines
               id="journey-title"
-              className="serif mt-6 text-[clamp(2.8rem,5vw,4.8rem)]"
+              className="serif mt-6 text-[clamp(2.4rem,4.4vw,4.4rem)]"
               lines={["The most fulfilling", <em key="e">learning curve.</em>]}
             />
           </div>
@@ -85,7 +85,7 @@ export default function StoryPage() {
       </section>
 
       {/* Twelve years, five builds, drawn to scale */}
-      <section data-tone="dark" aria-labelledby="builds-title" className="grain relative bg-ink py-28 text-paper md:py-40">
+      <section data-tone="dark" aria-labelledby="builds-title" className="relative bg-ink py-28 text-paper md:py-40">
         <div className="shell">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
@@ -94,7 +94,7 @@ export default function StoryPage() {
               </Label>
               <Lines
                 id="builds-title"
-                className="serif mt-6 text-[clamp(2.8rem,6vw,6rem)]"
+                className="serif mt-6 text-[clamp(2.4rem,4.8vw,4.8rem)]"
                 lines={["Built one at a time,", <em key="e">since 2014.</em>]}
               />
             </div>
@@ -151,7 +151,7 @@ export default function StoryPage() {
         </div>
       </section>
 
-      <BlackWhite n="03" />
+      <BlackWhite n="03" full />
 
       {/* Homemakers */}
       <section data-tone="light" aria-labelledby="homemakers-title" className="bg-paper py-28 md:py-40">
@@ -163,7 +163,7 @@ export default function StoryPage() {
               </Label>
               <Lines
                 id="homemakers-title"
-                className="serif mt-6 text-[clamp(2.8rem,6vw,6rem)]"
+                className="serif mt-6 text-[clamp(2.4rem,4.8vw,4.8rem)]"
                 lines={["The people who", <em key="e">nurture every home.</em>]}
               />
             </div>

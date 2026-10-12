@@ -4,11 +4,11 @@ export default function NotFound() {
   return (
     <section
       data-tone="dark"
-      className="grain relative flex min-h-[100svh] items-end bg-ink pb-20 pt-36 text-paper md:pb-28"
+      className="relative flex min-h-[100svh] items-end bg-ink pb-20 pt-36 text-paper md:pb-28"
     >
       <div className="shell">
         <Label className="text-paper/60">Page not found</Label>
-        <h1 className="serif mt-6 text-[clamp(3.8rem,11vw,11rem)] leading-[0.86]">
+        <h1 className="serif mt-6 text-[clamp(3rem,7vw,7rem)] leading-[0.95]">
           This path doesn’t <em className="text-paper/55">lead home.</em>
         </h1>
         <div className="mt-12 flex flex-col gap-6 border-t border-paper/20 pt-8 sm:flex-row sm:items-center sm:justify-between">

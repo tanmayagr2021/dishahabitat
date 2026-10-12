@@ -3,61 +3,47 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Phone } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { company } from "@/lib/site";
+import { elements } from "@/lib/elements";
 import { projectsByHandover } from "@/lib/projects";
 
 const nav = [
-  { href: "/homes", label: "Homes" },
-  { href: "/story", label: "Story" },
-  { href: "/plan", label: "Plan" },
+  { href: "/homes", label: "Our homes" },
+  { href: "/story", label: "Our story" },
+  { href: "/plan", label: "EMI calculator" },
   { href: "/contact", label: "Contact" },
 ] as const;
-
-/* Reads data-tone from the section currently under the header, so the bar always contrasts. */
-function toneUnder(y: number): "dark" | "light" {
-  const els = document.elementsFromPoint(window.innerWidth / 2, y);
-  for (const el of els) {
-    if (el.closest("[data-header]")) continue;
-    const toned = el.closest<HTMLElement>("[data-tone]");
-    if (toned) return toned.dataset.tone === "dark" ? "dark" : "light";
-  }
-  return "light";
-}
 
 export function Header() {
   const pathname = usePathname();
   const [tone, setTone] = useState<"dark" | "light">("dark");
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const [preview, setPreview] = useState(0);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // The section under the header sets its colours. An observer watches a thin band at the top
+  // of the viewport, so nothing is measured on scroll.
   useEffect(() => {
-    let last = window.scrollY;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const y = window.scrollY;
-      setScrolled(y > 24);
-      if (y > 600 && y > last + 6) setHidden(true);
-      else if (y < last - 6 || y <= 600) setHidden(false);
-      last = y;
-      setTone(toneUnder(36));
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    update();
+    const sections = document.querySelectorAll<HTMLElement>("main [data-tone], footer[data-tone]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setTone((e.target as HTMLElement).dataset.tone === "dark" ? "dark" : "light");
+        }
+      },
+      { rootMargin: "-36px 0px -96% 0px" },
+    );
+    sections.forEach((s) => observer.observe(s));
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
     return () => {
-      cancelAnimationFrame(frame);
+      observer.disconnect();
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
     };
   }, [pathname]);
 
@@ -111,41 +97,31 @@ export function Header() {
     <>
       <header
         data-header
-        className={`fixed inset-x-0 top-0 z-50 transition-[transform,color] duration-500 ease-out-expo ${
-          dark ? "text-paper" : "text-ink"
-        } ${hidden && !open ? "-translate-y-full" : "translate-y-0"}`}
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${dark ? "text-paper" : "text-ink"} ${
+          scrolled && !open
+            ? dark
+              ? "bg-ink/92 shadow-[0_1px_0_rgb(255_255_255/0.08)]"
+              : "bg-paper/94 shadow-[0_1px_0_rgb(0_0_0/0.08)]"
+            : ""
+        }`}
       >
-        <div className="shell flex h-18 items-center justify-between gap-6 md:h-20">
+        <div className="shell flex h-16 items-center justify-between gap-6 md:h-[4.5rem]">
           <Link href="/" className="relative z-10 -ml-1 p-1" aria-label="Disha Habitat — home">
             <Logo className="h-9 w-auto md:h-10" />
           </Link>
 
-          {/* Desktop navigation sits in a frosted pill once the page scrolls. */}
-          <nav
-            aria-label="Primary"
-            className={`absolute left-1/2 hidden -translate-x-1/2 rounded-full p-1 transition-[background-color,box-shadow] duration-500 lg:block ${
-              scrolled && !open
-                ? dark
-                  ? "bg-ink/55 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)] backdrop-blur-xl"
-                  : "bg-paper/70 shadow-[inset_0_0_0_1px_rgb(0_0_0/0.06)] backdrop-blur-xl"
-                : ""
-            }`}
-          >
-            <ul className="flex items-center">
+          <nav aria-label="Primary" className="hidden lg:block">
+            <ul className="flex items-center gap-1">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className={`group relative inline-flex h-10 items-center rounded-full px-5 text-[0.88rem] transition-colors ${
-                      dark ? "hover:bg-paper/10" : "hover:bg-ink/5"
-                    } aria-[current=page]:font-medium`}
+                    className={`inline-flex h-10 items-center rounded-full px-4 text-[0.95rem] transition-colors aria-[current=page]:font-medium ${
+                      dark ? "hover:bg-paper/10" : "hover:bg-ink/6"
+                    } ${isActive(item.href) ? (dark ? "bg-paper/10" : "bg-ink/6") : ""}`}
                   >
                     {item.label}
-                    <span
-                      aria-hidden
-                      className="absolute bottom-1.5 left-1/2 hidden size-1 -translate-x-1/2 rounded-full bg-current group-aria-[current=page]:block"
-                    />
                   </Link>
                 </li>
               ))}
@@ -153,19 +129,35 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <a
+              href={elements.phone.href}
+              className={`hidden h-10 items-center gap-2 rounded-full px-4 text-[0.95rem] xl:inline-flex ${
+                dark ? "hover:bg-paper/10" : "hover:bg-ink/6"
+              }`}
+            >
+              <Phone aria-hidden className="size-4" strokeWidth={1.6} />
+              <span className="tabular-nums">{elements.phone.display}</span>
+            </a>
             <Link
               href="/contact#enquire"
-              className={`hidden h-10 items-center rounded-full px-5 text-[0.88rem] font-medium transition-colors sm:inline-flex ${
+              className={`hidden h-10 items-center rounded-full px-5 text-[0.95rem] font-medium transition-colors sm:inline-flex ${
                 dark ? "bg-paper text-ink hover:bg-paper/85" : "bg-ink text-paper hover:bg-ink/85"
               }`}
             >
-              Enquire
+              Book a visit
             </Link>
+            <a
+              href={elements.phone.href}
+              aria-label={`Call ${elements.phone.display}`}
+              className={`inline-flex size-10 items-center justify-center rounded-full sm:hidden ${dark ? "bg-paper/10" : "bg-ink/6"}`}
+            >
+              <Phone aria-hidden className="size-4" strokeWidth={1.6} />
+            </a>
             <button
               ref={toggleRef}
               type="button"
-              className={`relative z-10 inline-flex h-10 items-center gap-3 rounded-full pl-4 pr-3 text-[0.88rem] lg:hidden ${
-                dark ? "bg-paper/10 backdrop-blur-md" : "bg-ink/5 backdrop-blur-md"
+              className={`relative z-10 inline-flex h-10 items-center gap-3 rounded-full pl-4 pr-3.5 text-[0.95rem] lg:hidden ${
+                dark ? "bg-paper/10" : "bg-ink/6"
               }`}
               aria-expanded={open}
               aria-controls="site-menu"
@@ -174,12 +166,12 @@ export function Header() {
               <span>{open ? "Close" : "Menu"}</span>
               <span aria-hidden className="relative block h-2.5 w-4">
                 <span
-                  className={`absolute left-0 h-px w-full bg-current transition-all duration-500 ease-out-expo ${
+                  className={`absolute left-0 h-px w-full bg-current transition-transform duration-300 ${
                     open ? "top-[5px] rotate-45" : "top-0"
                   }`}
                 />
                 <span
-                  className={`absolute left-0 h-px w-full bg-current transition-all duration-500 ease-out-expo ${
+                  className={`absolute left-0 h-px w-full bg-current transition-transform duration-300 ${
                     open ? "top-[5px] -rotate-45" : "top-2.5"
                   }`}
                 />
@@ -189,68 +181,65 @@ export function Header() {
         </div>
       </header>
 
-      {/* Full-screen menu (mobile and tablet): navigation plus the five communities. */}
+      {/* Full-screen menu (mobile and tablet). */}
       <div
         id="site-menu"
         ref={panelRef}
         hidden={!open}
         data-tone="dark"
-        className="grain fixed inset-0 z-40 overflow-y-auto bg-ink text-paper lg:hidden"
+        className="fixed inset-0 z-40 overflow-y-auto bg-ink text-paper lg:hidden"
       >
-        <nav aria-label="Menu" className="shell flex min-h-full flex-col gap-12 pb-10 pt-28">
+        <nav aria-label="Menu" className="shell flex min-h-full flex-col gap-10 pb-10 pt-24">
           <ul className="flex flex-col">
-            {[{ href: "/", label: "Home" }, ...nav].map((item, i) => (
-              <li key={item.href} className="overflow-hidden">
+            {[{ href: "/", label: "Home" }, ...nav].map((item) => (
+              <li key={item.href} className="border-b border-paper/10">
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
                   aria-current={pathname === item.href ? "page" : undefined}
-                  className="anim-rise group flex items-baseline gap-4 py-1"
-                  style={{ "--d": `${60 + i * 50}ms` } as CSSProperties}
+                  className="group flex items-center justify-between py-3.5"
                 >
-                  <span className="label w-6 text-mute-2">0{i + 1}</span>
-                  <span className="serif text-[3.6rem] leading-[1] transition-opacity group-hover:opacity-60 group-aria-[current=page]:italic">
-                    {item.label}
+                  <span className="serif text-[2.4rem] leading-tight group-aria-[current=page]:italic">{item.label}</span>
+                  <span aria-hidden className="text-paper/40">
+                    →
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
 
-          <div className="anim-fade-up" style={{ "--d": "380ms" } as CSSProperties}>
-            <p className="label text-mute-2">The communities</p>
-            <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {projectsByHandover.map((p, i) => (
+          <Link href={elements.href} onClick={() => setOpen(false)} className="flex items-center gap-4 rounded-[4px] bg-paper/6 p-3">
+            <span className="relative block aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-[3px]">
+              <Image src={elements.cover.src} alt="" fill sizes="112px" className="object-cover" />
+            </span>
+            <span>
+              <span className="label text-elements">{elements.status}</span>
+              <span className="serif mt-1 block text-[1.5rem] leading-tight">{elements.shortName}</span>
+              <span className="mt-0.5 block text-sm text-paper/60">{elements.locality}</span>
+            </span>
+          </Link>
+
+          <div>
+            <p className="label text-paper/50">Delivered communities</p>
+            <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-[0.95rem]">
+              {projectsByHandover.map((p) => (
                 <li key={p.slug}>
-                  <Link
-                    href={`/homes/${p.slug}`}
-                    onClick={() => setOpen(false)}
-                    onMouseEnter={() => setPreview(i)}
-                    className="group block"
-                  >
-                    <span className="relative block aspect-[4/3] overflow-hidden rounded-sm bg-ink-3">
-                      <Image
-                        src={p.cover.src}
-                        alt=""
-                        fill
-                        sizes="(min-width: 640px) 30vw, 45vw"
-                        className={`object-cover transition-[filter] duration-700 ${preview === i ? "" : "grayscale"} group-hover:grayscale-0`}
-                      />
-                    </span>
-                    <span className="mt-2 flex items-center gap-2 text-sm">
-                      <span aria-hidden className="size-1.5 rounded-full" style={{ background: p.hue }} />
-                      {p.shortName}
-                    </span>
+                  <Link href={`/homes/${p.slug}`} onClick={() => setOpen(false)} className="flex items-center gap-2 py-1.5">
+                    <span aria-hidden className="size-1.5 rounded-full" style={{ background: p.hue }} />
+                    {p.shortName}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="anim-fade-up mt-auto grid gap-1 text-sm text-paper/70" style={{ "--d": "460ms" } as CSSProperties}>
+          <div className="mt-auto grid gap-1 text-[0.95rem] text-paper/75">
+            <a href={elements.phone.href} className="py-1.5 hover:text-paper">
+              Sales · {elements.phone.display}
+            </a>
             {company.phones.map((p) => (
               <a key={p.href} href={p.href} className="py-1.5 hover:text-paper">
-                {p.display}
+                Office · {p.display}
               </a>
             ))}
             <a href={`mailto:${company.email}`} className="py-1.5 hover:text-paper">

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type InputHTMLAttributes, type ReactNode } from "react";
 import { Info, RotateCcw } from "lucide-react";
 import { buttonClass, ButtonInner } from "@/components/ui";
 import { calculateLoan, formatINR, formatINRShort, LIMITS, validateLoan, type LoanErrors } from "@/lib/emi";
@@ -68,8 +68,20 @@ function Field({
 const inputBase =
   "w-full border-0 border-b border-ink/25 bg-transparent px-0 pb-2 pt-3 font-serif text-[2.1rem] leading-none text-ink outline-none transition-colors focus:border-ink focus:ring-0 aria-[invalid=true]:border-error placeholder:text-[1.25rem] placeholder:text-ink/35 sm:text-[2.4rem]";
 
-const rangeBase =
-  "mt-5 h-6 w-full cursor-pointer appearance-none bg-transparent accent-ink [&::-webkit-slider-runnable-track]:h-px [&::-webkit-slider-runnable-track]:bg-ink/25 [&::-webkit-slider-thumb]:-mt-[9px] [&::-webkit-slider-thumb]:size-[19px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-[5px] [&::-webkit-slider-thumb]:border-paper [&::-webkit-slider-thumb]:bg-sunshine-deep [&::-webkit-slider-thumb]:shadow-[0_0_0_1px_var(--color-ink)] [&::-moz-range-track]:h-px [&::-moz-range-track]:bg-ink/25 [&::-moz-range-thumb]:size-[13px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-[3px] [&::-moz-range-thumb]:border-paper [&::-moz-range-thumb]:bg-sunshine-deep";
+/* Range input with a track that fills up to the handle (styles in globals.css). */
+function Range(props: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "className">) {
+  const min = Number(props.min ?? 0);
+  const max = Number(props.max ?? 100);
+  const pct = max > min ? ((Number(props.value ?? 0) - min) / (max - min)) * 100 : 0;
+  return (
+    <input
+      type="range"
+      {...props}
+      className="range mt-4 text-ink"
+      style={{ "--fill": `${Math.min(100, Math.max(0, pct))}%` } as CSSProperties}
+    />
+  );
+}
 
 /* Money input: always shows Indian grouping; the caret keeps its place among the digits as commas move. */
 function MoneyInput({
@@ -212,15 +224,13 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
           aside={Number.isFinite(input.price) && <span className="text-sm text-mute">{formatINRShort(input.price)}</span>}
         >
           <MoneyInput id={id("price")} value={v.price} onChange={set("price")} error={errors.price} />
-          <input
-            type="range"
+          <Range
             aria-label="Property price slider"
             min={0}
             max={1000}
             value={toSlider(Number.isFinite(input.price) ? input.price : PRICE_SLIDER.min)}
             onChange={(e) => set("price")(String(fromSlider(Number(e.target.value))))}
             aria-valuetext={Number.isFinite(input.price) ? formatINRShort(input.price) : undefined}
-            className={rangeBase}
           />
         </Field>
 
@@ -232,8 +242,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
           aside={downPct !== null && downPct >= 0 && <span className="text-sm text-mute">{downPct}% of price</span>}
         >
           <MoneyInput id={id("down")} value={v.down} onChange={set("down")} error={errors.downPayment} />
-          <input
-            type="range"
+          <Range
             aria-label="Down payment slider"
             min={0}
             max={Number.isFinite(input.price) ? input.price : 0}
@@ -241,7 +250,6 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
             value={Number.isFinite(input.downPayment) ? Math.min(input.downPayment, input.price || 0) : 0}
             onChange={(e) => set("down")(e.target.value)}
             aria-valuetext={Number.isFinite(input.downPayment) ? formatINRShort(input.downPayment) : undefined}
-            className={rangeBase}
           />
           <div className="mt-3 flex gap-2" role="group" aria-label="Quick down payment">
             {[10, 20, 30].map((pct) => (
@@ -277,8 +285,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 %
               </span>
             </div>
-            <input
-              type="range"
+            <Range
               aria-label="Interest rate slider"
               min={LIMITS.annualRate.min}
               max={15}
@@ -286,8 +293,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
               value={Number.isFinite(input.annualRate) ? Math.min(input.annualRate, 15) : 0}
               onChange={(e) => set("rate")(String(Number(e.target.value)))}
               aria-valuetext={`${v.rate}% per year`}
-              className={rangeBase}
-            />
+              />
           </Field>
 
           <Field id={id("years")} label="Loan tenure" error={errors.years} hint="1 to 30 years">
@@ -306,8 +312,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
                 years
               </span>
             </div>
-            <input
-              type="range"
+            <Range
               aria-label="Loan tenure slider"
               min={LIMITS.years.min}
               max={LIMITS.years.max}
@@ -315,8 +320,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
               value={Number.isFinite(input.years) ? input.years : 1}
               onChange={(e) => set("years")(e.target.value)}
               aria-valuetext={`${v.years} years`}
-              className={rangeBase}
-            />
+              />
           </Field>
         </div>
 
@@ -350,7 +354,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
       {/* Results */}
       <div
         data-tone="dark"
-        className="grain relative overflow-hidden rounded-[4px] bg-ink p-6 text-paper sm:p-10 lg:col-span-7 lg:p-12"
+        className="relative overflow-hidden rounded-[4px] bg-ink p-6 text-paper sm:p-10 lg:col-span-7 lg:p-12"
       >
         <div aria-live="polite" aria-atomic="true">
           {result ? (

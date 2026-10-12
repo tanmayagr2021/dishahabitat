@@ -1,51 +1,27 @@
-"use client";
-
 import Image from "next/image";
-import { useRef, type CSSProperties } from "react";
 import { ArrowLink, Label, Reveal } from "@/components/ui";
-import { useScrollProgress } from "@/lib/useScrollProgress";
 
-/* Disha Habitat's own words, from dishahabitat.com/our-journey. */
-const line =
-  "We began exactly where you are right now. Looking for a house that would become a home.";
-
+/* The founding line is Disha Habitat's own, from dishahabitat.com/our-journey. */
 export function Manifesto() {
-  const textRef = useRef<HTMLDivElement>(null);
-  useScrollProgress(textRef, "enter", { end: 0.4 });
-  const words = line.split(" ");
-
   return (
-    <section data-tone="light" aria-labelledby="manifesto-title" className="relative bg-paper py-28 md:py-44">
+    <section data-tone="light" aria-labelledby="manifesto-title" className="relative bg-paper py-24 md:py-32">
       <div className="shell">
-        <div ref={textRef} className="grid gap-12 [--p:1] lg:grid-cols-12 lg:gap-8">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-3 lg:pt-4">
-            <Label n="01" className="text-mute">
+            <Label n="02" className="text-mute">
               Where we began
             </Label>
           </div>
 
           <div className="lg:col-span-9">
-            {/* Each word inks in as the line scrolls up the page. */}
-            <h2
-              id="manifesto-title"
-              className="serif text-[clamp(2.6rem,6.4vw,6.6rem)] leading-[0.98] text-ink"
-            >
-              {words.map((w, i) => (
-                <span
-                  key={i}
-                  style={
-                    {
-                      opacity: `clamp(0.12, calc(var(--p) * ${words.length * 1.25} - ${i}), 1)`,
-                    } as CSSProperties
-                  }
-                >
-                  {w.startsWith("home") ? <em>{w}</em> : w}{" "}
-                </span>
-              ))}
-            </h2>
+            <Reveal as="h2" className="serif text-[clamp(2.3rem,4.8vw,4.8rem)] leading-[1.04] text-ink">
+              <span id="manifesto-title">
+                We began exactly where you are right now. Looking for a house that would become a <em>home.</em>
+              </span>
+            </Reveal>
 
-            <div className="mt-16 grid gap-10 md:mt-24 md:grid-cols-9 md:gap-8">
-              <Reveal variant="bloom" className="relative aspect-[4/3] overflow-hidden bg-paper-3 md:col-span-5">
+            <div className="mt-12 grid gap-10 md:mt-16 md:grid-cols-9 md:gap-8">
+              <Reveal variant="bloom" className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-paper-3 md:col-span-5">
                 <Image
                   src="/images/community/leadership-team.jpg"
                   alt="Members of the Disha Habitat team reviewing plans together, one wearing a hard hat"

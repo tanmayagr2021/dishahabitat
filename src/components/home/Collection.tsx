@@ -48,7 +48,7 @@ function Stats({ p }: { p: Project }) {
       ].map(([k, v]) => (
         <div key={k}>
           <dt className="label text-paper/55">{k}</dt>
-          <dd className="serif mt-1.5 text-[1.6rem] leading-none xl:text-[1.9rem]">{v}</dd>
+          <dd className="serif mt-1.5 text-[1.5rem] leading-none xl:text-[1.75rem]">{v}</dd>
         </div>
       ))}
     </dl>
@@ -60,21 +60,21 @@ export function Collection() {
   const [active, setActive] = useState(items.length - 1);
 
   return (
-    <section data-tone="dark" aria-labelledby="collection-title" className="grain relative bg-ink pb-6 pt-28 text-paper md:pt-40">
+    <section data-tone="dark" aria-labelledby="collection-title" className="relative bg-ink pb-24 pt-24 text-paper md:pb-32 md:pt-32">
       <div className="shell">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-3 lg:pt-4">
-            <Label n="02" className="text-paper/60">
-              The collection
+            <Label n="03" className="text-paper/60">
+              Delivered
             </Label>
           </div>
           <Lines
             id="collection-title"
-            className="serif text-[clamp(2.8rem,6.4vw,6.6rem)] lg:col-span-9"
+            className="serif text-[clamp(2.4rem,5vw,5rem)] lg:col-span-9"
             lines={[
               "Five communities,",
               <em key="e" className="text-paper/55">
-                built one at a time.
+                1,102 homes, handed over.
               </em>,
             ]}
           />
@@ -90,7 +90,7 @@ export function Collection() {
             return (
               <li
                 key={p.slug}
-                className="relative min-w-0 transition-[flex-grow] duration-[1100ms] ease-out-expo"
+                className="relative min-w-0 transition-[flex-grow] duration-700 ease-out-expo"
                 style={{ flexGrow: on ? 7 : 1, flexBasis: 0 }}
               >
                 <Link
@@ -108,7 +108,7 @@ export function Collection() {
                         alt=""
                         fill
                         sizes="(min-width: 1024px) 70vw, 100vw"
-                        className={`object-cover transition-[transform,filter] duration-[1400ms] ease-out-expo ${on ? "scale-100" : "scale-110 brightness-75"}`}
+                        className="object-cover"
                         style={{ objectPosition: img.position }}
                       />
                     </div>
@@ -121,7 +121,7 @@ export function Collection() {
                     className={`absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-between py-6 transition-opacity duration-500 ${on ? "opacity-0" : "opacity-100 delay-300"}`}
                   >
                     <span className="label text-paper/70">{p.index}</span>
-                    <span className="serif rotate-180 whitespace-nowrap text-[2rem] leading-none [writing-mode:vertical-rl]">
+                    <span className="serif rotate-180 whitespace-nowrap text-[1.7rem] leading-none [writing-mode:vertical-rl]">
                       {p.shortName}
                     </span>
                     <span className="size-2 rounded-full" style={{ background: p.hue }} />
@@ -139,7 +139,7 @@ export function Collection() {
                           <span className="h-[3px] w-10 rounded-full" style={{ background: p.hue }} />
                           {p.index} · {p.locality}
                         </span>
-                        <span className="serif mt-4 block whitespace-nowrap text-[clamp(3.4rem,5.4vw,6rem)] leading-[0.9]">
+                        <span className="serif mt-4 block whitespace-nowrap text-[clamp(2.6rem,4vw,4.4rem)] leading-[0.95]">
                           {p.shortName}
                         </span>
                       </span>
@@ -183,7 +183,7 @@ export function Collection() {
                       <span className="h-[3px] w-6 rounded-full" style={{ background: p.hue }} />
                       {p.handoverYear} · {p.locality}
                     </span>
-                    <span className="serif mt-2 block text-[2.6rem] leading-[0.95]">{p.shortName}</span>
+                    <span className="serif mt-2 block text-[2.2rem] leading-[1]">{p.shortName}</span>
                     <span className="mt-4 block">
                       <Stats p={p} />
                     </span>

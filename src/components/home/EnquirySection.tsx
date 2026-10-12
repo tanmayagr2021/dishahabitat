@@ -10,7 +10,7 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
       id="enquire"
       data-tone="dark"
       aria-labelledby="enquire-title"
-      className="grain relative isolate overflow-hidden bg-ink text-paper"
+      className="relative isolate overflow-hidden bg-ink text-paper"
     >
       <div className="absolute inset-0 -z-10">
         <AmbientFilm label="Brand film: gardens, sports courts and residents at home in Disha Habitat communities" />
@@ -26,7 +26,7 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
             </Label>
             <Lines
               id="enquire-title"
-              className="serif mt-8 text-[clamp(3.4rem,8vw,8.4rem)] leading-[0.86]"
+              className="serif mt-6 text-[clamp(2.8rem,6vw,6rem)] leading-[0.98]"
               lines={["“Let’s meet", <em key="c">for coffee.”</em>]}
             />
             <Reveal delay={200} className="mt-8 max-w-md">
@@ -66,8 +66,8 @@ export function EnquirySection({ defaultInterest, n = "08" }: { defaultInterest?
 
         <Reveal delay={150} className="lg:col-span-5 lg:col-start-8">
           <div className="rounded-[4px] bg-paper p-6 text-ink shadow-[0_60px_120px_-40px_rgb(0_0_0/0.6)] sm:p-10">
-            <p className="serif text-[2.2rem] leading-none">Tell us what you’re looking for.</p>
-            <p className="mb-8 mt-3 text-sm text-mute">We’ll call you back. Fields marked * are required.</p>
+            <p className="serif text-[2rem] leading-tight">Book a site visit</p>
+            <p className="mb-8 mt-2 text-sm text-mute">Tell us a little about what you’re looking for and we’ll call you back. Fields marked * are required.</p>
             <EnquiryForm defaultInterest={defaultInterest} />
           </div>
         </Reveal>

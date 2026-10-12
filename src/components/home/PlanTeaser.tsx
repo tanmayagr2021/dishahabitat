@@ -1,51 +1,34 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type CSSProperties } from "react";
 import { ArrowLink, Label } from "@/components/ui";
 import { calculateLoan, formatINR, formatINRShort } from "@/lib/emi";
 
 /*
- * The affordability explorer, folded into a single sentence. Each figure is its own control.
- * Example values are illustrative, not Disha Habitat prices.
+ * A quick EMI estimate with four plain sliders. Example values are illustrative,
+ * not Disha Habitat prices. The full planner lives at /plan.
  */
-type Knob = {
-  key: "price" | "down" | "years" | "rate";
-  label: string;
-  min: number;
-  max: number;
-  step: number;
-  show: (v: number) => string;
-};
+type Knob = { key: "price" | "down" | "years" | "rate"; label: string; min: number; max: number; step: number; show: (v: number) => string };
 
-const knobs: Record<Knob["key"], Knob> = {
-  price: { key: "price", label: "Home price", min: 30_00_000, max: 3_00_00_000, step: 5_00_000, show: (v) => formatINRShort(v) },
-  down: { key: "down", label: "Down payment", min: 10, max: 50, step: 5, show: (v) => `${v}%` },
-  years: { key: "years", label: "Tenure", min: 5, max: 30, step: 1, show: (v) => `${v} years` },
-  rate: { key: "rate", label: "Interest rate", min: 6, max: 12, step: 0.05, show: (v) => `${v.toFixed(2).replace(/\.?0+$/, "")}%` },
-};
+const knobs: Knob[] = [
+  { key: "price", label: "Home price", min: 30_00_000, max: 3_00_00_000, step: 5_00_000, show: (v) => formatINRShort(v) },
+  { key: "down", label: "Down payment", min: 10, max: 50, step: 5, show: (v) => `${v}%` },
+  { key: "years", label: "Loan tenure", min: 5, max: 30, step: 1, show: (v) => `${v} years` },
+  { key: "rate", label: "Interest rate", min: 6, max: 12, step: 0.05, show: (v) => `${v.toFixed(2).replace(/\.?0+$/, "")}%` },
+];
 
-function Inline({
-  knob,
-  value,
-  onChange,
-}: {
-  knob: Knob;
-  value: number;
-  onChange: (v: number) => void;
-}) {
+function Slider({ knob, value, onChange }: { knob: Knob; value: number; onChange: (v: number) => void }) {
   const id = useId();
   return (
-    <span className="group/k relative inline-flex flex-col align-baseline">
-      <label htmlFor={id} className="sr-only">
-        {knob.label}
-      </label>
-      <span
-        aria-hidden
-        className="whitespace-nowrap border-b-2 border-dashed border-ink/35 italic transition-colors group-focus-within/k:border-ink"
-      >
-        {knob.show(value)}
-      </span>
-      {/* An invisible range sits over the figure: drag or use arrow keys to change it. */}
+    <div className="border-t border-ink/15 py-4">
+      <div className="flex items-baseline justify-between gap-4">
+        <label htmlFor={id} className="label text-mute">
+          {knob.label}
+        </label>
+        <output htmlFor={id} className="serif text-[1.6rem] leading-none tabular-nums">
+          {knob.show(value)}
+        </output>
+      </div>
       <input
         id={id}
         type="range"
@@ -55,20 +38,15 @@ function Inline({
         value={value}
         aria-valuetext={knob.show(value)}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="peer absolute inset-0 size-full cursor-ew-resize opacity-0"
+        className="range mt-3 text-ink"
+        style={{ "--fill": `${((value - knob.min) / (knob.max - knob.min)) * 100}%` } as CSSProperties}
       />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -bottom-3 left-0 right-0 h-[3px] origin-left rounded-full bg-ink opacity-0 transition-opacity peer-focus-visible:opacity-100"
-        style={{ transform: `scaleX(${(value - knob.min) / (knob.max - knob.min)})` }}
-      />
-    </span>
+    </div>
   );
 }
 
 export function PlanTeaser() {
   const [v, setV] = useState({ price: 75_00_000, down: 20, years: 20, rate: 8.5 });
-  const set = (k: keyof typeof v) => (n: number) => setV((s) => ({ ...s, [k]: n }));
   const result = calculateLoan({
     price: v.price,
     downPayment: Math.round((v.price * v.down) / 100),
@@ -77,42 +55,36 @@ export function PlanTeaser() {
   });
 
   return (
-    <section id="plan" data-tone="light" aria-labelledby="plan-title" className="bg-paper-2 py-28 md:py-40">
-      <div className="shell">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-3 lg:pt-4">
-            <Label n="07" className="text-mute">
-              Plan your home
-            </Label>
-            <h2 id="plan-title" className="sr-only">
-              Estimate a monthly EMI
-            </h2>
-          </div>
-
-          <div className="lg:col-span-9">
-            <p className="serif text-[clamp(2.2rem,4.6vw,4.6rem)] leading-[1.12] text-ink">
-              A home of <Inline knob={knobs.price} value={v.price} onChange={set("price")} />, with{" "}
-              <Inline knob={knobs.down} value={v.down} onChange={set("down")} /> down, repaid over{" "}
-              <Inline knob={knobs.years} value={v.years} onChange={set("years")} /> at{" "}
-              <Inline knob={knobs.rate} value={v.rate} onChange={set("rate")} /> a year, comes to about
+    <section id="plan" data-tone="light" aria-labelledby="plan-title" className="bg-paper-2 py-24 md:py-32">
+      <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-5">
+          <Label n="07" className="text-mute">
+            EMI calculator
+          </Label>
+          <h2 id="plan-title" className="serif mt-5 text-[clamp(2.4rem,4.6vw,4.4rem)]">
+            What would your <em>monthly EMI</em> be?
+          </h2>
+          <p className="mt-5 max-w-md leading-relaxed text-mute">
+            Move the sliders for a quick estimate. Example figures only — not Disha Habitat prices or an offer of finance.
+          </p>
+          <div className="mt-10 rounded-[6px] bg-ink p-7 text-paper md:p-9" aria-live="polite">
+            <p className="label text-paper/60">Estimated EMI</p>
+            <p className="serif mt-3 text-[clamp(3rem,6vw,4.6rem)] leading-none tabular-nums">
+              {formatINR(result.emi)}
+              <span className="ml-2 font-sans text-base text-paper/60">/ month</span>
             </p>
-
-            <div className="mt-10 flex flex-col gap-8 border-t border-ink/15 pt-8 md:mt-14 md:flex-row md:items-end md:justify-between">
-              <p aria-live="polite" className="serif text-[clamp(4.2rem,10vw,10rem)] leading-[0.85] tabular-nums">
-                {formatINR(result.emi)}
-                <span className="ml-3 font-sans text-[1rem] tracking-normal text-mute">a month</span>
-              </p>
-              <div className="max-w-xs">
-                <p className="text-sm leading-relaxed text-mute">
-                  Drag any underlined figure, or focus it and use the arrow keys. Illustrative only — not a Disha Habitat
-                  price or an offer of finance.
-                </p>
-                <ArrowLink href="/plan" className="mt-4 text-ink">
-                  Open the full planner
-                </ArrowLink>
-              </div>
-            </div>
+            <p className="mt-4 text-sm text-paper/65">
+              Loan of {formatINRShort(result.principal)} · total interest {formatINRShort(result.totalInterest)}
+            </p>
           </div>
+          <ArrowLink href="/plan" className="mt-6 text-ink">
+            Open the full calculator
+          </ArrowLink>
+        </div>
+        <div className="lg:col-span-6 lg:col-start-7 lg:self-center">
+          {knobs.map((k) => (
+            <Slider key={k.key} knob={k} value={v[k.key]} onChange={(n) => setV((s) => ({ ...s, [k.key]: n }))} />
+          ))}
         </div>
       </div>
     </section>

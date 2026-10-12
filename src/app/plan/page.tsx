@@ -28,16 +28,17 @@ export default function PlanPage() {
   return (
     <>
       <PageHero
-        label="Plan your home"
+        compact
+        label="EMI calculator"
         title={
           <>
-            Begin with the numbers, <em>calmly.</em>
+            What would your <em>monthly EMI</em> be?
           </>
         }
-        intro="Estimate a monthly EMI, the interest you would pay over the life of a loan, and how each year’s payments divide between principal and interest. Your figures stay in your browser."
+        intro="Enter a home price, down payment, interest rate and tenure. The estimate updates as you type, and your figures never leave your browser."
       />
 
-      <section data-tone="light" aria-label="Affordability explorer" className="bg-paper py-16 md:py-24">
+      <section data-tone="light" aria-label="EMI calculator" className="bg-paper py-12 md:py-16">
         <div className="shell">
           <AffordabilityExplorer />
         </div>

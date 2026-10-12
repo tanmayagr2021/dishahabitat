@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { RotateCcw } from "lucide-react";
 import { Label } from "@/components/ui";
 import { projectsByHandover } from "@/lib/projects";
 import { formatIndian, stats } from "@/lib/site";
 
 /*
- * Every home Disha Habitat has built, drawn as one dot. As the visitor scrolls, the years
- * advance and each community lights up in its own colour, in order of handover.
+ * Every home Disha Habitat has built, drawn as one dot. When the section comes into view the
+ * years play forward once and each community lights up in its own colour, in order of handover.
  * Homes per community are the published figures in lib/projects.ts.
  */
 const groups = projectsByHandover.map((p) => ({
@@ -19,40 +20,41 @@ const groups = projectsByHandover.map((p) => ({
 }));
 const total = groups.reduce((n, g) => n + g.homes, 0);
 
-/* Scroll thresholds (0–1) at which each community lights; stage 0 is the empty field. */
-const thresholds = [0.12, 0.27, 0.42, 0.57, 0.72];
-
 export function HomesField() {
   const ref = useRef<HTMLElement>(null);
   const [stage, setStage] = useState(groups.length);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  /* Plays the years forward, one community at a time. */
+  const play = useCallback(() => {
+    if (timer.current) clearInterval(timer.current);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setStage(groups.length);
+    setStage(0);
+    let n = 0;
+    timer.current = setInterval(() => {
+      n += 1;
+      setStage(n);
+      if (n >= groups.length && timer.current) clearInterval(timer.current);
+    }, 900);
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      if (reduce.matches) {
-        setStage(groups.length);
-        return;
-      }
-      const r = el.getBoundingClientRect();
-      const p = -r.top / Math.max(1, r.height - window.innerHeight);
-      setStage(thresholds.filter((t) => p >= t).length);
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        play();
+      },
+      { threshold: 0.45 },
+    );
+    observer.observe(el);
     return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      observer.disconnect();
+      if (timer.current) clearInterval(timer.current);
     };
-  }, []);
+  }, [play]);
 
   const lit = groups.slice(0, stage);
   const homesLit = lit.reduce((n, g) => n + g.homes, 0);
@@ -64,9 +66,9 @@ export function HomesField() {
       ref={ref}
       data-tone="dark"
       aria-labelledby="field-title"
-      className="relative bg-ink text-paper motion-safe:h-[300svh]"
+      className="relative bg-ink text-paper"
     >
-      <div className="grain sticky top-0 flex min-h-[100svh] flex-col justify-center overflow-hidden py-16 motion-reduce:relative md:py-24">
+      <div className="py-24 md:py-32">
         <div className="shell grid w-full gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Narrative column */}
           <div className="flex flex-col justify-between gap-6 lg:col-span-4 lg:gap-8">
@@ -78,7 +80,7 @@ export function HomesField() {
                 {formatIndian(total)} homes across five communities, built between 2014 and {groups.at(-1)?.year}
               </h2>
               <div aria-hidden className="mt-5 flex items-end gap-5 lg:mt-6 lg:block">
-                <p className="serif text-[clamp(4.4rem,11vw,11rem)] leading-[0.82] tabular-nums">{year}</p>
+                <p className="serif text-[clamp(4rem,9vw,8.5rem)] leading-[0.85] tabular-nums">{year}</p>
                 <p className="min-h-[2.6em] max-w-xs pb-1 text-[0.95rem] leading-snug text-paper/70 lg:mt-4 lg:min-h-[3.2em] lg:pb-0 lg:text-[1.05rem]">
                   {current ? (
                     <>
@@ -120,12 +122,12 @@ export function HomesField() {
                 return Array.from({ length: g.homes }, (_, k) => (
                   <span
                     key={`${g.slug}-${k}`}
-                    className="aspect-square rounded-full transition-[background-color,transform] duration-700 ease-out-expo"
+                    className="aspect-square rounded-full transition-[background-color,transform] duration-500 ease-out"
                     style={
                       {
                         background: on ? g.hue : "rgb(243 241 236 / 0.1)",
                         transform: on ? "scale(1)" : "scale(0.6)",
-                        transitionDelay: on ? `${Math.round((k / g.homes) * 600)}ms` : "0ms",
+                        transitionDelay: on ? `${Math.round((k / g.homes) * 500)}ms` : "0ms",
                       } as CSSProperties
                     }
                   />
@@ -134,7 +136,17 @@ export function HomesField() {
             </div>
 
             <div className="mt-6 flex items-baseline justify-between gap-6 border-t border-paper/15 pt-4 md:mt-8 md:pt-5">
-              <p className="label text-paper/60">Homes handed over</p>
+              <div className="flex items-center gap-4">
+                <p className="label text-paper/60">Homes handed over</p>
+                <button
+                  type="button"
+                  onClick={play}
+                  className="inline-flex h-8 items-center gap-1.5 rounded-full border border-paper/20 px-3 text-xs text-paper/80 hover:bg-paper/10"
+                >
+                  <RotateCcw aria-hidden className="size-3" strokeWidth={1.8} />
+                  Replay
+                </button>
+              </div>
               <p aria-hidden className="serif text-[1.8rem] leading-none tabular-nums md:text-[2.4rem]">
                 {formatIndian(homesLit)}
                 <span className="text-paper/35"> / {formatIndian(total)}</span>

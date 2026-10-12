@@ -25,7 +25,7 @@ export function Journeys() {
       id="homeowners"
       data-tone="light"
       aria-labelledby="journeys-title"
-      className="relative bg-paper py-28 md:py-40"
+      className="relative bg-paper py-24 md:py-32"
     >
       <div className="shell">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
@@ -37,13 +37,13 @@ export function Journeys() {
           <div className="lg:col-span-9">
             <Lines
               id="journeys-title"
-              className="serif text-[clamp(2.8rem,6.4vw,6.6rem)]"
+              className="serif text-[clamp(2.4rem,5vw,5rem)]"
               lines={["From across India,", <em key="e">to a place called home.</em>]}
             />
           </div>
         </div>
 
-        <ul className="mt-16 border-b border-ink/15 md:mt-24">
+        <ul className="mt-12 border-b border-ink/15 md:mt-16">
           {homeowners.map((h, i) => {
             const on = open === i;
             const p = getProject(h.slug)!;
@@ -58,7 +58,7 @@ export function Journeys() {
                     onClick={() => setOpen(on ? -1 : i)}
                     className="group grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 py-6 text-left md:grid-cols-[1fr_minmax(0,7rem)_1fr_auto] md:py-8"
                   >
-                    <span className="serif text-[clamp(1.7rem,3.2vw,3rem)] leading-none transition-transform duration-500 ease-out-expo group-hover:translate-x-2">
+                    <span className="serif text-[clamp(1.5rem,2.6vw,2.4rem)] leading-tight transition-transform duration-500 ease-out-expo group-hover:translate-x-2">
                       {h.native}
                     </span>
                     {/* The journey: a line drawn from one place to the other. */}
@@ -109,7 +109,7 @@ export function Journeys() {
                         />
                       </figure>
                       <blockquote className="flex flex-col justify-between gap-8 md:col-span-7 md:col-start-6">
-                        <p className="serif text-[clamp(1.9rem,3.4vw,3.2rem)] leading-[1.05]">“{h.quote}”</p>
+                        <p className="serif text-[clamp(1.6rem,2.8vw,2.6rem)] leading-[1.15]">“{h.quote}”</p>
                         <footer className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-mute">
                           <cite className="not-italic font-medium text-ink">{h.name}</cite>
                           <span>Native of {h.native}</span>

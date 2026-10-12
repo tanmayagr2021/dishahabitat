@@ -17,6 +17,7 @@ export function PageHero({
   imagePosition = "50% 50%",
   morph,
   aside,
+  compact = false,
   children,
 }: {
   label: ReactNode;
@@ -26,6 +27,8 @@ export function PageHero({
   imagePosition?: string;
   morph?: string;
   aside?: ReactNode;
+  /* A shorter opening for tool pages, so the tool itself shows on first screen. */
+  compact?: boolean;
   children?: ReactNode;
 }) {
   const photo = image && (
@@ -47,7 +50,7 @@ export function PageHero({
   return (
     <section
       data-tone="dark"
-      className={`grain relative isolate overflow-hidden bg-ink text-paper ${image ? "min-h-[88svh] lg:min-h-[100svh]" : ""} flex flex-col`}
+      className={`relative isolate overflow-hidden bg-ink text-paper ${image ? "min-h-[88svh] lg:min-h-[100svh]" : ""} flex flex-col`}
     >
       {image && (
         <>
@@ -62,15 +65,16 @@ export function PageHero({
           </div>
           <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/30 to-ink/35" />
           <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/55 via-transparent to-transparent" />
+          <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-ink/70 to-transparent" />
           <MediaBadge kind={image.kind} className="left-auto right-5 top-24 md:right-10 md:top-28" />
         </>
       )}
 
-      <div className={`shell flex flex-1 flex-col justify-end pb-12 md:pb-16 ${image ? "pt-36" : "pt-40 md:pt-52"}`}>
+      <div className={`shell flex flex-1 flex-col justify-end ${compact ? "pb-10 pt-28 md:pt-32" : `pb-12 md:pb-16 ${image ? "pt-36" : "pt-40 md:pt-48"}`}`}>
         <Label className="anim-fade text-paper/70" as="p">
           {label}
         </Label>
-        <h1 className="mt-6 serif text-[clamp(3.6rem,10vw,11rem)] leading-[0.86]">
+        <h1 className={`serif ${compact ? "mt-4 text-[clamp(2.4rem,4.6vw,4.2rem)]" : "mt-6 text-[clamp(3rem,7.4vw,8rem)] leading-[0.95]"}`}>
           <span className="line">
             <span className="anim-rise" style={d(150)}>
               {title}
@@ -79,7 +83,7 @@ export function PageHero({
         </h1>
         {(intro || aside) && (
           <div
-            className="anim-fade-up mt-10 flex flex-col gap-8 border-t border-paper/20 pt-6 md:mt-14 md:flex-row md:items-start md:justify-between"
+            className={`anim-fade-up flex flex-col gap-8 md:flex-row md:items-start md:justify-between ${compact ? "mt-5" : "mt-10 border-t border-paper/20 pt-6 md:mt-12"}`}
             style={d(450)}
           >
             {intro && <div className="max-w-xl text-[1.08rem] leading-relaxed text-paper/80">{intro}</div>}

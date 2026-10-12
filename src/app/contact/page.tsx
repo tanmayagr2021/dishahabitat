@@ -103,7 +103,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section data-tone="dark" aria-labelledby="sites-title" className="grain relative bg-ink py-24 text-paper md:py-32">
+      <section data-tone="dark" aria-labelledby="sites-title" className="relative bg-ink py-24 text-paper md:py-32">
         <div className="shell">
           <Label n="02" className="text-paper/60">
             Our communities

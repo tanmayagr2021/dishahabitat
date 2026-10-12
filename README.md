@@ -32,7 +32,8 @@ npm run lint
 | Route | Page |
 | --- | --- |
 | `/` | Cinematic homepage — see below |
-| `/homes` | All five communities in alternating editorial rows, plus a comparison table |
+| `/homes` | Now selling, then all five delivered communities, a time-to-build chart and a comparison table |
+| `/homes/pursuit-of-the-elements` | The project on sale now: facts, homes, gallery, amenities, construction updates, RERA, enquiry |
 | `/homes/[slug]` | Each community: full-bleed hero, facts band, timeline, location, gallery and lightbox; amenities and specifications where published; homeowner words; enquiry; next/previous |
 | `/plan` | Home Affordability Explorer, with notes on how the estimates are made |
 | `/story` | Journey, the “Black & White” manifesto, founders, community timeline, brand film |
@@ -43,28 +44,25 @@ clear White. Bring in your own colours.”). The interface is strictly ink and p
 photographs, which develop from black & white into colour as they are reached, and through each community’s
 signature hue (Windsor palm green, Central Park dusk blue, Park West mustard, Courtyard terracotta, Sunshine gold).
 
-**Homepage sequence** (show, don’t tell):
+**Homepage sequence** — answers a first-time visitor’s questions in order, with no scroll-locked sequences:
 
-1. Hero — the photograph follows the time of day in Bengaluru (day: Courtyard; dusk / night: Central Park clubhouse),
-   developing from black & white into colour, with a live IST clock.
-2. Where we began — the founding line inks in word by word as it scrolls.
-3. The collection — five tall black-and-white panels; hover or focus opens one into colour. Morphs into the community
-   page on click (React `<ViewTransition>`).
-4. A day at Pursuit of Sunshine — pinned scroll: the sun crosses an arc, five photographs run morning to night and the
-   page itself turns from day to night. Phase names are an editorial device.
-5. Every dot is a home — 1,102 dots (the published home counts), lighting up community by community, year by year.
+1. Hero — who Disha is and what they build, in one sentence; the time-of-day photograph; a “Now selling” card.
+2. Now selling — Disha Pursuit of the Elements, Gunjur: facts, renders, call and visit buttons, RERA numbers.
+3. Where we began — the founding line and the team.
+4. Delivered — five black-and-white panels; hover or focus opens one into colour.
+5. Every dot is a home — 1,102 dots light up community by community when the section comes into view (Replay button).
 6. Homeowners — each journey from hometown to Disha community; open a row for their words.
-7. Our core — the manifesto as a title sequence, ending with “colours” in the five hues.
-8. Plan — a one-sentence EMI calculator; each underlined figure is a slider.
-9. “Let’s meet for coffee.” — the founder’s invitation over the brand film, with the enquiry form.
+7. Our core — the Black & White manifesto, set still.
+8. EMI calculator — four plain sliders and a live estimate.
+9. “Let’s meet for coffee.” — book a site visit, over the brand film.
 
 Inner pages: `/homes` (index, time-to-build chart, comparison table), each community (scaled timeline, gallery,
 specs, next-community morph), `/story` (to-scale chart of all five builds 2014–2025, manifesto, founders, film),
 `/plan`, `/contact`.
 
-**Design system** (`src/app/globals.css`): Instrument Serif (display), Geist (text), Geist Mono (labels and data);
-ink `#0c0c0b`, paper `#f3f1ec`, five community hues. Pinned sequences fall back to static layouts under
-`prefers-reduced-motion`; video never autoplays for reduced-motion or Save-Data visitors.
+**Design system** (`src/app/globals.css`): Fraunces (display, light, optical sizing), Geist (text and labels);
+ink `#0c0c0b`, paper `#f3f1ec`, five community hues. Motion is limited to one gentle fade per element, opacity and transform only; nothing is tied to scroll position. Under
+`prefers-reduced-motion` everything is static; video never autoplays for reduced-motion or Save-Data visitors.
 
 Stack: Next.js 16 (App Router, fully static), TypeScript, Tailwind CSS v4 and `lucide-react`. Nothing else is needed at
 runtime.

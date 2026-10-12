@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ViewTransition, type CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, MapPin, Plus } from "lucide-react";
 import { GalleryGrid } from "@/components/Lightbox";
+import { DayInTheSun } from "@/components/DayInTheSun";
 import { PageHero } from "@/components/PageHero";
 import { EnquirySection } from "@/components/home/EnquirySection";
 import { Label, Lines, Reveal } from "@/components/ui";
@@ -115,7 +116,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="label text-paper/60">{k}</dt>
-                <dd className="serif mt-2 text-[2rem] leading-none md:text-[2.6rem]">{v}</dd>
+                <dd className="serif mt-2 text-[1.8rem] leading-none md:text-[2.2rem]">{v}</dd>
               </div>
             ))}
           </dl>
@@ -191,7 +192,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 ))}
               </ol>
               <p className="mt-8 flex items-baseline gap-3">
-                <span className="serif text-[4.4rem] leading-none">{p.timeline.months}</span>
+                <span className="serif text-[3.6rem] leading-none">{p.timeline.months}</span>
                 <span className="text-mute">months from start to finish, as published.</span>
               </p>
             </Reveal>
@@ -227,7 +228,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 </Label>
                 <Lines
                   id="gallery-title"
-                  className="serif mt-6 text-[clamp(2.6rem,5vw,4.8rem)]"
+                  className="serif mt-6 text-[clamp(2.3rem,4.2vw,4.2rem)]"
                   lines={[
                     <>
                       Inside <em>{p.shortName}</em>
@@ -251,18 +252,20 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
         </section>
       )}
 
+      {p.slug === "disha-pursuit-of-sunshine" && <DayInTheSun />}
+
       {/* Signature spaces (Pursuit of Sunshine) */}
       {p.highlights && (
-        <section data-tone="dark" aria-labelledby="highlights-title" className="grain relative bg-ink py-24 text-paper md:py-36">
+        <section data-tone="dark" aria-labelledby="highlights-title" className="relative bg-ink py-24 text-paper md:py-36">
           <div className="shell">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
-                <Label n="03" className="text-paper/60">
+                <Label n="04" className="text-paper/60">
                   Signature spaces
                 </Label>
                 <Lines
                   id="highlights-title"
-                  className="serif mt-6 text-[clamp(2.8rem,6vw,6rem)]"
+                  className="serif mt-6 text-[clamp(2.4rem,4.6vw,4.6rem)]"
                   lines={["An ode", <em key="e">to the Sun.</em>]}
                 />
               </div>
@@ -278,7 +281,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                     <span className="h-[3px] w-6 rounded-full bg-[var(--accent)] transition-[width] duration-500 group-hover:w-12" />
                     {String(n + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="serif mt-4 text-[2.2rem] leading-none">{h.name}</h3>
+                  <h3 className="serif mt-4 text-[1.9rem] leading-tight">{h.name}</h3>
                   <p className="mt-3 leading-relaxed text-paper/65">{h.text}</p>
                 </Reveal>
               ))}
@@ -304,7 +307,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
         <section data-tone="light" aria-labelledby="specs-title" className="bg-paper py-24 md:py-32">
           <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-4">
-              <Label n="04" className="text-mute">
+              <Label n="05" className="text-mute">
                 Built to last
               </Label>
               <h2 id="specs-title" className="serif mt-6 text-[clamp(2.6rem,4.4vw,4.2rem)]">
@@ -321,7 +324,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               {p.specifications.map((s, n) => (
                 <details key={s.group} className="group border-t border-ink/20 last:border-b" open={n === 0}>
                   <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-6 [&::-webkit-details-marker]:hidden">
-                    <span className="serif text-[2.2rem] leading-none">{s.group}</span>
+                    <span className="serif text-[1.9rem] leading-none">{s.group}</span>
                     <span className="inline-flex size-10 items-center justify-center rounded-full border border-ink/20 transition-[transform,background-color,color] duration-500 group-open:rotate-45 group-open:bg-ink group-open:text-paper">
                       <Plus aria-hidden className="size-4" strokeWidth={1.5} />
                     </span>
@@ -395,7 +398,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 <span className="size-2 rounded-full" style={{ background: next.hue }} />
                 Next community · {next.locality}
               </span>
-              <span className="serif mt-4 block text-[clamp(3.4rem,9vw,9rem)] leading-[0.86]">{next.shortName}</span>
+              <span className="serif mt-4 block text-[clamp(2.8rem,6.4vw,6.4rem)] leading-[0.95]">{next.shortName}</span>
             </span>
             <span className="mb-3 inline-flex size-16 shrink-0 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-500 group-hover:translate-x-2 md:size-20">
               <ArrowRight aria-hidden className="size-6" strokeWidth={1.25} />

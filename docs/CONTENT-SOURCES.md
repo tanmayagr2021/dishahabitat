@@ -46,6 +46,16 @@ template’s Pexels stock and the checklist stock photos were deliberately exclu
 
 Each image is assigned to a project by the page it appeared on. Captions describe only what is visible.
 
+## Disha Pursuit of the Elements (added in the second pass)
+
+Sources: dishapursuitoftheelements.com (home, floor plans, amenities, gallery, updates) and the featured-project banner on
+the dishahabitat.com homepage, inspected 12 October 2026. Facts used: Gunjur location; five-elements concept and intro
+(verbatim); 20 acres; towers A, B, F, G (Premium, 25 floors), C (Millennium, 23 floors), D, E (Presidential, 29 floors);
+4 & 5 BHK villas; clubhouse 1,35,000+ sq ft with 40+ amenities and the listed amenities; RERA Phase I and II numbers;
+sales line +91 95053 33333, WhatsApp, email; quarterly construction updates (latest Q3 2026). “Last few 2, 3 & 4 BHK
+homes” is from the dishahabitat.com banner. All 12 images (`public/images/pursuit-of-the-elements/`) come from the
+project site and are labelled artist’s impressions; the master plan is labelled Plan.
+
 ## Items for the client to confirm
 
 1. **Image rights and originals.** Confirm usage rights and photographer credits. Please supply high-resolution originals:
@@ -68,3 +78,8 @@ Each image is assigned to a project by the page it appeared on. Captions describ
 17. **Social and map links.** These were taken from the live site; confirm they’re current.
 18. **Brand voice lines.** Section headings (“Five communities, built one at a time”, “From across India, to a place called home”, “Begin with the numbers, calmly”) and the “day at Pursuit of Sunshine” phase captions are new editorial copy written for the prototype. Every factual claim in them is sourced, but please approve the tone.
 19. **Affordability explorer.** Confirm the client is comfortable showing an illustrative EMI planner, and whether a partner lender or legal review should vet the disclaimer wording.
+20. **Pursuit of the Elements.** Confirm “Last few 2, 3 & 4 BHK homes” is still current, whether any gallery interiors
+    are photographs of a show apartment (all are labelled artist’s impressions), and whether to add prices or floor-plan
+    downloads.
+21. **Sales line in the header.** The header shows +91 95053 33333 (the line published for Pursuit of the Elements and
+    Pursuit of Sunshine). Confirm it should be the site-wide sales number.
