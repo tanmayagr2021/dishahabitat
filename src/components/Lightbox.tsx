@@ -64,7 +64,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
         {items.map((item, i) => (
           <li
             key={item.src}
-            data-reveal="image"
+            data-reveal="bloom"
             style={{ "--reveal-delay": `${(i % 3) * 90}ms` } as CSSProperties}
             className={tileClasses[Math.min(i, tileClasses.length - 1)]}
           >
@@ -74,7 +74,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               }}
               type="button"
               onClick={() => open(i)}
-              className="img-zoom group relative block size-full overflow-hidden bg-forest-900 text-left"
+              className="group relative block size-full overflow-hidden rounded-[3px] bg-paper-3 text-left"
               aria-label={`View larger: ${item.caption}${item.project ? `, ${item.project}` : ""}`}
             >
               <MediaBadge kind={item.kind} />
@@ -83,7 +83,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
                 alt={item.alt}
                 fill
                 sizes={sizes}
-                className={item.kind === "plan" ? "bg-white object-contain p-3" : "object-cover"}
+                className={`transition-transform duration-[1400ms] ease-out-expo group-hover:scale-[1.04] ${item.kind === "plan" ? "bg-white object-contain p-3" : "object-cover"}`}
               />
               <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-ink/70 to-transparent p-4 pt-12 text-sm text-paper opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
                 {item.caption}
@@ -97,7 +97,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
       <dialog
         ref={dialogRef}
         aria-label="Image viewer"
-        className="m-0 h-dvh max-h-none w-screen max-w-none bg-ink/95 p-0 text-ivory backdrop:bg-ink/80"
+        className="m-0 h-dvh max-h-none w-screen max-w-none bg-ink/95 p-0 text-paper backdrop:bg-ink/80"
         onClick={(e) => {
           if (e.target === e.currentTarget) close();
         }}
@@ -105,13 +105,13 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
         {current && index !== null && (
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-between px-4 py-3 md:px-8">
-              <p className="text-xs tabular-nums tracking-[0.14em] text-paper/60" aria-live="polite">
+              <p className="label tabular-nums text-paper/60" aria-live="polite">
                 {index + 1} / {items.length}
               </p>
               <button
                 type="button"
                 onClick={close}
-                className="inline-flex size-12 items-center justify-center text-paper hover:bg-paper/10"
+                className="inline-flex size-12 items-center justify-center rounded-full text-paper hover:bg-paper/10"
                 aria-label="Close image viewer"
                 autoFocus
               >
@@ -141,7 +141,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               <button
                 type="button"
                 onClick={() => step(-1)}
-                className="pointer-events-auto inline-flex size-12 items-center justify-center border border-paper/25 text-paper hover:bg-paper hover:text-ink"
+                className="pointer-events-auto inline-flex size-12 items-center justify-center rounded-full border border-paper/25 text-paper hover:bg-paper hover:text-ink"
                 aria-label="Previous image"
               >
                 <ChevronLeft className="size-5" strokeWidth={1.5} />
@@ -149,7 +149,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               <button
                 type="button"
                 onClick={() => step(1)}
-                className="pointer-events-auto inline-flex size-12 items-center justify-center border border-paper/25 text-paper hover:bg-paper hover:text-ink"
+                className="pointer-events-auto inline-flex size-12 items-center justify-center rounded-full border border-paper/25 text-paper hover:bg-paper hover:text-ink"
                 aria-label="Next image"
               >
                 <ChevronRight className="size-5" strokeWidth={1.5} />

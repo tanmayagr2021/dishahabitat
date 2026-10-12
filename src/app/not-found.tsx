@@ -1,26 +1,28 @@
-import { ArrowLink, ButtonLink } from "@/components/ui";
+import { ArrowLink, ButtonLink, Label } from "@/components/ui";
 
 export default function NotFound() {
   return (
     <section
       data-tone="dark"
-      className="topo grain relative flex min-h-[100svh] items-center bg-forest-900 pb-24 pt-36 text-ivory [--topo-opacity:0.4]"
+      className="grain relative flex min-h-[100svh] items-end bg-ink pb-20 pt-36 text-paper md:pb-28"
     >
       <div className="shell">
-        <p className="eyebrow text-brass-light">Page not found</p>
-        <h1 className="display mt-6 text-[3.6rem] sm:text-[6rem] xl:text-[7.5rem]">
-          This path doesn’t
-          <br />
-          <em className="text-brass-light">lead home.</em>
+        <Label className="text-paper/60">Page not found</Label>
+        <h1 className="serif mt-6 text-[clamp(3.8rem,11vw,11rem)] leading-[0.86]">
+          This path doesn’t <em className="text-paper/55">lead home.</em>
         </h1>
-        <p className="mt-6 max-w-md leading-relaxed text-ivory/70">
-          The page you were looking for has moved or never existed. Let us take you somewhere familiar.
-        </p>
-        <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
-          <ButtonLink href="/">Back to home</ButtonLink>
-          <ArrowLink href="/homes" className="text-ivory">
-            Explore our homes
-          </ArrowLink>
+        <div className="mt-12 flex flex-col gap-6 border-t border-paper/20 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-md leading-relaxed text-paper/70">
+            The page you were looking for has moved or never existed. Let us take you somewhere familiar.
+          </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+            <ArrowLink href="/homes" className="text-paper">
+              Explore our homes
+            </ArrowLink>
+            <ButtonLink href="/" variant="paper">
+              Back to home
+            </ButtonLink>
+          </div>
         </div>
       </div>
     </section>

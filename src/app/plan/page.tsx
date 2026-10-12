@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { AffordabilityExplorer } from "@/components/AffordabilityExplorer";
 import { PageHero } from "@/components/PageHero";
-import { Reveal } from "@/components/ui";
+import { Label, Reveal } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Plan your home",
@@ -28,33 +28,34 @@ export default function PlanPage() {
   return (
     <>
       <PageHero
-        eyebrow="Plan your home"
+        label="Plan your home"
         title={
           <>
-            Begin with the
-            <br />
-            numbers, <em className="text-brass-light">calmly.</em>
+            Begin with the numbers, <em>calmly.</em>
           </>
         }
         intro="Estimate a monthly EMI, the interest you would pay over the life of a loan, and how each year’s payments divide between principal and interest. Your figures stay in your browser."
       />
 
-      <section aria-label="Affordability explorer" className="bg-stone py-16 md:py-24">
+      <section data-tone="light" aria-label="Affordability explorer" className="bg-paper py-16 md:py-24">
         <div className="shell">
           <AffordabilityExplorer />
         </div>
       </section>
 
-      <section aria-labelledby="notes-title" className="bg-ivory py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="notes-title" className="bg-paper-2 py-20 md:py-28">
         <div className="shell">
-          <h2 id="notes-title" className="display text-[2.6rem] sm:text-[3.4rem]">
-            About these estimates
+          <Label n="01" className="text-mute">
+            The fine print
+          </Label>
+          <h2 id="notes-title" className="serif mt-6 text-[clamp(2.4rem,4.4vw,4rem)]">
+            About these <em>estimates</em>
           </h2>
           <div className="mt-10 grid gap-x-8 md:grid-cols-3">
             {notes.map((n, i) => (
-              <Reveal key={n.title} delay={i * 100} className="border-t border-ink/15 py-8">
-                <h3 className="text-lg font-semibold tracking-tight text-ink">{n.title}</h3>
-                <p className="mt-3 leading-relaxed text-ink-soft">{n.text}</p>
+              <Reveal key={n.title} delay={i * 100} className="border-t border-ink py-8">
+                <h3 className="text-lg font-medium tracking-tight text-ink">{n.title}</h3>
+                <p className="mt-3 leading-relaxed text-mute">{n.text}</p>
               </Reveal>
             ))}
           </div>

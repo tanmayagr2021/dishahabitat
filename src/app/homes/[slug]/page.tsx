@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin, Plus } from "lucide-react";
+import { ViewTransition, type CSSProperties } from "react";
+import { ArrowRight, ArrowUpRight, MapPin, Plus } from "lucide-react";
 import { GalleryGrid } from "@/components/Lightbox";
 import { PageHero } from "@/components/PageHero";
 import { EnquirySection } from "@/components/home/EnquirySection";
-import { Reveal, SectionMark } from "@/components/ui";
-import { getProject, projects } from "@/lib/projects";
+import { Label, Lines, Reveal } from "@/components/ui";
+import { getProject, projectsByHandover } from "@/lib/projects";
 import { homeowners } from "@/lib/site";
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return projectsByHandover.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata(props: PageProps<"/homes/[slug]">): Promise<Metadata> {
@@ -48,151 +49,201 @@ function tilesFor(count: number) {
   return galleryTiles;
 }
 
+/* "January 2023" → months since year 0, for placing dates on a scaled track. */
+const monthIndex = (s: string) => {
+  const d = new Date(`1 ${s}`);
+  return d.getFullYear() * 12 + d.getMonth();
+};
+
 export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
   const { slug } = await props.params;
   const p = getProject(slug);
   if (!p) notFound();
 
-  const i = projects.indexOf(p);
-  const prev = projects[(i - 1 + projects.length) % projects.length];
-  const next = projects[(i + 1) % projects.length];
+  const i = projectsByHandover.indexOf(p);
+  const next = projectsByHandover[(i + 1) % projectsByHandover.length];
   const words = homeowners.filter((h) => h.slug === p.slug);
   const mapQuery = encodeURIComponent(p.address ?? `${p.name}, ${p.locality}`);
-  const timeline = [
-    ["Construction start", p.timeline.start],
-    ["Completion (as per OC)", p.timeline.completion],
-    ["Handover", p.timeline.handover],
-  ];
+
+  // A scaled timeline: start, handover and OC completion placed by date.
+  const t0 = monthIndex(p.timeline.start);
+  const marks = [
+    { k: "Construction start", v: p.timeline.start },
+    { k: "Handover", v: p.timeline.handover },
+    { k: "Completion (as per OC)", v: p.timeline.completion },
+  ].map((m) => ({ ...m, at: monthIndex(m.v) - t0 }));
+  const span = Math.max(...marks.map((m) => m.at)) || 1;
+  const startYear = Number(p.timeline.start.split(" ")[1]);
+  const years = Array.from(
+    { length: Number(p.timeline.completion.split(" ")[1]) - startYear + 1 },
+    (_, n) => startYear + n,
+  ).filter((y) => (y * 12 - t0) / span > 0.04 && (y * 12 - t0) / span < 0.96);
 
   return (
-    <>
+    <div style={{ "--accent": p.hue } as CSSProperties}>
       <PageHero
-        eyebrow={
+        label={
           <>
-            <Link href="/homes" className="hover:text-ivory">
+            <Link href="/homes" className="hover:text-paper">
               Our homes
-            </Link>{" "}
-            / Community {p.index}
+            </Link>
+            <span aria-hidden className="mx-3 inline-block h-px w-6 bg-current align-middle opacity-40" />
+            <span className="inline-flex items-center gap-2">
+              <span aria-hidden className="size-2 rounded-full bg-[var(--accent)]" />
+              {p.index} · {p.locality}
+            </span>
           </>
         }
         title={
-          <>
-            {p.name.replace(/^Disha /, "")}
-            <span className="mt-3 block text-[0.3em] italic leading-tight text-brass-light">by Disha Habitat</span>
-          </>
+          p.shortName.includes(" ") ? (
+            <>
+              {p.shortName.split(" ").slice(0, -1).join(" ")} <em>{p.shortName.split(" ").at(-1)}</em>
+            </>
+          ) : (
+            p.shortName
+          )
         }
-        intro={
-          <p className="flex items-center gap-2">
-            <MapPin aria-hidden className="size-4 text-brass-light" strokeWidth={1.5} />
-            {p.locality}
-          </p>
-        }
+        intro={p.intro}
         image={p.cover}
-      />
-
-      {/* Facts band */}
-      <section data-tone="dark" aria-label="Key facts" className="topo bg-ink text-ivory [--topo-opacity:0.14]">
-        <div className="shell">
-          <dl className="grid grid-cols-2 md:grid-cols-4">
-            {p.facts.slice(0, 4).map((f, n) => (
-              <Reveal
-                key={f.label}
-                delay={n * 80}
-                className="border-b border-ivory/12 py-8 pr-4 md:border-b-0 md:border-l md:py-12 md:pl-6 md:first:border-l-0 md:first:pl-0"
-              >
-                <dt className="eyebrow text-ivory/50">{f.label}</dt>
-                <dd className="display mt-3 text-[2.1rem] leading-none text-ivory sm:text-[2.8rem]">{f.value}</dd>
-              </Reveal>
+        morph={`cover-${p.slug}`}
+        aside={
+          <dl className="grid shrink-0 grid-cols-3 gap-8 md:gap-12">
+            {[
+              ["Homes", p.facts.find((f) => f.label === "Homes")?.value],
+              ["Land", p.facts.find((f) => f.label === "Project size")?.value],
+              ["Handover", String(p.handoverYear)],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <dt className="label text-paper/60">{k}</dt>
+                <dd className="serif mt-2 text-[2rem] leading-none md:text-[2.6rem]">{v}</dd>
+              </div>
             ))}
           </dl>
-        </div>
-      </section>
+        }
+      />
 
-      {/* Overview */}
-      <section aria-labelledby="overview-title" className="bg-ivory py-20 md:py-32">
-        <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-8">
-          <Reveal className="lg:col-span-7">
-            <SectionMark n="01" label="About the community" />
+      {/* Overview: the facts and a timeline drawn to scale */}
+      <section data-tone="light" aria-labelledby="overview-title" className="bg-paper py-24 md:py-36">
+        <div className="shell grid gap-16 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-5">
+            <Label n="01" className="text-mute">
+              The community
+            </Label>
             <h2 id="overview-title" className="sr-only">
               About {p.name}
             </h2>
-            <p className="display mt-8 text-[2.1rem] leading-[1.1] text-ink sm:text-[2.8rem] xl:text-[3.3rem]">{p.intro}</p>
-            {p.facts.length > 4 && (
-              <dl className="mt-10 grid gap-x-8 sm:grid-cols-3">
-                {p.facts.slice(4).map((f) => (
-                  <div key={f.label} className="border-t border-ink/15 py-4">
-                    <dt className="text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-ink-mute">{f.label}</dt>
-                    <dd className="mt-1 font-medium text-ink">{f.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
+            <dl className="mt-8 border-b border-ink/15">
+              {p.facts.map((f) => (
+                <div key={f.label} className="flex items-baseline justify-between gap-6 border-t border-ink/15 py-4">
+                  <dt className="label text-mute">{f.label}</dt>
+                  <dd className="serif text-right text-[1.6rem] leading-tight">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
             {p.website && (
               <a
                 href={p.website.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+                className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
               >
                 Official project site: {p.website.label}
                 <ArrowUpRight aria-hidden className="size-3.5" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             )}
-          </Reveal>
+          </div>
 
-          <Reveal delay={150} className="lg:col-span-4 lg:col-start-9">
-            <h3 className="eyebrow text-ink-mute">Timeline</h3>
-            <ol className="relative mt-6 space-y-7 border-l border-ink/20 pl-6">
-              {timeline.map(([k, v]) => (
-                <li key={k} className="relative">
-                  <span aria-hidden className="absolute -left-[29px] top-1.5 size-[9px] rounded-full bg-brass-deep" />
-                  <span className="block text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-ink-mute">{k}</span>
-                  <span className="display mt-1 block text-[1.6rem] leading-tight text-ink">{v}</span>
-                </li>
-              ))}
-            </ol>
-            <p className="mt-6 text-xs text-ink-mute">
-              {p.timeline.months} months from start to finish, as published by Disha Habitat.
-            </p>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <Label className="text-mute">Timeline</Label>
+            <Reveal className="mt-10">
+              <div className="relative h-24">
+                <div className="absolute inset-x-0 top-1/2 h-px bg-ink/20" />
+                <div
+                  className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-[var(--accent)]"
+                  style={{ width: `${(marks[2].at / span) * 100}%` }}
+                />
+                {years.map((y) => (
+                  <span
+                    key={y}
+                    aria-hidden
+                    className="label absolute top-[calc(50%+14px)] -translate-x-1/2 text-mute/70"
+                    style={{ left: `${((y * 12 - t0) / span) * 100}%` }}
+                  >
+                    {y}
+                  </span>
+                ))}
+                {marks.map((m, n) => (
+                  <span
+                    key={m.k}
+                    aria-hidden
+                    className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-paper bg-ink"
+                    style={{ left: `${(m.at / span) * 100}%`, zIndex: 3 - n }}
+                  />
+                ))}
+              </div>
+              <ol className="mt-8 grid gap-6 sm:grid-cols-3">
+                {[...marks].sort((a, b) => a.at - b.at).map((m) => (
+                  <li key={m.k} className="border-t border-ink/15 pt-4">
+                    <span className="label block text-mute">{m.k}</span>
+                    <span className="serif mt-2 block text-[1.8rem] leading-tight">{m.v}</span>
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-8 flex items-baseline gap-3">
+                <span className="serif text-[4.4rem] leading-none">{p.timeline.months}</span>
+                <span className="text-mute">months from start to finish, as published.</span>
+              </p>
+            </Reveal>
 
-            <div className="mt-12 border-t border-ink/15 pt-6">
-              <h3 className="eyebrow text-ink-mute">Location</h3>
-              <p className="mt-3 leading-relaxed text-ink-soft">{p.address ?? p.locality}</p>
+            <div className="mt-14 border-t border-ink/15 pt-6">
+              <Label className="text-mute">Location</Label>
+              <p className="mt-3 flex gap-2 text-[1.05rem] leading-relaxed">
+                <MapPin aria-hidden className="mt-1 size-4 shrink-0" strokeWidth={1.5} />
+                {p.address ?? p.locality}
+              </p>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+                className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
               >
                 Search on Google Maps <ArrowUpRight aria-hidden className="size-3.5" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
       {/* Gallery */}
       {p.gallery.length > 0 && (
-        <section aria-labelledby="gallery-title" className="bg-stone py-20 md:py-28">
+        <section data-tone="light" aria-labelledby="gallery-title" className="bg-paper-2 py-24 md:py-32">
           <div className="shell">
-            <Reveal className="flex flex-wrap items-end justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <SectionMark n="02" label="Gallery" />
-                <h2 id="gallery-title" className="display mt-6 text-[2.8rem] sm:text-[3.8rem]">
-                  Inside <em className="text-brass-deep">{p.shortName}</em>
-                </h2>
+                <Label n="02" className="text-mute">
+                  Gallery
+                </Label>
+                <Lines
+                  id="gallery-title"
+                  className="serif mt-6 text-[clamp(2.6rem,5vw,4.8rem)]"
+                  lines={[
+                    <>
+                      Inside <em>{p.shortName}</em>
+                    </>,
+                  ]}
+                />
               </div>
-              <p className="text-sm text-ink-mute">
+              <p className="label text-mute">
                 {p.gallery.length} {p.gallery.length === 1 ? "image" : "images"} · select to enlarge
               </p>
-            </Reveal>
-            <div className="mt-10">
+            </div>
+            <div className="mt-12">
               <GalleryGrid
                 items={p.gallery}
                 tileClasses={tilesFor(p.gallery.length)}
-                gridClassName="grid grid-cols-2 gap-3 md:grid-cols-12 md:gap-4"
+                gridClassName="grid grid-cols-2 gap-2 md:grid-cols-12 md:gap-3"
                 sizes="(min-width: 768px) 60vw, 100vw"
               />
             </div>
@@ -202,45 +253,47 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Signature spaces (Pursuit of Sunshine) */}
       {p.highlights && (
-        <section
-          data-tone="dark"
-          aria-labelledby="highlights-title"
-          className="topo bg-forest-900 py-20 text-ivory [--topo-opacity:0.2] md:py-32"
-        >
+        <section data-tone="dark" aria-labelledby="highlights-title" className="grain relative bg-ink py-24 text-paper md:py-36">
           <div className="shell">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-              <Reveal className="lg:col-span-7">
-                <SectionMark n="03" label="Signature spaces" tone="dark" />
-                <h2 id="highlights-title" className="display mt-6 text-[2.8rem] sm:text-[4rem] xl:text-[5rem]">
-                  An ode to the <em className="text-brass-light">Sun.</em>
-                </h2>
-              </Reveal>
-              <Reveal delay={100} className="lg:col-span-4 lg:col-start-9">
-                <p className="leading-relaxed text-ivory/70">
-                  From your own sundeck at home or any of the outdoor arenas — every step here is a step closer to the
-                  Sun’s bounty.
-                </p>
-              </Reveal>
+              <div className="lg:col-span-7">
+                <Label n="03" className="text-paper/60">
+                  Signature spaces
+                </Label>
+                <Lines
+                  id="highlights-title"
+                  className="serif mt-6 text-[clamp(2.8rem,6vw,6rem)]"
+                  lines={["An ode", <em key="e">to the Sun.</em>]}
+                />
+              </div>
+              <p className="leading-relaxed text-paper/70 lg:col-span-4 lg:col-start-9">
+                From your own sundeck at home or any of the outdoor arenas — every step here is a step closer to the Sun’s
+                bounty.
+              </p>
             </div>
-            <ul className="mt-14 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+            <ol className="mt-16 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
               {p.highlights.map((h, n) => (
-                <Reveal as="li" key={h.name} delay={(n % 3) * 80} className="border-t border-ivory/15 py-8">
-                  <h3 className="display text-[2rem] leading-tight text-ivory">{h.name}</h3>
-                  <p className="mt-2 leading-relaxed text-ivory/65">{h.text}</p>
+                <Reveal as="li" key={h.name} delay={(n % 3) * 80} className="group border-t border-paper/15 py-8">
+                  <span className="label flex items-center gap-3 text-paper/50">
+                    <span className="h-[3px] w-6 rounded-full bg-[var(--accent)] transition-[width] duration-500 group-hover:w-12" />
+                    {String(n + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="serif mt-4 text-[2.2rem] leading-none">{h.name}</h3>
+                  <p className="mt-3 leading-relaxed text-paper/65">{h.text}</p>
                 </Reveal>
               ))}
-            </ul>
+            </ol>
             {p.otherAmenities && (
-              <Reveal className="mt-12 border-t border-ivory/15 pt-8">
-                <h3 className="eyebrow text-ivory/50">Also in the community</h3>
+              <div className="mt-12 border-t border-paper/15 pt-8">
+                <h3 className="label text-paper/50">Also in the community</h3>
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {p.otherAmenities.map((a) => (
-                    <li key={a} className="border border-ivory/20 px-3.5 py-2 text-sm text-ivory/80">
+                    <li key={a} className="rounded-full border border-paper/20 px-4 py-2 text-sm text-paper/80">
                       {a}
                     </li>
                   ))}
                 </ul>
-              </Reveal>
+              </div>
             )}
           </div>
         </section>
@@ -248,39 +301,35 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Specifications */}
       {p.specifications && (
-        <section aria-labelledby="specs-title" className="bg-ivory py-20 md:py-28">
+        <section data-tone="light" aria-labelledby="specs-title" className="bg-paper py-24 md:py-32">
           <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-8">
-            <Reveal className="lg:col-span-4">
-              <SectionMark n="04" label="Built to last" />
-              <h2 id="specs-title" className="display mt-6 text-[2.8rem] sm:text-[3.6rem]">
+            <div className="lg:col-span-4">
+              <Label n="04" className="text-mute">
+                Built to last
+              </Label>
+              <h2 id="specs-title" className="serif mt-6 text-[clamp(2.6rem,4.4vw,4.2rem)]">
                 Specifications
               </h2>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-mute">
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-mute">
                 Selected items from the published project specification.
                 {p.rera && (
-                  <>
-                    <br />
-                    <br />
-                    RERA No. {p.rera}
-                  </>
+                  <span className="label mt-6 block text-ink">RERA No. {p.rera}</span>
                 )}
               </p>
-            </Reveal>
+            </div>
             <div className="lg:col-span-7 lg:col-start-6">
               {p.specifications.map((s, n) => (
                 <details key={s.group} className="group border-t border-ink/20 last:border-b" open={n === 0}>
-                  <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-5 text-ink [&::-webkit-details-marker]:hidden">
-                    <span className="display text-[1.8rem] leading-none">{s.group}</span>
-                    <Plus
-                      aria-hidden
-                      className="size-5 shrink-0 transition-transform duration-500 group-open:rotate-45"
-                      strokeWidth={1.25}
-                    />
+                  <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-6 [&::-webkit-details-marker]:hidden">
+                    <span className="serif text-[2.2rem] leading-none">{s.group}</span>
+                    <span className="inline-flex size-10 items-center justify-center rounded-full border border-ink/20 transition-[transform,background-color,color] duration-500 group-open:rotate-45 group-open:bg-ink group-open:text-paper">
+                      <Plus aria-hidden className="size-4" strokeWidth={1.5} />
+                    </span>
                   </summary>
-                  <ul className="space-y-2 pb-6 text-ink-soft">
+                  <ul className="space-y-2.5 pb-8 text-mute">
                     {s.items.map((item) => (
                       <li key={item} className="flex gap-3 leading-relaxed">
-                        <span aria-hidden className="mt-3 h-px w-3 shrink-0 bg-brass-deep" />
+                        <span aria-hidden className="mt-[0.7em] size-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
                         {item}
                       </li>
                     ))}
@@ -288,7 +337,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 </details>
               ))}
               {p.salesPhone && (
-                <p className="mt-8 text-sm text-ink-soft">
+                <p className="mt-8 text-sm text-mute">
                   Project enquiries:{" "}
                   <a href={p.salesPhone.href} className="font-medium text-ink underline underline-offset-4">
                     {p.salesPhone.display}
@@ -302,23 +351,19 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Homeowner words */}
       {words.length > 0 && (
-        <section aria-labelledby="words-title" className="bg-paper py-20 md:py-28">
+        <section data-tone="light" aria-labelledby="words-title" className="bg-paper-2 py-24 md:py-32">
           <div className="shell">
-            <SectionMark n="—" label={`Homeowners at ${p.shortName}`} />
+            <Label className="text-mute">Homeowners at {p.shortName}</Label>
             <h2 id="words-title" className="sr-only">
               From homeowners at {p.name}
             </h2>
-            <div className="mt-10 grid gap-12 md:grid-cols-2">
+            <div className={`mt-10 grid gap-14 ${words.length > 1 ? "md:grid-cols-2" : "max-w-5xl"}`}>
               {words.map((w) => (
                 <Reveal as="figure" key={w.name} className="border-t border-ink/15 pt-8">
-                  <span aria-hidden className="display block text-[5rem] leading-[0.5] text-brass">
-                    “
-                  </span>
-                  <blockquote className="display mt-4 text-[2rem] leading-[1.1] text-ink sm:text-[2.5rem]">
-                    {w.quote}
-                  </blockquote>
-                  <figcaption className="mt-6 text-sm text-ink-mute">
-                    <span className="font-semibold text-ink">{w.name}</span> · Native of {w.native}
+                  <blockquote className="serif text-[clamp(2rem,3.8vw,3.6rem)] leading-[1.04]">“{w.quote}”</blockquote>
+                  <figcaption className="mt-8 flex flex-wrap gap-x-5 gap-y-1 text-sm text-mute">
+                    <span className="font-medium text-ink">{w.name}</span>
+                    <span>Native of {w.native}</span>
                   </figcaption>
                 </Reveal>
               ))}
@@ -327,33 +372,37 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
         </section>
       )}
 
-      <EnquirySection defaultInterest={p.name} mark="—" />
+      <EnquirySection defaultInterest={p.name} n="—" />
 
-      {/* Previous / next as image cards */}
-      <nav aria-label="More communities" className="grid bg-ink sm:grid-cols-2">
-        {[
-          { label: "Previous", item: prev, Icon: ArrowLeft },
-          { label: "Next", item: next, Icon: ArrowRight },
-        ].map(({ label, item, Icon }) => (
-          <Link
-            key={label}
-            href={`/homes/${item.slug}`}
-            className="group relative flex min-h-56 items-end overflow-hidden p-6 text-ivory md:min-h-72 md:p-10"
-          >
-            <span className="img-zoom absolute inset-0">
-              <Image src={item.cover.src} alt="" fill sizes="50vw" className="object-cover opacity-45" />
+      {/* Next community: the photograph carries through to its page. */}
+      <nav aria-label="Next community" className="bg-ink text-paper" data-tone="dark">
+        <Link href={`/homes/${next.slug}`} className="bloom-on-hover group relative flex min-h-[70svh] items-end overflow-hidden">
+          <ViewTransition name={`cover-${next.slug}`} share="morph" default="none">
+            <span className="absolute inset-0 block">
+              <Image
+                src={next.cover.src}
+                alt=""
+                fill
+                sizes="100vw"
+                className="mono-img object-cover opacity-70 transition-[filter,transform,opacity] duration-[1400ms] ease-out-expo group-hover:scale-105 group-hover:opacity-90"
+              />
             </span>
-            <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/20" />
-            <span className="relative flex w-full items-end justify-between gap-4">
-              <span>
-                <span className="eyebrow block text-brass-light">{label}</span>
-                <span className="display mt-2 block text-[2.2rem] leading-tight md:text-[2.8rem]">{item.name}</span>
+          </ViewTransition>
+          <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
+          <span className="shell relative flex w-full items-end justify-between gap-6 pb-12 md:pb-16">
+            <span>
+              <span className="label flex items-center gap-3 text-paper/70">
+                <span className="size-2 rounded-full" style={{ background: next.hue }} />
+                Next community · {next.locality}
               </span>
-              <Icon aria-hidden className="size-6 shrink-0 transition-transform group-hover:translate-x-1" strokeWidth={1.25} />
+              <span className="serif mt-4 block text-[clamp(3.4rem,9vw,9rem)] leading-[0.86]">{next.shortName}</span>
             </span>
-          </Link>
-        ))}
+            <span className="mb-3 inline-flex size-16 shrink-0 items-center justify-center rounded-full bg-paper text-ink transition-transform duration-500 group-hover:translate-x-2 md:size-20">
+              <ArrowRight aria-hidden className="size-6" strokeWidth={1.25} />
+            </span>
+          </span>
+        </Link>
       </nav>
-    </>
+    </div>
   );
 }

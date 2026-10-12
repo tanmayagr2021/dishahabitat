@@ -66,5 +66,5 @@ Each image is assigned to a project by the page it appeared on. Captions describ
 15. **Upcoming launches.** “32,00,000+ sq ft in the making” implies new projects. Provide details if they should appear.
 16. **Enquiry routing.** Where should enquiries go (CRM, email, sales line)? A privacy notice is also needed before launch.
 17. **Social and map links.** These were taken from the live site; confirm they’re current.
-18. **Brand voice lines.** The homepage’s philosophy section and section headings (“Mindfulness, shown not told”, “Begin with the numbers, calmly”) are new editorial copy written for the prototype. Every factual claim in them is sourced, but please approve the tone.
+18. **Brand voice lines.** Section headings (“Five communities, built one at a time”, “From across India, to a place called home”, “Begin with the numbers, calmly”) and the “day at Pursuit of Sunshine” phase captions are new editorial copy written for the prototype. Every factual claim in them is sourced, but please approve the tone.
 19. **Affordability explorer.** Confirm the client is comfortable showing an illustrative EMI planner, and whether a partner lender or legal review should vet the disclaimer wording.

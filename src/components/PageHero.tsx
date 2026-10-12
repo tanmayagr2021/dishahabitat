@@ -1,78 +1,97 @@
 import Image from "next/image";
-import type { CSSProperties, ReactNode } from "react";
-import { Eyebrow, MediaBadge } from "@/components/ui";
+import { ViewTransition, type CSSProperties, type ReactNode } from "react";
+import { Label, MediaBadge } from "@/components/ui";
 import type { Media } from "@/lib/projects";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
-/* Dark opening for inner pages: a full-bleed photograph, or forest with the contour texture. */
+/*
+ * Opening for inner pages. With a photograph, it develops from black & white into colour;
+ * `morph` names the image so it can travel in from the page that linked here.
+ */
 export function PageHero({
-  eyebrow,
+  label,
   title,
   intro,
   image,
   imagePosition = "50% 50%",
+  morph,
   aside,
   children,
 }: {
-  eyebrow: ReactNode;
+  label: ReactNode;
   title: ReactNode;
   intro?: ReactNode;
   image?: Pick<Media, "src" | "alt" | "caption" | "kind">;
   imagePosition?: string;
+  morph?: string;
   aside?: ReactNode;
   children?: ReactNode;
 }) {
+  const photo = image && (
+    <div aria-hidden={!image.alt} className="absolute inset-0">
+      <div className="anim-develop absolute inset-0">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: imagePosition }}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <section
       data-tone="dark"
-      className={`grain relative isolate overflow-hidden bg-forest-900 text-ivory ${image ? "" : "topo [--topo-opacity:0.35]"}`}
+      className={`grain relative isolate overflow-hidden bg-ink text-paper ${image ? "min-h-[88svh] lg:min-h-[100svh]" : ""} flex flex-col`}
     >
       {image && (
         <>
-          <div aria-hidden={!image.alt} className="anim-settle absolute inset-0 -z-10">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-              style={{ objectPosition: imagePosition }}
-            />
+          <div className="absolute inset-0 -z-10">
+            {morph ? (
+              <ViewTransition name={morph} share="morph" default="none">
+                {photo}
+              </ViewTransition>
+            ) : (
+              photo
+            )}
           </div>
-          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950 via-forest-950/35 to-forest-950/10" />
-          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-950/70 via-forest-950/20 to-transparent" />
+          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/30 to-ink/35" />
+          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/55 via-transparent to-transparent" />
           <MediaBadge kind={image.kind} className="left-auto right-5 top-24 md:right-10 md:top-28" />
         </>
       )}
 
-      <div
-        className={`shell flex flex-col justify-end pb-14 pt-36 md:pb-20 md:pt-44 ${image ? "min-h-[82svh] lg:min-h-[88svh]" : ""}`}
-      >
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
-          <div className="lg:col-span-8">
-            <Eyebrow className="anim-fade text-ivory/70">{eyebrow}</Eyebrow>
-            <h1
-              className="display anim-rise mt-7 text-[3.4rem] leading-[0.9] min-[400px]:text-[3.9rem] sm:text-[5.4rem] xl:text-[7.4rem]"
-              style={d(120)}
-            >
+      <div className={`shell flex flex-1 flex-col justify-end pb-12 md:pb-16 ${image ? "pt-36" : "pt-40 md:pt-52"}`}>
+        <Label className="anim-fade text-paper/70" as="p">
+          {label}
+        </Label>
+        <h1 className="mt-6 serif text-[clamp(3.6rem,10vw,11rem)] leading-[0.86]">
+          <span className="line">
+            <span className="anim-rise" style={d(150)}>
               {title}
-            </h1>
+            </span>
+          </span>
+        </h1>
+        {(intro || aside) && (
+          <div
+            className="anim-fade-up mt-10 flex flex-col gap-8 border-t border-paper/20 pt-6 md:mt-14 md:flex-row md:items-start md:justify-between"
+            style={d(450)}
+          >
+            {intro && <div className="max-w-xl text-[1.08rem] leading-relaxed text-paper/80">{intro}</div>}
+            {aside}
           </div>
-          {(intro || aside) && (
-            <div className="anim-rise lg:col-span-4 lg:pb-3" style={d(300)}>
-              {intro && <div className="max-w-md leading-relaxed text-ivory/75">{intro}</div>}
-              {aside}
-            </div>
-          )}
-        </div>
+        )}
         {children}
       </div>
 
       {image?.caption && (
-        <p className="absolute right-5 top-28 hidden max-w-xs text-right text-[0.65rem] uppercase tracking-[0.2em] text-ivory/55 md:block md:right-10 md:top-32 xl:right-[4.5rem]">
-          {image.caption}
+        <p className="label absolute right-5 top-24 hidden max-w-xs text-right text-paper/60 md:right-10 md:top-28 md:block xl:right-14">
+          {image.kind === "photo" && image.caption}
         </p>
       )}
     </section>

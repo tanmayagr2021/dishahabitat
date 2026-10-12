@@ -38,27 +38,33 @@ npm run lint
 | `/story` | Journey, the “Black & White” manifesto, founders, community timeline, brand film |
 | `/contact` | Office, phones, email, socials, enquiry form, community addresses |
 
-**Homepage sequence.** Sections alternate between dark and light grounds to set the rhythm:
+**Concept — “Black & White”.** Taken from Disha’s own manifesto (“Our promises are inked in Black. Our approach is
+clear White. Bring in your own colours.”). The interface is strictly ink and paper; colour arrives only through the
+photographs, which develop from black & white into colour as they are reached, and through each community’s
+signature hue (Windsor palm green, Central Park dusk blue, Park West mustard, Courtyard terracotta, Sunshine gold).
 
-1. Hero — golden-hour photograph of Central Park, headline lines rising from a mask, project ledger with hover previews.
-2. Transition — the company’s founding line reveals word by word; a Courtyard photograph opens from an inset frame.
-3. Signature homes — interactive showcase with prev/next, a tablist (arrow keys work) and swipe on touch.
-4. How we build — light, green, space and together, each tied to a real photograph in a sticky crossfading frame.
-5. This is us — the verified stats, counting up on a contour-texture ground.
-6. Homeowners — the real quotes, each paired with a photo of that homeowner’s community.
-7. Plan your home — the affordability explorer.
-8. Our core — the “Black & White” manifesto and the founders.
-9. Life at Disha — gallery with lightbox.
-10. Enquiry — the brand film as an ambient background.
+**Homepage sequence** (show, don’t tell):
 
-**Design system** (`src/app/globals.css`):
+1. Hero — the photograph follows the time of day in Bengaluru (day: Courtyard; dusk / night: Central Park clubhouse),
+   developing from black & white into colour, with a live IST clock.
+2. Where we began — the founding line inks in word by word as it scrolls.
+3. The collection — five tall black-and-white panels; hover or focus opens one into colour. Morphs into the community
+   page on click (React `<ViewTransition>`).
+4. A day at Pursuit of Sunshine — pinned scroll: the sun crosses an arc, five photographs run morning to night and the
+   page itself turns from day to night. Phase names are an editorial device.
+5. Every dot is a home — 1,102 dots (the published home counts), lighting up community by community, year by year.
+6. Homeowners — each journey from hometown to Disha community; open a row for their words.
+7. Our core — the manifesto as a title sequence, ending with “colours” in the five hues.
+8. Plan — a one-sentence EMI calculator; each underlined figure is a slider.
+9. “Let’s meet for coffee.” — the founder’s invitation over the brand film, with the enquiry form.
 
-- **Palette:** forest, charcoal, ivory, stone and an antique-brass accent. The official logo keeps its sky blue.
-- **Type:** Cormorant Garamond for display (with lining figures) and Manrope for text.
-- **Textures:** a generated topographic contour texture (`public/textures/topography.svg`, from
-  `scripts/generate-topography.mjs`) and a fine film grain.
-- **Motion:** CSS-led scroll reveals, plus a tiny scroll-progress hook for parallax. No animation library and no scroll
-  hijacking. `prefers-reduced-motion` disables reveals, parallax and video autoplay.
+Inner pages: `/homes` (index, time-to-build chart, comparison table), each community (scaled timeline, gallery,
+specs, next-community morph), `/story` (to-scale chart of all five builds 2014–2025, manifesto, founders, film),
+`/plan`, `/contact`.
+
+**Design system** (`src/app/globals.css`): Instrument Serif (display), Geist (text), Geist Mono (labels and data);
+ink `#0c0c0b`, paper `#f3f1ec`, five community hues. Pinned sequences fall back to static layouts under
+`prefers-reduced-motion`; video never autoplays for reduced-motion or Save-Data visitors.
 
 Stack: Next.js 16 (App Router, fully static), TypeScript, Tailwind CSS v4 and `lucide-react`. Nothing else is needed at
 runtime.
@@ -67,7 +73,7 @@ runtime.
 src/
   app/                    routes, layout, design tokens (globals.css)
   components/             Header, Footer, Logo, PageHero, Lightbox, EnquiryForm, AffordabilityExplorer, AmbientFilm
-  components/home/        homepage sections
+  components/home/        homepage sections (Hero, Manifesto, Collection, DayInTheSun, HomesField, Journeys, BlackWhite, PlanTeaser, EnquirySection)
   lib/site.ts             company facts, stats, homeowner quotes, founders
   lib/projects.ts         the five communities (facts, timelines, media)
   lib/emi.ts (+ .test.ts) loan maths and ₹ formatting

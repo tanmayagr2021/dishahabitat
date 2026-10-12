@@ -1,13 +1,63 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { ButtonLink } from "@/components/ui";
 import { useScrollProgress } from "@/lib/useScrollProgress";
-import { projectsByHandover } from "@/lib/projects";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
+
+/*
+ * Three photographs, one shown according to the hour in Bengaluru (set before paint by the
+ * bootstrap script in layout.tsx). Without JavaScript the dusk photograph shows.
+ */
+const parts = [
+  {
+    part: "day",
+    src: "/images/courtyard/pool-court.jpg",
+    position: "50% 62%",
+    place: "Disha Courtyard",
+    note: "Daylight on the court",
+  },
+  {
+    part: "dusk",
+    src: "/images/central-park/clubhouse-dusk.jpg",
+    position: "56% 55%",
+    place: "Disha Central Park",
+    note: "The clubhouse, lights coming on",
+  },
+  {
+    part: "night",
+    src: "/images/central-park/clubhouse-night.jpg",
+    position: "50% 50%",
+    place: "Disha Central Park",
+    note: "The clubhouse after dark",
+  },
+] as const;
+
+/* Live Bengaluru time, written straight to the DOM so server and client markup match. */
+function BengaluruClock() {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+      timeZone: "Asia/Kolkata",
+    });
+    const tick = () => {
+      if (ref.current) ref.current.textContent = fmt.format(new Date());
+    };
+    tick();
+    const t = setInterval(tick, 15_000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <span ref={ref} className="tabular-nums">
+      --:--
+    </span>
+  );
+}
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -18,120 +68,91 @@ export function Hero() {
       ref={ref}
       data-tone="dark"
       aria-labelledby="hero-title"
-      className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-forest-950 text-ivory [--p:0]"
+      className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink text-paper [--p:0]"
     >
-      {/* Photograph: settles on load, drifts and dims as the visitor scrolls on. */}
+      {/* The photograph develops from black & white into colour, then drifts as you scroll. */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 will-change-transform"
-        style={{ transform: "translate3d(0, calc(var(--p) * 22%), 0) scale(calc(1 + var(--p) * 0.06))" }}
+        style={{ transform: "translate3d(0, calc(var(--p) * 18%), 0)" }}
       >
-        <div className="anim-settle absolute inset-0">
-          <Image
-            src="/images/central-park/clubhouse-dusk.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[58%_55%] md:object-[50%_60%]"
-          />
-        </div>
+        {parts.map((p) => (
+          <div key={p.part} data-part={p.part} className="anim-develop absolute inset-0">
+            <Image
+              src={p.src}
+              alt=""
+              fill
+              priority={p.part === "dusk"}
+              loading={p.part === "dusk" ? undefined : "lazy"}
+              sizes="100vw"
+              className="object-cover"
+              style={{ objectPosition: p.position }}
+            />
+          </div>
+        ))}
       </div>
-      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-950/90 via-forest-950/45 to-forest-950/5" />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950 via-forest-950/35 to-transparent" />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-forest-950" style={{ opacity: "calc(var(--p) * 0.75)" }} />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/25 to-ink/40" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/60 via-transparent to-transparent" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-ink" style={{ opacity: "calc(var(--p) * 0.8)" }} />
 
       <div
-        className="shell flex flex-1 flex-col justify-end pb-10 pt-32 md:pb-14 lg:pt-40"
-        style={{ transform: "translate3d(0, calc(var(--p) * -90px), 0)", opacity: "calc(1 - var(--p) * 1.6)" }}
+        className="shell flex flex-1 flex-col justify-end pb-8 pt-28 md:pb-10"
+        style={{ transform: "translate3d(0, calc(var(--p) * -80px), 0)", opacity: "calc(1 - var(--p) * 1.5)" }}
       >
-        <div className="grid items-end gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <p className="eyebrow anim-fade flex items-center gap-3 text-ivory/70" style={d(150)}>
-              <span className="hidden text-brass-light sm:inline">Disha Habitat</span>
-              <span aria-hidden className="tick hidden sm:inline-block" />
-              <span>East Bengaluru · Since 2014</span>
-            </p>
-            <h1
-              id="hero-title"
-              className="display mt-6 text-[3.7rem] leading-[0.88] min-[400px]:text-[4.2rem] sm:text-[6rem] lg:text-[7.4rem] xl:text-[8.6rem] 2xl:text-[9.6rem]"
-            >
-              <span className="mask-line">
-                <span style={d(250)}>
-                  Come <em className="text-brass-light">home</em>
-                </span>
-              </span>
-              <span className="mask-line">
-                <span style={d(380)}>to mindful</span>
-              </span>
-              <span className="mask-line">
-                <span style={d(510)}>living spaces.</span>
-              </span>
-            </h1>
-          </div>
+        <p className="label anim-fade flex flex-wrap items-center gap-x-3 gap-y-1 text-paper/75" style={d(400)}>
+          <span>East Bengaluru</span>
+          <span aria-hidden className="h-px w-6 bg-current opacity-50" />
+          <span>Since 2014</span>
+        </p>
 
-          <div className="anim-rise lg:col-span-4 lg:pb-3" style={d(800)}>
-            <p className="max-w-sm text-[1.02rem] leading-relaxed text-ivory/80">
-              Five communities across East Bengaluru, home to more than a thousand families — built by people who began
-              exactly where you are now.
+        <h1 id="hero-title" className="mt-5">
+          <span className="line serif text-[clamp(5.2rem,19vw,19rem)] leading-[0.8]">
+            <span className="anim-rise" style={d(300)}>
+              Come <em>home</em>
+            </span>
+          </span>
+          <span className="line mt-4 max-w-[22ch] text-[clamp(1.35rem,2.6vw,2.4rem)] font-light leading-[1.15] tracking-[-0.02em] text-paper/90 md:mt-6">
+            <span className="anim-rise" style={d(520)}>
+              to mindful living spaces.
+            </span>
+          </span>
+        </h1>
+
+        <div className="mt-10 flex flex-col gap-8 border-t border-paper/20 pt-6 md:mt-14 md:flex-row md:items-end md:justify-between">
+          <dl className="anim-fade-up grid grid-cols-3 gap-6 md:gap-12" style={d(900)}>
+            {[
+              ["Communities", "5"],
+              ["Homes", "1,102"],
+              ["Families", "1,000+"],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <dt className="label text-paper/60">{k}</dt>
+                <dd className="serif mt-2 text-[2rem] leading-none md:text-[2.6rem]">{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="anim-fade-up flex flex-col gap-5 md:items-end" style={d(1050)}>
+            <p className="label text-paper/60">
+              {parts.map((p) => (
+                <span key={p.part} data-part={p.part}>
+                  {p.place} · {p.note}
+                </span>
+              ))}
+              <span className="mt-1 flex items-center gap-2 md:justify-end">
+                <span aria-hidden className="relative flex size-1.5">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-paper/70" />
+                  <span className="relative inline-flex size-1.5 rounded-full bg-paper" />
+                </span>
+                Bengaluru, now <BengaluruClock /> IST
+              </span>
             </p>
-            <div className="mt-8 flex flex-col gap-3 min-[440px]:flex-row">
-              <ButtonLink href="/homes" variant="brass">
-                Explore our homes
-              </ButtonLink>
-              <ButtonLink href="/story" variant="light" icon={false}>
-                Our story
-              </ButtonLink>
-            </div>
+            <ButtonLink href="/homes" variant="paper">
+              Explore the homes
+            </ButtonLink>
           </div>
         </div>
       </div>
-
-      {/* Project discovery ledger */}
-      <nav
-        aria-label="Our five communities"
-        className="anim-fade relative border-t border-ivory/15 bg-forest-950/55 backdrop-blur-sm"
-        style={d(1000)}
-      >
-        <div className="shell">
-          <ol className="-mx-5 flex snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-5 md:overflow-visible md:px-0">
-            {projectsByHandover.map((p) => (
-              <li key={p.slug} className="relative shrink-0 snap-start md:border-l md:border-ivory/12 md:px-5 md:first:border-l-0 md:first:pl-0">
-                <Link
-                  href={`/homes/${p.slug}`}
-                  className="group flex min-w-[12.5rem] flex-col gap-1 py-5 pr-8 md:min-w-0 md:pr-0"
-                >
-                  {/* Hover preview of the community */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute bottom-full left-0 mb-3 hidden aspect-[4/3] w-52 translate-y-3 overflow-hidden opacity-0 shadow-2xl shadow-black/40 transition-all duration-500 ease-out-soft group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 md:block"
-                  >
-                    <Image src={p.cover.src} alt="" fill sizes="208px" className="object-cover" />
-                  </span>
-                  <span className="flex items-center gap-2 text-[0.68rem] tabular-nums tracking-[0.16em] text-ivory/55">
-                    <span className="font-display text-sm italic tracking-normal text-brass-light">{p.index}</span>
-                    <span aria-hidden className="h-px w-4 bg-current" />
-                    <span>
-                      <span className="sr-only">Handover </span>
-                      {p.handoverYear}
-                    </span>
-                  </span>
-                  <span className="display text-[1.7rem] leading-tight transition-colors duration-300 group-hover:text-brass-light lg:whitespace-nowrap xl:text-[1.75rem]">
-                    {p.shortName}
-                  </span>
-                  <span className="text-xs text-ivory/50">{p.locality}</span>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </nav>
-
-      <p className="pointer-events-none absolute right-5 top-28 hidden text-right text-[0.65rem] uppercase tracking-[0.2em] text-ivory/50 md:block md:right-10 xl:right-[4.5rem]">
-        Disha Central Park
-        <br />
-        The clubhouse at dusk
-      </p>
     </section>
   );
 }

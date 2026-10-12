@@ -66,7 +66,7 @@ export function AmbientFilm({ className = "", label }: { className?: string; lab
       <button
         type="button"
         onClick={toggle}
-        className="absolute bottom-5 right-5 z-20 inline-flex min-h-11 items-center gap-2 border border-ivory/30 bg-ink/40 px-4 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ivory backdrop-blur-sm transition-colors hover:bg-ivory hover:text-ink md:bottom-8 md:right-8"
+        className="absolute bottom-5 right-5 z-20 inline-flex h-10 items-center gap-2 rounded-full bg-ink/40 px-4 text-[0.82rem] text-paper shadow-[inset_0_0_0_1px_rgb(255_255_255/0.2)] backdrop-blur-md transition-colors hover:bg-paper hover:text-ink md:bottom-8 md:right-8"
         aria-label={playing ? "Pause film" : "Play film"}
       >
         {playing ? <Pause aria-hidden className="size-3.5" /> : <Play aria-hidden className="size-3.5" />}

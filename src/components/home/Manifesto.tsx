@@ -1,86 +1,71 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRef, type CSSProperties } from "react";
-import { ArrowUpRight } from "lucide-react";
-import { SectionMark } from "@/components/ui";
+import { ArrowLink, Label, Reveal } from "@/components/ui";
 import { useScrollProgress } from "@/lib/useScrollProgress";
 
 /* Disha Habitat's own words, from dishahabitat.com/our-journey. */
 const line =
-  "We began our journey from exactly where you are right now. Looking for a house that would become a home.";
+  "We began exactly where you are right now. Looking for a house that would become a home.";
 
 export function Manifesto() {
   const textRef = useRef<HTMLDivElement>(null);
-  const frameRef = useRef<HTMLDivElement>(null);
-  useScrollProgress(textRef, "enter", { end: 0.45 });
-  useScrollProgress(frameRef, "enter", { end: 0.15 });
-
+  useScrollProgress(textRef, "enter", { end: 0.4 });
   const words = line.split(" ");
 
   return (
-    <section aria-labelledby="manifesto-title" className="relative bg-ivory pt-24 md:pt-36">
+    <section data-tone="light" aria-labelledby="manifesto-title" className="relative bg-paper py-28 md:py-44">
       <div className="shell">
-        <div ref={textRef} className="grid gap-10 [--p:1] lg:grid-cols-12">
-          <div className="lg:col-span-3">
-            <SectionMark n="01" label="Where we began" />
+        <div ref={textRef} className="grid gap-12 [--p:1] lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-3 lg:pt-4">
+            <Label n="01" className="text-mute">
+              Where we began
+            </Label>
           </div>
-          <h2
-            id="manifesto-title"
-            className="display text-[2.5rem] leading-[1.02] text-ink sm:text-[3.6rem] lg:col-span-9 xl:text-[5rem]"
-          >
-            {words.map((w, i) => (
-              <span
-                key={i}
-                className="transition-opacity duration-300"
-                style={
-                  {
-                    opacity: `clamp(0.16, calc(var(--p) * ${words.length * 1.15} - ${i}), 1)`,
-                  } as CSSProperties
-                }
-              >
-                {w === "home." ? <em className="text-brass-deep">{w}</em> : w}{" "}
-              </span>
-            ))}
-          </h2>
-        </div>
-      </div>
 
-      {/* The frame opens from an inset window to (almost) full bleed. */}
-      <div ref={frameRef} className="mt-16 [--p:1] md:mt-24">
-        <figure
-          className="relative mx-auto aspect-[4/5] overflow-hidden bg-forest-900 sm:aspect-[16/10] lg:aspect-[16/8]"
-          style={{
-            width: "calc(100% - (1 - var(--p)) * 22%)",
-            clipPath: "inset(calc((1 - var(--p)) * 6%) 0)",
-          }}
-        >
-          <Image
-            src="/images/courtyard/pool-court.jpg"
-            alt="Disha Courtyard’s white and terracotta blocks around a pool and landscaped lawn at dusk"
-            fill
-            sizes="100vw"
-            className="object-cover"
-            style={{ transform: "scale(calc(1.16 - var(--p) * 0.16))" }}
-          />
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-950/70 via-transparent to-transparent" />
-          <figcaption className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-5 text-ivory sm:flex-row sm:items-end sm:justify-between md:p-10">
-            <span>
-              <span className="eyebrow block text-brass-light">Disha Courtyard · Hagadur</span>
-              <span className="display mt-2 block max-w-xl text-[1.9rem] leading-tight md:text-[2.6rem]">
-                264 homes, gathered around a landscaped court.
-              </span>
-            </span>
-            <Link
-              href="/homes/disha-courtyard"
-              className="group inline-flex min-h-11 shrink-0 items-center gap-2 text-[0.74rem] font-semibold uppercase tracking-[0.2em] text-ivory"
+          <div className="lg:col-span-9">
+            {/* Each word inks in as the line scrolls up the page. */}
+            <h2
+              id="manifesto-title"
+              className="serif text-[clamp(2.6rem,6.4vw,6.6rem)] leading-[0.98] text-ink"
             >
-              Visit Courtyard
-              <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
-          </figcaption>
-        </figure>
+              {words.map((w, i) => (
+                <span
+                  key={i}
+                  style={
+                    {
+                      opacity: `clamp(0.12, calc(var(--p) * ${words.length * 1.25} - ${i}), 1)`,
+                    } as CSSProperties
+                  }
+                >
+                  {w.startsWith("home") ? <em>{w}</em> : w}{" "}
+                </span>
+              ))}
+            </h2>
+
+            <div className="mt-16 grid gap-10 md:mt-24 md:grid-cols-9 md:gap-8">
+              <Reveal variant="bloom" className="relative aspect-[4/3] overflow-hidden bg-paper-3 md:col-span-5">
+                <Image
+                  src="/images/community/leadership-team.jpg"
+                  alt="Members of the Disha Habitat team reviewing plans together, one wearing a hard hat"
+                  fill
+                  sizes="(min-width: 768px) 40vw, 100vw"
+                  className="object-cover object-[60%_50%]"
+                />
+              </Reveal>
+              <Reveal delay={150} className="flex flex-col justify-end md:col-span-4">
+                <p className="text-[1.05rem] leading-relaxed text-mute">
+                  Homebuyers first, then investors, then builders. Every stumble opened a new window of understanding — and
+                  every Disha home since 2014 has been planned by people who remember what it was like to be looking.
+                </p>
+                <ArrowLink href="/story" className="mt-6 text-ink">
+                  Read our story
+                </ArrowLink>
+              </Reveal>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

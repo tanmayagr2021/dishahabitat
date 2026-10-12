@@ -21,6 +21,8 @@ export type Project = {
   name: string;
   shortName: string;
   index: string;
+  /* Signature hue, sampled from the buildings themselves (see globals.css). */
+  hue: string;
   locality: string;
   address?: string;
   intro: string;
@@ -52,6 +54,7 @@ export const projects: Project[] = [
     name: "Disha Pursuit of Sunshine",
     shortName: "Pursuit of Sunshine",
     index: "05",
+    hue: "var(--color-sunshine)",
     locality: "Budigere Road, Bengaluru",
     intro:
       "A step closer to the Sun, and all that it has to offer for a better, healthier way of living. Every home catches the real rays of the Sun, with extensive 8 ft × 12 ft sundecks that invite the whole family outdoors.",
@@ -230,6 +233,7 @@ export const projects: Project[] = [
     name: "Disha Courtyard",
     shortName: "Courtyard",
     index: "04",
+    hue: "var(--color-courtyard)",
     locality: "Hagadur Village, Bengaluru",
     address: "13/1, 13/3, 13/4, Vijayanagara, Hagadur Village, near Ganesh Temple, Bengaluru 560066",
     intro:
@@ -285,6 +289,7 @@ export const projects: Project[] = [
     name: "Disha Central Park",
     shortName: "Central Park",
     index: "02",
+    hue: "var(--color-centralpark)",
     locality: "Panathur–Varthur Road, Bengaluru",
     address: "14, 15/1 & 15/2, Panathur–Varthur Road, Bengaluru 560103",
     intro:
@@ -333,6 +338,7 @@ export const projects: Project[] = [
     name: "Disha Park West",
     shortName: "Park West",
     index: "03",
+    hue: "var(--color-parkwest)",
     locality: "Bengaluru",
     intro:
       "A compact community of 118 homes on 1.5 acres, in mustard and white, built from start to finish in 32 months.",
@@ -366,6 +372,7 @@ export const projects: Project[] = [
     name: "Disha Windsor Gardens",
     shortName: "Windsor Gardens",
     index: "01",
+    hue: "var(--color-windsor)",
     locality: "Panathur–Varthur Road, Bengaluru",
     address: "71/3, 71/6, Panathur–Varthur Road, Bengaluru 560087",
     intro:

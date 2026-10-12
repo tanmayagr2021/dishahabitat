@@ -1,27 +1,30 @@
 import { Hero } from "@/components/home/Hero";
 import { Manifesto } from "@/components/home/Manifesto";
-import { Showcase } from "@/components/home/Showcase";
-import { Philosophy } from "@/components/home/Philosophy";
-import { Stats } from "@/components/home/Stats";
-import { Testimonials } from "@/components/home/Testimonials";
-import { PlanSection } from "@/components/home/PlanSection";
-import { StorySection } from "@/components/home/StorySection";
-import { LifeGallery } from "@/components/home/LifeGallery";
+import { Collection } from "@/components/home/Collection";
+import { HomesField } from "@/components/home/HomesField";
+import { DayInTheSun } from "@/components/home/DayInTheSun";
+import { Journeys } from "@/components/home/Journeys";
+import { BlackWhite } from "@/components/home/BlackWhite";
+import { PlanTeaser } from "@/components/home/PlanTeaser";
 import { EnquirySection } from "@/components/home/EnquirySection";
 
-/* Rhythm: dark hero → ivory → ink → stone → forest → ivory → stone → ink → ivory → film → forest footer. */
+/*
+ * Ink and paper alternate to set the rhythm; colour arrives only through the homes:
+ * hero (ink) → where we began (paper) → the collection (ink) → a day in the sun (paper into
+ * night) → every dot is a home (ink, continuing the night) → homeowners (paper) → our core (ink)
+ * → plan (paper) → let's meet for coffee (film).
+ */
 export default function HomePage() {
   return (
     <>
       <Hero />
       <Manifesto />
-      <Showcase />
-      <Philosophy />
-      <Stats />
-      <Testimonials />
-      <PlanSection />
-      <StorySection />
-      <LifeGallery />
+      <Collection />
+      <DayInTheSun />
+      <HomesField />
+      <Journeys />
+      <BlackWhite />
+      <PlanTeaser />
       <EnquirySection />
     </>
   );

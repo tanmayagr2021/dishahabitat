@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, useRef, useState, type FormEvent } from "react";
-import { AlertCircle, ArrowRight, CheckCircle2, Info } from "lucide-react";
+import { AlertCircle, CheckCircle2, Info } from "lucide-react";
+import { buttonClass, ButtonInner } from "@/components/ui";
 import { projects } from "@/lib/projects";
 
 /*
@@ -76,9 +77,9 @@ export function EnquiryForm({
 
   const dark = tone === "dark";
   const fieldBase = `peer block w-full border-0 border-b bg-transparent px-0 pb-3 pt-2 text-base outline-none transition-colors placeholder:text-current placeholder:opacity-40 focus:ring-0 ${
-    dark ? "border-paper/35 text-paper focus:border-paper" : "border-ink/30 text-ink focus:border-ink"
+    dark ? "border-paper/35 text-paper focus:border-paper" : "border-ink/25 text-ink focus:border-ink"
   }`;
-  const labelBase = `text-[0.7rem] font-semibold uppercase tracking-[0.16em] ${dark ? "text-paper/70" : "text-ink-mute"}`;
+  const labelBase = `label ${dark ? "text-paper/70" : "text-mute"}`;
   const errorText = dark ? "text-[#ffb4a8]" : "text-error";
 
   const set = <K extends keyof Values>(key: K, value: Values[K]) => {
@@ -109,15 +110,15 @@ export function EnquiryForm({
         role="status"
         className={`outline-none ${dark ? "text-paper" : "text-ink"}`}
       >
-        <CheckCircle2 aria-hidden className={`size-8 ${dark ? "text-paper" : "text-brass-deep"}`} strokeWidth={1.25} />
-        <h3 className="display mt-6 text-[2.6rem] leading-none">Thank you, {submitted}.</h3>
-        <p className={`mt-4 max-w-md leading-relaxed ${dark ? "text-paper/75" : "text-ink-soft"}`}>
+        <CheckCircle2 aria-hidden className="size-8" strokeWidth={1.25} />
+        <h3 className="serif mt-6 text-[2.8rem] leading-none">Thank you, {submitted}.</h3>
+        <p className={`mt-4 max-w-md leading-relaxed ${dark ? "text-paper/75" : "text-mute"}`}>
           Your details passed validation. On the live website, this is where your enquiry would reach the Disha
           Habitat team.
         </p>
         <p
           className={`mt-6 flex max-w-md gap-3 border p-4 text-sm leading-relaxed ${
-            dark ? "border-paper/25 text-paper/85" : "border-ink/20 bg-paper text-ink-soft"
+            dark ? "border-paper/25 text-paper/85" : "border-ink/15 bg-paper-2 text-mute"
           }`}
         >
           <Info aria-hidden className="mt-0.5 size-4 shrink-0" />
@@ -134,7 +135,7 @@ export function EnquiryForm({
             setTouched(false);
             setErrors({});
           }}
-          className={`mt-8 inline-flex min-h-11 items-center text-[0.8rem] font-semibold uppercase tracking-[0.16em] underline underline-offset-8 ${
+          className={`mt-8 inline-flex min-h-11 items-center text-[0.92rem] font-medium underline underline-offset-8 ${
             dark ? "decoration-paper/40" : "decoration-ink/30"
           }`}
         >
@@ -303,9 +304,9 @@ export function EnquiryForm({
             onChange={(e) => set("consent", e.target.checked)}
             aria-invalid={!!errors.consent}
             aria-describedby={describedBy("consent")}
-            className={`mt-0.5 size-5 shrink-0 cursor-pointer ${dark ? "accent-brass-light" : "accent-brass-deep"}`}
+            className={`mt-0.5 size-5 shrink-0 cursor-pointer ${dark ? "accent-paper" : "accent-ink"}`}
           />
-          <label htmlFor={id("consent")} className={`text-sm leading-relaxed ${dark ? "text-paper/80" : "text-ink-soft"}`}>
+          <label htmlFor={id("consent")} className={`text-sm leading-relaxed ${dark ? "text-paper/80" : "text-mute"}`}>
             I agree to be contacted by Disha Habitat by phone or email about this enquiry.
           </label>
         </div>
@@ -319,14 +320,11 @@ export function EnquiryForm({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          className={`group inline-flex min-h-12 shrink-0 items-center justify-center gap-3 whitespace-nowrap px-7 text-[0.8rem] font-semibold uppercase tracking-[0.16em] transition-colors ${
-            dark ? "bg-brass text-ink hover:bg-brass-light" : "bg-ink text-ivory hover:bg-forest-700"
-          }`}
+          className={buttonClass(dark ? "paper" : "ink", "shrink-0 whitespace-nowrap")}
         >
-          Send enquiry
-          <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
+          <ButtonInner>Send enquiry</ButtonInner>
         </button>
-        <p id={id("demo-note")} className={`flex items-center gap-2 text-xs ${dark ? "text-paper/60" : "text-ink-mute"}`}>
+        <p id={id("demo-note")} className={`flex items-center gap-2 text-xs ${dark ? "text-paper/60" : "text-mute"}`}>
           <Info aria-hidden className="size-3.5 shrink-0" />
           Prototype: submissions are validated but not sent.
         </p>
