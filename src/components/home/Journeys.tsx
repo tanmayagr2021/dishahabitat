@@ -2,12 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useId, useState } from "react";
-import { Label, Lines } from "@/components/ui";
+import { useState, type CSSProperties } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Label } from "@/components/ui";
 import { homeowners } from "@/lib/site";
 import { getProject } from "@/lib/projects";
 
-/* A photograph of each homeowner's own community (the last is a general community photograph). */
+/*
+ * "From across India, to a place called home." Each homeowner's home town is plotted at its
+ * real latitude and longitude, and an arc carries them to Bengaluru. Choosing a story washes
+ * the section in the colour of the community they now live in.
+ * Positions are approximate town centres; no national borders are drawn.
+ */
 const photos = [
   { src: "/images/courtyard/facade.jpg", alt: "A Disha Courtyard block with terracotta panels and white lattice screens" },
   { src: "/images/park-west/entrance.jpg", alt: "The Disha Park West entrance arch" },
@@ -16,118 +22,270 @@ const photos = [
   { src: "/images/courtyard/giant-chess.jpg", alt: "A young boy among giant chess pieces in the Disha Courtyard" },
 ];
 
+/* [longitude, latitude] of each home town, in the same order as `homeowners`. */
+const towns: [number, number][] = [
+  [85.85, 20.45], // Govindapur, Odisha
+  [79.75, 15.6], // Gundlapalli, Andhra Pradesh
+  [76.04, 10.59], // Guruvayur, Kerala
+  [81.8, 16.41], // Malkipuram, Andhra Pradesh
+  [84.83, 24.94], // Tekari, Bihar
+];
+const bengaluru: [number, number] = [77.59, 12.97];
+
+/* Equirectangular projection over the part of India the stories span. */
+const W = 640;
+const H = 600;
+const bounds = { west: 74, east: 88.5, south: 9, north: 26.2 };
+const kx = Math.cos((18 * Math.PI) / 180);
+const spanX = (bounds.east - bounds.west) * kx;
+const spanY = bounds.north - bounds.south;
+const scale = Math.min(W / spanX, H / spanY);
+const project = ([lon, lat]: [number, number]) => ({
+  x: (lon - bounds.west) * kx * scale + (W - spanX * scale) / 2,
+  y: (bounds.north - lat) * scale + (H - spanY * scale) / 2,
+});
+const home = project(bengaluru);
+
+/* Great-circle distance, rounded to the nearest 50 km. */
+function distanceKm([lon1, lat1]: [number, number], [lon2, lat2]: [number, number]) {
+  const r = Math.PI / 180;
+  const a =
+    Math.sin(((lat2 - lat1) * r) / 2) ** 2 +
+    Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(((lon2 - lon1) * r) / 2) ** 2;
+  return Math.round((6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))) / 50) * 50;
+}
+
+const stories = homeowners.map((h, i) => {
+  const from = project(towns[i]);
+  // A gentle arc, bowed to one side of the straight line.
+  const mx = (from.x + home.x) / 2;
+  const my = (from.y + home.y) / 2;
+  const dx = home.x - from.x;
+  const dy = home.y - from.y;
+  const bow = 0.22;
+  const cx = mx - dy * bow;
+  const cy = my + dx * bow;
+  return {
+    ...h,
+    town: h.native.split(",")[0],
+    state: h.native.split(",")[1]?.trim(),
+    from,
+    path: `M${from.x.toFixed(1)},${from.y.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${home.x.toFixed(1)},${home.y.toFixed(1)}`,
+    km: distanceKm(towns[i], bengaluru),
+    hue: getProject(h.slug)!.hue,
+    photo: photos[i],
+  };
+});
+
+/* Faint dot field behind the map. */
+const field: { x: number; y: number }[] = [];
+for (let y = 14; y < H; y += 22) for (let x = 14; x < W; x += 22) field.push({ x, y });
+
 export function Journeys() {
-  const [open, setOpen] = useState(0);
-  const uid = useId();
+  const [active, setActive] = useState(0);
+  const s = stories[active];
+  const go = (d: number) => setActive((a) => (a + d + stories.length) % stories.length);
 
   return (
     <section
       id="homeowners"
       data-tone="light"
       aria-labelledby="journeys-title"
-      className="relative bg-paper py-24 md:py-32"
+      className="relative overflow-hidden py-24 text-ink transition-[background-color] duration-700 ease-out-expo md:py-32"
+      style={{ backgroundColor: `color-mix(in oklab, ${s.hue} 86%, white)` } as CSSProperties}
     >
       <div className="shell">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-3 lg:pt-4">
-            <Label n="05" className="text-mute">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <Label n="05" className="text-ink/70">
               Homeowners
             </Label>
+            <h2 id="journeys-title" className="serif mt-5 text-[clamp(2.4rem,5vw,5rem)]">
+              From across India,
+              <br />
+              <em>to a place called home.</em>
+            </h2>
           </div>
-          <div className="lg:col-span-9">
-            <Lines
-              id="journeys-title"
-              className="serif text-[clamp(2.4rem,5vw,5rem)]"
-              lines={["From across India,", <em key="e">to a place called home.</em>]}
-            />
-          </div>
+          <p className="max-w-xs text-[0.95rem] leading-relaxed text-ink/75">
+            Choose a home town to follow a family’s journey to Bengaluru.
+          </p>
         </div>
 
-        <ul className="mt-12 border-b border-ink/15 md:mt-16">
-          {homeowners.map((h, i) => {
-            const on = open === i;
-            const p = getProject(h.slug)!;
-            const panel = `${uid}-panel-${i}`;
-            return (
-              <li key={h.name} className="border-t border-ink/15">
-                <h3>
-                  <button
-                    type="button"
-                    aria-expanded={on}
-                    aria-controls={panel}
-                    onClick={() => setOpen(on ? -1 : i)}
-                    className="group grid w-full grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 py-6 text-left md:grid-cols-[1fr_minmax(0,7rem)_1fr_auto] md:py-8"
-                  >
-                    <span className="serif text-[clamp(1.5rem,2.6vw,2.4rem)] leading-tight transition-transform duration-500 ease-out-expo group-hover:translate-x-2">
-                      {h.native}
-                    </span>
-                    {/* The journey: a line drawn from one place to the other. */}
-                    <span aria-hidden className="relative hidden h-px w-full md:block">
-                      <span className="absolute inset-0 bg-ink/20" />
-                      <span
-                        className={`absolute inset-y-0 left-0 bg-ink transition-[width] duration-1000 ease-out-expo ${on ? "w-full" : "w-0 group-hover:w-1/3"}`}
-                      />
-                      <span
-                        className="absolute -top-[3px] right-0 size-[7px] rounded-full transition-transform duration-700"
-                        style={{ background: p.hue, transform: on ? "scale(1.4)" : "scale(1)" }}
-                      />
-                    </span>
-                    <span className="col-start-1 row-start-2 flex items-center gap-2 text-[0.95rem] text-mute md:col-start-auto md:row-start-auto md:text-[1.15rem] md:text-ink">
-                      <span aria-hidden className="md:hidden">→</span>
-                      {h.resident}
-                    </span>
-                    <span
-                      aria-hidden
-                      className={`col-start-2 row-span-2 row-start-1 inline-flex size-10 items-center justify-center rounded-full border border-ink/20 transition-[transform,background-color,color] duration-500 md:col-start-auto md:row-span-1 md:row-start-auto ${
-                        on ? "rotate-45 bg-ink text-paper" : "group-hover:bg-ink group-hover:text-paper"
-                      }`}
-                    >
-                      <span className="relative block size-3">
-                        <span className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-current" />
-                        <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-current" />
-                      </span>
-                    </span>
-                  </button>
-                </h3>
+        <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-12 lg:gap-10">
+          {/* The map */}
+          <div className="relative min-w-0 lg:col-span-6">
+            <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" aria-hidden>
+              <g aria-hidden>
+                {field.map((d) => (
+                  <circle key={`${d.x}-${d.y}`} cx={d.x} cy={d.y} r={1.3} className="fill-ink/15" />
+                ))}
+                {[10, 15, 20, 25].map((lat) => {
+                  const y = project([bounds.west, lat]).y;
+                  return (
+                    <g key={lat}>
+                      <line x1={0} x2={W} y1={y} y2={y} className="stroke-ink/15" strokeDasharray="2 5" />
+                      <text x={4} y={y - 8} className="fill-ink/45 text-[13px] tabular-nums">
+                        {lat}°N
+                      </text>
+                    </g>
+                  );
+                })}
+                {stories.map((st, i) => (
+                  <path
+                    key={st.name}
+                    d={st.path}
+                    fill="none"
+                    className="stroke-ink/25"
+                    strokeWidth={1.2}
+                    strokeDasharray="3 6"
+                    opacity={i === active ? 0 : 1}
+                  />
+                ))}
+                {/* The chosen journey draws itself in. */}
+                <path
+                  key={`arc-${active}`}
+                  d={s.path}
+                  fill="none"
+                  className="journey-arc stroke-ink"
+                  strokeWidth={2.4}
+                  strokeLinecap="round"
+                  pathLength={1}
+                />
+                <circle key={`dot-${active}`} r={6} className="journey-traveller fill-ink">
+                  <animateMotion dur="1.4s" begin="0s" fill="freeze" path={s.path} keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" />
+                </circle>
+                {/* Bengaluru */}
+                <circle cx={home.x} cy={home.y} r={22} className="journey-pulse fill-ink/10" />
+                <circle cx={home.x} cy={home.y} r={9} className="fill-ink" />
+                <circle cx={home.x} cy={home.y} r={3.5} className="fill-paper" />
+                <text x={home.x + 18} y={home.y + 34} className="serif fill-ink text-[26px] italic">
+                  Bengaluru
+                </text>
+              </g>
 
-                <div
-                  id={panel}
-                  role="region"
-                  aria-label={`${h.name}, ${h.resident}`}
-                  className={`grid transition-[grid-template-rows] duration-700 ease-out-expo ${on ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-                  inert={!on}
+              {stories.map((st, i) => {
+                const on = i === active;
+                const right = st.from.x < W - 170;
+                return (
+                  <g
+                    key={st.name}
+                    onClick={() => setActive(i)}
+                    className="cursor-pointer"
+                  >
+                    <circle cx={st.from.x} cy={st.from.y} r={20} fill="transparent" />
+                    <circle
+                      cx={st.from.x}
+                      cy={st.from.y}
+                      r={on ? 8 : 5.5}
+                      className={`transition-all duration-500 ${on ? "fill-ink" : "fill-paper stroke-ink"}`}
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      x={st.from.x + (right ? 16 : -16)}
+                      y={st.from.y + 6}
+                      textAnchor={right ? "start" : "end"}
+                      className={`text-[17px] transition-opacity duration-500 ${on ? "fill-ink font-medium" : "fill-ink/60"}`}
+                    >
+                      {st.town}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+
+          {/* The story */}
+          <div className="flex min-w-0 flex-col lg:col-span-6">
+            <div role="tablist" aria-label="Home towns" className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+              {stories.map((st, i) => (
+                <button
+                  key={st.name}
+                  type="button"
+                  role="tab"
+                  id={`journey-tab-${i}`}
+                  aria-selected={i === active}
+                  aria-controls="journey-panel"
+                  onClick={() => setActive(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+                      e.preventDefault();
+                      const n = (i + (e.key === "ArrowRight" ? 1 : -1) + stories.length) % stories.length;
+                      setActive(n);
+                      document.getElementById(`journey-tab-${n}`)?.focus();
+                    }
+                  }}
+                  tabIndex={i === active ? 0 : -1}
+                  className={`shrink-0 rounded-full border px-4 py-2 text-[0.92rem] transition-colors ${
+                    i === active ? "border-ink bg-ink text-paper" : "border-ink/25 hover:border-ink hover:bg-ink/5"
+                  }`}
                 >
-                  <div className="overflow-hidden">
-                    <div className="grid gap-8 pb-10 md:grid-cols-12 md:gap-8 md:pb-14">
-                      <figure className="relative aspect-[4/3] overflow-hidden rounded-[3px] bg-paper-3 md:col-span-4">
-                        <Image
-                          src={photos[i].src}
-                          alt={photos[i].alt}
-                          fill
-                          sizes="(min-width: 768px) 30vw, 100vw"
-                          className={`object-cover transition-[filter,transform] delay-200 duration-[1600ms] ease-out-expo ${on ? "scale-100 grayscale-0" : "scale-110 grayscale"}`}
-                        />
-                      </figure>
-                      <blockquote className="flex flex-col justify-between gap-8 md:col-span-7 md:col-start-6">
-                        <p className="serif text-[clamp(1.6rem,2.8vw,2.6rem)] leading-[1.15]">“{h.quote}”</p>
-                        <footer className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-mute">
-                          <cite className="not-italic font-medium text-ink">{h.name}</cite>
-                          <span>Native of {h.native}</span>
-                          <Link
-                            href={`/homes/${h.slug}`}
-                            className="underline decoration-ink/25 underline-offset-4 hover:text-ink hover:decoration-ink"
-                          >
-                            Resident, {h.resident}
-                          </Link>
-                        </footer>
-                      </blockquote>
-                    </div>
-                  </div>
+                  {st.town}
+                </button>
+              ))}
+            </div>
+
+            <div
+              id="journey-panel"
+              role="tabpanel"
+              aria-labelledby={`journey-tab-${active}`}
+              key={active}
+              className="journey-card mt-6 flex flex-1 flex-col overflow-hidden rounded-[8px] bg-paper shadow-[0_40px_80px_-40px_rgb(0_0_0/0.45)]"
+            >
+              <div className="grid flex-1 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                <div className="relative aspect-[4/3] sm:aspect-auto sm:min-h-[22rem]">
+                  <Image src={s.photo.src} alt={s.photo.alt} fill sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw" className="object-cover" />
                 </div>
-              </li>
-            );
-          })}
-        </ul>
+                <blockquote className="flex flex-col justify-between gap-8 p-6 md:p-8">
+                  <div>
+                    <p className="label flex items-center gap-2 text-mute">
+                      <span className="whitespace-nowrap tabular-nums text-ink">≈ {s.km.toLocaleString("en-IN")} km</span>
+                      <span aria-hidden className="h-px w-5 bg-current opacity-40" />
+                      from {s.town} to Bengaluru
+                    </p>
+                    <p className="serif mt-5 text-[clamp(1.5rem,2.2vw,2.1rem)] leading-[1.15]">“{s.quote}”</p>
+                  </div>
+                  <footer className="text-[0.95rem]">
+                    <cite className="block font-medium not-italic">{s.name}</cite>
+                    <span className="mt-1 block text-mute">
+                      From {s.native} · now at{" "}
+                      <Link
+                        href={`/homes/${s.slug}`}
+                        className="text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+                      >
+                        {s.resident}
+                      </Link>
+                    </span>
+                  </footer>
+                </blockquote>
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between gap-4">
+              <p className="text-sm tabular-nums text-ink/70">
+                {String(active + 1).padStart(2, "0")} / {String(stories.length).padStart(2, "0")}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => go(-1)}
+                  aria-label="Previous story"
+                  className="inline-flex size-11 items-center justify-center rounded-full border border-ink/25 transition-colors hover:bg-ink hover:text-paper"
+                >
+                  <ArrowLeft aria-hidden className="size-4" strokeWidth={1.6} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => go(1)}
+                  aria-label="Next story"
+                  className="inline-flex size-11 items-center justify-center rounded-full bg-ink text-paper transition-transform hover:scale-105"
+                >
+                  <ArrowRight aria-hidden className="size-4" strokeWidth={1.6} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="mt-8 text-xs text-ink/60">Home towns are plotted at approximate positions; distances are as the crow flies.</p>
       </div>
     </section>
   );

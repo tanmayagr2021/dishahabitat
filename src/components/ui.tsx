@@ -9,7 +9,7 @@ type LinkProps = ComponentProps<typeof Link>;
  * so the label reverses out of it.
  */
 const buttonBase =
-  "group relative isolate inline-flex min-h-12 items-center gap-4 overflow-hidden rounded-full py-1.5 pl-6 pr-1.5 text-[0.9rem] font-medium tracking-[-0.005em] transition-colors duration-500";
+  "group relative isolate inline-flex min-h-12 items-center justify-between gap-4 overflow-hidden rounded-full py-1.5 pl-6 pr-1.5 text-[0.9rem] font-medium tracking-[-0.005em] transition-colors duration-500";
 
 const buttonVariants = {
   ink: "bg-ink text-paper hover:text-ink [--disc:var(--color-paper)] [--disc-fg:var(--color-ink)]",

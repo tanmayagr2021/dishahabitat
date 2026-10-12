@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, type CSSProperties } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { ArrowUpRight, Moon, Sun, Sunset } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
 import { elements } from "@/lib/elements";
 
@@ -14,10 +14,47 @@ const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
  * bootstrap script in layout.tsx). Without JavaScript the dusk photograph shows.
  */
 const parts = [
-  { part: "day", src: "/images/courtyard/pool-court.jpg", position: "50% 62%", caption: "Disha Courtyard, by day" },
-  { part: "dusk", src: "/images/central-park/clubhouse-dusk.jpg", position: "56% 55%", caption: "Disha Central Park, at dusk" },
-  { part: "night", src: "/images/central-park/clubhouse-night.jpg", position: "50% 50%", caption: "Disha Central Park, after dark" },
+  { part: "day", label: "Day", Icon: Sun, src: "/images/courtyard/pool-court.jpg", position: "50% 62%", caption: "Disha Courtyard, by day" },
+  { part: "dusk", label: "Dusk", Icon: Sunset, src: "/images/central-park/clubhouse-dusk.jpg", position: "56% 55%", caption: "Disha Central Park, at dusk" },
+  { part: "night", label: "Night", Icon: Moon, src: "/images/central-park/clubhouse-night.jpg", position: "50% 50%", caption: "Disha Central Park, after dark" },
 ] as const;
+type Part = (typeof parts)[number]["part"];
+const noop = () => () => {};
+
+/* Lets the visitor change the hour: the bootstrap script picks the real one, this overrides it. */
+function DaypartSwitch() {
+  // The hour the bootstrap script chose, read once on the client; null while rendering on the server.
+  const initial = useSyncExternalStore(
+    noop,
+    () => (document.documentElement.dataset.daypart as Part | undefined) ?? "dusk",
+    () => null,
+  );
+  const [chosen, setChosen] = useState<Part | null>(null);
+  const part = chosen ?? initial;
+  useEffect(() => {
+    if (chosen) document.documentElement.setAttribute("data-daypart", chosen);
+  }, [chosen]);
+  const choose = setChosen;
+  return (
+    <div role="radiogroup" aria-label="Show the homes by" className="flex rounded-full bg-paper/12 p-1 backdrop-blur-md">
+      {parts.map(({ part: p, label, Icon }) => (
+        <button
+          key={p}
+          type="button"
+          role="radio"
+          aria-checked={part === p}
+          onClick={() => choose(p)}
+          className={`inline-flex h-9 items-center gap-2 rounded-full px-3.5 text-[0.85rem] transition-colors duration-300 ${
+            part === p ? "bg-paper text-ink" : "text-paper/80 hover:text-paper"
+          }`}
+        >
+          <Icon aria-hidden className="size-3.5" strokeWidth={1.8} />
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 /* Bengaluru time, written straight to the DOM so server and client markup match. */
 function BengaluruClock() {
@@ -41,9 +78,9 @@ export function Hero() {
       aria-labelledby="hero-title"
       className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink text-paper"
     >
-      <div aria-hidden className="absolute inset-0 -z-10">
+      <div aria-hidden className="anim-develop absolute inset-0 -z-10">
         {parts.map((p) => (
-          <div key={p.part} data-part={p.part} className="anim-develop absolute inset-0">
+          <div key={p.part} data-part={p.part} className="daypart-fade absolute inset-0">
             <Image
               src={p.src}
               alt=""
@@ -123,9 +160,12 @@ export function Hero() {
               </span>
             ))}
           </p>
-          <p>
-            In Bengaluru it’s <BengaluruClock />
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="hidden sm:block">
+              In Bengaluru it’s <BengaluruClock />
+            </p>
+            <DaypartSwitch />
+          </div>
         </div>
       </div>
     </section>

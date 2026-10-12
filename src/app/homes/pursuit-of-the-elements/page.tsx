@@ -28,9 +28,6 @@ const galleryTiles = [
   "col-span-2 aspect-[16/10] md:col-span-6 md:aspect-[16/10]",
 ];
 
-const pill =
-  "inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-6 text-[0.95rem] font-medium transition-colors";
-
 export default function ElementsPage() {
   return (
     <div style={{ "--accent": e.hue } as CSSProperties}>
@@ -60,16 +57,15 @@ export default function ElementsPage() {
             <ButtonLink href="#enquire" variant="paper">
               Book a site visit
             </ButtonLink>
-            <a href={e.phone.href} className={`${pill} border border-paper/30 hover:bg-paper hover:text-ink`}>
-              <Phone aria-hidden className="size-4" strokeWidth={1.6} />
-              {e.phone.display}
-            </a>
+            <ButtonLink href={e.whatsapp} variant="outline-light" target="_blank" rel="noopener noreferrer">
+              WhatsApp us
+            </ButtonLink>
           </div>
         }
       />
 
       {/* At a glance */}
-      <section data-tone="light" aria-labelledby="glance-title" className="bg-paper py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="glance-title" className="bg-elements py-20 md:py-28">
         <div className="shell">
           <h2 id="glance-title" className="sr-only">
             At a glance
@@ -77,7 +73,7 @@ export default function ElementsPage() {
           <dl className="grid grid-cols-2 gap-x-6 md:grid-cols-3 lg:grid-cols-6">
             {e.facts.map((f, i) => (
               <Reveal key={f.label} delay={i * 60} className="border-t border-ink py-5">
-                <dt className="label text-mute">{f.label}</dt>
+                <dt className="label text-ink/70">{f.label}</dt>
                 <dd className="serif mt-2 text-[1.9rem] leading-tight">{f.value}</dd>
               </Reveal>
             ))}
@@ -85,7 +81,7 @@ export default function ElementsPage() {
 
           <div className="mt-20 grid gap-10 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-4">
-              <Label n="01" className="text-mute">
+              <Label n="01" className="text-ink/70">
                 The idea
               </Label>
               <Lines
@@ -99,12 +95,12 @@ export default function ElementsPage() {
                 {e.fiveElements.map((el, i) => (
                   <li key={el} className="serif text-[clamp(1.7rem,3vw,2.8rem)] leading-tight">
                     {el}
-                    {i < e.fiveElements.length - 1 && <span aria-hidden className="ml-6 text-ink/25">·</span>}
+                    {i < e.fiveElements.length - 1 && <span aria-hidden className="ml-6 text-ink/40">·</span>}
                   </li>
                 ))}
               </ul>
-              <p className="mt-8 max-w-2xl text-[1.12rem] leading-relaxed text-ink/80">{e.intro}</p>
-              <p className="mt-4 max-w-2xl text-[1.12rem] leading-relaxed text-ink/80">
+              <p className="mt-8 max-w-2xl text-[1.12rem] leading-relaxed text-ink">{e.intro}</p>
+              <p className="mt-4 max-w-2xl text-[1.12rem] leading-relaxed text-ink">
                 Come home to Disha Pursuit of the Elements and let it all come to you.
               </p>
             </div>

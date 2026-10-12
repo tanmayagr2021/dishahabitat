@@ -81,5 +81,10 @@ project site and are labelled artist’s impressions; the master plan is labelle
 20. **Pursuit of the Elements.** Confirm “Last few 2, 3 & 4 BHK homes” is still current, whether any gallery interiors
     are photographs of a show apartment (all are labelled artist’s impressions), and whether to add prices or floor-plan
     downloads.
-21. **Sales line in the header.** The header shows +91 95053 33333 (the line published for Pursuit of the Elements and
-    Pursuit of Sunshine). Confirm it should be the site-wide sales number.
+21. **Sales line.** The header no longer shows a phone number (client request). +91 95053 33333 (the line
+    published for Pursuit of the Elements and Pursuit of Sunshine) still appears in the mobile menu and on the
+    Pursuit of the Elements page. Confirm it should be the site-wide sales number.
+
+22. **Homeowners map.** The home towns on the homepage map are plotted at approximate town
+    centres (Govindapur, Odisha is ambiguous — several towns share the name), and the distances
+    shown are straight-line estimates rounded to 50 km. Confirm the towns with the homeowners.

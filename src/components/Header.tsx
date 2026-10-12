@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Phone } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
@@ -129,15 +128,6 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <a
-              href={elements.phone.href}
-              className={`hidden h-10 items-center gap-2 rounded-full px-4 text-[0.95rem] xl:inline-flex ${
-                dark ? "hover:bg-paper/10" : "hover:bg-ink/6"
-              }`}
-            >
-              <Phone aria-hidden className="size-4" strokeWidth={1.6} />
-              <span className="tabular-nums">{elements.phone.display}</span>
-            </a>
             <Link
               href="/contact#enquire"
               className={`hidden h-10 items-center rounded-full px-5 text-[0.95rem] font-medium transition-colors sm:inline-flex ${
@@ -146,13 +136,6 @@ export function Header() {
             >
               Book a visit
             </Link>
-            <a
-              href={elements.phone.href}
-              aria-label={`Call ${elements.phone.display}`}
-              className={`inline-flex size-10 items-center justify-center rounded-full sm:hidden ${dark ? "bg-paper/10" : "bg-ink/6"}`}
-            >
-              <Phone aria-hidden className="size-4" strokeWidth={1.6} />
-            </a>
             <button
               ref={toggleRef}
               type="button"

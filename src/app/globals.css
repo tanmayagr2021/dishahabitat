@@ -7,13 +7,13 @@
  * photographs and through each community's signature hue (set per page as --accent).
  */
 @theme {
-  --color-paper: #f3f1ec;
+  --color-paper: #f5f3ee;
   --color-paper-2: #e8e5dd;
   --color-paper-3: #dcd8ce;
   --color-ink: #0c0c0b;
   --color-ink-2: #151513;
   --color-ink-3: #22221f;
-  --color-mute: #66645e;
+  --color-mute: #57554f;
   --color-mute-2: #94918a;
   --color-line: #cfcbc1;
 
@@ -80,7 +80,7 @@
   /* Display serif: Fraunces at large optical sizes, light and open. */
   .serif {
     font-family: var(--font-serif);
-    font-weight: 300;
+    font-weight: 360;
     font-optical-sizing: auto;
     letter-spacing: -0.022em;
     line-height: 0.98;
@@ -90,7 +90,7 @@
   .serif em,
   .serif i {
     font-style: italic;
-    font-weight: 300;
+    font-weight: 340;
   }
 
   /* Small labels: plain sans, uppercase, tracked — legible at a glance. */
@@ -130,11 +130,11 @@
   }
 }
 
-/* ---------- Colour: black & white until you reach for it ---------- */
+/* ---------- Colour: photographs always show in full colour ---------- */
 
 .mono-img img,
 img.mono-img {
-  filter: grayscale(1);
+  filter: saturate(0.92);
   transition: filter 0.7s ease;
 }
 
@@ -142,7 +142,7 @@ img.mono-img {
 .bloom-on-hover:focus-visible img,
 [data-active="true"] .mono-img img,
 [data-active="true"] img.mono-img {
-  filter: none;
+  filter: saturate(1.08);
 }
 
 /* ---------- Motion: one gentle fade per element, once ---------- */
@@ -387,4 +387,71 @@ html[data-daypart="night"] [data-part~="night"] {
 
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow: 0 0 0 1px currentColor, 0 0 0 5px rgb(128 128 128 / 0.35);
+}
+
+/* ---------- Homeowners: the journey arc draws in, the card settles ---------- */
+
+.journey-arc {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: journey-draw 1.4s var(--ease-out-expo) forwards;
+}
+
+@keyframes journey-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.journey-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: journey-pulse 2.6s ease-out infinite;
+}
+
+@keyframes journey-pulse {
+  from {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.journey-card {
+  animation: fade-up 0.7s var(--ease-out-expo) both;
+}
+
+/* Hero photographs crossfade when the visitor changes the hour. */
+[data-part].daypart-fade {
+  display: block;
+  opacity: 0;
+  transition: opacity 1.1s var(--ease-out-expo);
+}
+
+html:not([data-daypart]) .daypart-fade[data-part~="dusk"],
+html[data-daypart="day"] .daypart-fade[data-part~="day"],
+html[data-daypart="dusk"] .daypart-fade[data-part~="dusk"],
+html[data-daypart="night"] .daypart-fade[data-part~="night"] {
+  opacity: 1;
+}
+
+/* "Bring in your own colours": each chosen hue spreads out from its swatch. */
+.paint-layer {
+  clip-path: circle(0 at var(--x) var(--y));
+  animation: paint 1.1s var(--ease-in-out-cine) forwards;
+}
+
+@keyframes paint {
+  to {
+    clip-path: circle(150vmax at var(--x) var(--y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-traveller {
+    display: none;
+  }
 }

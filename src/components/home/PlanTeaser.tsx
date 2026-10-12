@@ -73,9 +73,30 @@ export function PlanTeaser() {
               {formatINR(result.emi)}
               <span className="ml-2 font-sans text-base text-paper/60">/ month</span>
             </p>
-            <p className="mt-4 text-sm text-paper/65">
-              Loan of {formatINRShort(result.principal)} · total interest {formatINRShort(result.totalInterest)}
-            </p>
+            {/* Where the money goes: the loan itself against the interest on it. */}
+            <div className="mt-7">
+              <div className="flex h-3 gap-1 overflow-hidden rounded-full">
+                <span
+                  className="rounded-full bg-paper transition-[width] duration-500 ease-out-expo"
+                  style={{ width: `${(result.principal / (result.principal + result.totalInterest || 1)) * 100}%` }}
+                />
+                <span className="flex-1 rounded-full bg-sunshine" />
+              </div>
+              <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <dt className="flex items-center gap-2 text-paper/60">
+                    <span aria-hidden className="size-2 rounded-full bg-paper" /> Loan amount
+                  </dt>
+                  <dd className="mt-1 text-[1.05rem] tabular-nums">{formatINRShort(result.principal)}</dd>
+                </div>
+                <div>
+                  <dt className="flex items-center gap-2 text-paper/60">
+                    <span aria-hidden className="size-2 rounded-full bg-sunshine" /> Total interest
+                  </dt>
+                  <dd className="mt-1 text-[1.05rem] tabular-nums">{formatINRShort(result.totalInterest)}</dd>
+                </div>
+              </dl>
+            </div>
           </div>
           <ArrowLink href="/plan" className="mt-6 text-ink">
             Open the full calculator

@@ -23,6 +23,7 @@ const total = groups.reduce((n, g) => n + g.homes, 0);
 export function HomesField() {
   const ref = useRef<HTMLElement>(null);
   const [stage, setStage] = useState(groups.length);
+  const [focus, setFocus] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   /* Plays the years forward, one community at a time. */
@@ -58,7 +59,7 @@ export function HomesField() {
 
   const lit = groups.slice(0, stage);
   const homesLit = lit.reduce((n, g) => n + g.homes, 0);
-  const current = stage > 0 ? groups[stage - 1] : null;
+  const current = focus ? groups.find((g) => g.slug === focus)! : stage > 0 ? groups[stage - 1] : null;
   const year = current ? current.year : 2014;
 
   return (
@@ -93,22 +94,37 @@ export function HomesField() {
               </div>
             </div>
 
-            <ol className="flex flex-wrap gap-x-5 gap-y-2 lg:grid lg:grid-cols-1 lg:gap-y-2.5">
-              {groups.map((g, i) => (
-                <li
-                  key={g.slug}
-                  className={`flex items-center justify-between gap-4 text-sm transition-opacity duration-700 lg:border-t lg:border-paper/12 lg:pt-2.5 ${
-                    i < stage ? "opacity-100" : "opacity-35"
-                  }`}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className="size-2 rounded-full" style={{ background: g.hue }} />
-                    {g.name}
-                  </span>
-                  <span className="label tabular-nums text-paper/60">{g.homes}</span>
-                </li>
-              ))}
-            </ol>
+            <ul className="flex flex-col gap-1.5" aria-label="Highlight a community">
+              {groups.map((g, i) => {
+                const on = focus === g.slug;
+                return (
+                  <li key={g.slug}>
+                    <button
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => {
+                        setStage(groups.length);
+                        setFocus(on ? null : g.slug);
+                      }}
+                      onMouseEnter={() => stage >= groups.length && setFocus(g.slug)}
+                      onMouseLeave={() => setFocus(null)}
+                      className={`flex w-full items-center justify-between gap-4 rounded-full border px-4 py-2.5 text-left text-[0.95rem] transition-[opacity,background-color,border-color,color] duration-500 ${
+                        i < stage ? "opacity-100" : "opacity-35"
+                      } ${on ? "border-transparent text-ink" : "border-paper/15 hover:border-paper/40"}`}
+                      style={on ? { background: g.hue } : undefined}
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <span className="size-2.5 rounded-full" style={{ background: on ? "var(--color-ink)" : g.hue }} />
+                        {g.name}
+                      </span>
+                      <span className="tabular-nums opacity-70">
+                        {g.homes} homes · {g.year}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           {/* The field */}
@@ -119,15 +135,17 @@ export function HomesField() {
             >
               {groups.map((g, gi) => {
                 const on = gi < stage;
+                const dim = focus !== null && focus !== g.slug;
                 return Array.from({ length: g.homes }, (_, k) => (
                   <span
                     key={`${g.slug}-${k}`}
-                    className="aspect-square rounded-full transition-[background-color,transform] duration-500 ease-out"
+                    className="aspect-square rounded-full transition-[background-color,transform,opacity] duration-500 ease-out"
                     style={
                       {
                         background: on ? g.hue : "rgb(243 241 236 / 0.1)",
-                        transform: on ? "scale(1)" : "scale(0.6)",
-                        transitionDelay: on ? `${Math.round((k / g.homes) * 500)}ms` : "0ms",
+                        opacity: dim ? 0.18 : 1,
+                        transform: on ? (focus === g.slug ? "scale(1.15)" : "scale(1)") : "scale(0.6)",
+                        transitionDelay: on && !focus ? `${Math.round((k / g.homes) * 500)}ms` : "0ms",
                       } as CSSProperties
                     }
                   />

@@ -124,19 +124,19 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
       />
 
       {/* Overview: the facts and a timeline drawn to scale */}
-      <section data-tone="light" aria-labelledby="overview-title" className="bg-paper py-24 md:py-36">
+      <section data-tone="light" aria-labelledby="overview-title" className="bg-[color-mix(in_oklab,var(--accent)_84%,white)] py-24 md:py-36">
         <div className="shell grid gap-16 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
-            <Label n="01" className="text-mute">
+            <Label n="01" className="text-ink/70">
               The community
             </Label>
             <h2 id="overview-title" className="sr-only">
               About {p.name}
             </h2>
-            <dl className="mt-8 border-b border-ink/15">
+            <dl className="mt-8 border-b border-ink/20">
               {p.facts.map((f) => (
-                <div key={f.label} className="flex items-baseline justify-between gap-6 border-t border-ink/15 py-4">
-                  <dt className="label text-mute">{f.label}</dt>
+                <div key={f.label} className="flex items-baseline justify-between gap-6 border-t border-ink/20 py-4">
+                  <dt className="label text-ink/70">{f.label}</dt>
                   <dd className="serif text-right text-[1.6rem] leading-tight">{f.value}</dd>
                 </div>
               ))}
@@ -156,19 +156,19 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
           </div>
 
           <div className="lg:col-span-6 lg:col-start-7">
-            <Label className="text-mute">Timeline</Label>
+            <Label className="text-ink/70">Timeline</Label>
             <Reveal className="mt-10">
               <div className="relative h-24">
                 <div className="absolute inset-x-0 top-1/2 h-px bg-ink/20" />
                 <div
-                  className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-[var(--accent)]"
+                  className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-ink"
                   style={{ width: `${(marks[2].at / span) * 100}%` }}
                 />
                 {years.map((y) => (
                   <span
                     key={y}
                     aria-hidden
-                    className="label absolute top-[calc(50%+14px)] -translate-x-1/2 text-mute/70"
+                    className="label absolute top-[calc(50%+14px)] -translate-x-1/2 text-ink/60"
                     style={{ left: `${((y * 12 - t0) / span) * 100}%` }}
                   >
                     {y}
@@ -185,20 +185,20 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               </div>
               <ol className="mt-8 grid gap-6 sm:grid-cols-3">
                 {[...marks].sort((a, b) => a.at - b.at).map((m) => (
-                  <li key={m.k} className="border-t border-ink/15 pt-4">
-                    <span className="label block text-mute">{m.k}</span>
+                  <li key={m.k} className="border-t border-ink/20 pt-4">
+                    <span className="label block text-ink/70">{m.k}</span>
                     <span className="serif mt-2 block text-[1.8rem] leading-tight">{m.v}</span>
                   </li>
                 ))}
               </ol>
               <p className="mt-8 flex items-baseline gap-3">
                 <span className="serif text-[3.6rem] leading-none">{p.timeline.months}</span>
-                <span className="text-mute">months from start to finish, as published.</span>
+                <span className="text-ink/70">months from start to finish, as published.</span>
               </p>
             </Reveal>
 
-            <div className="mt-14 border-t border-ink/15 pt-6">
-              <Label className="text-mute">Location</Label>
+            <div className="mt-14 border-t border-ink/20 pt-6">
+              <Label className="text-ink/70">Location</Label>
               <p className="mt-3 flex gap-2 text-[1.05rem] leading-relaxed">
                 <MapPin aria-hidden className="mt-1 size-4 shrink-0" strokeWidth={1.5} />
                 {p.address ?? p.locality}
