@@ -77,7 +77,7 @@ export function InteractiveProjectCard({
         <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
           <StatusLine p={p} className="text-paper/80" />
           <div className="mt-3 flex items-end justify-between gap-6">
-            <h3 className="serif text-[clamp(2rem,3.4vw,3.6rem)] leading-[0.95]">{p.shortName}</h3>
+            <h3 className="serif text-[clamp(1.8rem,2.6vw,2.8rem)] leading-[1.02]">{p.shortName}</h3>
             <Arrow className="mb-2 shrink-0 text-paper" />
           </div>
           {/* Details: always visible on touch screens; on hover screens they rise on hover or focus. */}

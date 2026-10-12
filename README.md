@@ -44,24 +44,23 @@ and the name resolves beneath it. Forest and charcoal give depth; ivory and ston
 drawn line (active states, progress, focus, the seam in the hero); brass is the warm metal of the film’s ribbon; earth
 is the terracotta of the buildings. Each community keeps a signature hue for data and card accents.
 
-**Homepage sequence**
+**Homepage sequence** — in the order a buyer's questions arrive:
 
-0. Logo film — once per visit, home page only. The supplied 8-second film plays; as its logo settles the official SVG
-   logo is laid exactly over it, the film dissolves, and the logo glides into the header while the hero rises
-   (`src/components/Intro.tsx`). Skip at any time (button, key, click, scroll); never shown with reduced motion.
-1. Hero — a day at a Disha community. A centred headline inside the sun’s arc; drag the sun (or the time line, or use
-   the arrow keys) and the full-bleed photograph moves through the day — morning yoga at Courtyard, the pool court at
-   noon, the Sunshine sundial, Central Park at dusk and after dark. After the intro the sun rises once from dawn to the
-   current hour in Bengaluru, so the interaction shows itself.
-2. Featured project — Pursuit of the Elements at full bleed, an ivory facts panel overlapping it, five elements, renders.
-3. Where we began — the founding line with layered team photographs; then “Our core”, set large on charcoal.
-4. The record — every home handed over as a square in its community’s colour; choose a community to light it.
-5. Delivered — card hierarchy: a large interactive card, an offset tall card, an editorial spread, compact rows.
-6. Life between the buildings — a photographic essay of real community photographs, varied crops, gentle parallax.
-7. Homeowners — a map of home towns; choosing one draws the journey to a cyan roof at Bengaluru.
-8. EMI calculator — price, down payment, rate, tenure and optional income; EMI rounded to the rupee, the final instalment adjusted so every total is the exact sum of payments (tested in `src/lib/emi.test.ts`).
-9. Project explorer — filter by status, sort by published figures, select a community, then visit it or enquire.
-10. “Let’s meet for coffee.” — enquiry over Central Park at night.
+0. Logo film — plays the moment the home page opens (autoplays from the HTML), on every visit; the official SVG
+   logo takes over from the film's and glides into the header. Skip at any time; never with reduced motion.
+1. Hero — Disha's own buildings full screen, one after another, each rising in through vertical strips like a facade
+   going up; centred headline; every slide names the community, its location and what was built.
+2. Trust strip — 1,102 homes handed over (the one hero number), with communities, families and square feet delivered.
+3. Now selling — Pursuit of the Elements: full-bleed render, translucent facts card, three renders.
+4. Delivered — the five communities in a calm grid (two large, three smaller).
+5. Why Disha — their own manifesto, then four proof cards: former homebuyers, published build timelines, construction
+   updates and RERA numbers, founders you can meet.
+6. A day at Disha — drag the sun across the sky to move a real community from morning to night.
+7. Homeowners — a map of home towns and their words.
+8. EMI calculator — exact, rupee-rounded EMI with totals that are the true sum of payments.
+9. “Let’s meet for coffee.” — book a site visit. Compact footer.
+
+The project explorer (filter, sort, select) is on `/homes`.
 
 **Design system** (`src/app/globals.css`): Newsreader (headlines, optical sizes, true italic for emphasis) and Hanken
 Grotesk (text, labels and figures — clear numerals and ₹). Labels are plain sentence case. Translucent cards: `.card`

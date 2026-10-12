@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Label } from "@/components/ui";
+import { SectionHead } from "@/components/ui";
 import { homeowners } from "@/lib/site";
 import { getProject } from "@/lib/projects";
 
@@ -94,21 +94,13 @@ export function Journeys() {
       className="surface-earth grain relative overflow-hidden py-24 md:py-36"
     >
       <div className="shell">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <Label n="06" className="text-paper/70">
-              Homeowners
-            </Label>
-            <h2 id="journeys-title" className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]">
-              From across India,
-              <br />
-              <em>to a place called home.</em>
-            </h2>
-          </div>
-          <p className="max-w-xs text-[1rem] leading-relaxed text-paper/80">
-            Choose a home town to follow a family’s journey to Bengaluru.
-          </p>
-        </div>
+        <SectionHead
+          id="journeys-title"
+          tone="dark"
+          eyebrow="Homeowners"
+          title={["From across India,", <em key="e">to a place called home.</em>]}
+          intro="Choose a home town to follow a family’s journey to Bengaluru, in their own words."
+        />
 
         <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-12 lg:gap-10">
           {/* The map */}

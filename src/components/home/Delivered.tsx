@@ -1,69 +1,37 @@
-import { ArrowLink, Label, Lines } from "@/components/ui";
-import { CompactProjectCard, EditorialProjectCard, InteractiveProjectCard } from "@/components/ProjectCards";
+import { ButtonLink, SectionHead } from "@/components/ui";
+import { InteractiveProjectCard } from "@/components/ProjectCards";
 import { getPortfolioItem } from "@/lib/portfolio";
 
-/*
- * The delivered communities, with hierarchy instead of a grid: the newest at large scale, an
- * offset tall card beside it, one editorial spread, and the two smallest as compact rows.
- */
+/* The five delivered communities: a calm grid, newest first — two large, then three. */
 export function Delivered() {
-  const sunshine = getPortfolioItem("disha-pursuit-of-sunshine");
-  const courtyard = getPortfolioItem("disha-courtyard");
-  const centralPark = getPortfolioItem("disha-central-park");
-  const parkWest = getPortfolioItem("disha-park-west");
-  const windsor = getPortfolioItem("disha-windsor-gardens");
+  const top = ["disha-pursuit-of-sunshine", "disha-courtyard"].map(getPortfolioItem);
+  const rest = ["disha-central-park", "disha-park-west", "disha-windsor-gardens"].map(getPortfolioItem);
 
   return (
-    <section data-tone="light" aria-labelledby="delivered-title" className="surface-ivory py-24 md:py-36">
+    <section data-tone="light" aria-labelledby="delivered-title" className="surface-ivory py-24 md:py-32">
       <div className="shell">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <Label n="04" className="text-mute">
-              Delivered
-            </Label>
-            <Lines
-              id="delivered-title"
-              className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]"
-              lines={["Five communities,", <em key="e">handed over.</em>]}
-            />
-          </div>
-          <p className="max-w-md text-[1.05rem] leading-relaxed text-ink/70 lg:col-span-4 lg:col-start-9">
-            Each one photographed as it stands today. Select a community for its timeline, its photographs and the words of
-            the families who live there.
-          </p>
+        <SectionHead
+          id="delivered-title"
+          eyebrow="Delivered"
+          title={["Five communities,", <em key="e">handed over.</em>]}
+          intro="Each one photographed as it stands today. Open a community for its timeline, its photographs and the words of the families who live there."
+        />
+
+        <div className="mt-14 grid gap-5 md:grid-cols-2 md:gap-6">
+          {top.map((p, i) => (
+            <InteractiveProjectCard key={p.slug} p={p} aspect="aspect-[4/3]" sizes="(min-width: 768px) 50vw, 100vw" morph delay={i * 100} />
+          ))}
+        </div>
+        <div className="mt-5 grid gap-5 sm:grid-cols-3 md:mt-6 md:gap-6">
+          {rest.map((p, i) => (
+            <InteractiveProjectCard key={p.slug} p={p} aspect="aspect-[4/5]" sizes="(min-width: 640px) 33vw, 100vw" morph delay={i * 100} />
+          ))}
         </div>
 
-        <div className="mt-14 grid gap-6 md:mt-16 lg:grid-cols-12 lg:gap-6">
-          <div className="lg:col-span-8">
-            <InteractiveProjectCard p={sunshine} morph />
-          </div>
-          <div className="lg:col-span-4">
-            <InteractiveProjectCard
-              p={courtyard}
-              aspect="aspect-[3/4] lg:aspect-auto lg:h-full"
-              className="lg:h-full"
-              sizes="(min-width: 1024px) 30vw, 100vw"
-              morph
-              delay={100}
-            />
-          </div>
-        </div>
-
-        <div className="mt-20 md:mt-32">
-          <EditorialProjectCard p={centralPark} />
-        </div>
-
-        <div className="mt-20 border-t border-ink/15 pt-6 md:mt-28">
-          <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <p className="text-[0.95rem] text-mute">Where it started</p>
-            <ArrowLink href="/homes" className="text-ink">
-              All our homes, side by side
-            </ArrowLink>
-          </div>
-          <div className="mt-4 grid gap-2 md:grid-cols-2 md:gap-6">
-            <CompactProjectCard p={parkWest} />
-            <CompactProjectCard p={windsor} />
-          </div>
+        <div className="mt-12 flex justify-center">
+          <ButtonLink href="/homes" variant="outline-dark">
+            Compare all communities side by side
+          </ButtonLink>
         </div>
       </div>
     </section>

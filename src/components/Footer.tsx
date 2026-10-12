@@ -1,154 +1,109 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { ButtonLink } from "@/components/ui";
 import { company } from "@/lib/site";
 import { projects, projectsByHandover } from "@/lib/projects";
 import { elements } from "@/lib/elements";
 
+/* A compact footer: the mark, the communities, the essentials, and the legal line. */
 export function Footer() {
   const sunshine = projects.find((p) => p.slug === "disha-pursuit-of-sunshine");
+  const linkCls = "text-paper/75 transition-colors hover:text-paper";
 
   return (
-    <footer data-tone="dark" className="surface-deep grain relative overflow-hidden">
-      <div className="shell pt-24 md:pt-32">
-        <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-7">
-            <p className="serif text-[clamp(3rem,6.4vw,6.4rem)] leading-[1.02]">
-              Come
-              <br />
-              <em>home.</em>
+    <footer data-tone="dark" className="surface-deep">
+      <div className="shell py-12 md:py-14">
+        <div className="grid gap-10 md:grid-cols-12">
+          <div className="md:col-span-4">
+            <Link href="/" aria-label="Disha Habitat — home" className="inline-block">
+              <Logo className="h-12 w-auto" />
+            </Link>
+            <p className="mt-4 max-w-xs text-[0.95rem] leading-relaxed text-paper/65">
+              {company.tagline}. Residential communities in East Bengaluru since {company.founded}.
             </p>
-            <ButtonLink href="/contact#enquire" variant="paper" className="mt-10">
-              Plan a visit
-            </ButtonLink>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-2 lg:col-span-5">
-            <div>
-              <h2 className="label text-paper/50">The communities</h2>
-              <ul className="mt-5 space-y-1">
-                <li>
-                  <Link href={elements.href} className="group inline-flex min-h-9 items-center gap-3 text-[0.95rem] text-paper hover:text-paper">
-                    <span aria-hidden className="size-1.5 bg-cyan" />
-                    {elements.shortName}
-                    <span className="label bg-cyan/15 px-2 py-0.5 text-[0.8rem] text-cyan">Now selling</span>
+          <nav aria-label="Communities" className="md:col-span-3">
+            <h2 className="text-sm text-paper/50">Communities</h2>
+            <ul className="mt-3 space-y-1.5 text-[0.95rem]">
+              <li>
+                <Link href={elements.href} className={`${linkCls} inline-flex items-center gap-2`}>
+                  {elements.shortName}
+                  <span className="rounded-full bg-cyan/15 px-2 py-0.5 text-[0.72rem] text-cyan">Now selling</span>
+                </Link>
+              </li>
+              {projectsByHandover.map((p) => (
+                <li key={p.slug}>
+                  <Link href={`/homes/${p.slug}`} className={linkCls}>
+                    {p.shortName}
                   </Link>
                 </li>
-                {projectsByHandover.map((p) => (
-                  <li key={p.slug}>
-                    <Link
-                      href={`/homes/${p.slug}`}
-                      className="group inline-flex min-h-9 items-center gap-3 text-[0.95rem] text-paper/80 hover:text-paper"
-                    >
-                      <span
-                        aria-hidden
-                        className="size-1.5 transition-transform duration-500 group-hover:scale-[2]"
-                        style={{ background: p.hue }}
-                      />
-                      {p.shortName}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              ))}
+            </ul>
+          </nav>
 
-            <div>
-              <h2 className="label text-paper/50">Explore</h2>
-              <ul className="mt-5 space-y-1">
-                {[
-                  ["/homes", "All homes"],
-                  ["/story", "Our story"],
-                  ["/plan", "Plan your home"],
-                  ["/#homeowners", "Homeowners"],
-                  ["/contact", "Contact"],
-                ].map(([href, label]) => (
-                  <li key={href}>
-                    <Link href={href} className="inline-flex min-h-9 items-center text-[0.95rem] text-paper/80 hover:text-paper">
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="label text-paper/50">Visit</h2>
-              <address className="mt-5 text-[0.95rem] not-italic leading-relaxed text-paper/80">
-                {company.office.lines.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </address>
-              <a
-                href={company.office.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-flex min-h-9 items-center gap-1.5 text-[0.95rem] text-paper underline decoration-paper/30 underline-offset-4 hover:decoration-paper"
-              >
-                Directions <ArrowUpRight aria-hidden className="size-3.5" />
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
-            </div>
-
-            <div>
-              <h2 className="label text-paper/50">Talk to us</h2>
-              <ul className="mt-5 space-y-1 text-[0.95rem]">
-                {company.phones.map((p) => (
-                  <li key={p.href}>
-                    <a href={p.href} className="inline-flex min-h-9 items-center text-paper/80 hover:text-paper">
-                      {p.display}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <a href={`mailto:${company.email}`} className="inline-flex min-h-9 items-center text-paper/80 hover:text-paper">
-                    {company.email}
-                  </a>
+          <nav aria-label="Explore" className="md:col-span-2">
+            <h2 className="text-sm text-paper/50">Explore</h2>
+            <ul className="mt-3 space-y-1.5 text-[0.95rem]">
+              {[
+                ["/homes", "All homes"],
+                ["/story", "Our story"],
+                ["/plan", "EMI calculator"],
+                ["/contact", "Contact"],
+              ].map(([href, label]) => (
+                <li key={href}>
+                  <Link href={href} className={linkCls}>
+                    {label}
+                  </Link>
                 </li>
-              </ul>
-              <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                {company.socials.map((s) => (
-                  <li key={s.href}>
-                    <a
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-9 items-center text-paper/60 hover:text-paper"
-                    >
-                      {s.label}
-                      <span className="sr-only"> (opens in a new tab)</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="md:col-span-3">
+            <h2 className="text-sm text-paper/50">Visit or call</h2>
+            <address className="mt-3 text-[0.95rem] not-italic leading-relaxed text-paper/75">{company.office.lines.join(", ")}</address>
+            <a
+              href={company.office.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${linkCls} mt-1 inline-flex items-center gap-1 text-[0.95rem]`}
+            >
+              Directions <ArrowUpRight aria-hidden className="size-3.5" />
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+            <p className="mt-3 flex flex-wrap gap-x-4 text-[0.95rem]">
+              {company.phones.map((p) => (
+                <a key={p.href} href={p.href} className={linkCls}>
+                  {p.display}
+                </a>
+              ))}
+              <a href={`mailto:${company.email}`} className={linkCls}>
+                {company.email}
+              </a>
+            </p>
           </div>
         </div>
 
-        {/* The wordmark, set full width. */}
-        <div className="relative mt-20 flex items-end justify-between gap-6 pt-12 md:mt-28">
-          <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-paper/12" />
-          <span aria-hidden data-reveal="rule" className="absolute left-0 top-0 h-px w-1/3 bg-cyan" />
-          <Logo className="h-16 w-auto md:h-28" />
-          <div aria-hidden className="flex h-1 w-40 gap-1 md:w-64">
-            {projectsByHandover.map((p) => (
-              <span key={p.slug} className="flex-1" style={{ background: p.hue }} />
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 py-8 text-xs leading-relaxed text-paper/45 lg:flex-row lg:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-paper/10 pt-6 text-xs leading-relaxed text-paper/45 md:flex-row md:items-center md:justify-between">
           <p>
             © {company.copyrightYear} {company.legalName}
-            {sunshine?.rera && <> · {sunshine.shortName} RERA No. {sunshine.rera}</>}
+            {sunshine?.rera && <> · {sunshine.shortName} RERA {sunshine.rera}</>}
           </p>
-          <p className="max-w-2xl lg:text-right">
-            Redesign prototype for client review — not the live website. Images marked “Artist’s impression” are renders.
-            The planner is illustrative only.
-          </p>
+          <ul className="flex flex-wrap gap-x-4">
+            {company.socials.map((s) => (
+              <li key={s.href}>
+                <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-paper">
+                  {s.label}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
+        <p className="mt-2 text-[0.7rem] text-paper/35">
+          Redesign prototype for client review. Images marked “Artist’s impression” are renders; the EMI calculator is illustrative.
+        </p>
       </div>
     </footer>
   );

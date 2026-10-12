@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { ProjectExplorer } from "@/components/home/ProjectExplorer";
 import { Label, Lines, MediaBadge, Reveal } from "@/components/ui";
 import { elements } from "@/lib/elements";
 import { projects, projectsByHandover } from "@/lib/projects";
@@ -135,6 +136,8 @@ export default function HomesPage() {
           </ol>
         </div>
       </section>
+
+      <ProjectExplorer />
 
       {/* Time to build */}
       <section data-tone="light" aria-labelledby="pace-title" className="surface-ivory py-28 md:py-40">

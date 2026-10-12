@@ -50,10 +50,10 @@ export const viewport: Viewport = {
  * Runs before paint:
  *  1. marks the page for scroll reveals (removed after 3s if the app never hydrates);
  *  2. picks the hero photograph for the time of day in Bengaluru (IST);
- *  3. decides whether the logo film plays: once per visit, never with reduced motion — and if it
- *     will, starts fetching it straight away rather than waiting for hydration.
+ *  3. decides whether the logo film plays: on every arrival at the home page (never with reduced
+ *     motion; `?nointro` skips it for automated checks). The film itself autoplays from the HTML.
  */
-const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var seen=sessionStorage.getItem('disha-intro');var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;d.dataset.intro=(location.pathname==='/'&&!seen&&!rm)?'on':'off';if(d.dataset.intro==='on'&&window.fetch)fetch('/media/logo-intro.mp4').catch(function(){})}catch(e){d.dataset.intro='off'}})();`;
+const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);d.dataset.intro=(location.pathname==='/'&&!rm&&!skip)?'on':'off'}catch(e){d.dataset.intro='off'}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

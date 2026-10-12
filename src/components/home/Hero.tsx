@@ -2,322 +2,222 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
-import { ArrowRight } from "lucide-react";
-import { ButtonLink } from "@/components/ui";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import { ButtonLink, words } from "@/components/ui";
 import { elements } from "@/lib/elements";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 /*
- * A day at a Disha community. The headline sits inside the sun's arc; drag the sun (or use the
- * time control, or arrow keys) and the photograph moves through the day — every one a real
- * Disha community. When the intro hands over, the sun rises from dawn to the hour it is now in
- * Bengaluru, once, so the interaction shows itself. Reduced motion: no sweep.
+ * The opening: Disha's own buildings, full screen, one after another. Each new photograph rises
+ * in through vertical strips, like a facade going up, then settles with a slow zoom. Every slide
+ * names the community, where it is and what was built — so the page says "homes, built and
+ * handed over" before a word is read. Facts from lib/projects.ts and lib/elements.ts.
  */
-type Phase = { from: number; name: string; src: string; alt: string; caption: string; position: string; tint: string };
-const phases: Phase[] = [
+type Slide = { src: string; alt: string; position: string; name: string; place: string; fact: string; href: string; render?: boolean };
+const slides: Slide[] = [
   {
-    from: 6,
-    name: "Morning",
-    src: "/images/courtyard/yoga-lawn.jpg",
-    alt: "Residents practising yoga on the lawn at Disha Courtyard as a man walks past",
-    caption: "Yoga on the lawn · Disha Courtyard",
-    position: "50% 55%",
-    tint: "linear-gradient(180deg, rgb(255 190 140 / 0.28), transparent 55%)",
-  },
-  {
-    from: 10,
-    name: "Midday",
-    src: "/images/courtyard/pool-court.jpg",
-    alt: "The pool court at Disha Courtyard, framed by terracotta and white blocks",
-    caption: "The pool court · Disha Courtyard",
-    position: "50% 60%",
-    tint: "linear-gradient(180deg, rgb(180 220 255 / 0.12), transparent 50%)",
-  },
-  {
-    from: 14,
-    name: "Afternoon",
-    src: "/images/pursuit-of-sunshine/sundial.webp",
-    alt: "A large stone sundial set into a circular plaza at Disha Pursuit of Sunshine",
-    caption: "The sundial · Disha Pursuit of Sunshine",
-    position: "50% 55%",
-    tint: "linear-gradient(180deg, rgb(255 200 110 / 0.22), transparent 60%)",
-  },
-  {
-    from: 17,
-    name: "Dusk",
     src: "/images/central-park/clubhouse-dusk.jpg",
     alt: "The glass clubhouse at Disha Central Park lit up at dusk above the pool",
-    caption: "The clubhouse at dusk · Disha Central Park",
     position: "56% 55%",
-    tint: "linear-gradient(180deg, rgb(120 70 140 / 0.25), transparent 60%)",
+    name: "Disha Central Park",
+    place: "Panathur–Varthur Road",
+    fact: "306 homes · handed over 2018",
+    href: "/homes/disha-central-park",
   },
   {
-    from: 19,
-    name: "Night",
-    src: "/images/central-park/clubhouse-night.jpg",
-    alt: "The Disha Central Park clubhouse and pool lit up after dark",
-    caption: "After dark · Disha Central Park",
-    position: "50% 50%",
-    tint: "linear-gradient(180deg, rgb(20 40 90 / 0.35), transparent 60%)",
+    src: "/images/courtyard/pool-court.jpg",
+    alt: "The pool court at Disha Courtyard, framed by terracotta and white blocks",
+    position: "50% 60%",
+    name: "Disha Courtyard",
+    place: "Hagadur Village",
+    fact: "264 homes · handed over 2021",
+    href: "/homes/disha-courtyard",
+  },
+  {
+    src: "/images/pursuit-of-the-elements/towers.webp",
+    alt: "Artist’s impression of the Pursuit of the Elements towers above landscaped gardens",
+    position: "50% 40%",
+    name: "Disha Pursuit of the Elements",
+    place: "Gunjur",
+    fact: "Now selling · 20 acres · 7 towers",
+    href: elements.href,
+    render: true,
+  },
+  {
+    src: "/images/pursuit-of-sunshine/towers.webp",
+    alt: "The two residential towers of Disha Pursuit of Sunshine above a line of trees",
+    position: "40% 50%",
+    name: "Disha Pursuit of Sunshine",
+    place: "Budigere Road",
+    fact: "322 homes · handed over 2025",
+    href: "/homes/disha-pursuit-of-sunshine",
   },
 ];
-const DAY = { start: 6, end: 18.75, max: 22 };
-const phaseIndex = (h: number) => phases.reduce((i, p, n) => (h >= p.from ? n : i), 0);
-
-const clock = (h: number) => {
-  const q = Math.round(h * 4) / 4;
-  const hh = Math.floor(q);
-  const mm = Math.round((q - hh) * 60);
-  return new Date(2000, 0, 1, hh, mm).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
-};
-
-/* Arc geometry, in the SVG's own units. */
-const W = 1000;
-const CX = 500;
-const CY = 520;
-const R = 470;
-const sunAt = (h: number) => {
-  const p = Math.min(1, Math.max(0, (h - DAY.start) / (DAY.end - DAY.start)));
-  const a = Math.PI * (1 - p);
-  return { x: CX + R * Math.cos(a), y: CY - R * Math.sin(a), up: h < DAY.end };
-};
-
-function bengaluruHour() {
-  const parts = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", hourCycle: "h23", timeZone: "Asia/Kolkata" }).formatToParts(new Date());
-  const h = Number(parts.find((p) => p.type === "hour")?.value ?? 17) + Number(parts.find((p) => p.type === "minute")?.value ?? 0) / 60;
-  return h < DAY.start ? DAY.max : Math.min(h, DAY.max);
-}
+const STRIPS = 7;
+const DWELL = 6500;
 
 export function Hero() {
-  const [hour, setHour] = useState(17.5);
-  const [touched, setTouched] = useState(false);
-  const svg = useRef<SVGSVGElement>(null);
-  const dragging = useRef(false);
-  const raf = useRef(0);
+  const [i, setI] = useState(0);
+  const [prev, setPrev] = useState<number | null>(null);
+  const [paused, setPaused] = useState(false);
+  const started = useRef(false);
 
-  const phase = phaseIndex(hour);
-  const sun = sunAt(hour);
+  const go = (n: number) => {
+    setPrev(i);
+    setI((n + slides.length) % slides.length);
+  };
 
-  /* The sunrise sweep, once the intro has handed over. */
+  /* Advance on a timer once the intro has handed over; pause while the visitor hovers the controls. */
   useEffect(() => {
     const html = document.documentElement;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const target = bengaluruHour();
-    const sweep = () => {
-      if (reduce) {
-        raf.current = requestAnimationFrame(() => setHour(target));
-        return;
-      }
-      const t0 = performance.now() + 500;
-      const dur = 2600;
-      const step = (now: number) => {
-        const k = Math.min(1, Math.max(0, (now - t0) / dur));
-        const e = 1 - Math.pow(1 - k, 3);
-        setHour(DAY.start + (target - DAY.start) * e);
-        if (k < 1) raf.current = requestAnimationFrame(step);
-      };
-      raf.current = requestAnimationFrame(step);
+    if (reduce) return;
+    let timer = 0;
+    const tick = () => {
+      timer = window.setTimeout(() => {
+        setPrev(i);
+        setI((i + 1) % slides.length);
+      }, DWELL);
     };
-    const mo = new MutationObserver(() => {
-      if (html.dataset.intro !== "on") {
+    const begin = () => {
+      started.current = true;
+      if (!paused) tick();
+    };
+    if (html.dataset.intro === "on" && !started.current) {
+      const mo = new MutationObserver(() => {
+        if (html.dataset.intro !== "on") {
+          mo.disconnect();
+          begin();
+        }
+      });
+      mo.observe(html, { attributes: true, attributeFilter: ["data-intro"] });
+      return () => {
         mo.disconnect();
-        sweep();
-      }
-    });
-    if (html.dataset.intro === "on") mo.observe(html, { attributes: true, attributeFilter: ["data-intro"] });
-    else sweep();
-    return () => {
-      mo.disconnect();
-      cancelAnimationFrame(raf.current);
-    };
-  }, []);
-
-  const takeOver = useCallback(() => {
-    cancelAnimationFrame(raf.current);
-    setTouched(true);
-  }, []);
-
-  /* Dragging the sun: the pointer's angle around the arc's centre becomes the hour. */
-  const fromPointer = (e: PointerEvent<SVGSVGElement>) => {
-    const el = svg.current;
-    const m = el?.getScreenCTM();
-    if (!el || !m) return;
-    const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
-    if (pt.y > CY) {
-      setHour(pt.x < CX ? DAY.start : DAY.max);
-      return;
+        window.clearTimeout(timer);
+      };
     }
-    const a = Math.atan2(CY - pt.y, pt.x - CX);
-    const p = 1 - Math.min(Math.PI, Math.max(0, a)) / Math.PI;
-    setHour(DAY.start + p * (DAY.end - DAY.start));
-  };
+    begin();
+    return () => window.clearTimeout(timer);
+  }, [i, paused]);
+
+  const s = slides[i];
 
   return (
     <section
       data-tone="dark"
       aria-labelledby="hero-title"
+      aria-roledescription="carousel"
       className="hero-stage relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-forest-deep text-paper"
     >
-      {/* The day, in photographs */}
-      <div aria-hidden className="anim-develop absolute inset-0 -z-10">
-        {phases.map((p, i) => (
-          <Image
-            key={p.src}
-            src={p.src}
-            alt=""
-            fill
-            sizes="100vw"
-            priority={i === 3}
-            className={`object-cover transition-opacity duration-[1200ms] ease-out ${i === phase ? "opacity-100" : "opacity-0"}`}
-            style={{ objectPosition: p.position }}
-          />
-        ))}
-        {phases.map((p, i) => (
-          <div
-            key={p.name}
-            className={`absolute inset-0 transition-opacity duration-[1200ms] ${i === phase ? "opacity-100" : "opacity-0"}`}
-            style={{ background: p.tint }}
-          />
-        ))}
-        <div className="absolute inset-0 bg-forest-deep/45" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_58%,rgb(8_22_15/0.55),transparent_75%)]" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-forest-deep/70 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-forest-deep/85 to-transparent" />
+      {/* Photographs */}
+      <div aria-hidden className="absolute inset-0 -z-10">
+        {prev !== null && prev !== i && (
+          <div key={`prev-${prev}`} className="absolute inset-0">
+            <Image src={slides[prev].src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: slides[prev].position }} />
+          </div>
+        )}
+        <div key={`cur-${i}`} className="absolute inset-0">
+          {prev === null ? (
+            <div className="anim-develop absolute inset-0">
+              <Image src={s.src} alt="" fill priority sizes="100vw" className="slow-zoom object-cover" style={{ objectPosition: s.position }} />
+            </div>
+          ) : (
+            Array.from({ length: STRIPS }, (_, k) => (
+              <div
+                key={k}
+                className="strip absolute inset-0"
+                style={{ "--sd": `${k * 70}ms` } as CSSProperties}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{ clipPath: `inset(0 ${((STRIPS - k - 1) / STRIPS) * 100}% 0 ${(k / STRIPS) * 100}%)` }}
+                >
+                  <Image src={s.src} alt="" fill sizes="100vw" className="slow-zoom object-cover" style={{ objectPosition: s.position }} />
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        <div className="absolute inset-0 bg-forest-deep/40" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgb(8_22_15/0.5),transparent_80%)]" />
+        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-forest-deep/75 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-forest-deep/90 to-transparent" />
       </div>
 
-      <div className="relative flex flex-1 flex-col items-center justify-end px-5 pb-8 pt-28 text-center md:pt-32">
-        {/* The arc and the sun */}
-        <div className="relative w-full max-w-[68rem]">
-          <svg
-            ref={svg}
-            viewBox={`0 0 ${W} ${CY + 10}`}
-            className="anim-fade block h-auto w-full touch-none select-none"
-            style={d(500)}
-            onPointerDown={(e) => {
-              dragging.current = true;
-              takeOver();
-              e.currentTarget.setPointerCapture(e.pointerId);
-              fromPointer(e);
-            }}
-            onPointerMove={(e) => dragging.current && fromPointer(e)}
-            onPointerUp={() => (dragging.current = false)}
-            onPointerCancel={() => (dragging.current = false)}
-            aria-hidden
-          >
-            <defs>
-              <radialGradient id="sun-glow">
-                <stop offset="0" stopColor="#ffd9a0" stopOpacity="0.9" />
-                <stop offset="0.35" stopColor="#f5a34a" stopOpacity="0.35" />
-                <stop offset="1" stopColor="#f5a34a" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            {/* the path of the day, and the part already travelled */}
-            <path d={`M${CX - R},${CY} A${R},${R} 0 0 1 ${CX + R},${CY}`} fill="none" stroke="rgb(241 235 223 / 0.28)" strokeWidth="1.2" strokeDasharray="2 7" />
-            {sun.up && (
-              <path
-                d={`M${CX - R},${CY} A${R},${R} 0 0 1 ${sun.x.toFixed(1)},${sun.y.toFixed(1)}`}
-                fill="none"
-                stroke="rgb(241 235 223 / 0.75)"
-                strokeWidth="1.4"
-              />
-            )}
-            <line x1={CX - R - 30} x2={CX + R + 30} y1={CY} y2={CY} stroke="rgb(241 235 223 / 0.35)" strokeWidth="1" />
-            {[6, 12, 18].map((h) => {
-              const s = sunAt(h);
-              return <circle key={h} cx={s.x} cy={s.y} r="3" fill="rgb(241 235 223 / 0.6)" />;
-            })}
-            {sun.up ? (
-              <g style={{ cursor: "grab" }}>
-                <circle cx={sun.x} cy={sun.y} r="70" fill="url(#sun-glow)" />
-                <circle cx={sun.x} cy={sun.y} r="17" fill="#ffcf8a" />
-                <circle cx={sun.x} cy={sun.y} r="30" fill="transparent" />
-              </g>
-            ) : (
-              <g transform={`translate(${CX + R * 0.62} ${CY - R * 0.74})`}>
-                <circle r="16" fill="#e9e4d6" />
-                <circle cx="7" cy="-5" r="14" fill="rgb(8 22 15 / 0.85)" />
-              </g>
-            )}
-          </svg>
-
-          {/* The headline, inside the arc */}
-          <div className="-mt-[22%] flex flex-col items-center sm:pointer-events-none sm:absolute sm:inset-x-0 sm:bottom-[6%] sm:mt-0 sm:px-4">
-            <p className="anim-fade text-[0.95rem] text-paper/80" style={d(300)}>
-              Disha Habitat · East Bengaluru · since 2014
-            </p>
-            <h1
-              id="hero-title"
-              className="serif anim-rise mt-4 max-w-[15ch] text-[clamp(2.7rem,7vw,6.6rem)] leading-[0.98] [text-shadow:0_2px_30px_rgb(0_0_0/0.25)]"
-              style={d(350)}
-            >
-              Come home to <em>mindful</em> living spaces.
-            </h1>
-            <p className="anim-fade-up mt-5 max-w-xl text-[1.05rem] leading-relaxed text-paper/85 md:text-[1.15rem]" style={d(550)}>
-              Apartments and villas in East Bengaluru, built by people who were once homebuyers themselves.
-            </p>
-            <div className="anim-fade-up pointer-events-auto mt-7 flex flex-col gap-3 sm:flex-row" style={d(700)}>
-              <ButtonLink href="#explore" variant="paper">
-                Explore the homes
-              </ButtonLink>
-              <ButtonLink href="/story" variant="outline-light">
-                Our story
-              </ButtonLink>
-            </div>
-          </div>
+      {/* Headline, centred */}
+      <div className="flex flex-1 flex-col items-center justify-center px-5 pb-10 pt-32 text-center">
+        <p className="anim-fade flex items-center gap-3 text-[0.95rem] text-paper/85" style={d(200)}>
+          <span aria-hidden className="h-px w-8 bg-paper/50" />
+          Residential developers · East Bengaluru · since 2014
+          <span aria-hidden className="h-px w-8 bg-paper/50" />
+        </p>
+        <h1
+          id="hero-title"
+          className="serif anim-words mt-6 max-w-[16ch] text-[clamp(2.9rem,7.2vw,7rem)] leading-[1] [text-shadow:0_2px_40px_rgb(0_0_0/0.3)]"
+          style={d(300)}
+        >
+          {words(["Come home to", <em key="m">mindful</em>, "living spaces."])}
+        </h1>
+        <p className="anim-fade-up mt-6 max-w-xl text-[1.08rem] leading-relaxed text-paper/85 md:text-[1.2rem]" style={d(900)}>
+          Five communities built and handed over to more than 1,000 families. Now building our sixth, in Gunjur.
+        </p>
+        <div className="anim-fade-up mt-9 flex flex-col gap-3 sm:flex-row" style={d(1050)}>
+          <ButtonLink href={elements.href} variant="paper">
+            See what we’re building now
+          </ButtonLink>
+          <ButtonLink href="/homes" variant="outline-light">
+            Our communities
+          </ButtonLink>
         </div>
+      </div>
 
-        {/* The time control: the hour, where you are, and a way to change it */}
-        <div className="anim-fade-up mt-6 w-full max-w-xl" style={d(900)}>
-          <div className="flex items-baseline justify-between gap-4 text-sm">
-            <span className="tabular-nums text-paper">
-              <span className="font-semibold">{clock(hour)}</span>
-              <span className="text-paper/60"> · {phases[phase].name}</span>
+      {/* The slide's facts and the controls */}
+      <div className="anim-fade-up shell relative pb-6 md:pb-8" style={d(1250)} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+        <div className="card-dark grid items-center gap-4 px-5 py-4 md:grid-cols-[1fr_auto_1fr] md:px-6">
+          <Link href={s.href} className="group min-w-0" aria-live="polite">
+            <span key={`cap-${i}`} className="swap-in block">
+              <span className="block text-sm text-paper/60">
+                {s.place}
+                {s.render && " · artist’s impression"}
+              </span>
+              <span className="mt-0.5 flex items-center gap-2 font-medium">
+                {s.name}
+                <ArrowRight aria-hidden className="size-4 opacity-60 transition-transform group-hover:translate-x-1" strokeWidth={1.75} />
+              </span>
             </span>
-            <span className="truncate text-paper/70">{phases[phase].caption}</span>
+          </Link>
+          <div className="flex items-center gap-2" role="group" aria-label="Choose a community">
+            {slides.map((sl, n) => (
+              <button
+                key={sl.name}
+                type="button"
+                onClick={() => go(n)}
+                aria-label={`Show ${sl.name}`}
+                aria-current={n === i}
+                className="group relative h-8 w-10 md:w-14"
+              >
+                <span className="absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 overflow-hidden rounded-full bg-paper/25">
+                  {n === i && (
+                    <span
+                      key={`bar-${i}-${paused}`}
+                      className="absolute inset-0 origin-left rounded-full bg-paper"
+                      style={{ animation: paused ? "none" : `fill-x ${DWELL}ms linear both`, transform: paused ? "scaleX(1)" : undefined }}
+                    />
+                  )}
+                  {n < i && <span className="absolute inset-0 rounded-full bg-paper/60" />}
+                </span>
+              </button>
+            ))}
           </div>
-          <label className="sr-only" htmlFor="hero-hour">
-            Time of day
-          </label>
-          <span
-            className="mt-2 block text-paper"
-            style={{ "--fill": `${(((hour - DAY.start) / (DAY.max - DAY.start)) * 100).toFixed(2)}%`, "--thumb": "#ffcf8a" } as CSSProperties}
-          >
-            <input
-              id="hero-hour"
-              type="range"
-              min={DAY.start}
-              max={DAY.max}
-              step={0.25}
-              value={hour}
-              onChange={(e) => {
-                takeOver();
-                setHour(Number(e.target.value));
-              }}
-              aria-valuetext={`${clock(hour)}, ${phases[phase].name}: ${phases[phase].caption}`}
-              className="range"
-            />
-          </span>
-          <p className={`mt-1 text-xs text-paper/55 transition-opacity duration-700 ${touched ? "opacity-0" : "opacity-100"}`}>
-            Drag the sun, or this line, to spend a day at a Disha community.
+          <p key={`fact-${i}`} className="swap-in text-sm text-paper/75 md:text-right">
+            {s.fact}
           </p>
         </div>
-
-        <Link
-          href={elements.href}
-          className="anim-fade-up group card-dark mt-6 inline-flex items-center gap-3 !rounded-full py-2 pl-2 pr-4 text-left text-sm"
-          style={d(1050)}
-        >
-          <span className="relative block size-9 overflow-hidden rounded-full">
-            <Image src={elements.cover.src} alt="" fill sizes="36px" className="object-cover" />
-          </span>
-          <span>
-            <span className="text-paper/65">Now selling · </span>
-            <span className="font-medium">{elements.shortName}, Gunjur</span>
-          </span>
-          <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" strokeWidth={1.75} />
-        </Link>
+        <a href="#trust" className="mx-auto mt-4 flex w-fit items-center gap-1.5 text-sm text-paper/60 hover:text-paper">
+          Scroll <ChevronDown aria-hidden className="size-4" />
+        </a>
       </div>
     </section>
   );

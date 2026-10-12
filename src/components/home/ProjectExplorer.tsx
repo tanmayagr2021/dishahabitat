@@ -61,7 +61,7 @@ function Segmented<T extends string>({
 function Selected({ p }: { p: PortfolioItem }) {
   const [shot, setShot] = useState(0);
   const m = p.gallery[shot] ?? p.gallery[0];
-  const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : "#enquire";
+  const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : "/contact#enquire";
 
   return (
     <article key={p.slug} aria-labelledby="explorer-name" className="swap-in card-dark overflow-hidden p-3 md:p-4" style={{ "--hue": p.hue } as CSSProperties}>
@@ -122,13 +122,9 @@ function Selected({ p }: { p: PortfolioItem }) {
             <Link href={p.href} className={buttonClass("paper")}>
               <ButtonInner>Visit {p.shortName}</ButtonInner>
             </Link>
-            <a
-              href={enquireHref}
-              onClick={() => window.dispatchEvent(new CustomEvent("disha:interest", { detail: p.name }))}
-              className={buttonClass("outline-light")}
-            >
+            <Link href={enquireHref} className={buttonClass("outline-light")}>
               <ButtonInner>Enquire about this</ButtonInner>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

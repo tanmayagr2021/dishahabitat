@@ -5,8 +5,8 @@ import { Logo } from "@/components/Logo";
 
 /*
  * The logo film (supplied, 8 s, 1920×1080): a cyan line draws the roof and the name resolves
- * on forest green. It plays once per visit, on the home page only, never with reduced motion
- * (layout.tsx decides before paint). As the film's logo settles, the official SVG logo is laid
+ * on forest green. It plays on every arrival at the home page, starting from the HTML itself,
+ * never with reduced motion (layout.tsx decides before paint). As the film's logo settles, the official SVG logo is laid
  * exactly over it, then glides into its place in the header while the film dissolves into the
  * hero — one continuous movement. Any key, click, scroll or "Skip intro" ends it at once.
  *
@@ -38,9 +38,6 @@ export function Intro() {
     const close = () => {
       if (ended) return;
       ended = true;
-      try {
-        sessionStorage.setItem("disha-intro", "1");
-      } catch {}
       html.dataset.intro = "off";
       setGone(true);
     };
@@ -108,8 +105,10 @@ export function Intro() {
     v.addEventListener("timeupdate", onTime);
     v.addEventListener("ended", handover);
     v.addEventListener("error", skip);
-    const playing = v.play();
-    playing?.catch(skip);
+    // The film has usually been playing since the HTML arrived; if it is already past the
+    // settle point by the time this runs, hand over at once.
+    if (v.currentTime >= SETTLED_AT || v.ended) handover();
+    else v.play()?.catch(skip);
     // If the film has not started within 2.5 s (slow network, autoplay blocked), go straight in.
     const stall = window.setTimeout(() => {
       if (v.currentTime < 0.1) skip();
@@ -144,9 +143,10 @@ export function Intro() {
           <video
             ref={video}
             src="/media/logo-intro.mp4"
+            autoPlay
             muted
             playsInline
-            preload="none"
+            preload="auto"
             aria-hidden
             tabIndex={-1}
             className="absolute inset-0 size-full"

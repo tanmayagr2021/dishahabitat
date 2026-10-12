@@ -134,7 +134,30 @@ export function Reveal({
   );
 }
 
-/* Headline whose lines rise from behind a mask. Pass each line as an array item. */
+/* Splits a headline into words for the word-by-word entrance. Elements (e.g. <em>) stay whole. */
+export function words(lines: ReactNode[], start = 0) {
+  let i = start;
+  return lines.map((l, li) => (
+    <span key={li} className="block">
+      {typeof l === "string"
+        ? l.split(" ").map((w, wi, arr) => (
+            <span key={wi}>
+              <span className="w" style={{ "--wi": i++ } as CSSProperties}>
+                {w}
+              </span>
+              {wi < arr.length - 1 ? " " : ""}
+            </span>
+          ))
+        : (
+            <span className="w" style={{ "--wi": i++ } as CSSProperties}>
+              {l}
+            </span>
+          )}
+    </span>
+  ));
+}
+
+/* Headline that arrives word by word as it scrolls into view. Pass each line as an array item. */
 export function Lines({
   lines,
   className = "",
@@ -149,13 +172,49 @@ export function Lines({
   delay?: number;
 }) {
   return (
-    <Tag id={id} data-reveal="lines" className={className} style={{ "--reveal-delay": `${delay}ms` } as CSSProperties}>
-      {lines.map((l, i) => (
-        <span key={i} className="line" style={{ "--i": i } as CSSProperties}>
-          <span>{l}</span>
-        </span>
-      ))}
+    <Tag id={id} data-reveal="words" className={className} style={{ "--reveal-delay": `${delay}ms` } as CSSProperties}>
+      {words(lines)}
     </Tag>
+  );
+}
+
+/*
+ * Every section opens the same way: a small eyebrow, a headline, an optional short intro — centred,
+ * so the page reads as one composed sequence rather than a scatter of layouts.
+ */
+export function SectionHead({
+  id,
+  eyebrow,
+  title,
+  intro,
+  tone = "light",
+  align = "center",
+  className = "",
+}: {
+  id: string;
+  eyebrow: string;
+  title: ReactNode[];
+  intro?: ReactNode;
+  tone?: "light" | "dark";
+  align?: "center" | "left";
+  className?: string;
+}) {
+  const muted = tone === "dark" ? "text-paper/65" : "text-mute";
+  const center = align === "center";
+  return (
+    <div className={`${center ? "mx-auto max-w-3xl text-center" : "max-w-3xl"} ${className}`}>
+      <Reveal as="p" className={`flex items-center gap-3 text-[0.95rem] ${muted} ${center ? "justify-center" : ""}`}>
+        <span aria-hidden className={`h-px w-8 ${tone === "dark" ? "bg-paper/35" : "bg-ink/25"}`} />
+        {eyebrow}
+        {center && <span aria-hidden className={`h-px w-8 ${tone === "dark" ? "bg-paper/35" : "bg-ink/25"}`} />}
+      </Reveal>
+      <Lines id={id} className="serif mt-5 text-[clamp(2.3rem,4.4vw,4.2rem)] leading-[1.04]" lines={title} />
+      {intro && (
+        <Reveal delay={150} as="p" className={`mt-5 text-[1.08rem] leading-relaxed ${muted} ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}>
+          {intro}
+        </Reveal>
+      )}
+    </div>
   );
 }
 

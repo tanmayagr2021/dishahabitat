@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ButtonLink, Label, Lines, MediaBadge, Reveal } from "@/components/ui";
+import { ButtonLink, Lines, MediaBadge, Reveal } from "@/components/ui";
 import { elements } from "@/lib/elements";
 
 /*
@@ -18,17 +18,22 @@ export function Featured() {
       <div className="parallax relative h-[88svh] min-h-[34rem]">
         <Image src={elements.cover.src} alt={elements.cover.alt} fill sizes="100vw" className="object-cover object-[50%_40%]" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest via-forest/25 to-forest-deep/40" />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-forest-deep/75 via-forest-deep/25 to-transparent" />
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_70%,rgb(8_22_15/0.55),transparent_80%)]" />
         <MediaBadge kind="render" className="left-5 top-24 md:left-10" />
-        <div className="shell absolute inset-x-0 bottom-0 pb-44 md:pb-56">
-          <Label n="01" className="text-paper/80">
+        <div className="absolute inset-x-0 bottom-0 px-5 pb-48 text-center md:pb-60">
+          <p className="flex items-center justify-center gap-3 text-[0.95rem] text-paper/85">
+            <span aria-hidden className="h-px w-8 bg-paper/50" />
             Now selling · {elements.locality}
-          </Label>
+            <span aria-hidden className="h-px w-8 bg-paper/50" />
+          </p>
           <Lines
             id="featured-title"
-            className="serif mt-5 max-w-[14ch] text-[clamp(2.8rem,6vw,6rem)] leading-[1.02]"
-            lines={["Pursuit of", "the Elements"]}
+            className="serif mx-auto mt-5 text-[clamp(2.8rem,6.4vw,6.4rem)] leading-[1.02] [text-shadow:0_2px_40px_rgb(0_0_0/0.3)]"
+            lines={["Disha Pursuit of", <em key="e">the Elements</em>]}
           />
+          <p className="mx-auto mt-4 max-w-xl text-[1.05rem] text-paper/85">
+            2, 3 &amp; 4 BHK apartments and 4 &amp; 5 BHK villas on 20 acres
+          </p>
         </div>
       </div>
 
