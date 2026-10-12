@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { ButtonLink, words } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { elements } from "@/lib/elements";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
@@ -109,61 +109,32 @@ export function Hero() {
       data-tone="dark"
       aria-labelledby="hero-title"
       aria-roledescription="carousel"
-      className="hero-stage relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-forest-deep text-paper"
+      className="hero-stage surface-deep grain relative overflow-hidden pb-6 pt-28 md:pt-[7.5rem]"
     >
-      {/* Photographs */}
-      <div aria-hidden className="absolute inset-0 -z-10">
-        {prev !== null && prev !== i && (
-          <div key={`prev-${prev}`} className="absolute inset-0">
-            <Image src={slides[prev].src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: slides[prev].position }} />
-          </div>
-        )}
-        <div key={`cur-${i}`} className="absolute inset-0">
-          {prev === null ? (
-            <div className="anim-develop absolute inset-0">
-              <Image src={s.src} alt="" fill priority sizes="100vw" className="slow-zoom object-cover" style={{ objectPosition: s.position }} />
-            </div>
-          ) : (
-            Array.from({ length: STRIPS }, (_, k) => (
-              <div
-                key={k}
-                className="strip absolute inset-0"
-                style={{ "--sd": `${k * 70}ms` } as CSSProperties}
-              >
-                <div
-                  className="absolute inset-0"
-                  style={{ clipPath: `inset(0 ${((STRIPS - k - 1) / STRIPS) * 100}% 0 ${(k / STRIPS) * 100}%)` }}
-                >
-                  <Image src={s.src} alt="" fill sizes="100vw" className="slow-zoom object-cover" style={{ objectPosition: s.position }} />
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-        <div className="absolute inset-0 bg-forest-deep/40" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgb(8_22_15/0.5),transparent_80%)]" />
-        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-forest-deep/75 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-forest-deep/90 to-transparent" />
-      </div>
-
-      {/* Headline, centred */}
-      <div className="flex flex-1 flex-col items-center justify-center px-5 pb-10 pt-32 text-center">
-        <p className="anim-fade flex items-center gap-3 text-[0.95rem] text-paper/85" style={d(200)}>
-          <span aria-hidden className="h-px w-8 bg-paper/50" />
+      {/* Headline on forest green */}
+      <div className="shell flex flex-col items-center text-center">
+        <p className="anim-fade flex items-center gap-3 text-[0.95rem] text-paper/75" style={d(150)}>
+          <span aria-hidden className="h-px w-8 bg-paper/40" />
           Residential developers · East Bengaluru · since 2014
-          <span aria-hidden className="h-px w-8 bg-paper/50" />
+          <span aria-hidden className="h-px w-8 bg-paper/40" />
         </p>
-        <h1
-          id="hero-title"
-          className="serif anim-words mt-6 max-w-[16ch] text-[clamp(2.9rem,7.2vw,7rem)] leading-[1] [text-shadow:0_2px_40px_rgb(0_0_0/0.3)]"
-          style={d(300)}
-        >
-          {words(["Come home to", <em key="m">mindful</em>, "living spaces."])}
+        <h1 id="hero-title" className="serif anim-words mt-5 text-[clamp(2.6rem,5.6vw,5.9rem)] leading-[1.02]" style={d(250)}>
+          {[
+            ["Come", "home", "to", <em key="m">mindful</em>],
+            ["living", "spaces."],
+          ].map((line, li) => (
+            <span key={li} className="block">
+              {line.map((w, wi) => (
+                <span key={wi}>
+                  <span className="w" style={{ "--wi": li * 4 + wi } as CSSProperties}>
+                    {w}
+                  </span>{" "}
+                </span>
+              ))}
+            </span>
+          ))}
         </h1>
-        <p className="anim-fade-up mt-6 max-w-xl text-[1.08rem] leading-relaxed text-paper/85 md:text-[1.2rem]" style={d(900)}>
-          Five communities built and handed over to more than 1,000 families. Now building our sixth, in Gunjur.
-        </p>
-        <div className="anim-fade-up mt-9 flex flex-col gap-3 sm:flex-row" style={d(1050)}>
+        <div className="anim-fade-up mt-8 flex flex-col items-center gap-3 sm:flex-row" style={d(900)}>
           <ButtonLink href={elements.href} variant="paper">
             See what we’re building now
           </ButtonLink>
@@ -173,52 +144,81 @@ export function Hero() {
         </div>
       </div>
 
-      {/* The slide's facts and the controls */}
-      <div className="anim-fade-up shell relative pb-6 md:pb-8" style={d(1250)} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-        <div className="card-dark grid items-center gap-4 px-5 py-4 md:grid-cols-[1fr_auto_1fr] md:px-6">
-          <Link href={s.href} className="group min-w-0" aria-live="polite">
-            <span key={`cap-${i}`} className="swap-in block">
-              <span className="block text-sm text-paper/60">
-                {s.place}
-                {s.render && " · artist’s impression"}
-              </span>
-              <span className="mt-0.5 flex items-center gap-2 font-medium">
-                {s.name}
-                <ArrowRight aria-hidden className="size-4 opacity-60 transition-transform group-hover:translate-x-1" strokeWidth={1.75} />
-              </span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-2" role="group" aria-label="Choose a community">
-            {slides.map((sl, n) => (
-              <button
-                key={sl.name}
-                type="button"
-                onClick={() => go(n)}
-                aria-label={`Show ${sl.name}`}
-                aria-current={n === i}
-                className="group relative h-8 w-10 md:w-14"
-              >
-                <span className="absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 overflow-hidden rounded-full bg-paper/25">
-                  {n === i && (
-                    <span
-                      key={`bar-${i}-${paused}`}
-                      className="absolute inset-0 origin-left rounded-full bg-paper"
-                      style={{ animation: paused ? "none" : `fill-x ${DWELL}ms linear both`, transform: paused ? "scaleX(1)" : undefined }}
-                    />
-                  )}
-                  {n < i && <span className="absolute inset-0 rounded-full bg-paper/60" />}
-                </span>
-              </button>
-            ))}
+      {/* The window onto the buildings: it opens like a door being unveiled, then moves through the communities */}
+      <div className="mt-9 px-3 md:mt-10 md:px-6">
+        <div
+          className="hero-window relative mx-auto aspect-[4/5] max-w-[110rem] overflow-hidden rounded-2xl bg-forest sm:aspect-auto sm:h-[calc(100svh-29rem)] sm:min-h-[24rem]"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div aria-hidden className="absolute inset-0">
+            {prev !== null && prev !== i && (
+              <div key={`prev-${prev}`} className="absolute inset-0">
+                <Image src={slides[prev].src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: slides[prev].position }} />
+              </div>
+            )}
+            <div key={`cur-${i}`} className="absolute inset-0">
+              {prev === null ? (
+                <Image src={s.src} alt="" fill priority sizes="100vw" className="slow-zoom object-cover" style={{ objectPosition: s.position }} />
+              ) : (
+                Array.from({ length: STRIPS }, (_, k) => (
+                  <div key={k} className="strip absolute inset-0" style={{ "--sd": `${k * 70}ms` } as CSSProperties}>
+                    <div
+                      className="absolute inset-0"
+                      style={{ clipPath: `inset(0 ${((STRIPS - k - 1) / STRIPS) * 100}% 0 ${(k / STRIPS) * 100}%)` }}
+                    >
+                      <Image src={s.src} alt="" fill sizes="100vw" className="slow-zoom object-cover" style={{ objectPosition: s.position }} />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-forest-deep/80 to-transparent" />
           </div>
-          <p key={`fact-${i}`} className="swap-in text-sm text-paper/75 md:text-right">
-            {s.fact}
-          </p>
+
+          {s.render && (
+            <span className="absolute left-4 top-4 rounded-md bg-forest-deep/60 px-2 py-1 text-[0.72rem] font-medium backdrop-blur-sm md:left-6 md:top-6">
+              Artist’s impression
+            </span>
+          )}
+
+          {/* What you are looking at, and where the slideshow is */}
+          <div className="absolute inset-x-3 bottom-3 flex flex-col gap-3 md:inset-x-6 md:bottom-6 md:flex-row md:items-end md:justify-between">
+            <Link href={s.href} className="card-dark group block px-5 py-4 md:min-w-[22rem]" aria-live="polite">
+              <span key={`cap-${i}`} className="swap-in block">
+                <span className="block text-sm text-paper/65">{s.place}</span>
+                <span className="serif mt-1 flex items-center gap-2 text-[1.6rem] leading-tight">
+                  {s.name}
+                  <ArrowRight aria-hidden className="size-5 opacity-60 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
+                </span>
+                <span className="mt-1 block text-sm text-paper/80">{s.fact}</span>
+              </span>
+            </Link>
+            <div className="card-dark flex items-center gap-1 px-3 py-2" role="group" aria-label="Choose a community">
+              {slides.map((sl, n) => (
+                <button key={sl.name} type="button" onClick={() => go(n)} aria-label={`Show ${sl.name}`} aria-current={n === i} className="relative h-8 w-9 md:w-12">
+                  <span className="absolute inset-x-1 top-1/2 h-[2px] -translate-y-1/2 overflow-hidden rounded-full bg-paper/25">
+                    {n === i && (
+                      <span
+                        key={`bar-${i}-${paused}`}
+                        className="absolute inset-0 origin-left rounded-full bg-paper"
+                        style={{ animation: paused ? "none" : `fill-x ${DWELL}ms linear both`, transform: paused ? "scaleX(1)" : undefined }}
+                      />
+                    )}
+                  </span>
+                </button>
+              ))}
+              <span className="ml-1 text-sm tabular-nums text-paper/70">
+                {String(i + 1).padStart(2, "0")}/{String(slides.length).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
         </div>
-        <a href="#trust" className="mx-auto mt-4 flex w-fit items-center gap-1.5 text-sm text-paper/60 hover:text-paper">
-          Scroll <ChevronDown aria-hidden className="size-4" />
-        </a>
       </div>
+
+      <a href="#trust" className="mx-auto mt-5 flex w-fit items-center gap-1.5 text-sm text-paper/60 hover:text-paper">
+        Scroll <ChevronDown aria-hidden className="size-4" />
+      </a>
     </section>
   );
 }

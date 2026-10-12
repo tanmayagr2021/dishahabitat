@@ -48,8 +48,9 @@ is the terracotta of the buildings. Each community keeps a signature hue for dat
 
 0. Logo film — plays the moment the home page opens (autoplays from the HTML), on every visit; the official SVG
    logo takes over from the film's and glides into the header. Skip at any time; never with reduced motion.
-1. Hero — Disha's own buildings full screen, one after another, each rising in through vertical strips like a facade
-   going up; centred headline; every slide names the community, its location and what was built.
+1. Hero — a centred headline on forest green above a wide window onto Disha's own buildings. The window opens from a
+   slit like a door being unveiled, then moves through the communities, each new photograph rising in through vertical
+   strips like a facade going up; a card in the frame names the community, its location and what was built.
 2. Trust strip — 1,102 homes handed over (the one hero number), with communities, families and square feet delivered.
 3. Now selling — Pursuit of the Elements: full-bleed render, translucent facts card, three renders.
 4. Delivered — the five communities in a calm grid (two large, three smaller).

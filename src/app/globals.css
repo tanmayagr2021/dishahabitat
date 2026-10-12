@@ -775,3 +775,21 @@ html[data-daypart="night"] [data-part~="night"] {
     color: var(--color-paper);
   }
 }
+
+/* Hero window: opens from a horizontal slit, like a door being unveiled, once the intro hands over. */
+@keyframes window-unveil {
+  from {
+    clip-path: inset(46% 6% 46% 6% round 1rem);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 1rem);
+  }
+}
+
+.hero-window {
+  animation: window-unveil 1.6s cubic-bezier(0.76, 0, 0.24, 1) 0.45s both;
+}
+
+html[data-intro="on"] .hero-window {
+  animation-play-state: paused;
+}
