@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { Media } from "@/lib/projects";
 import { MediaBadge } from "@/components/ui";
@@ -20,8 +20,10 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [index, setIndex] = useState<number | null>(null);
+  const openedFrom = useRef<number | null>(null);
 
   const open = (i: number) => {
+    openedFrom.current = i;
     setIndex(i);
     dialogRef.current?.showModal();
   };
@@ -37,10 +39,10 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
     const dialog = dialogRef.current;
     if (!dialog) return;
     const onClose = () => {
-      setIndex((i) => {
-        if (i !== null) triggerRefs.current[i]?.focus();
-        return null;
-      });
+      // Return focus to the tile that opened the viewer, wherever the visitor browsed to.
+      if (openedFrom.current !== null) triggerRefs.current[openedFrom.current]?.focus();
+      openedFrom.current = null;
+      setIndex(null);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") step(1);
@@ -60,14 +62,19 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
     <>
       <ul className={gridClassName}>
         {items.map((item, i) => (
-          <li key={item.src} data-reveal className={tileClasses[Math.min(i, tileClasses.length - 1)]}>
+          <li
+            key={item.src}
+            data-reveal="image"
+            style={{ "--reveal-delay": `${(i % 3) * 90}ms` } as CSSProperties}
+            className={tileClasses[Math.min(i, tileClasses.length - 1)]}
+          >
             <button
               ref={(el) => {
                 triggerRefs.current[i] = el;
               }}
               type="button"
               onClick={() => open(i)}
-              className="img-zoom group relative block size-full overflow-hidden bg-linen text-left"
+              className="img-zoom group relative block size-full overflow-hidden bg-forest-900 text-left"
               aria-label={`View larger: ${item.caption}${item.project ? `, ${item.project}` : ""}`}
             >
               <MediaBadge kind={item.kind} />
@@ -90,7 +97,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
       <dialog
         ref={dialogRef}
         aria-label="Image viewer"
-        className="m-0 h-dvh max-h-none w-screen max-w-none bg-ink/95 p-0 text-paper backdrop:bg-ink/80"
+        className="m-0 h-dvh max-h-none w-screen max-w-none bg-ink/95 p-0 text-ivory backdrop:bg-ink/80"
         onClick={(e) => {
           if (e.target === e.currentTarget) close();
         }}

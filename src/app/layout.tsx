@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Instrument_Serif, Manrope } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RevealObserver } from "@/components/RevealObserver";
 import "./globals.css";
 
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f0e7",
+  themeColor: "#0d1712",
   width: "device-width",
   initialScale: 1,
 };
@@ -54,13 +54,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
-      className={`${instrument.variable} ${manrope.variable} antialiased`}
+      className={`${cormorant.variable} ${manrope.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh flex-col">
         <a
           href="#main"
-          className="sr-only z-[100] bg-ink px-4 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          className="sr-only z-[100] bg-brass px-4 py-3 text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         >
           Skip to content
         </a>

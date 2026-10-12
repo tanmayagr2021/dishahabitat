@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { EnquiryForm } from "@/components/EnquiryForm";
-import { PageIntro } from "@/components/PageIntro";
-import { Reveal } from "@/components/ui";
+import { PageHero } from "@/components/PageHero";
+import { Reveal, SectionMark } from "@/components/ui";
 import { company } from "@/lib/site";
 import { projects } from "@/lib/projects";
 
@@ -13,31 +13,29 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  const withAddress = projects.filter((p) => p.address);
-
   return (
     <>
-      <PageIntro
+      <PageHero
         eyebrow="Contact"
         title={
           <>
-            “Let’s meet <br className="hidden sm:block" />
-            for <em className="text-olive">coffee</em>.”
+            “Let’s meet
+            <br />
+            for <em className="text-brass-light">coffee.</em>”
           </>
         }
-      >
-        Whether you are ready to visit or just beginning to look, we would be glad to talk it through with you.
-      </PageIntro>
+        intro="Whether you are ready to visit or just beginning to look, we would be glad to talk it through with you."
+      />
 
-      <section className="pb-24 md:pb-32">
+      <section className="bg-ivory py-20 md:py-28">
         <div className="shell grid gap-16 lg:grid-cols-12 lg:gap-8">
           <Reveal className="space-y-12 lg:col-span-4">
-            <div className="border-t border-ink/20 pt-6">
-              <h2 className="eyebrow text-ink-mute">Corporate office</h2>
-              <address className="mt-4 not-italic leading-relaxed text-ink">
-                {company.legalName}
+            <div>
+              <SectionMark n="01" label="Corporate office" />
+              <address className="mt-6 not-italic leading-relaxed text-ink">
+                <span className="display block text-[1.9rem] leading-tight">{company.legalName}</span>
                 {company.office.lines.map((l) => (
-                  <span key={l} className="block">
+                  <span key={l} className="mt-1 block text-ink-soft">
                     {l}
                   </span>
                 ))}
@@ -46,19 +44,19 @@ export default function ContactPage() {
                 href={company.office.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
+                className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
               >
                 Open in Google Maps <ArrowUpRight aria-hidden className="size-3.5" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </div>
 
-            <div className="border-t border-ink/20 pt-6">
+            <div className="border-t border-ink/15 pt-8">
               <h2 className="eyebrow text-ink-mute">Call</h2>
               <ul className="mt-3">
                 {company.phones.map((p) => (
                   <li key={p.href}>
-                    <a href={p.href} className="display inline-flex min-h-12 items-center text-[1.9rem] hover:text-olive">
+                    <a href={p.href} className="display inline-flex min-h-12 items-center text-[2.1rem] hover:text-brass-deep">
                       {p.display}
                     </a>
                   </li>
@@ -66,17 +64,17 @@ export default function ContactPage() {
               </ul>
             </div>
 
-            <div className="border-t border-ink/20 pt-6">
+            <div className="border-t border-ink/15 pt-8">
               <h2 className="eyebrow text-ink-mute">Write</h2>
               <a
                 href={`mailto:${company.email}`}
-                className="display mt-3 inline-flex min-h-12 items-center text-[1.9rem] hover:text-olive"
+                className="display mt-3 inline-flex min-h-12 items-center break-all text-[2.1rem] hover:text-brass-deep"
               >
                 {company.email}
               </a>
             </div>
 
-            <div className="border-t border-ink/20 pt-6">
+            <div className="border-t border-ink/15 pt-8">
               <h2 className="eyebrow text-ink-mute">Follow</h2>
               <ul className="mt-3 flex flex-wrap gap-x-6">
                 {company.socials.map((s) => (
@@ -97,8 +95,10 @@ export default function ContactPage() {
           </Reveal>
 
           <Reveal delay={120} className="lg:col-span-7 lg:col-start-6">
-            <div id="enquire" className="bg-paper p-6 sm:p-10 lg:p-14">
-              <h2 className="display text-[2.4rem] leading-none sm:text-[3rem]">Send an enquiry</h2>
+            <div id="enquire" className="border border-ink/10 bg-paper p-6 shadow-[0_40px_80px_-40px_rgba(20,19,17,0.35)] sm:p-10 lg:p-14">
+              <h2 className="display text-[2.6rem] leading-none sm:text-[3.4rem]">
+                Send an <em className="text-brass-deep">enquiry</em>
+              </h2>
               <p className="mb-10 mt-3 text-sm text-ink-mute">Fields marked * are required.</p>
               <EnquiryForm />
             </div>
@@ -106,36 +106,25 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section aria-labelledby="sites-title" className="bg-linen py-20 md:py-28">
+      <section data-tone="dark" aria-labelledby="sites-title" className="topo bg-forest-900 py-20 text-ivory [--topo-opacity:0.3] md:py-28">
         <div className="shell">
           <Reveal>
-            <h2 id="sites-title" className="display text-[2.6rem] sm:text-[3.4rem]">
-              Our communities
+            <SectionMark n="02" label="Our communities" tone="dark" />
+            <h2 id="sites-title" className="display mt-6 text-[2.8rem] sm:text-[3.8rem]">
+              Where to <em className="text-brass-light">find us.</em>
             </h2>
           </Reveal>
-          <ul className="mt-10 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-            {withAddress.map((p) => (
-              <Reveal as="li" key={p.slug} className="border-t border-ink/20 py-6">
-                <h3 className="display text-[1.7rem] leading-tight">
-                  <Link href={`/homes/${p.slug}`} className="hover:text-olive">
+          <ul className="mt-12 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p) => (
+              <Reveal as="li" key={p.slug} className="border-t border-ivory/15 py-7">
+                <h3 className="display text-[1.9rem] leading-tight">
+                  <Link href={`/homes/${p.slug}`} className="hover:text-brass-light">
                     {p.name}
                   </Link>
                 </h3>
-                <address className="mt-2 text-sm not-italic leading-relaxed text-ink-soft">{p.address}</address>
+                <p className="mt-2 text-sm leading-relaxed text-ivory/65">{p.address ?? p.locality}</p>
               </Reveal>
             ))}
-            {projects
-              .filter((p) => !p.address)
-              .map((p) => (
-                <Reveal as="li" key={p.slug} className="border-t border-ink/20 py-6">
-                  <h3 className="display text-[1.7rem] leading-tight">
-                    <Link href={`/homes/${p.slug}`} className="hover:text-olive">
-                      {p.name}
-                    </Link>
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{p.locality}</p>
-                </Reveal>
-              ))}
           </ul>
         </div>
       </section>

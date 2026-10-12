@@ -109,7 +109,7 @@ export function EnquiryForm({
         role="status"
         className={`outline-none ${dark ? "text-paper" : "text-ink"}`}
       >
-        <CheckCircle2 aria-hidden className={`size-8 ${dark ? "text-paper" : "text-olive"}`} strokeWidth={1.25} />
+        <CheckCircle2 aria-hidden className={`size-8 ${dark ? "text-paper" : "text-brass-deep"}`} strokeWidth={1.25} />
         <h3 className="display mt-6 text-[2.6rem] leading-none">Thank you, {submitted}.</h3>
         <p className={`mt-4 max-w-md leading-relaxed ${dark ? "text-paper/75" : "text-ink-soft"}`}>
           Your details passed validation. On the live website, this is where your enquiry would reach the Disha
@@ -303,7 +303,7 @@ export function EnquiryForm({
             onChange={(e) => set("consent", e.target.checked)}
             aria-invalid={!!errors.consent}
             aria-describedby={describedBy("consent")}
-            className={`mt-0.5 size-5 shrink-0 cursor-pointer ${dark ? "accent-paper" : "accent-olive"}`}
+            className={`mt-0.5 size-5 shrink-0 cursor-pointer ${dark ? "accent-brass-light" : "accent-brass-deep"}`}
           />
           <label htmlFor={id("consent")} className={`text-sm leading-relaxed ${dark ? "text-paper/80" : "text-ink-soft"}`}>
             I agree to be contacted by Disha Habitat by phone or email about this enquiry.
@@ -319,8 +319,8 @@ export function EnquiryForm({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          className={`group inline-flex min-h-12 items-center justify-center gap-3 px-7 text-[0.8rem] font-semibold uppercase tracking-[0.16em] transition-colors ${
-            dark ? "bg-paper text-ink hover:bg-linen" : "bg-ink text-paper hover:bg-olive-deep"
+          className={`group inline-flex min-h-12 shrink-0 items-center justify-center gap-3 whitespace-nowrap px-7 text-[0.8rem] font-semibold uppercase tracking-[0.16em] transition-colors ${
+            dark ? "bg-brass text-ink hover:bg-brass-light" : "bg-ink text-ivory hover:bg-forest-700"
           }`}
         >
           Send enquiry

@@ -1,97 +1,137 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
-import type { CSSProperties } from "react";
-import { HeroFilm } from "@/components/home/HeroFilm";
-import { ButtonLink, ArrowLink } from "@/components/ui";
-import { company } from "@/lib/site";
+import { useRef, type CSSProperties } from "react";
+import { ButtonLink } from "@/components/ui";
+import { useScrollProgress } from "@/lib/useScrollProgress";
 import { projectsByHandover } from "@/lib/projects";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export function Hero() {
-  return (
-    <section aria-labelledby="hero-title" className="relative overflow-hidden pt-24 md:pt-28 lg:pt-32">
-      <div className="shell">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
-          {/* Copy column */}
-          <div className="flex flex-col justify-between lg:col-span-6 lg:pb-4 xl:col-span-6">
-            <div>
-              <p className="eyebrow hero-rise flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-mute" style={d(100)}>
-                <span>East Bengaluru</span>
-                <span aria-hidden className="h-px w-6 bg-current opacity-50" />
-                <span>Since {company.founded}</span>
-              </p>
-              <h1
-                id="hero-title"
-                className="display mt-7 text-[3.35rem] text-ink min-[400px]:text-[3.8rem] sm:text-[5.2rem] lg:text-[5.6rem] xl:text-[7.1rem] 2xl:text-[7.8rem]"
-              >
-                <span className="hero-rise block" style={d(200)}>
-                  Come <em className="text-olive">home</em>
-                </span>
-                <span className="hero-rise block" style={d(320)}>
-                  to mindful
-                </span>
-                <span className="hero-rise block" style={d(440)}>
-                  living spaces.
-                </span>
-              </h1>
-            </div>
+  const ref = useRef<HTMLElement>(null);
+  useScrollProgress(ref, "exit", { still: 0 });
 
-            <div className="hero-rise mt-10 max-w-md lg:mt-12" style={d(600)}>
-              <p className="text-[1.05rem] leading-relaxed text-ink-soft">
-                Five communities. More than a thousand families. Homes built by people who began exactly where you
-                are now — looking for a house that would become a home.
-              </p>
-              <div className="mt-8 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-6">
-                <ButtonLink href="/homes">Explore our homes</ButtonLink>
-                <ArrowLink href="#enquire" className="text-ink">
-                  Enquire
-                </ArrowLink>
-              </div>
-            </div>
+  return (
+    <section
+      ref={ref}
+      data-tone="dark"
+      aria-labelledby="hero-title"
+      className="grain relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-forest-950 text-ivory [--p:0]"
+    >
+      {/* Photograph: settles on load, drifts and dims as the visitor scrolls on. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 will-change-transform"
+        style={{ transform: "translate3d(0, calc(var(--p) * 22%), 0) scale(calc(1 + var(--p) * 0.06))" }}
+      >
+        <div className="anim-settle absolute inset-0">
+          <Image
+            src="/images/central-park/clubhouse-dusk.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[58%_55%] md:object-[50%_60%]"
+          />
+        </div>
+      </div>
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-950/90 via-forest-950/45 to-forest-950/5" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950 via-forest-950/35 to-transparent" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-forest-950" style={{ opacity: "calc(var(--p) * 0.75)" }} />
+
+      <div
+        className="shell flex flex-1 flex-col justify-end pb-10 pt-32 md:pb-14 lg:pt-40"
+        style={{ transform: "translate3d(0, calc(var(--p) * -90px), 0)", opacity: "calc(1 - var(--p) * 1.6)" }}
+      >
+        <div className="grid items-end gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <p className="eyebrow anim-fade flex items-center gap-3 text-ivory/70" style={d(150)}>
+              <span className="hidden text-brass-light sm:inline">Disha Habitat</span>
+              <span aria-hidden className="tick hidden sm:inline-block" />
+              <span>East Bengaluru · Since 2014</span>
+            </p>
+            <h1
+              id="hero-title"
+              className="display mt-6 text-[3.7rem] leading-[0.88] min-[400px]:text-[4.2rem] sm:text-[6rem] lg:text-[7.4rem] xl:text-[8.6rem] 2xl:text-[9.6rem]"
+            >
+              <span className="mask-line">
+                <span style={d(250)}>
+                  Come <em className="text-brass-light">home</em>
+                </span>
+              </span>
+              <span className="mask-line">
+                <span style={d(380)}>to mindful</span>
+              </span>
+              <span className="mask-line">
+                <span style={d(510)}>living spaces.</span>
+              </span>
+            </h1>
           </div>
 
-          {/* Film column */}
-          <div className="relative lg:col-span-6 xl:col-span-6">
-            <div className="hero-unveil relative" style={d(250)}>
-              <HeroFilm className="aspect-[4/5] w-full sm:aspect-[16/11] lg:aspect-[4/5] lg:h-[min(72svh,46rem)] lg:w-full" />
-            </div>
-            <p className="hero-rise mt-3 flex items-center justify-between gap-4 text-xs text-ink-mute" style={d(900)}>
-              <span>From the Disha Habitat brand film</span>
-              <a
-                href={company.brandFilm.youtubeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center underline decoration-ink/25 underline-offset-4 hover:text-ink hover:decoration-ink"
-              >
-                Watch with sound<span className="sr-only"> on YouTube (opens in a new tab)</span>
-              </a>
+          <div className="anim-rise lg:col-span-4 lg:pb-3" style={d(800)}>
+            <p className="max-w-sm text-[1.02rem] leading-relaxed text-ivory/80">
+              Five communities across East Bengaluru, home to more than a thousand families — built by people who began
+              exactly where you are now.
             </p>
+            <div className="mt-8 flex flex-col gap-3 min-[440px]:flex-row">
+              <ButtonLink href="/homes" variant="brass">
+                Explore our homes
+              </ButtonLink>
+              <ButtonLink href="/story" variant="light" icon={false}>
+                Our story
+              </ButtonLink>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Ledger of the five communities */}
-        <nav aria-label="Our five communities" className="hero-rise mt-10 border-t border-ink/15 lg:mt-14" style={d(800)}>
+      {/* Project discovery ledger */}
+      <nav
+        aria-label="Our five communities"
+        className="anim-fade relative border-t border-ivory/15 bg-forest-950/55 backdrop-blur-sm"
+        style={d(1000)}
+      >
+        <div className="shell">
           <ol className="-mx-5 flex snap-x snap-mandatory scroll-px-5 overflow-x-auto px-5 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-5 md:overflow-visible md:px-0">
             {projectsByHandover.map((p) => (
-              <li key={p.slug} className="shrink-0 snap-start border-ink/15 md:border-l md:first:border-l-0">
+              <li key={p.slug} className="relative shrink-0 snap-start md:border-l md:border-ivory/12 md:px-5 md:first:border-l-0 md:first:pl-0">
                 <Link
                   href={`/homes/${p.slug}`}
-                  className="group flex min-w-[11rem] flex-col gap-1 py-5 pr-8 md:min-w-0 md:px-5 md:first:pl-0"
+                  className="group flex min-w-[12.5rem] flex-col gap-1 py-5 pr-8 md:min-w-0 md:pr-0"
                 >
-                  <span className="flex items-center gap-2 text-[0.7rem] tabular-nums tracking-[0.14em] text-ink-mute">
-                    {p.index}
-                    <span aria-hidden className="h-px w-4 bg-current opacity-50" />
-                    {p.handoverYear}
+                  {/* Hover preview of the community */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute bottom-full left-0 mb-3 hidden aspect-[4/3] w-52 translate-y-3 overflow-hidden opacity-0 shadow-2xl shadow-black/40 transition-all duration-500 ease-out-soft group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 md:block"
+                  >
+                    <Image src={p.cover.src} alt="" fill sizes="208px" className="object-cover" />
                   </span>
-                  <span className="display text-[1.55rem] leading-tight text-ink transition-colors group-hover:text-olive xl:text-[1.8rem]">
+                  <span className="flex items-center gap-2 text-[0.68rem] tabular-nums tracking-[0.16em] text-ivory/55">
+                    <span className="font-display text-sm italic tracking-normal text-brass-light">{p.index}</span>
+                    <span aria-hidden className="h-px w-4 bg-current" />
+                    <span>
+                      <span className="sr-only">Handover </span>
+                      {p.handoverYear}
+                    </span>
+                  </span>
+                  <span className="display text-[1.7rem] leading-tight transition-colors duration-300 group-hover:text-brass-light lg:whitespace-nowrap xl:text-[1.75rem]">
                     {p.shortName}
                   </span>
+                  <span className="text-xs text-ivory/50">{p.locality}</span>
                 </Link>
               </li>
             ))}
           </ol>
-        </nav>
-      </div>
+        </div>
+      </nav>
+
+      <p className="pointer-events-none absolute right-5 top-28 hidden text-right text-[0.65rem] uppercase tracking-[0.2em] text-ivory/50 md:block md:right-10 xl:right-[4.5rem]">
+        Disha Central Park
+        <br />
+        The clubhouse at dusk
+      </p>
     </section>
   );
 }
