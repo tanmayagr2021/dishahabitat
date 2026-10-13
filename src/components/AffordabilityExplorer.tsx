@@ -148,7 +148,7 @@ function MoneyInput({
   );
 }
 
-export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 | 3 }) {
+export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 | 2 | 3 }) {
   const uid = useId();
   const id = (k: string) => `${uid}-${k}`;
   const [v, setV] = useState(EXAMPLE);
@@ -169,7 +169,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
     Number.isFinite(input.price) && input.price > 0 && Number.isFinite(input.downPayment)
       ? (input.downPayment / input.price) * 100
       : null;
-  const H = headingLevel === 2 ? "h3" : "h4";
+  const H = headingLevel === 1 ? "h2" : headingLevel === 2 ? "h3" : "h4";
   const principalShare = result ? (result.principal / result.totalRepaid) * 100 : 0;
 
   return (

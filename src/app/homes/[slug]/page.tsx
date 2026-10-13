@@ -8,6 +8,7 @@ import { GalleryGrid } from "@/components/Lightbox";
 import { DayInTheSun } from "@/components/DayInTheSun";
 import { PageHero } from "@/components/PageHero";
 import { EnquirySection } from "@/components/home/EnquirySection";
+import { SoldOutBand } from "@/components/SoldOutBand";
 import { Label, Lines, Reveal } from "@/components/ui";
 import { getProject, projectsByHandover, projectsNewestFirst } from "@/lib/projects";
 import { homeowners } from "@/lib/site";
@@ -375,7 +376,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
         </section>
       )}
 
-      <EnquirySection defaultInterest={p.name} n="" />
+      {p.salesPhone ? <EnquirySection defaultInterest={p.name} n="" /> : <SoldOutBand name={p.shortName} />}
 
       {/* Next community: the photograph carries through to its page. */}
       <nav aria-label="Next community" className="surface-deep" data-tone="dark">

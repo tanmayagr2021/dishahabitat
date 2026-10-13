@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ArrowUpRight, MessageCircle, Phone } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Award, HardHat, KeyRound, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import { GalleryGrid } from "@/components/Lightbox";
 import { PageHero } from "@/components/PageHero";
 import { ComposeButton } from "@/components/ComposeButton";
 import { EnquirySection } from "@/components/home/EnquirySection";
 import { ButtonLink, Label, Lines, Reveal } from "@/components/ui";
 import { elements as e } from "@/lib/elements";
+import { CommuteChecker } from "@/components/CommuteChecker";
+import { award, breakAtSlashes, homesHandedOver, reraSearch } from "@/lib/proof";
+import { formatIndian } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: e.name,
@@ -49,6 +53,14 @@ export default function ElementsPage() {
             <span className="serif block text-[1.8rem] italic leading-tight text-paper">{e.tagline}</span>
             <span className="mt-3 block">
               {e.offer} and 4 & 5 BHK villas, on 20 acres at Gunjur in East Bengaluru.
+            </span>
+            <span className="mt-4 flex flex-wrap gap-2 text-sm">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-paper/10 px-3 py-1 backdrop-blur-sm">
+                <ShieldCheck aria-hidden className="size-3.5" /> RERA registered
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brass px-3 py-1 font-semibold text-forest-deep">
+                <Award aria-hidden className="size-3.5" /> {award.title}
+              </span>
             </span>
           </>
         }
@@ -209,62 +221,121 @@ export default function ElementsPage() {
         </div>
       </section>
 
-      {/* Progress and paperwork */}
-      <section data-tone="light" aria-labelledby="progress-title" className="surface-stone py-20 md:py-24">
-        <div className="shell grid gap-8 md:grid-cols-3">
-          <div>
-            <Label n="05" className="text-mute">
-              Construction
-            </Label>
-            <h2 id="progress-title" className="serif mt-4 text-[2.2rem] leading-tight">
-              Quarterly progress updates
-            </h2>
-            <p className="mt-3 leading-relaxed text-mute">
-              Photo updates for every tower and the villas, published each quarter. Latest: {e.latestUpdate}.
+      {/* Commute */}
+      <section id="commute" data-tone="light" aria-labelledby="commute-title" className="surface-stone scroll-mt-24 py-16 md:py-20">
+        <div className="shell">
+          <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <Label n="05" className="text-mute">
+                Your commute
+              </Label>
+              <Lines id="commute-title" className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]" lines={["Check the drive", <em key="e">before you decide.</em>]} />
+            </div>
+            <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
+              Gunjur sits between Whitefield and Sarjapur Road in East Bengaluru. Bengaluru traffic changes by the hour, so we
+              won’t quote you a number. See today’s real route instead.
             </p>
-            <a
-              href={e.updates}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
-            >
-              See construction updates <ArrowUpRight aria-hidden className="size-4" />
-              <span className="sr-only">(opens in a new tab)</span>
-            </a>
           </div>
-          <div>
-            <p className="label text-mute">RERA registration</p>
-            <ul className="mt-4 space-y-3">
-              {e.rera.map((r) => (
-                <li key={r.no}>
-                  <span className="block font-medium">{r.phase}</span>
-                  <span className="text-sm text-mute">{r.no}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="mt-10">
+            <CommuteChecker />
           </div>
-          <div>
-            <p className="label text-mute">Talk to the sales team</p>
-            <div className="mt-4 flex flex-col items-start gap-2">
-              <a href={e.phone.href} className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium">
-                <Phone aria-hidden className="size-4" strokeWidth={1.6} /> {e.phone.display}
-              </a>
-              <ComposeButton channel="whatsapp" topic={e.name} className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium">
-                <MessageCircle aria-hidden className="size-4" strokeWidth={1.6} /> WhatsApp us
-              </ComposeButton>
-              <ComposeButton channel="email" topic={e.name} className="inline-flex min-h-11 items-center break-all text-left text-mute hover:text-ink">
-                {e.email}
-              </ComposeButton>
-              <a
-                href={e.website.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-1.5 text-mute hover:text-ink"
-              >
-                {e.website.label} <ArrowUpRight aria-hidden className="size-3.5" />
+        </div>
+      </section>
+
+      {/* Papers, progress and proof */}
+      <section id="papers" data-tone="light" aria-labelledby="papers-title" className="surface-ivory scroll-mt-24 py-16 md:py-20">
+        <div className="shell">
+          <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <Label n="06" className="text-mute">
+                Papers and progress
+              </Label>
+              <Lines id="papers-title" className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]" lines={["Check everything.", <em key="e">We’d want you to.</em>]} />
+            </div>
+            <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
+              The registration numbers, the construction photographs and our record on every community we have built. Ask us for
+              any document you want to see.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            <article className="card flex flex-col p-6">
+              <ShieldCheck aria-hidden className="size-6 text-forest" strokeWidth={1.6} />
+              <h3 className="serif mt-4 text-[1.5rem] leading-tight">RERA registered</h3>
+              <ul className="mt-3 space-y-3">
+                {e.rera.map((r) => (
+                  <li key={r.no}>
+                    <span className="block text-sm font-semibold">{r.phase}</span>
+                    <span className="block text-[0.82rem] tabular-nums text-mute">{breakAtSlashes(r.no)}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href={reraSearch} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-sm font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
+                Verify on Karnataka RERA <ArrowUpRight aria-hidden className="size-4" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
+            </article>
+
+            <article className="card flex flex-col p-6">
+              <HardHat aria-hidden className="size-6 text-forest" strokeWidth={1.6} />
+              <h3 className="serif mt-4 text-[1.5rem] leading-tight">Progress, every quarter</h3>
+              <p className="mt-3 text-[0.95rem] leading-relaxed text-mute">
+                Photographs of every tower and the villas, published each quarter. The latest is {e.latestUpdate}.
+              </p>
+              <a href={e.updates} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-sm font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
+                See construction updates <ArrowUpRight aria-hidden className="size-4" />
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </article>
+
+            <article className="card flex flex-col p-6">
+              <KeyRound aria-hidden className="size-6 text-forest" strokeWidth={1.6} />
+              <h3 className="serif mt-4 text-[1.5rem] leading-tight">Our record</h3>
+              <p className="mt-3 text-[0.95rem] leading-relaxed text-mute">
+                {formatIndian(homesHandedOver)} homes handed over across five communities since 2014. Every start and handover date is published.
+              </p>
+              <Link href="/#record" className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-sm font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
+                See every timeline
+              </Link>
+            </article>
+
+            <article className="surface-forest flex flex-col overflow-hidden rounded-2xl p-6">
+              <Award aria-hidden className="size-6 text-brass" strokeWidth={1.6} />
+              <h3 className="serif mt-4 text-[1.5rem] leading-tight">{award.title}</h3>
+              <p className="mt-3 text-[0.95rem] leading-relaxed text-paper/75">
+                {award.honour}: {e.shortName}, {award.citation}.
+              </p>
+              <div className="mt-auto pt-5">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-ink">
+                  <Image src={award.image} alt={`${award.title} ${award.honour} for ${e.name}`} fill sizes="(min-width: 1024px) 20vw, 90vw" className="object-cover" />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div className="mt-10 flex flex-col items-start justify-between gap-5 border-t border-ink/10 pt-8 md:flex-row md:items-center">
+            <div>
+              <p className="label text-mute">Talk to the sales team</p>
+              <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-1">
+                <a href={e.phone.href} className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium">
+                  <Phone aria-hidden className="size-4" strokeWidth={1.6} /> {e.phone.display}
+                </a>
+                <ComposeButton channel="email" topic={e.name} className="inline-flex min-h-11 items-center break-all text-left text-mute hover:text-ink">
+                  {e.email}
+                </ComposeButton>
+                <a href={e.website.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-mute hover:text-ink">
+                  {e.website.label} <ArrowUpRight aria-hidden className="size-3.5" />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              </div>
             </div>
+            <ComposeButton
+              channel="whatsapp"
+              topic={`documents for ${e.name}`}
+              className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper hover:bg-forest-2"
+            >
+              <MessageCircle aria-hidden className="size-4" strokeWidth={1.8} /> Ask for any document
+            </ComposeButton>
           </div>
         </div>
       </section>

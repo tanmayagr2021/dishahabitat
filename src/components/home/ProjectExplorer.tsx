@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
 import { CompactProjectCard } from "@/components/ProjectCards";
-import { buttonClass, ButtonInner, Label, MediaBadge } from "@/components/ui";
+import { buttonClass, ButtonInner, MediaBadge } from "@/components/ui";
 import { portfolio, type PortfolioItem } from "@/lib/portfolio";
 
 /*
@@ -120,7 +120,7 @@ function Selected({ p }: { p: PortfolioItem }) {
           </dl>
           <div className="mt-6 flex flex-col gap-3">
             <Link href={p.href} className={buttonClass("paper")}>
-              <ButtonInner>Visit {p.shortName}</ButtonInner>
+              <ButtonInner>See {p.shortName}</ButtonInner>
             </Link>
             <Link href={enquireHref} className={buttonClass("outline-light")}>
               <ButtonInner>Enquire about this</ButtonInner>
@@ -148,9 +148,7 @@ export function ProjectExplorer() {
       <div className="shell">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <Label n="08" className="text-paper/60">
-              Project explorer
-            </Label>
+            <p className="eyebrow text-paper/60">Compare</p>
             <h2 id="explore-title" className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]">
               Every Disha community, <em>side by side.</em>
             </h2>

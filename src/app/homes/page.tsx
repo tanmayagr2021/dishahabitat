@@ -13,7 +13,7 @@ import { formatIndian } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Our homes",
   description:
-    "Five Disha Habitat communities across East Bengaluru, Pursuit of Sunshine, Courtyard, Central Park, Park West and Windsor Gardens.",
+    "Pursuit of the Elements, now selling in Gunjur, and the five Disha Habitat communities handed over since 2014: Pursuit of Sunshine, Courtyard, Central Park, Park West and Windsor Gardens.",
 };
 
 const value = (p: (typeof projects)[number], label: string) => p.facts.find((f) => f.label === label)?.value ?? "";
@@ -28,12 +28,12 @@ export default function HomesPage() {
         label="Our homes"
         title={
           <>
-            Five delivered.
+            One to choose now.
             <br />
-            <em className="text-paper/55">One being built.</em>
+            <em className="text-paper/55">Five to judge us by.</em>
           </>
         }
-        intro={`${formatIndian(totalHomes)} homes handed over across five communities since 2014, and Pursuit of the Elements, now selling in Gunjur. All figures as published by Disha Habitat.`}
+        intro={`Pursuit of the Elements is selling now in Gunjur. The five communities we have handed over since 2014, ${formatIndian(totalHomes)} homes in all, are lived in today. Look at them closely: they are our proof.`}
       />
 
       {/* The index */}
@@ -77,7 +77,7 @@ export default function HomesPage() {
             </span>
           </Link>
 
-          <p className="label mb-6 text-paper/60">Delivered communities</p>
+          <p className="label mb-6 text-paper/60">Handed over, and lived in today</p>
           <ol className="border-b border-paper/15">
             {newestFirst.map((p, i) => (
               <li key={p.slug} className="border-t border-paper/15">
@@ -149,7 +149,7 @@ export default function HomesPage() {
             <Lines
               id="pace-title"
               className="serif mt-6 text-[clamp(2.6rem,5vw,4.8rem)]"
-              lines={["Ground broken", <em key="e">to keys handed.</em>]}
+              lines={["Ground broken", <em key="e">to work complete.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-mute">
               Months from construction start to completion, as published for each community.

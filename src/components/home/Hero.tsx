@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { ArrowDown, Play, X } from "lucide-react";
+import { ArrowDown, Award, KeyRound, Play, ShieldCheck, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
 import { elements } from "@/lib/elements";
+import { award, homesHandedOver } from "@/lib/proof";
+import { formatIndian } from "@/lib/site";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
@@ -143,15 +145,15 @@ export function Hero() {
             ))}
           </h1>
           <p className="anim-fade-up mt-6 max-w-lg text-[1.08rem] leading-relaxed text-paper/85 md:text-[1.15rem]" style={d(900)}>
-            Apartments and villas in East Bengaluru, built by people who were once homebuyers themselves. Five communities
-            handed over; our sixth is rising in Gunjur.
+            Keys on the day they’re promised, papers in order, neighbours who feel like family. We wanted the same things as
+            homebuyers in 2014. Since then we have built them, one community at a time, in East Bengaluru.
           </p>
           <div className="anim-fade-up mt-9 flex flex-col gap-3 sm:flex-row sm:items-center" style={d(1050)}>
             <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
               Book a site visit
             </ButtonLink>
-            <ButtonLink href="#developments" variant="outline-light">
-              Explore our projects
+            <ButtonLink href="#looking" variant="outline-light">
+              What you’re looking for
             </ButtonLink>
             <button
               type="button"
@@ -171,10 +173,30 @@ export function Hero() {
             </a>
             .
           </p>
+          <ul className="anim-fade mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-paper/15 pt-5 text-sm text-paper/80" style={d(1350)} aria-label="Proof">
+            <li className="flex items-center gap-2">
+              <KeyRound aria-hidden className="size-4 text-brass" strokeWidth={1.7} />
+              <span>
+                <strong className="font-semibold tabular-nums text-paper">{formatIndian(homesHandedOver)}</strong> homes handed over
+              </span>
+            </li>
+            <li className="flex items-center gap-2">
+              <ShieldCheck aria-hidden className="size-4 text-brass" strokeWidth={1.7} />
+              <span>
+                <strong className="font-semibold text-paper">RERA</strong> registered
+              </span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Award aria-hidden className="size-4 text-brass" strokeWidth={1.7} />
+              <span>
+                <strong className="font-semibold text-paper">{award.title}</strong>, {award.citation}
+              </span>
+            </li>
+          </ul>
         </div>
 
-        <div className="anim-fade mt-14 flex items-end justify-between gap-6" style={d(1300)}>
-          <a href="#approach" className="group flex items-center gap-3 text-sm text-paper/75 hover:text-paper">
+        <div className="anim-fade mt-10 flex items-end justify-between gap-6" style={d(1450)}>
+          <a href="#looking" className="group flex items-center gap-3 text-sm text-paper/75 hover:text-paper">
             <span className="inline-flex size-10 items-center justify-center rounded-full border border-paper/35 transition-colors group-hover:border-paper">
               <ArrowDown aria-hidden className="scroll-nudge size-4" strokeWidth={1.6} />
             </span>

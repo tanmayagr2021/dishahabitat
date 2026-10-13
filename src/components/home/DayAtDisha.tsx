@@ -352,7 +352,7 @@ export function DayAtDisha() {
         {/* Words */}
         <div className="lg:col-span-4 lg:sticky lg:top-28">
           <Reveal as="p" className="eyebrow text-paper/65">
-            A better way of living
+            Life, long after the keys
           </Reveal>
           <Lines id="day-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Spaces that bring", <em key="e">people closer.</em>]} />
           <p className="mt-6 text-[1.05rem] leading-relaxed text-paper/75">
@@ -367,7 +367,7 @@ export function DayAtDisha() {
             <p className="serif mt-2 text-[1.5rem] leading-tight">{ph.caption}</p>
             <p className="mt-2 text-[0.98rem] leading-relaxed text-paper/75">{ph.line}</p>
             <Link href={ph.href} className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-paper">
-              Visit {ph.community}
+              See {ph.community}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>

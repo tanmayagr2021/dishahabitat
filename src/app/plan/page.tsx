@@ -40,7 +40,7 @@ export default function PlanPage() {
 
       <section data-tone="light" aria-label="EMI calculator" className="surface-ivory py-12 md:py-16">
         <div className="shell">
-          <AffordabilityExplorer />
+          <AffordabilityExplorer headingLevel={1} />
         </div>
       </section>
 

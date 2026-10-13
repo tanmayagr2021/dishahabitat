@@ -60,7 +60,7 @@ export default function ContactPage() {
               </ComposeButton>
             </div>
             <p className="anim-fade-up mt-3 text-sm text-paper/60" style={{ "--d": "500ms" } as CSSProperties}>
-              No obligation. We’ll call you to confirm a time that suits you.
+              No obligation. You see the full message before it’s sent from your own WhatsApp or email.
             </p>
           </div>
 
@@ -144,7 +144,7 @@ export default function ContactPage() {
                   href={company.office.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-forest underline decoration-forest/30 underline-offset-4 hover:decoration-forest"
+                  className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-forest underline decoration-forest/30 underline-offset-4 hover:decoration-forest"
                 >
                   Get directions <ArrowUpRight aria-hidden className="size-4" />
                   <span className="sr-only">(opens in a new tab)</span>
@@ -216,7 +216,7 @@ export default function ContactPage() {
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}, ${p.address ?? p.locality}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brass"
+                      className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brass"
                     >
                       Directions <ArrowUpRight aria-hidden className="size-3.5" />
                       <span className="sr-only">(opens in a new tab)</span>

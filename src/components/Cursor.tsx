@@ -22,9 +22,21 @@ export function Cursor() {
     let raf = 0;
     let mag: HTMLElement | null = null;
 
+    let shown = false;
+    const show = (on: boolean) => {
+      if (shown === on || !dot.current) return;
+      shown = on;
+      dot.current.style.opacity = on ? "1" : "0";
+    };
     const move = (e: PointerEvent) => {
       x = e.clientX;
       y = e.clientY;
+      // First move: start from the pointer, not from the corner, then fade in.
+      if (!shown) {
+        cx = x;
+        cy = y;
+        show(true);
+      }
       const t = e.target as HTMLElement;
       const target = t.closest<HTMLElement>("[data-cursor]");
       setLabel(target?.dataset.cursor ?? null);
@@ -37,7 +49,7 @@ export function Cursor() {
       }
     };
     const leave = () => {
-      x = y = -100;
+      show(false);
       if (mag) mag.style.translate = "";
     };
     const loop = () => {

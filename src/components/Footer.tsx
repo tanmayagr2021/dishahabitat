@@ -26,7 +26,7 @@ const tools = [
 
 export function Footer() {
   const sunshine = projectsNewestFirst.find((p) => p.slug === "disha-pursuit-of-sunshine");
-  const linkCls = "text-paper/75 transition-colors hover:text-paper";
+  const linkCls = "inline-block py-1 text-paper/75 transition-colors hover:text-paper";
   const head = "text-sm text-paper/50";
 
   return (
@@ -45,7 +45,7 @@ export function Footer() {
 
           <nav aria-label="Communities" className="lg:col-span-3">
             <h2 className={head}>Communities</h2>
-            <ul className="mt-3 space-y-1.5 text-[0.95rem]">
+            <ul className="mt-2 space-y-0.5 text-[0.95rem]">
               <li>
                 <Link href={elements.href} className={`${linkCls} inline-flex items-center gap-2`}>
                   {elements.shortName}
@@ -64,7 +64,7 @@ export function Footer() {
 
           <nav aria-label="Company" className="lg:col-span-2">
             <h2 className={head}>Company</h2>
-            <ul className="mt-3 space-y-1.5 text-[0.95rem]">
+            <ul className="mt-2 space-y-0.5 text-[0.95rem]">
               {company_links.map(([href, label]) => (
                 <li key={href}>
                   <Link href={href} className={linkCls}>
@@ -74,7 +74,7 @@ export function Footer() {
               ))}
             </ul>
             <h2 className={`${head} mt-6`}>Tools</h2>
-            <ul className="mt-3 space-y-1.5 text-[0.95rem]">
+            <ul className="mt-2 space-y-0.5 text-[0.95rem]">
               {tools.map(([href, label]) => (
                 <li key={href}>
                   <Link href={href} className={linkCls}>
@@ -143,7 +143,7 @@ export function Footer() {
             </p>
             <ul className="flex flex-wrap gap-x-4 gap-y-1">
               <li>
-                <Link href="/privacy" className="hover:text-paper">
+                <Link href="/privacy" className="inline-block py-1 hover:text-paper">
                   Privacy
                 </Link>
               </li>

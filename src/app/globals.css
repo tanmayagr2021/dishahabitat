@@ -998,6 +998,7 @@ html.has-cursor .cursor-dot {
   background: var(--color-paper);
   color: var(--color-ink);
   mix-blend-mode: difference;
+  opacity: 0;
   transition:
     width 0.35s var(--ease-out-expo),
     height 0.35s var(--ease-out-expo),
@@ -1249,4 +1250,30 @@ main img {
   .stack-print {
     transition: none;
   }
+}
+
+/* ---------- Buyer needs (home) ---------- */
+.need-swap {
+  animation: need-in 0.55s var(--ease-out-expo) both;
+}
+@keyframes need-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .need-swap {
+    animation: none;
+  }
+}
+
+/* ---------- Memoir (Our story) ---------- */
+.drop-cap::first-letter {
+  float: left;
+  margin: 0.08em 0.12em 0 0;
+  font-family: var(--font-serif);
+  font-size: 3.6em;
+  line-height: 0.8;
+  color: var(--color-forest);
 }

@@ -30,7 +30,7 @@ const places: Place[] = [
   {
     id: "call",
     title: "A call first",
-    detail: "Not ready to visit yet? We’ll call you to answer your questions.",
+    detail: "Not ready to visit yet? Send us your number and ask for a call.",
     Icon: PhoneCall,
     where: "Phone call",
   },

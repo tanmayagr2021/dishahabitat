@@ -11,7 +11,7 @@ export function Breadcrumbs({ trail, tone = "dark" }: { trail: { label: string; 
           <li key={t.label} className="flex items-center gap-1.5">
             {i > 0 && <ChevronRight aria-hidden className={`size-3.5 ${tone === "dark" ? "text-paper/40" : "text-mute/60"}`} />}
             {t.href ? (
-              <Link href={t.href} className={muted}>
+              <Link href={t.href} className={`inline-block py-1 ${muted}`}>
                 {t.label}
               </Link>
             ) : (

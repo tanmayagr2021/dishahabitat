@@ -63,7 +63,7 @@ export function Diniee() {
     visit: (said = "I’d like to book a site visit") => {
       me(said);
       setStep("details");
-      say(`Happy to arrange that at ${elements.shortName}, ${elements.locality}. What’s your name and mobile number? Our sales team will call to confirm a time.`);
+      say(`Happy to arrange that at ${elements.shortName}, ${elements.locality}. What’s your name and mobile number? I’ll write the message for you to send us on WhatsApp, and our team will call to confirm a time.`);
     },
     where: (said = "Where are your projects?") => {
       me(said);
@@ -137,7 +137,7 @@ export function Diniee() {
     me(w);
     setLead((l) => ({ ...l, when: w }));
     setStep("details");
-    say("Thank you. If you share your name and mobile number, our sales team will call you and can arrange a site visit.");
+    say("Thank you. Share your name and mobile number and I’ll write a message for you to send us; once it reaches us, our sales team can call and arrange a visit.");
   };
 
   const digits = lead.phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
@@ -185,7 +185,7 @@ export function Diniee() {
       return;
     }
     me(q);
-    say("That’s a good question for our team. Shall I put you in touch? Share your name and mobile and they’ll call you.");
+    say("That’s a good question for our team. Share your name and mobile and I’ll write a message for you to send them on WhatsApp.");
     setStep("details");
   };
 
@@ -216,7 +216,7 @@ export function Diniee() {
               <p id={`${uid}-title`} className="font-semibold">
                 Diniee
               </p>
-              <p className="text-xs text-paper/65">Disha Habitat guide · replies instantly</p>
+              <p className="text-xs text-paper/65">Disha Habitat guide · answers common questions</p>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="inline-flex size-9 items-center justify-center rounded-full hover:bg-paper/10">
               <X aria-hidden className="size-5" />

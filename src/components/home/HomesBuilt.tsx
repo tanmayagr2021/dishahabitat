@@ -64,7 +64,7 @@ export function HomesBuilt() {
   const current = focus ? groups.find((g) => g.slug === focus)! : stage > 0 ? groups[stage - 1] : null;
 
   return (
-    <div ref={ref} className="surface-forest grain mt-16 grid gap-8 overflow-hidden rounded-[1.75rem] p-6 md:mt-24 md:p-9 lg:grid-cols-12 lg:gap-10">
+    <div ref={ref} className="surface-forest grain mt-8 grid gap-8 overflow-hidden rounded-[1.75rem] p-6 md:mt-10 md:p-9 lg:grid-cols-12 lg:gap-10">
       {/* Timeline */}
       <div className="lg:col-span-4">
         <h3 className="serif text-[1.6rem] leading-tight">Timelines in the open</h3>

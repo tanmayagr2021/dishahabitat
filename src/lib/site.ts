@@ -127,7 +127,7 @@ export const poem = {
 export const thisIsUs = [
   "We have been in the business since 2014, operating largely in East Bengaluru. Our first four properties were fully sold out without any concentrated brand marketing. Our home buyers have been our brand ambassadors thus far.",
   "Our build quality and mindfulness have been our biggest strengths. We have a resident community of 1,000-plus members, which grows with each new project.",
-  "Our homes are mindful living spaces that are priced mindfully too. Our studio homes are as mindfully created as our independent villas. We understand what a huge deal it is to invest yourself in a home of your own.",
+  "Our homes are mindful living spaces that are priced mindfully too. From apartments to independent villas, every home is created with the same care. We understand what a huge deal it is to invest yourself in a home of your own.",
 ] as const;
 
 /* The founders' fuller profiles, from dishahabitat.com/homemakers (condensed, in their words). */

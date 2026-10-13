@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, MapPin } from "lucide-react";
 import { ButtonLink, Lines, Reveal } from "@/components/ui";
 import { elements } from "@/lib/elements";
 import { deliveredPortfolio } from "@/lib/portfolio";
+import { award } from "@/lib/proof";
 
 /*
  * Our developments, after the reference layout: the project on sale now as the large card, and
@@ -27,7 +28,7 @@ export function Developments() {
             <Reveal as="p" className="eyebrow text-paper/65">
               Our developments
             </Reveal>
-            <Lines id="dev-title" className="serif mt-5 text-[clamp(2.4rem,4.2vw,4rem)] leading-[1.04]" lines={["Communities we have built,", <em key="e">and one we are building.</em>]} />
+            <Lines id="dev-title" className="serif mt-5 text-[clamp(2.4rem,4.2vw,4rem)] leading-[1.04]" lines={["One community selling now.", <em key="e">Five lived in, as proof.</em>]} />
           </div>
           <div className="flex items-center gap-2">
             <p className="mr-3 text-sm tabular-nums text-paper/60" aria-live="polite">
@@ -57,6 +58,9 @@ export function Developments() {
               <div className="absolute left-5 top-5 flex gap-2 md:left-7 md:top-7">
                 <span className="rounded-full bg-cyan px-3 py-1 text-xs font-semibold text-forest-deep">Now selling</span>
                 <span className="rounded-full bg-forest-deep/60 px-3 py-1 text-xs font-medium backdrop-blur-sm">Artist’s impression</span>
+                <span className="hidden items-center gap-1.5 rounded-full bg-brass px-3 py-1 text-xs font-semibold text-forest-deep sm:inline-flex">
+                  <Award aria-hidden className="size-3.5" strokeWidth={2} /> {award.title}: {award.citation}
+                </span>
               </div>
               <div className="absolute inset-x-5 bottom-5 md:inset-x-8 md:bottom-8">
                 <p className="flex items-center gap-1.5 text-sm text-paper/80">
@@ -64,9 +68,10 @@ export function Developments() {
                 </p>
                 <h3 className="serif mt-2 text-[clamp(2.2rem,4vw,3.6rem)] leading-[1.02]">{elements.name}</h3>
                 <div className="mt-5 flex flex-wrap items-end justify-between gap-5">
-                  <dl className="grid grid-cols-3 gap-6 sm:gap-10">
+                  <dl className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4 sm:gap-10">
                     {[
                       ["2, 3 & 4 BHK", "Apartments"],
+                      ["4 & 5 BHK", "Villas"],
                       ["20 acres", "Land"],
                       ["40+", "Amenities"],
                     ].map(([v, k]) => (
@@ -104,7 +109,7 @@ export function Developments() {
                 />
                 <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/10 to-transparent" />
                 <span className="absolute left-4 top-4 rounded-full bg-forest-deep/60 px-3 py-1 text-xs font-medium backdrop-blur-sm">
-                  Delivered {p.handoverYear}
+                  Handed over {p.handoverYear} · lived in today
                 </span>
                 <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
                   <div>
@@ -125,7 +130,8 @@ export function Developments() {
 
         <div className="mt-10 flex flex-col items-start justify-between gap-5 border-t border-paper/12 pt-8 sm:flex-row sm:items-center">
           <p className="max-w-xl text-[1.02rem] text-paper/75">
-            The last few 2, 3 and 4 BHK homes at Pursuit of the Elements are available now. See them in person.
+            The last few 2, 3 and 4 BHK homes at Pursuit of the Elements are available now. Walk the site, ask us anything,
+            and judge for yourself.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/contact#book" variant="paper" className="font-semibold">

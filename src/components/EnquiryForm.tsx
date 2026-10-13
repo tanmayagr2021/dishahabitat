@@ -40,7 +40,7 @@ function validate(v: Values): Errors {
   else if (name.length < 2) errors.name = "Please enter your full name.";
 
   const digits = v.phone.replace(/[\s()-]/g, "").replace(/^(\+91|0091|0)/, "");
-  if (!v.phone.trim()) errors.phone = "Please add a mobile number so we can call you back.";
+  if (!v.phone.trim()) errors.phone = "Please add a mobile number so our team can reach you.";
   else if (!/^[6-9]\d{9}$/.test(digits)) errors.phone = "Enter a 10-digit Indian mobile number, e.g. 98765 43210.";
 
   if (v.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim()))
