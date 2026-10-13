@@ -46,7 +46,7 @@ export function formatIndian(n: number) {
   return n.toLocaleString("en-IN");
 }
 
-/* "What a home means..." — homeowner words published on the dishahabitat.com homepage. */
+/* "What a home means...", homeowner words published on the dishahabitat.com homepage. */
 export const homeowners = [
   {
     quote:
@@ -95,7 +95,7 @@ export const homemakers = [
     role: "Founder & Director",
     signature: "“Let’s meet for coffee.”",
     bio: [
-      "If you know Guna, the invitation means he wants to explain something properly — until you leave as informed as any engineer, architect or site supervisor on the project.",
+      "If you know Guna, the invitation means he wants to explain something properly, until you leave as informed as any engineer, architect or site supervisor on the project.",
       "A software professional for a decade and a half before turning to homes, he is also a practising horticulturist. You will find that passion in every Disha Habitat venture.",
     ],
   },

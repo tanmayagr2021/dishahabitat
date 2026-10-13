@@ -8,11 +8,11 @@ import { Logo } from "@/components/Logo";
  * on forest green. It plays whenever someone arrives at the site, starting from the HTML itself,
  * never with reduced motion (layout.tsx decides before paint). As the film's logo settles, the official SVG logo is laid
  * exactly over it, then glides into its place in the header while the film dissolves into the
- * hero — one continuous movement. Any key, click, scroll or "Skip intro" ends it at once.
+ * hero, one continuous movement. Any key, click, scroll or "Skip intro" ends it at once.
  *
  * Where the logo sits in the film, measured from its pixels (film px, 1920×1080). The film keeps a
- * slow push-in going to the end — DISHA narrows from 772 px at 5.3 s to 745 px at 7.9 s, about the
- * frame's centre — so the box is scaled for the exact frame at which the film is frozen.
+ * slow push-in going to the end, DISHA narrows from 772 px at 5.3 s to 745 px at 7.9 s, about the
+ * frame's centre, so the box is scaled for the exact frame at which the film is frozen.
  */
 const FILM = { w: 1920, h: 1080, cx: 960, cy: 540 };
 const LOGO_AT_7_6 = { x: 579.3, y: 300.8, w: 64 * 12.03, dishaWidth: 748.1 };

@@ -133,7 +133,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
               </div>
               <figcaption className="py-5 text-center text-sm text-paper/85">
                 {current.caption}
-                {current.project && <span className="text-paper/55"> — {current.project}</span>}
+                {current.project && <span className="text-paper/55"> · {current.project}</span>}
               </figcaption>
             </figure>
 

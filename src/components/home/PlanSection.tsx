@@ -26,7 +26,7 @@ export function PlanSection() {
           <div className="mt-5 flex flex-wrap items-end justify-between gap-6">
             <Lines id="plan-title" className="serif text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["What would your", <em key="e">monthly EMI be?</em>]} />
             <p className="max-w-sm text-[0.98rem] leading-relaxed text-mute">
-              Example figures only — not Disha Habitat prices or an offer of finance. Nothing you enter leaves your browser.
+              Example figures only. Not Disha Habitat prices or an offer of finance. Nothing you enter leaves your browser.
             </p>
           </div>
           <div className="mt-10">

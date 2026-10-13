@@ -8,7 +8,7 @@ import { projects } from "@/lib/projects";
 import { formatIndian, poem, stats } from "@/lib/site";
 
 /*
- * Our approach — after the reference layout: a short statement on the left, a layered collage of
+ * Our approach, after the reference layout: a short statement on the left, a layered collage of
  * real community photographs in the middle (with a hand-written card quoting the company's own
  * poem), and the record on the right. Every figure is published (lib/site.ts, lib/projects.ts).
  */
@@ -73,7 +73,7 @@ export function Approach() {
           <Lines id="approach-title" className="serif mt-5 text-[clamp(2.4rem,4vw,3.8rem)] leading-[1.04]" lines={["Homes, planned by", <em key="e">homebuyers.</em>]} />
           <Reveal delay={150}>
             <p className="mt-6 max-w-sm text-[1.05rem] leading-relaxed text-ink/75">
-              We began exactly where you are right now — looking for a house that would become a home. Homebuyers first, then
+              We began exactly where you are right now: looking for a house that would become a home. Homebuyers first, then
               investors, then builders. Every Disha home since 2014 has been planned by people who remember what it was like to
               be looking.
             </p>
@@ -117,7 +117,7 @@ export function Approach() {
             className="absolute -bottom-2 left-[8%] z-20 w-[52%] -rotate-3 rounded-lg bg-[#f7f1e4] px-5 py-4 shadow-[0_20px_40px_-20px_rgb(21_26_23/0.45)]"
           >
             <p className="font-[family-name:var(--font-caveat)] text-[1.45rem] leading-[1.15] text-ink/85">{poem.closing}</p>
-            <p className="mt-1 text-[0.72rem] text-mute">— from the Disha Habitat poem</p>
+            <p className="mt-1 text-[0.72rem] text-mute">From the Disha Habitat poem</p>
           </Reveal>
         </div>
 

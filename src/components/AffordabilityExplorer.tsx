@@ -5,7 +5,7 @@ import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type Inpu
 import { calculateLoan, formatINR, formatINRShort, LIMITS, validateLoan, type LoanErrors } from "@/lib/emi";
 
 /*
- * Home loan EMI calculator. ILLUSTRATIVE — not a Disha Habitat financing, eligibility or loan
+ * Home loan EMI calculator. ILLUSTRATIVE, not a Disha Habitat financing, eligibility or loan
  * service. The defaults are neutral example figures, not Disha Habitat prices. All arithmetic is
  * in lib/emi.ts (tested): EMI rounded to the rupee, a month-by-month schedule in paise, and a final
  * instalment that clears the loan exactly, so every total is the true sum of the payments.
@@ -180,7 +180,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
           id={id("price")}
           label="Property price"
           error={errors.price}
-          hint="An example figure — not a Disha Habitat price."
+          hint="An example figure, not a Disha Habitat price."
           note={Number.isFinite(input.price) && input.price > 0 ? formatINRShort(input.price) : undefined}
         >
           <MoneyInput id={id("price")} value={v.price} onChange={set("price")} error={errors.price} />
@@ -304,7 +304,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
             </>
           ) : (
             <>
-              <p className="mt-2 text-[clamp(2.6rem,5vw,3.6rem)] font-semibold leading-none text-ink/25">—</p>
+              <p className="mt-2 text-[clamp(2.6rem,5vw,3.6rem)] font-semibold leading-none text-ink/25">₹ –</p>
               <p className="mt-3 text-sm text-mute">Correct the highlighted details to see your estimate.</p>
             </>
           )}
@@ -390,10 +390,10 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 2 |
 
         <div className="mt-auto pt-8">
           <Link
-            href="/contact#enquire"
+            href="/contact#book"
             className="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-5 text-[0.95rem] font-medium text-paper transition-colors hover:bg-forest"
           >
-            Talk to us about a Disha home
+            Book a site visit
           </Link>
           <p className="mt-4 text-xs leading-relaxed text-mute">
             An estimate for planning only, using the standard reducing-balance method with monthly rests. It is not an offer

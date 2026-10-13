@@ -59,6 +59,22 @@ is the terracotta of the buildings. Each community keeps a signature hue for dat
 7. Homeowners speak — published homeowner words beside their community.
 8. Begin your journey — book a site visit or talk to us. Compact footer.
 
+Calls to action: one primary action everywhere, "Book a site visit" (header, hero, each key section, and a sticky
+dock with Call and WhatsApp that appears after the hero and steps aside when a booking form is on screen). WhatsApp
+links carry a pre-filled message to the published sales line.
+
+`/contact`: every channel as a card (sales, WhatsApp, office, email), a four-step visit booker (place, day and time,
+details, review) that sends the request to the sales WhatsApp with all details and offers a calendar invite (.ics),
+"what happens next", an office map, and every community with directions. No data is stored by the site.
+
+Why Disha: three proof cards, then "Timelines in the open" with animated build-time bars beside 1,102 house-shaped
+blocks that fill with each community's colour in order of handover (choose a community to light only its homes).
+
+A day at Disha: play the whole day, drag the sun, jump to a time with thumbnails, or "Now in Bengaluru"; each time
+of day names the place and links to its community.
+
+No em dashes appear in site copy.
+
 Motion: Lenis smooth scrolling; words rise from soft focus; photographs open like a window; collage layers drift at
 different depths; counters; hover zoom with a turning arrow. All off or static under reduced motion.
 

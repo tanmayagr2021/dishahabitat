@@ -66,12 +66,12 @@ export default function StoryPage() {
             <Reveal delay={80}>
               <p>
                 From being prospective homebuyers, to investing in a home, to taking the plunge into realty and becoming
-                developers and builders — it has been the most fulfilling learning curve.
+                developers and builders, it has been the most fulfilling learning curve.
               </p>
             </Reveal>
             <Reveal delay={160}>
               <p>
-                It’s been quite a journey since — and a growing community of over 1,000 proud homeowners. We are one big
+                It’s been quite a journey since, and a growing community of over 1,000 proud homeowners. We are one big
                 family now. Close-knit and mindfully conscious.
               </p>
             </Reveal>

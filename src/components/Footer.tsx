@@ -11,11 +11,11 @@ export function Footer() {
   const linkCls = "text-paper/75 transition-colors hover:text-paper";
 
   return (
-    <footer data-tone="dark" className="surface-deep">
+    <footer data-tone="dark" className="surface-deep pb-20 md:pb-0">
       <div className="shell py-12 md:py-14">
         <div className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-4">
-            <Link href="/" aria-label="Disha Habitat — home" className="inline-block">
+            <Link href="/" aria-label="Disha Habitat home" className="inline-block">
               <Logo className="h-12 w-auto" />
             </Link>
             <p className="mt-4 max-w-xs text-[0.95rem] leading-relaxed text-paper/65">

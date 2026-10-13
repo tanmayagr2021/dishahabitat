@@ -127,12 +127,12 @@ export function yearlySchedule(principal: number, annualRate: number, years: num
 
 const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 
-/* ₹52,069 — Indian digit grouping. */
+/* ₹52,069, Indian digit grouping. */
 export function formatINR(n: number) {
   return inr.format(Math.round(n));
 }
 
-/* ₹75 lakh / ₹1.25 crore — how Indian buyers talk about prices. */
+/* ₹75 lakh / ₹1.25 crore, how Indian buyers talk about prices. */
 export function formatINRShort(n: number) {
   const trim = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(2).replace(/0+$/, "").replace(/\.$/, ""));
   if (n >= 1_00_00_000) return `₹${trim(n / 1_00_00_000)} crore`;

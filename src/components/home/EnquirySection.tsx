@@ -39,7 +39,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
             />
             <Reveal delay={200} className="mt-8 max-w-md">
               <p className="text-[1.05rem] leading-relaxed text-paper/75">
-                It’s our founder’s favourite invitation. It means he wants to explain something properly — until you
+                It’s our founder’s favourite invitation. It means he wants to explain something properly, until you
                 leave as informed as any engineer, architect or site supervisor on the project.
               </p>
               <p className="label mt-5 text-paper/55">

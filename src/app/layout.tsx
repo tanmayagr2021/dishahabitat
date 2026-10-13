@@ -6,6 +6,7 @@ import { Intro } from "@/components/Intro";
 import { Footer } from "@/components/Footer";
 import { RevealObserver } from "@/components/RevealObserver";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { ActionDock } from "@/components/ActionDock";
 import "./globals.css";
 
 /* Headlines: Newsreader, an editorial serif with optical sizes and a true italic. */
@@ -34,7 +35,7 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "Disha Habitat — Come home to mindful living spaces",
+    default: "Disha Habitat | Come home to mindful living spaces",
     template: "%s · Disha Habitat",
   },
   description:
@@ -87,6 +88,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Footer />
         <RevealObserver />
         <SmoothScroll />
+        <ActionDock />
         <Script id="bootstrap" strategy="beforeInteractive">
           {bootstrap}
         </Script>

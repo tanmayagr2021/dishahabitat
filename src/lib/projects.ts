@@ -124,7 +124,7 @@ export const projects: Project[] = [
         1440,
         850,
         "Artist’s impression of the Surya Stambh tower at the entrance, framed by palms",
-        "The Surya Stambh at the entrance — artist’s impression",
+        "The Surya Stambh at the entrance (artist’s impression)",
         "render",
       ),
       img(
@@ -132,7 +132,7 @@ export const projects: Project[] = [
         1920,
         1080,
         "Artist’s impression of a sundeck at night with lounge chair, plants and a telescope",
-        "A sundeck after dark — artist’s impression",
+        "A sundeck after dark (artist’s impression)",
         "render",
       ),
       img(

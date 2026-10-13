@@ -106,7 +106,7 @@ export function Header() {
         }`}
       >
         <div className="shell flex h-16 items-center justify-between gap-6 md:h-[5rem]">
-          <Link href="/" className="relative z-10 -ml-1 p-1" aria-label="Disha Habitat — home">
+          <Link href="/" className="relative z-10 -ml-1 p-1" aria-label="Disha Habitat home">
             <span data-header-logo className="block">
               <Logo className="block h-9 w-auto md:h-11" />
             </span>
@@ -134,12 +134,12 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             <Link
-              href="/contact#enquire"
+              href="/contact#book"
               className={`hidden h-11 items-center gap-3 rounded-lg px-5 text-[0.95rem] font-medium transition-colors sm:inline-flex ${
-                dark ? "border border-paper/40 text-paper hover:bg-paper hover:text-ink" : "border border-ink/25 text-ink hover:bg-ink hover:text-paper"
+                dark ? "bg-paper font-semibold text-ink hover:bg-white" : "bg-forest font-semibold text-paper hover:bg-forest-2"
               }`}
             >
-              Enquire now
+              Book a site visit
               <ArrowRight aria-hidden className="size-4" strokeWidth={1.75} />
             </Link>
             <button

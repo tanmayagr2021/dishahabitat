@@ -270,7 +270,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 />
               </div>
               <p className="leading-relaxed text-paper/70 lg:col-span-4 lg:col-start-9">
-                From your own sundeck at home or any of the outdoor arenas — every step here is a step closer to the Sun’s
+                From your own sundeck at home or any of the outdoor arenas, every step here is a step closer to the Sun’s
                 bounty.
               </p>
             </div>
@@ -375,7 +375,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
         </section>
       )}
 
-      <EnquirySection defaultInterest={p.name} n="—" />
+      <EnquirySection defaultInterest={p.name} n="" />
 
       {/* Next community: the photograph carries through to its page. */}
       <nav aria-label="Next community" className="surface-deep" data-tone="dark">

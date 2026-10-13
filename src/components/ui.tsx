@@ -179,7 +179,7 @@ export function Lines({
 }
 
 /*
- * Every section opens the same way: a small eyebrow, a headline, an optional short intro — centred,
+ * Every section opens the same way: a small eyebrow, a headline, an optional short intro, centred,
  * so the page reads as one composed sequence rather than a scatter of layouts.
  */
 export function SectionHead({

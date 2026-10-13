@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MessageCircle } from "lucide-react";
 import { ButtonLink, Lines, Reveal } from "@/components/ui";
 import { elements } from "@/lib/elements";
 
@@ -16,16 +17,22 @@ export function CtaBand() {
           <Lines id="cta-title" className="serif mt-5 text-[clamp(2.4rem,4.4vw,4.2rem)] leading-[1.04]" lines={["Begin your journey", <em key="e">with Disha Habitat.</em>]} />
           <Reveal delay={150} as="p" className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-paper/75">
             Visit Pursuit of the Elements in Gunjur, or meet us for coffee at our office on Whitefield Main Road. We’ll explain
-            everything — until you’re as informed as anyone on the project.
+            everything, until you’re as informed as anyone on the project.
           </Reveal>
         </div>
         <Reveal delay={250} className="flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href={`${elements.href}#enquire`} variant="paper">
+          <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
             Book a site visit
           </ButtonLink>
-          <ButtonLink href="/contact#enquire" variant="outline-light">
-            Talk to us
-          </ButtonLink>
+          <a
+            href={`${elements.whatsapp}&text=${encodeURIComponent("Hello Disha Habitat, I'd like to know more about your homes.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-paper/30 bg-white/[0.04] px-5 text-[0.95rem] font-medium backdrop-blur-sm transition-colors hover:border-paper/60"
+          >
+            <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Chat on WhatsApp
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
         </Reveal>
       </div>
     </section>

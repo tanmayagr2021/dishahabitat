@@ -21,7 +21,7 @@ const slides = [
   {
     src: "/images/pursuit-of-the-elements/towers.webp",
     position: "50% 40%",
-    caption: "Disha Pursuit of the Elements, Gunjur — artist’s impression",
+    caption: "Disha Pursuit of the Elements, Gunjur (artist’s impression)",
   },
   {
     src: "/images/courtyard/pool-court.jpg",
@@ -143,17 +143,20 @@ export function Hero() {
             Apartments and villas in East Bengaluru, built by people who were once homebuyers themselves. Five communities
             handed over; our sixth is rising in Gunjur.
           </p>
-          <div className="anim-fade-up mt-9 flex flex-col gap-3 sm:flex-row" style={d(1050)}>
-            <ButtonLink href="#developments" variant="paper">
+          <div className="anim-fade-up mt-9 flex flex-col gap-3 sm:flex-row sm:items-center" style={d(1050)}>
+            <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
+              Book a site visit
+            </ButtonLink>
+            <ButtonLink href="#developments" variant="outline-light">
               Explore our projects
             </ButtonLink>
             <button
               type="button"
               onClick={() => setFilm(true)}
-              className="group inline-flex min-h-12 items-center gap-3 rounded-lg border border-paper/30 bg-white/[0.04] px-5 text-[0.95rem] font-medium backdrop-blur-sm transition-colors hover:border-paper/60 hover:bg-white/10"
+              className="group inline-flex min-h-12 items-center gap-3 px-2 text-[0.95rem] font-medium text-paper/90 hover:text-paper"
             >
-              <span className="inline-flex size-7 items-center justify-center rounded-full bg-paper text-ink transition-transform group-hover:scale-110">
-                <Play aria-hidden className="ml-0.5 size-3" fill="currentColor" />
+              <span className="inline-flex size-9 items-center justify-center rounded-full border border-paper/40 transition-[transform,background-color] group-hover:scale-110 group-hover:bg-paper group-hover:text-ink">
+                <Play aria-hidden className="ml-0.5 size-3.5" fill="currentColor" />
               </span>
               Watch our story
             </button>

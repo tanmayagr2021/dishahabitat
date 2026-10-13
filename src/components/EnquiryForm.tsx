@@ -7,7 +7,7 @@ import { elements } from "@/lib/elements";
 import { projects } from "@/lib/projects";
 
 /*
- * PROTOTYPE FORM — validates in the browser only. Nothing is transmitted or stored.
+ * PROTOTYPE FORM, validates in the browser only. Nothing is transmitted or stored.
  * Real delivery needs an approved backend or form integration (see README).
  */
 

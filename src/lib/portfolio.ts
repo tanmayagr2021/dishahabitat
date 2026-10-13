@@ -1,6 +1,6 @@
 /*
  * Every Disha Habitat community in one shape, for the cards and the project explorer.
- * Built only from lib/projects.ts and lib/elements.ts — no figure here is new. Where a fact is
+ * Built only from lib/projects.ts and lib/elements.ts, no figure here is new. Where a fact is
  * not published (e.g. the number of homes at Pursuit of the Elements) it is left null and the
  * interface omits it rather than guessing.
  */

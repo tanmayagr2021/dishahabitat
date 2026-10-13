@@ -13,7 +13,7 @@ import { formatIndian } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Our homes",
   description:
-    "Five Disha Habitat communities across East Bengaluru — Pursuit of Sunshine, Courtyard, Central Park, Park West and Windsor Gardens.",
+    "Five Disha Habitat communities across East Bengaluru, Pursuit of Sunshine, Courtyard, Central Park, Park West and Windsor Gardens.",
 };
 
 const value = (p: (typeof projects)[number], label: string) => p.facts.find((f) => f.label === label)?.value ?? "";
@@ -33,7 +33,7 @@ export default function HomesPage() {
             <em className="text-paper/55">One being built.</em>
           </>
         }
-        intro={`${formatIndian(totalHomes)} homes handed over across five communities since 2014 — and Pursuit of the Elements, now selling in Gunjur. All figures as published by Disha Habitat.`}
+        intro={`${formatIndian(totalHomes)} homes handed over across five communities since 2014, and Pursuit of the Elements, now selling in Gunjur. All figures as published by Disha Habitat.`}
       />
 
       {/* The index */}

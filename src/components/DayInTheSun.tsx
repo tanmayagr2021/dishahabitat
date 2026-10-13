@@ -12,7 +12,7 @@ import { Label, MediaBadge } from "@/components/ui";
 const phases = [
   {
     name: "Morning",
-    line: "Keep time by the Vrihat Samrat Yantra — a working sundial in the central plaza.",
+    line: "Keep time by the Vrihat Samrat Yantra, a working sundial in the central plaza.",
     src: "/images/pursuit-of-sunshine/sundial.webp",
     alt: "A large stone sundial set into a circular plaza, with a pergola behind it",
     kind: "photo" as const,
@@ -40,7 +40,7 @@ const phases = [
   },
   {
     name: "Night",
-    line: "Stars from your own 8 ft × 12 ft sundeck — every home has one.",
+    line: "Stars from your own 8 ft × 12 ft sundeck, every home has one.",
     src: "/images/pursuit-of-sunshine/render-sundeck.jpg",
     alt: "Artist’s impression of a sundeck at night with lounge chair, plants and a telescope",
     kind: "render" as const,

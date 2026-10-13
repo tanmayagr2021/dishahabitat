@@ -28,7 +28,7 @@ export function Origins() {
               </Reveal>
               <Reveal delay={120}>
                 <p className="leading-relaxed text-ink/70">
-                  Every stumble opened a new window of understanding — and every Disha home since 2014 has been planned by
+                  Every stumble opened a new window of understanding, and every Disha home since 2014 has been planned by
                   people who remember what it was like to be looking.
                 </p>
                 <ArrowLink href="/story" className="mt-6 text-ink">
@@ -106,7 +106,7 @@ export function CoreBand({ full = false }: { full?: boolean }) {
             </div>
           ) : (
             <p className="text-[1.05rem] leading-relaxed text-paper/70 md:col-span-5">
-              Life is colourful, with every hue open to its own interpretation. Then there’s Black, and there’s White — both
+              Life is colourful, with every hue open to its own interpretation. Then there’s Black, and there’s White, both
               definitive, both unrelenting.
             </p>
           )}

@@ -177,7 +177,7 @@ export default function ElementsPage() {
               lines={["Over 40,", <em key="e">indoors and out.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-mute">
-              Not ten or twenty, but over forty mindful amenities — created to bring you outdoors and closer to nature.
+              Not ten or twenty, but over forty mindful amenities, created to bring you outdoors and closer to nature.
             </p>
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
@@ -270,7 +270,7 @@ export default function ElementsPage() {
         </div>
       </section>
 
-      <EnquirySection defaultInterest={e.name} n="—" />
+      <EnquirySection defaultInterest={e.name} n="" />
 
       <nav aria-label="Our delivered communities" data-tone="light" className="surface-ivory py-12">
         <div className="shell flex flex-wrap items-center justify-between gap-4">

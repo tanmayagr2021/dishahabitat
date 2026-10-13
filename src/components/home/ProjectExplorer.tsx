@@ -10,7 +10,7 @@ import { portfolio, type PortfolioItem } from "@/lib/portfolio";
 /*
  * Browse every community. Filters use only attributes published for all of them (status);
  * sorting uses published figures (handover year, homes, land). Where a figure isn't published
- * — the number of homes at Pursuit of the Elements — the project sorts last rather than being
+ *, the number of homes at Pursuit of the Elements, the project sorts last rather than being
  * given an invented number.
  */
 const statuses = ["All", "Now selling", "Delivered"] as const;
@@ -61,7 +61,7 @@ function Segmented<T extends string>({
 function Selected({ p }: { p: PortfolioItem }) {
   const [shot, setShot] = useState(0);
   const m = p.gallery[shot] ?? p.gallery[0];
-  const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : "/contact#enquire";
+  const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : "/contact#book";
 
   return (
     <article key={p.slug} aria-labelledby="explorer-name" className="swap-in card-dark overflow-hidden p-3 md:p-4" style={{ "--hue": p.hue } as CSSProperties}>

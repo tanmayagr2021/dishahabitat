@@ -889,3 +889,8 @@ html.lenis body {
     animation: none !important;
   }
 }
+
+/* A small house: a pitched roof over a square body. */
+.house {
+  clip-path: polygon(50% 0, 100% 42%, 100% 100%, 0 100%, 0 42%);
+}

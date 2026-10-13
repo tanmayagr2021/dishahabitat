@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
-import { Lines, Reveal } from "@/components/ui";
+import { ButtonLink, Lines, Reveal } from "@/components/ui";
 import { elements } from "@/lib/elements";
 import { deliveredPortfolio } from "@/lib/portfolio";
 
 /*
- * Our developments — after the reference layout: the project on sale now as the large card, and
+ * Our developments, after the reference layout: the project on sale now as the large card, and
  * the delivered communities two at a time beside it, stepped through with the arrows. Facts are
  * the published ones (lib/portfolio.ts).
  */
@@ -119,6 +119,20 @@ export function Developments() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-col items-start justify-between gap-5 border-t border-paper/12 pt-8 sm:flex-row sm:items-center">
+          <p className="max-w-xl text-[1.02rem] text-paper/75">
+            The last few 2, 3 and 4 BHK homes at Pursuit of the Elements are available now. See them in person.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
+              Book a site visit
+            </ButtonLink>
+            <ButtonLink href="/homes" variant="outline-light">
+              Compare all communities
+            </ButtonLink>
           </div>
         </div>
       </div>
