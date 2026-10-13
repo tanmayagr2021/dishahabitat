@@ -1088,3 +1088,48 @@ html.has-cursor .cursor-dot {
 main img {
   filter: saturate(0.93) contrast(1.03) brightness(1.01);
 }
+
+/* The contact stack: items rise from the button one after another, nearest first. */
+.stack-li {
+  opacity: 0;
+  transform: translateY(calc(18px + var(--k, 0) * 6px)) scale(0.88);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc((3 - var(--k, 0)) * 25ms);
+}
+
+.stack-li.is-open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: calc(var(--k, 0) * 55ms);
+}
+
+/* A slow, single halo now and then, so the button is noticed without nagging. */
+@keyframes dock-ping {
+  0%,
+  70% {
+    box-shadow: 0 0 0 0 rgb(198 164 107 / 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgb(198 164 107 / 0);
+  }
+}
+
+.dock-ping {
+  animation: dock-ping 4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-li {
+    transition: opacity 0.01ms !important;
+    transform: none !important;
+  }
+
+  .dock-ping {
+    animation: none !important;
+  }
+}
