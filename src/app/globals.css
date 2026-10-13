@@ -793,3 +793,99 @@ html[data-daypart="night"] [data-part~="night"] {
 html[data-intro="on"] .hero-window {
   animation-play-state: paused;
 }
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Small uppercase eyebrow over headings. */
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+}
+
+/* Hero photographs: the incoming one wipes in from the right while the whole frame zooms slowly. */
+.hero-slide {
+  opacity: 0;
+  clip-path: inset(0 0 0 100%);
+  transition:
+    clip-path 1.6s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0s linear 1.6s;
+}
+
+.hero-slide.is-on {
+  z-index: 1;
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path 1.6s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0s;
+}
+
+.hero-slide.is-on img {
+  animation: slow-zoom 9s cubic-bezier(0.2, 0.6, 0.3, 1) both;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+.scroll-nudge {
+  animation: nudge 2.2s ease-in-out infinite;
+}
+
+/* Layers that drift at different depths as the page scrolls (compositor only). */
+@supports (animation-timeline: view()) {
+  .depth-slow,
+  .depth-fast {
+    animation: depth linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  .depth-slow {
+    --depth: 30px;
+  }
+
+  .depth-fast {
+    --depth: 90px;
+  }
+
+  @keyframes depth {
+    from {
+      translate: 0 var(--depth);
+    }
+    to {
+      translate: 0 calc(var(--depth) * -1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .depth-slow,
+  .depth-fast,
+  .scroll-nudge,
+  .hero-slide.is-on img {
+    animation: none !important;
+  }
+}

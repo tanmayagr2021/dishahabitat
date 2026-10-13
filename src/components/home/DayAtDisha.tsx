@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
-import { SectionHead } from "@/components/ui";
+import { ButtonLink, Lines, Reveal } from "@/components/ui";
 
 /*
  * A day at a Disha community. Drag the sun across the sky (or use the time line, or arrow keys)
@@ -145,16 +145,32 @@ export function DayAtDisha() {
   };
 
   return (
-    <section ref={section} data-tone="light" aria-labelledby="day-title" className="surface-stone py-24 md:py-32">
-      <div className="shell">
-        <SectionHead
-          id="day-title"
-          eyebrow="A day at Disha"
-          title={["Spend a day", <em key="e">with us.</em>]}
-          intro="Move the sun across the sky to see a Disha community from morning yoga to the lights coming on after dark. Every photograph is from a community we have built."
-        />
+    <section ref={section} data-tone="dark" aria-labelledby="day-title" className="surface-forest grain py-24 md:py-32">
+      <div className="shell grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:order-2 lg:col-span-4">
+          <Reveal as="p" className="eyebrow text-paper/65">
+            A better way of living
+          </Reveal>
+          <Lines id="day-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Spaces that bring", <em key="e">people closer.</em>]} />
+          <Reveal delay={150}>
+            <p className="mt-6 text-[1.05rem] leading-relaxed text-paper/75">
+              Lawns for morning yoga, a pool for midday lengths, a sundial and a treehouse for the afternoon, and lights on the
+              water after dark. Move the sun across the sky to spend a day at a Disha community — every photograph is from one we
+              have built.
+            </p>
+            <div className="mt-8">
+              <ButtonLink href="/homes" variant="paper">
+                Explore our communities
+              </ButtonLink>
+            </div>
+            <p className={`mt-6 text-sm text-paper/55 transition-opacity duration-700 ${touched ? "opacity-0" : "opacity-100"}`}>
+              Drag the sun, or the line beneath the photograph.
+            </p>
+          </Reveal>
+        </div>
 
-        <div className="relative mx-auto mt-12 aspect-[4/5] max-w-6xl overflow-hidden rounded-2xl bg-forest-deep text-paper shadow-[0_40px_90px_-50px_rgb(21_26_23/0.6)] sm:aspect-[16/10] lg:aspect-[16/9]">
+        <div className="lg:order-1 lg:col-span-8">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-forest-deep text-paper shadow-[0_40px_90px_-50px_rgb(0_0_0/0.7)] sm:aspect-[16/11]">
           {phases.map((p, i) => (
             <Image
               key={p.src}
@@ -256,9 +272,7 @@ export function DayAtDisha() {
             </div>
           </div>
         </div>
-        <p className={`mt-4 text-center text-sm text-mute transition-opacity duration-700 ${touched ? "opacity-0" : "opacity-100"}`}>
-          Drag the sun, or the line beneath the photograph.
-        </p>
+        </div>
       </div>
     </section>
   );

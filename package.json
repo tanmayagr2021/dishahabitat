@@ -10,6 +10,7 @@
     "test": "node --test src/lib/"
   },
   "dependencies": {
+    "lenis": "^1.3.11",
     "lucide-react": "^1.55.0",
     "next": "16.4.0",
     "react": "19.3.0",

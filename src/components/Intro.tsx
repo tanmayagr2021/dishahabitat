@@ -5,7 +5,7 @@ import { Logo } from "@/components/Logo";
 
 /*
  * The logo film (supplied, 8 s, 1920×1080): a cyan line draws the roof and the name resolves
- * on forest green. It plays on every arrival at the home page, starting from the HTML itself,
+ * on forest green. It plays whenever someone arrives at the site, starting from the HTML itself,
  * never with reduced motion (layout.tsx decides before paint). As the film's logo settles, the official SVG logo is laid
  * exactly over it, then glides into its place in the header while the film dissolves into the
  * hero — one continuous movement. Any key, click, scroll or "Skip intro" ends it at once.
@@ -113,6 +113,8 @@ export function Intro() {
     const stall = window.setTimeout(() => {
       if (v.currentTime < 0.1) skip();
     }, 2500);
+    // Whatever happens (a stalled network, a blocked autoplay mid-way), the site appears by 11 s.
+    const cap = window.setTimeout(skip, 11000);
 
     const interrupt = (e: Event) => {
       if (e.type === "keydown" && (e as KeyboardEvent).key === "Tab") return;
@@ -124,6 +126,7 @@ export function Intro() {
 
     return () => {
       window.clearTimeout(stall);
+      window.clearTimeout(cap);
       v.removeEventListener("timeupdate", onTime);
       v.removeEventListener("ended", handover);
       v.removeEventListener("error", skip);

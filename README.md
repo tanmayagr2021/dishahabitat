@@ -44,24 +44,23 @@ and the name resolves beneath it. Forest and charcoal give depth; ivory and ston
 drawn line (active states, progress, focus, the seam in the hero); brass is the warm metal of the film’s ribbon; earth
 is the terracotta of the buildings. Each community keeps a signature hue for data and card accents.
 
-**Homepage sequence** — in the order a buyer's questions arrive:
+**Homepage sequence** (laid out after the client's reference):
 
-0. Logo film — plays the moment the home page opens (autoplays from the HTML), on every visit; the official SVG
-   logo takes over from the film's and glides into the header. Skip at any time; never with reduced motion.
-1. Hero — a centred headline on forest green above a wide window onto Disha's own buildings. The window opens from a
-   slit like a door being unveiled, then moves through the communities, each new photograph rising in through vertical
-   strips like a facade going up; a card in the frame names the community, its location and what was built.
-2. Trust strip — 1,102 homes handed over (the one hero number), with communities, families and square feet delivered.
-3. Now selling — Pursuit of the Elements: full-bleed render, translucent facts card, three renders.
-4. Delivered — the five communities in a calm grid (two large, three smaller).
-5. Why Disha — their own manifesto, then four proof cards: former homebuyers, published build timelines, construction
-   updates and RERA numbers, founders you can meet.
-6. A day at Disha — drag the sun across the sky to move a real community from morning to night.
-7. Homeowners — a map of home towns and their words.
-8. EMI calculator — exact, rupee-rounded EMI with totals that are the true sum of payments.
-9. “Let’s meet for coffee.” — book a site visit. Compact footer.
+0. Logo film — plays whenever someone arrives at the site, on any page (from the layout); the official SVG logo takes
+   over and glides into the header. Skip at any time; never with reduced motion; capped at 11 s.
+1. Hero — Disha's buildings full bleed, crossing over with a soft wipe and a slow zoom; headline on the left; "Explore
+   our projects" and "Watch our story" (the brand film in a dialog).
+2. Our approach — statement, a layered collage of community photographs with a hand-written card quoting the company
+   poem, and the record (1,102 homes, 5 communities, 1,000+ families, 20,25,000+ sq ft), counting up.
+3. Our developments — Pursuit of the Elements as the featured card; the five delivered communities two at a time.
+4. Plan your home — EMI calculator beside a home at Central Park.
+5. Why Disha — the manifesto and four proof cards.
+6. Spaces that bring people closer — drag the sun across a day at a Disha community.
+7. Homeowners speak — published homeowner words beside their community.
+8. Begin your journey — book a site visit or talk to us. Compact footer.
 
-The project explorer (filter, sort, select) is on `/homes`.
+Motion: Lenis smooth scrolling; words rise from soft focus; photographs open like a window; collage layers drift at
+different depths; counters; hover zoom with a turning arrow. All off or static under reduced motion.
 
 **Design system** (`src/app/globals.css`): Newsreader (headlines, optical sizes, true italic for emphasis) and Hanken
 Grotesk (text, labels and figures — clear numerals and ₹). Labels are plain sentence case. Translucent cards: `.card`

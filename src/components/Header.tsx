@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
@@ -135,10 +136,11 @@ export function Header() {
             <Link
               href="/contact#enquire"
               className={`hidden h-11 items-center gap-3 rounded-lg px-5 text-[0.95rem] font-medium transition-colors sm:inline-flex ${
-                dark ? "bg-paper text-ink hover:bg-cyan hover:text-forest-deep" : "bg-ink text-paper hover:bg-cyan hover:text-forest-deep"
+                dark ? "border border-paper/40 text-paper hover:bg-paper hover:text-ink" : "border border-ink/25 text-ink hover:bg-ink hover:text-paper"
               }`}
             >
-              Book a visit
+              Enquire now
+              <ArrowRight aria-hidden className="size-4" strokeWidth={1.75} />
             </Link>
             <button
               ref={toggleRef}
