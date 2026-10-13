@@ -37,6 +37,7 @@ export function ActionDock() {
 
   return (
     <div
+      data-print-hide=""
       aria-hidden={!visible}
       inert={!visible}
       className={`fixed inset-x-0 bottom-0 z-40 transition-[transform,opacity] duration-500 ease-out-expo md:inset-x-auto md:bottom-6 md:right-6 ${

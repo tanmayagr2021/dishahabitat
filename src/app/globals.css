@@ -1032,3 +1032,42 @@ html.has-cursor .cursor-dot {
     translate: none !important;
   }
 }
+
+/* Printing (the checklist's "Print or save PDF"): content only, on white. */
+@media print {
+  header[data-header],
+  footer,
+  .cursor-dot,
+  .intro,
+  dialog,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  body,
+  .surface-ivory,
+  .surface-deep,
+  .layer {
+    background: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    margin-top: 0 !important;
+  }
+
+  .surface-deep img {
+    display: none !important;
+  }
+
+  .surface-deep h1,
+  .surface-deep p {
+    color: #111 !important;
+  }
+
+  .js-reveal [data-reveal],
+  .js-reveal [data-reveal] * {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+}

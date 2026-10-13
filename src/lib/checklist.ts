@@ -2,7 +2,7 @@
  * "The checklist: must-knows while investing in a home", from dishahabitat.com/checklist.
  * Article text is Disha Habitat's own, lightly edited for grammar; no facts were added.
  */
-export type ChecklistItem = { slug: string; title: string; summary: string; image: string; body: string[] };
+export type ChecklistItem = { slug: string; title: string; summary: string; image: string; body: string[]; checks?: string[] };
 
 export const checklist: ChecklistItem[] = [
   {
@@ -56,3 +56,33 @@ export const checklist: ChecklistItem[] = [
 ];
 
 export const getChecklistItem = (slug: string) => checklist.find((c) => c.slug === slug);
+
+/*
+ * What to check before you buy, for each must-know. Each point restates the article above it as an
+ * action; no new facts are introduced.
+ */
+const checks: Record<string, string[]> = {
+  "khata-certificate": [
+    "Ask whose name the property’s khata certificate is in.",
+    "Keep it ready: it is needed to register the property, and again if you sell it.",
+  ],
+  "occupancy-certificate": [
+    "Ask whether the occupancy certificate (OC) has been issued for the building.",
+    "Remember the developer is responsible for obtaining it once construction is complete.",
+    "An OC is needed when applying for water, sanitation and electricity connections.",
+  ],
+  "carpet-area": [
+    "Ask for the carpet area of the home, not only the built-up or super built-up area.",
+    "Understand what the super built-up area adds: a share of the lobby, lifts, stairs, pool, garden and clubhouse.",
+    "Compare homes by carpet area, the net usable floor area defined by RERA.",
+  ],
+  "deviation-assessment": [
+    "Ask how the finished building compares with its approved layout plan.",
+    "Know that authorities allow a deviation of plus or minus 5% from the approved plan.",
+  ],
+  "sewage-treatment-plants": [
+    "Ask whether the community treats its own sewage with an STP.",
+    "Ask how the treated water is disposed of or reused.",
+  ],
+};
+for (const c of checklist) c.checks = checks[c.slug];
