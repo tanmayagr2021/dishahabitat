@@ -7,8 +7,9 @@ import { CoreBand } from "@/components/home/Origins";
 import { ArrowLink, Label, Lines, Reveal } from "@/components/ui";
 import { Hammer, Megaphone, Scale } from "lucide-react";
 import { CountUp } from "@/components/CountUp";
-import { EventsLineup } from "@/components/story/EventsLineup";
-import { company, dishaFamily, homemakerProfiles, homemakers, stats } from "@/lib/site";
+import { FamilyStacks } from "@/components/story/FamilyStacks";
+import { GigWall } from "@/components/story/GigWall";
+import { company, homemakerProfiles, homemakers, stats } from "@/lib/site";
 import { projectsByHandover } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -24,10 +25,6 @@ const toYear = (s: string) => {
 };
 const AXIS = { from: 2014, to: 2026 };
 const pct = (y: number) => ((y - AXIS.from) / (AXIS.to - AXIS.from)) * 100;
-const familyGroups = [
-  { kind: "Homeowners", line: "The families who live in our homes.", photos: dishaFamily.filter((f) => f.kind === "Homeowners") },
-  { kind: "The team", line: "The people who build them.", photos: dishaFamily.filter((f) => f.kind === "The team") },
-];
 const axisYears = Array.from({ length: AXIS.to - AXIS.from + 1 }, (_, i) => AXIS.from + i);
 
 export default function StoryPage() {
@@ -198,7 +195,7 @@ export default function StoryPage() {
       </section>
 
       {/* Events and collaborations */}
-      <section data-tone="light" aria-labelledby="events-title" className="layer surface-stone py-16 [--poster-h:19rem] md:py-24 md:[--poster-h:23rem]">
+      <section data-tone="light" aria-labelledby="events-title" className="layer surface-stone overflow-x-clip py-16 md:py-24">
         <div className="shell">
           <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
@@ -212,40 +209,7 @@ export default function StoryPage() {
           </div>
 
           <div className="mt-12">
-            <EventsLineup />
-          </div>
-
-          <div className="mt-12 grid gap-6 lg:grid-cols-12">
-            <Reveal className="surface-forest overflow-hidden rounded-2xl lg:col-span-7">
-              <div className="p-6 md:p-8">
-                <p className="label text-brass">Recognition</p>
-                <p className="serif mt-3 text-[clamp(1.7rem,2.4vw,2.2rem)] leading-tight">
-                  ET Business Awards 2025, <em>Certificate of Excellence.</em>
-                </p>
-                <p className="mt-3 max-w-lg leading-relaxed text-paper/75">
-                  Disha Pursuit of the Elements was named Innovation Real Estate Project of the Year.
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-3 px-6 pb-6 md:px-8 md:pb-8">
-                <div className="relative aspect-[16/11] overflow-hidden rounded-lg bg-ink">
-                  <Image src="/images/events/et-award-certificate.webp" alt="ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements" fill sizes="(min-width: 1024px) 22rem, 45vw" className="object-cover" />
-                </div>
-                <div className="relative aspect-[16/11] overflow-hidden rounded-lg bg-ink">
-                  <Image src="/images/events/et-award-stage.webp" alt="Receiving the ET Business Award on stage" fill sizes="(min-width: 1024px) 22rem, 45vw" className="object-cover object-[65%_50%]" />
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={120} className="flex flex-col lg:col-span-5">
-              <p className="label text-mute">Backstage with the artists</p>
-              <ul className="mt-4 grid flex-1 grid-cols-2 gap-3">
-                {[1, 2, 3, 4].map((n) => (
-                  <li key={n} className="group relative aspect-[4/3] overflow-hidden rounded-lg lg:aspect-auto">
-                    <Image src={`/images/events/backstage-${n}.webp`} alt="The Disha Habitat team with a visiting artist, backstage" fill sizes="(min-width: 1024px) 16rem, 45vw" className="object-cover transition-transform duration-[1200ms] ease-out-expo group-hover:scale-105" />
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+            <GigWall />
           </div>
         </div>
       </section>
@@ -298,45 +262,18 @@ export default function StoryPage() {
       </section>
 
       {/* The Disha family */}
-      <section data-tone="dark" aria-labelledby="family-title" className="layer surface-forest grain py-16 md:py-24">
-        <div className="shell">
-          <p className="eyebrow text-paper/65">Our homemakers · The Disha family</p>
-          <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
-
-          <div className="mt-12 space-y-14 md:mt-16 md:space-y-20">
-            {familyGroups.map((g, gi) => (
-              <div key={g.kind}>
-                <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-paper/15 pt-5">
-                  <h3 className="serif text-[clamp(1.6rem,2.2vw,2rem)]">{g.kind}</h3>
-                  <p className="text-paper/65">{g.line}</p>
-                </div>
-                <ul className="mt-6 grid grid-cols-2 gap-3 md:h-[clamp(28rem,42vw,38rem)] md:grid-cols-4 md:grid-rows-2 md:gap-4">
-                  {g.photos.map((f, i) => (
-                    <Reveal
-                      as="li"
-                      key={f.src}
-                      variant="mask"
-                      delay={i * 90}
-                      className={`group relative overflow-hidden rounded-xl md:aspect-auto ${
-                        i === 0
-                          ? `col-span-2 aspect-[4/3] md:row-span-2 ${gi % 2 ? "md:col-start-3 md:row-start-1" : ""}`
-                          : i === 1
-                            ? "col-span-2 aspect-[2/1]"
-                            : "aspect-[4/3]"
-                      }`}
-                    >
-                      <Image
-                        src={f.src}
-                        alt={f.alt}
-                        fill
-                        sizes={i === 0 ? "(min-width: 768px) 45vw, 100vw" : "(min-width: 768px) 25vw, 50vw"}
-                        className="object-cover transition-transform duration-[1400ms] ease-out-expo group-hover:scale-[1.04]"
-                      />
-                    </Reveal>
-                  ))}
-                </ul>
-              </div>
-            ))}
+      <section data-tone="dark" aria-labelledby="family-title" className="layer surface-forest grain overflow-x-clip py-16 md:py-24">
+        <div className="shell grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-8">
+          <div className="lg:col-span-4">
+            <p className="eyebrow text-paper/65">Our homemakers · The Disha family</p>
+            <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
+            <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
+              The families who live in our homes, and the people who build them. Pull up a chair and go through the album.
+            </p>
+            <p className="mt-6 font-[family-name:var(--font-caveat)] text-[1.6rem] leading-none text-brass">tap a photo for the next one →</p>
+          </div>
+          <div className="lg:col-span-8">
+            <FamilyStacks />
           </div>
         </div>
       </section>

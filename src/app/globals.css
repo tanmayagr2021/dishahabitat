@@ -1141,3 +1141,112 @@ main img {
     animation: none !important;
   }
 }
+
+/* ---------- Gig wall (Our story) ---------- */
+/* Every piece is placed in container-width units, so the wall scales as one picture. */
+.gig-wall {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 100 / 392;
+}
+.gig-piece {
+  position: absolute;
+  left: var(--mx);
+  top: var(--my);
+  width: var(--mw);
+  rotate: var(--mr);
+  transition: translate 0.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+.gig-piece.is-dragging {
+  transition: none;
+}
+@media (min-width: 768px) {
+  .gig-wall {
+    aspect-ratio: 100 / 52;
+  }
+  .gig-piece {
+    left: var(--dx);
+    top: var(--dy);
+    width: var(--dw);
+    rotate: var(--dr);
+  }
+}
+.gig-hit {
+  position: relative;
+  perspective: 1400px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    opacity 0.5s ease,
+    transform 0.8s cubic-bezier(0.2, 0.9, 0.25, 1.15),
+    rotate 0.7s cubic-bezier(0.2, 0.9, 0.25, 1.15);
+  transition-delay: calc(var(--i) * 70ms);
+}
+.gig-wall:not(.is-pinned) .gig-hit {
+  opacity: 0;
+  transform: translateY(-2.5rem) scale(1.1);
+}
+.gig-wall.is-settled .gig-hit {
+  transition-delay: 0s;
+}
+.gig-wall.is-settled .gig-hit:hover {
+  transform: translateY(-4px) scale(1.025);
+}
+.gig-tape {
+  position: absolute;
+  z-index: 2;
+  top: -0.55rem;
+  left: 50%;
+  width: 34%;
+  height: 1.3rem;
+  translate: -50% 0;
+  rotate: -4deg;
+  background: rgb(241 235 223 / 0.72);
+  box-shadow: 0 1px 2px rgb(21 26 23 / 0.18);
+  backdrop-filter: blur(1px);
+}
+.gig-flip {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+.gig-flip.is-flipped {
+  transform: rotateY(180deg);
+}
+.gig-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.gig-back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gig-hit,
+  .gig-flip,
+  .gig-piece {
+    transition: none;
+  }
+  .gig-wall:not(.is-pinned) .gig-hit {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Family photo piles (Our story) ---------- */
+.stack-print {
+  transition:
+    rotate 0.45s cubic-bezier(0.3, 1.25, 0.45, 1),
+    translate 0.45s cubic-bezier(0.3, 1.1, 0.45, 1),
+    scale 0.3s ease;
+}
+.stack-print.cursor-pointer:hover {
+  scale: 1.02;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stack-print {
+    transition: none;
+  }
+}
