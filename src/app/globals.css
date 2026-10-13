@@ -117,6 +117,14 @@
     line-height: 1.45;
   }
 
+  /* Horizontal rails scroll by touch, trackpad or their buttons, without a visible bar. */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Translucent cards: content sits on the surface rather than in a solid box. */
   .card {
     border-radius: 1rem;
