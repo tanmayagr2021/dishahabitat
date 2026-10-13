@@ -65,7 +65,7 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
           <aside className="space-y-6 lg:col-span-4 lg:col-start-9">
             <div className="lg:sticky lg:top-28 lg:space-y-6">
               <div className="rounded-2xl bg-forest p-6 text-paper">
-                <p className="serif text-[1.5rem] leading-tight">Questions about {c.title.toLowerCase()} for a Disha home?</p>
+                <p className="serif text-[1.5rem] leading-tight">Have a question about this for a Disha home?</p>
                 <p className="mt-2 text-sm text-paper/75">Ask us. We’ll explain it as plainly as you need.</p>
                 <ComposeButton channel="whatsapp" topic="Something else" className="mt-5 inline-flex h-11 w-full items-center justify-center rounded-lg bg-paper font-semibold text-ink hover:bg-white">
                   Ask on WhatsApp

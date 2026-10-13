@@ -16,8 +16,8 @@ export function SoldOutBand({ name }: { name: string }) {
             Families live at {name} today. <em>Looking for a home like theirs?</em>
           </h2>
           <p className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-paper/75">
-            {elements.shortName} is selling now in {elements.locality}: {elements.offer.toLowerCase()} and 4 & 5 BHK villas, built by
-            the same people, with the same care.
+            {elements.shortName} is selling now in {elements.locality}: the last few 2, 3 & 4 BHK homes and 4 & 5 BHK villas,
+            built by the same people, with the same care.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href={elements.href} variant="paper" className="font-semibold">
