@@ -90,9 +90,7 @@ project site and are labelled artist’s impressions; the master plan is labelle
     centres (Govindapur, Odisha is ambiguous — several towns share the name), and the distances
     shown are straight-line estimates rounded to 50 km. Confirm the towns with the homeowners.
 
-23. **Logo film.** The supplied logo animation appears to be AI-generated (it carries a generator’s sparkle mark in
-    the lower right, which the site softens). Its logo matches the official artwork closely, and the site always hands
-    over to the official SVG logo. Confirm the client is happy to publish the film, ideally with a clean export.
+23. **Logo film.** Confirmed by the project team as the final version (13 October 2026).
 
 ## Added from dishahabitat.com (fourth pass)
 
