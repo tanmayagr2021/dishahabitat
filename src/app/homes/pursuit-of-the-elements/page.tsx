@@ -70,7 +70,7 @@ export default function ElementsPage() {
       />
 
       {/* At a glance */}
-      <section data-tone="dark" aria-labelledby="glance-title" className="surface-forest grain py-20 md:py-28">
+      <section data-tone="dark" aria-labelledby="glance-title" className="surface-forest grain py-16 md:py-20">
         <div className="shell">
           <h2 id="glance-title" className="sr-only">
             At a glance
@@ -114,7 +114,7 @@ export default function ElementsPage() {
       </section>
 
       {/* The homes */}
-      <section data-tone="dark" aria-labelledby="homes-title" className="surface-charcoal grain py-20 md:py-28">
+      <section data-tone="dark" aria-labelledby="homes-title" className="surface-charcoal grain py-16 md:py-20">
         <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="02" className="text-paper/60">
@@ -145,7 +145,7 @@ export default function ElementsPage() {
       </section>
 
       {/* Gallery */}
-      <section data-tone="light" aria-labelledby="gallery-title" className="surface-stone py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="gallery-title" className="surface-stone py-16 md:py-20">
         <div className="shell">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -170,7 +170,7 @@ export default function ElementsPage() {
       </section>
 
       {/* Amenities */}
-      <section data-tone="light" aria-labelledby="amenities-title" className="surface-ivory py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="amenities-title" className="surface-ivory py-16 md:py-20">
         <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="04" className="text-mute">

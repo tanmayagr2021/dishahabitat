@@ -10,7 +10,7 @@ import { Logo } from "@/components/Logo";
 import { SocialIcons } from "@/components/Socials";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
-import { projectsByHandover } from "@/lib/projects";
+import { projectsNewestFirst } from "@/lib/projects";
 
 const nav = [
   { href: "/homes", label: "Our homes" },
@@ -109,6 +109,8 @@ export function Header() {
             : ""
         }`}
       >
+        {/* How far down the page you are */}
+        <span aria-hidden className="scroll-progress absolute inset-x-0 bottom-0 h-[2px] origin-left bg-brass" />
         <div className="shell flex h-16 items-center justify-between gap-6 md:h-[5rem]">
           <Link href="/" className="relative z-10 -ml-1 p-1" aria-label="Disha Habitat home">
             <span data-header-logo className="block">
@@ -215,7 +217,7 @@ export function Header() {
           <div>
             <p className="label text-paper/50">Delivered communities</p>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-[0.95rem]">
-              {projectsByHandover.map((p) => (
+              {projectsNewestFirst.map((p) => (
                 <li key={p.slug}>
                   <Link href={`/homes/${p.slug}`} onClick={() => setOpen(false)} className="flex items-center gap-2 py-1.5">
                     <span aria-hidden className="size-1.5 rounded-full" style={{ background: p.hue }} />

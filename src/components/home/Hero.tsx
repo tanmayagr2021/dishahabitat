@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowDown, Play, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
+import { elements } from "@/lib/elements";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
@@ -163,6 +164,13 @@ export function Hero() {
               Watch our story
             </button>
           </div>
+          <p className="anim-fade mt-3 text-sm text-paper/65" style={d(1200)}>
+            Free site visits, no obligation. Or call{" "}
+            <a href={elements.phone.href} className="underline decoration-paper/40 underline-offset-4 hover:text-paper">
+              {elements.phone.display}
+            </a>
+            .
+          </p>
         </div>
 
         <div className="anim-fade mt-14 flex items-end justify-between gap-6" style={d(1300)}>

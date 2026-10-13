@@ -17,8 +17,8 @@ import { Logo } from "@/components/Logo";
 const FILM = { w: 1920, h: 1080, cx: 960, cy: 540 };
 const LOGO_AT_7_6 = { x: 579.3, y: 300.8, w: 64 * 12.03, dishaWidth: 748.1 };
 const dishaWidthAt = (t: number) => 772 - 10.4 * (t - 5.3);
-const SETTLED_AT = 5.5; // seconds of film: the name has resolved and the light sweep has passed
-const RATE = 1.4;
+const SETTLED_AT = 4.9; // seconds of film: the name has resolved and the light sweep has passed
+const RATE = 2.2;
 
 export function Intro() {
   const root = useRef<HTMLDivElement>(null);
@@ -38,6 +38,9 @@ export function Intro() {
     const close = () => {
       if (ended) return;
       ended = true;
+      try {
+        sessionStorage.setItem("disha-intro", "1");
+      } catch {}
       html.dataset.intro = "off";
       setGone(true);
     };
@@ -66,17 +69,17 @@ export function Intro() {
       Object.assign(lg.style, { left: `${from.x}px`, top: `${from.y}px`, width: `${from.w}px` });
 
       const target = document.querySelector<HTMLElement>("[data-header-logo]")?.getBoundingClientRect();
-      const fade = lg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: "ease-out", fill: "forwards" });
+      const fade = lg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: "ease-out", fill: "forwards" });
 
       // 1. The official logo is in place over the frozen frame. 2. The film dissolves beneath it, so
       // only the official logo remains on forest green. 3. It flies to the header as the green lifts.
       const film = el.querySelector<HTMLElement>("[data-film]")!;
       fade.finished
-        .then(() => film.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 480, easing: "ease-out", fill: "forwards" }).finished)
+        .then(() => film.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, easing: "ease-out", fill: "forwards" }).finished)
         .then(() => {
           html.dataset.intro = "handover"; // the hero begins its entrance underneath
           el.animate([{ backgroundColor: "rgb(8 22 15 / 1)" }, { backgroundColor: "rgb(8 22 15 / 0)" }], {
-            duration: 1100,
+            duration: 800,
             easing: "cubic-bezier(0.7,0,0.2,1)",
             fill: "forwards",
           });
@@ -88,7 +91,7 @@ export function Intro() {
                     transform: `translate(${target.left - from.x}px, ${target.top - from.y}px) scale(${target.width / from.w})`,
                   },
                 ],
-                { duration: 1150, easing: "cubic-bezier(0.7,0,0.2,1)", fill: "forwards" },
+                { duration: 850, easing: "cubic-bezier(0.7,0,0.2,1)", fill: "forwards" },
               )
             : lg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: "forwards" });
           return move.finished;
@@ -112,9 +115,9 @@ export function Intro() {
     // If the film has not started within 2.5 s (slow network, autoplay blocked), go straight in.
     const stall = window.setTimeout(() => {
       if (v.currentTime < 0.1) skip();
-    }, 2500);
-    // Whatever happens (a stalled network, a blocked autoplay mid-way), the site appears by 11 s.
-    const cap = window.setTimeout(skip, 11000);
+    }, 1500);
+    // Whatever happens (a stalled network, a blocked autoplay mid-way), the site appears by 5 s.
+    const cap = window.setTimeout(skip, 5000);
 
     const interrupt = (e: Event) => {
       if (e.type === "keydown" && (e as KeyboardEvent).key === "Tab") return;

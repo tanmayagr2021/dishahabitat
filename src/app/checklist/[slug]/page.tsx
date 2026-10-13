@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ComposeButton } from "@/components/ComposeButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Reveal } from "@/components/ui";
 import { checklist, getChecklistItem } from "@/lib/checklist";
 
@@ -21,7 +22,6 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
   if (!c) notFound();
   const i = checklist.indexOf(c);
   const next = checklist[(i + 1) % checklist.length];
-  const others = checklist.filter((x) => x.slug !== c.slug);
 
   return (
     <>
@@ -29,10 +29,11 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
         <Image src={c.image} alt="" fill priority sizes="100vw" className="-z-10 object-cover opacity-30" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-forest-deep/60 via-forest-deep/80 to-forest-deep" />
         <div className="shell max-w-4xl">
-          <Link href="/checklist" className="inline-flex items-center gap-2 text-sm text-paper/70 hover:text-paper">
-            <ArrowLeft aria-hidden className="size-4" /> The checklist · {i + 1} of {checklist.length}
-          </Link>
-          <h1 id="item-title" className="serif anim-rise mt-5 text-[clamp(2.8rem,6vw,5rem)] leading-[1.02]">
+          <Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Checklist", href: "/checklist" }, { label: c.title }]} />
+          <p className="mt-6 text-sm text-paper/60">
+            Must-know {i + 1} of {checklist.length}
+          </p>
+          <h1 id="item-title" className="serif anim-rise mt-2 text-[clamp(2.8rem,6vw,5rem)] leading-[1.02]">
             {c.title}
           </h1>
           <p className="anim-fade-up mt-4 text-[1.15rem] text-paper/80">{c.summary}</p>
@@ -73,24 +74,9 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
                   Book a site visit
                 </Link>
               </div>
-              <nav aria-label="The checklist" className="card p-5">
-                <p className="text-sm text-mute">The checklist</p>
-                <ul className="mt-3 space-y-1">
-                  {checklist.map((x, k) => (
-                    <li key={x.slug}>
-                      <Link
-                        href={`/checklist/${x.slug}`}
-                        aria-current={x.slug === c.slug ? "page" : undefined}
-                        className="flex items-center gap-3 rounded-lg px-2 py-2 text-[0.98rem] hover:bg-ink/5 aria-[current=page]:bg-ink aria-[current=page]:text-paper"
-                      >
-                        <span className="inline-flex size-6 items-center justify-center rounded-full border border-current/25 text-xs tabular-nums">{k + 1}</span>
-                        {x.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <p className="sr-only">{others.length} other guides</p>
-              </nav>
+              <Link href="/checklist" className="card flex items-center gap-3 p-5 text-[0.98rem] font-medium hover:border-ink/25">
+                <ArrowLeft aria-hidden className="size-4" /> Back to your checklist
+              </Link>
             </div>
           </aside>
         </div>

@@ -27,7 +27,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-r from-forest-deep via-forest-deep/80 to-forest-deep/20" />
       </div>
 
-      <div className="shell pointer-events-none relative grid gap-16 py-28 md:py-40 lg:grid-cols-12 lg:gap-8 [&>*]:pointer-events-auto">
+      <div className="shell pointer-events-none relative grid gap-16 py-16 md:py-24 lg:grid-cols-12 lg:gap-8 [&>*]:pointer-events-auto">
         <div className="flex flex-col justify-between gap-12 lg:col-span-6">
           <div>
             <Label n={n} className="text-paper/60">

@@ -1071,3 +1071,20 @@ html.has-cursor .cursor-dot {
     filter: none !important;
   }
 }
+
+/* Header: a thin line that fills as the page is read. */
+.scroll-progress {
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: fill-x linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+/* One colour grade for every photograph, so images from different shoots read as one brand. */
+main img {
+  filter: saturate(0.93) contrast(1.03) brightness(1.01);
+}

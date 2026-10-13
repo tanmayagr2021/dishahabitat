@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { ActionDock } from "@/components/ActionDock";
 import { Cursor } from "@/components/Cursor";
 import { MessageComposer } from "@/components/MessageComposer";
+import { Diniee } from "@/components/Diniee";
 import "./globals.css";
 
 /* Headlines: Newsreader, an editorial serif with optical sizes and a true italic. */
@@ -62,11 +63,11 @@ export const viewport: Viewport = {
  * Runs before paint:
  *  1. marks the page for scroll reveals (removed after 3s if the app never hydrates);
  *  2. picks the hero photograph for the time of day in Bengaluru (IST);
- *  3. decides whether the logo film plays: whenever someone arrives at the site, on any page (never
- *     with reduced motion; `?nointro` skips it for automated checks). It autoplays from the HTML;
- *     moving between pages inside the site does not replay it.
+ *  3. decides whether the logo film plays: once per visit, on whichever page the visitor arrives
+ *     at, in about 3.5 seconds (never with reduced motion; `?nointro` skips it for automated
+ *     checks). It autoplays from the HTML.
  */
-const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);d.dataset.intro=(!rm&&!skip)?'on':'off'}catch(e){d.dataset.intro='off'}})();`;
+const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);var seen=sessionStorage.getItem('disha-intro');d.dataset.intro=(!rm&&!skip&&!seen)?'on':'off'}catch(e){d.dataset.intro='off'}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ActionDock />
         <Cursor />
         <MessageComposer />
+        <Diniee />
         <Script id="bootstrap" strategy="beforeInteractive">
           {bootstrap}
         </Script>

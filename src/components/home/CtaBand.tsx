@@ -13,7 +13,7 @@ export function CtaBand() {
       <div className="shell flex flex-col items-start justify-between gap-10 md:flex-row md:items-end">
         <div className="max-w-2xl">
           <Reveal as="p" className="eyebrow text-paper/65">
-            Let’s connect
+            Visit us
           </Reveal>
           <Lines id="cta-title" className="serif mt-5 text-[clamp(2.4rem,4.4vw,4.2rem)] leading-[1.04]" lines={["Begin your journey", <em key="e">with Disha Habitat.</em>]} />
           <Reveal delay={150} as="p" className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-paper/75">
@@ -25,7 +25,8 @@ export function CtaBand() {
             <SocialIcons className="text-paper/80" itemClassName="hover:text-paper" />
           </div>
         </div>
-        <Reveal delay={250} className="flex flex-col gap-3 sm:flex-row">
+        <Reveal delay={250} className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
           <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
             Book a site visit
           </ButtonLink>
@@ -35,6 +36,8 @@ export function CtaBand() {
           >
             <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Message us on WhatsApp
           </ComposeButton>
+          </div>
+          <p className="text-sm text-paper/60">No obligation. We’ll call you to confirm a time that suits you.</p>
         </Reveal>
       </div>
     </section>

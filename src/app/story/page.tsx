@@ -5,7 +5,9 @@ import { AmbientFilm } from "@/components/AmbientFilm";
 import { PageHero } from "@/components/PageHero";
 import { CoreBand } from "@/components/home/Origins";
 import { ArrowLink, Label, Lines, Reveal } from "@/components/ui";
-import { company, dishaFamily, formatIndian, homemakerProfiles, homemakers, stats, thisIsUs } from "@/lib/site";
+import { Hammer, Megaphone, Scale } from "lucide-react";
+import { CountUp } from "@/components/CountUp";
+import { company, dishaFamily, homemakerProfiles, homemakers, stats } from "@/lib/site";
 import { projectsByHandover } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -44,7 +46,7 @@ export default function StoryPage() {
       />
 
       {/* Journey */}
-      <section data-tone="light" aria-labelledby="journey-title" className="surface-ivory py-28 md:py-40">
+      <section data-tone="light" aria-labelledby="journey-title" className="surface-ivory py-16 md:py-24">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="01" className="text-mute">
@@ -85,7 +87,7 @@ export default function StoryPage() {
       </section>
 
       {/* Twelve years, five builds, drawn to scale */}
-      <section data-tone="dark" aria-labelledby="builds-title" className="surface-forest grain relative py-28 md:py-40">
+      <section data-tone="dark" aria-labelledby="builds-title" className="surface-forest grain relative py-16 md:py-24">
         <div className="shell">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
@@ -154,32 +156,57 @@ export default function StoryPage() {
       <CoreBand full />
 
       {/* This is us */}
-      <section data-tone="dark" aria-labelledby="us-title" className="layer surface-deep grain py-16 md:py-24">
+      <section id="this-is-us" data-tone="dark" aria-labelledby="us-title" className="layer surface-deep grain py-16 md:py-24">
         <div className="shell">
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <p className="eyebrow text-paper/65">This is us</p>
               <Lines id="us-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Our homes are truly", <em key="e">where our hearts are.</em>]} />
             </div>
-            <div className="space-y-4 text-[1.05rem] leading-relaxed text-paper/75 lg:col-span-6 lg:col-start-7">
-              {thisIsUs.map((t) => (
-                <Reveal as="p" key={t}>
-                  {t}
+            <ul className="grid gap-5 sm:grid-cols-3 lg:col-span-7 lg:col-start-6">
+              {[
+                { Icon: Megaphone, title: "Sold on word of mouth", text: "Our first four properties sold out without any concentrated brand marketing. Our home buyers have been our ambassadors." },
+                { Icon: Hammer, title: "Built with care", text: "Build quality and mindfulness are our biggest strengths, and our resident community of 1,000-plus grows with every project." },
+                { Icon: Scale, title: "Priced mindfully", text: "From studio homes to independent villas, every home is created, and priced, with the same care." },
+              ].map(({ Icon, title, text }, i) => (
+                <Reveal as="li" key={title} delay={i * 90} className="card-dark p-5">
+                  <span className="inline-flex size-10 items-center justify-center rounded-full bg-paper/10">
+                    <Icon aria-hidden className="size-5 text-brass" strokeWidth={1.6} />
+                  </span>
+                  <p className="mt-4 font-semibold">{title}</p>
+                  <p className="mt-1.5 text-[0.95rem] leading-relaxed text-paper/70">{text}</p>
                 </Reveal>
               ))}
-            </div>
+            </ul>
           </div>
           <dl className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-paper/10 bg-paper/10 md:grid-cols-5">
             {stats.map((st, i) => (
               <Reveal key={st.label} delay={i * 70} className="flex flex-col-reverse bg-forest-deep/80 p-6">
                 <dt className="mt-2 text-sm text-paper/60">{st.label}</dt>
                 <dd className="serif text-[clamp(1.8rem,2.8vw,2.6rem)] leading-none tabular-nums">
-                  {formatIndian(st.value)}
-                  {st.suffix}
+                  <CountUp value={st.value} suffix={st.suffix} />
                 </dd>
               </Reveal>
             ))}
           </dl>
+        </div>
+      </section>
+
+      {/* Events and collaborations */}
+      <section data-tone="light" aria-labelledby="events-title" className="layer surface-stone py-16 md:py-24">
+        <div className="shell grid items-center gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="eyebrow text-mute">Events and collaborations</p>
+            <Lines id="events-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Evenings the whole", <em key="e">community remembers.</em>]} />
+            <p className="mt-5 max-w-md leading-relaxed text-mute">
+              Concerts, celebrations and collaborations that bring Disha residents together, as featured on dishahabitat.com.
+            </p>
+          </div>
+          <Reveal variant="mask" className="lg:col-span-6 lg:col-start-7">
+            <div className="relative mx-auto aspect-[1084/1456] max-w-md overflow-hidden rounded-2xl shadow-[0_40px_80px_-40px_rgb(21_26_23/0.5)]">
+              <Image src="/images/people/events.webp" alt="A collage of event posters and photographs from Disha Habitat community concerts and celebrations" fill sizes="(min-width: 1024px) 28rem, 100vw" className="object-cover" />
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -235,7 +262,7 @@ export default function StoryPage() {
         <div className="shell">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="eyebrow text-paper/65">The Disha family</p>
+              <p className="eyebrow text-paper/65">Our homemakers · The Disha family</p>
               <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
             </div>
             <p className="max-w-sm text-paper/70">The families who live in our homes, and the people who build them.</p>
@@ -255,26 +282,8 @@ export default function StoryPage() {
         </div>
       </section>
 
-      {/* Events and collaborations */}
-      <section data-tone="light" aria-labelledby="events-title" className="layer surface-stone py-16 md:py-24">
-        <div className="shell grid items-center gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <p className="eyebrow text-mute">Events and collaborations</p>
-            <Lines id="events-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Evenings the whole", <em key="e">community remembers.</em>]} />
-            <p className="mt-5 max-w-md leading-relaxed text-mute">
-              Concerts, celebrations and collaborations that bring Disha residents together, as featured on dishahabitat.com.
-            </p>
-          </div>
-          <Reveal variant="mask" className="lg:col-span-6 lg:col-start-7">
-            <div className="relative mx-auto aspect-[1084/1456] max-w-md overflow-hidden rounded-2xl shadow-[0_40px_80px_-40px_rgb(21_26_23/0.5)]">
-              <Image src="/images/people/events.webp" alt="A collage of event posters and photographs from Disha Habitat community concerts and celebrations" fill sizes="(min-width: 1024px) 28rem, 100vw" className="object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       {/* Film */}
-      <section data-tone="light" aria-labelledby="film-title" className="surface-stone py-24 md:py-32">
+      <section data-tone="light" aria-labelledby="film-title" className="surface-stone py-16 md:py-24">
         <div className="shell grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="05" className="text-mute">

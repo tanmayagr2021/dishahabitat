@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CalendarCheck, MessageCircle, Phone } from "lucide-react";
+import { Bot, CalendarCheck, MessageCircle, Phone } from "lucide-react";
+import { openDiniee } from "@/components/Diniee";
 import { elements } from "@/lib/elements";
 import { openComposer } from "@/lib/messaging";
 
@@ -52,6 +53,14 @@ export function ActionDock() {
           <Phone aria-hidden className="size-4" strokeWidth={1.7} />
           Call
         </a>
+        <button
+          type="button"
+          onClick={openDiniee}
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-3 py-1.5 text-[0.72rem] text-paper/85 transition-colors hover:bg-paper/10 md:flex-none md:flex-row md:gap-2 md:px-4 md:text-sm"
+        >
+          <Bot aria-hidden className="size-4 text-cyan" strokeWidth={1.7} />
+          Ask Diniee
+        </button>
         <button
           type="button"
           onClick={() => openComposer({ channel: "whatsapp" })}

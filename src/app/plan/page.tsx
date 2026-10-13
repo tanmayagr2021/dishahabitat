@@ -44,7 +44,7 @@ export default function PlanPage() {
         </div>
       </section>
 
-      <section data-tone="light" aria-labelledby="notes-title" className="surface-stone py-20 md:py-28">
+      <section data-tone="light" aria-labelledby="notes-title" className="surface-stone py-16 md:py-20">
         <div className="shell">
           <Label n="01" className="text-mute">
             The fine print

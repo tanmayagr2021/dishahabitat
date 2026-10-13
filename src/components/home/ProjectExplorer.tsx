@@ -144,7 +144,7 @@ export function ProjectExplorer() {
   const selected = list.find((p) => p.slug === picked) ?? list[0];
 
   return (
-    <section id="explore" data-tone="dark" aria-labelledby="explore-title" className="surface-deep grain py-24 md:py-36">
+    <section id="explore" data-tone="dark" aria-labelledby="explore-title" className="surface-deep grain py-16 md:py-24">
       <div className="shell">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">

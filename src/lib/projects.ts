@@ -412,3 +412,6 @@ export function getProject(slug: string) {
 export const projectsByHandover = [...projects].sort(
   (a, b) => a.handoverYear - b.handoverYear || a.index.localeCompare(b.index),
 );
+
+/* The order used in every list and menu: newest handover first (after the project on sale). */
+export const projectsNewestFirst = [...projectsByHandover].reverse();

@@ -140,7 +140,7 @@ export default function HomesPage() {
       <ProjectExplorer />
 
       {/* Time to build */}
-      <section data-tone="light" aria-labelledby="pace-title" className="surface-ivory py-28 md:py-40">
+      <section data-tone="light" aria-labelledby="pace-title" className="surface-ivory py-16 md:py-24">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Label n="01" className="text-mute">
@@ -185,7 +185,7 @@ export default function HomesPage() {
       </section>
 
       {/* At a glance */}
-      <section data-tone="light" aria-labelledby="glance-title" className="surface-stone py-24 md:py-32">
+      <section data-tone="light" aria-labelledby="glance-title" className="surface-stone py-16 md:py-24">
         <div className="shell">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -213,7 +213,7 @@ export default function HomesPage() {
                 </tr>
               </thead>
               <tbody>
-                {projectsByHandover.map((p) => (
+                {newestFirst.map((p) => (
                   <tr key={p.slug} className="border-b border-ink/12 transition-colors hover:bg-paper">
                     <th scope="row" className="py-5 pr-4 font-normal">
                       <Link href={`/homes/${p.slug}`} className="flex items-center gap-3">

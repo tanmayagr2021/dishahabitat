@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Mail, MessageCircle, Send, X } from "lucide-react";
 import { buildMessage, destinations, mailtoUrl, whatsappUrl, type Channel } from "@/lib/messaging";
 import { elements } from "@/lib/elements";
-import { projectsByHandover } from "@/lib/projects";
+import { projectsNewestFirst } from "@/lib/projects";
 
 /*
  * One message form for the whole site. Every "WhatsApp us" and "Email us" opens it: the visitor
@@ -14,7 +14,7 @@ import { projectsByHandover } from "@/lib/projects";
 const topics = [
   `${elements.name}`,
   "Booking a site visit",
-  ...projectsByHandover.map((p) => p.name),
+  ...projectsNewestFirst.map((p) => p.name),
   "Something else",
 ];
 

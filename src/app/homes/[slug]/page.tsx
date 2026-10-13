@@ -9,7 +9,7 @@ import { DayInTheSun } from "@/components/DayInTheSun";
 import { PageHero } from "@/components/PageHero";
 import { EnquirySection } from "@/components/home/EnquirySection";
 import { Label, Lines, Reveal } from "@/components/ui";
-import { getProject, projectsByHandover } from "@/lib/projects";
+import { getProject, projectsByHandover, projectsNewestFirst } from "@/lib/projects";
 import { homeowners } from "@/lib/site";
 
 export const dynamicParams = false;
@@ -61,8 +61,8 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
   const p = getProject(slug);
   if (!p) notFound();
 
-  const i = projectsByHandover.indexOf(p);
-  const next = projectsByHandover[(i + 1) % projectsByHandover.length];
+  const i = projectsNewestFirst.indexOf(p);
+  const next = projectsNewestFirst[(i + 1) % projectsNewestFirst.length];
   const words = homeowners.filter((h) => h.slug === p.slug);
   const mapQuery = encodeURIComponent(p.address ?? `${p.name}, ${p.locality}`);
 
@@ -124,7 +124,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
       />
 
       {/* Overview: the facts and a timeline drawn to scale */}
-      <section data-tone="light" aria-labelledby="overview-title" className="surface-ivory py-24 md:py-36">
+      <section data-tone="light" aria-labelledby="overview-title" className="surface-ivory py-16 md:py-24">
         <div className="shell grid gap-16 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
             <Label n="01" className="text-ink/70">
@@ -219,7 +219,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Gallery */}
       {p.gallery.length > 0 && (
-        <section data-tone="light" aria-labelledby="gallery-title" className="surface-stone py-24 md:py-32">
+        <section data-tone="light" aria-labelledby="gallery-title" className="surface-stone py-16 md:py-24">
           <div className="shell">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -256,7 +256,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Signature spaces (Pursuit of Sunshine) */}
       {p.highlights && (
-        <section data-tone="dark" aria-labelledby="highlights-title" className="surface-forest grain relative py-24 md:py-36">
+        <section data-tone="dark" aria-labelledby="highlights-title" className="surface-forest grain relative py-16 md:py-24">
           <div className="shell">
             <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
@@ -304,7 +304,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Specifications */}
       {p.specifications && (
-        <section data-tone="light" aria-labelledby="specs-title" className="surface-ivory py-24 md:py-32">
+        <section data-tone="light" aria-labelledby="specs-title" className="surface-ivory py-16 md:py-24">
           <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-4">
               <Label n="05" className="text-mute">
@@ -354,7 +354,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
 
       {/* Homeowner words */}
       {words.length > 0 && (
-        <section data-tone="light" aria-labelledby="words-title" className="surface-stone py-24 md:py-32">
+        <section data-tone="light" aria-labelledby="words-title" className="surface-stone py-16 md:py-24">
           <div className="shell">
             <Label className="text-mute">Homeowners at {p.shortName}</Label>
             <h2 id="words-title" className="sr-only">

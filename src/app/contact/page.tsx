@@ -9,7 +9,7 @@ import { SocialCards } from "@/components/Socials";
 import { Lines, Reveal } from "@/components/ui";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
-import { projectsByHandover } from "@/lib/projects";
+import { projectsNewestFirst } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "Contact and site visits",
@@ -59,6 +59,9 @@ export default function ContactPage() {
                 <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Message us on WhatsApp
               </ComposeButton>
             </div>
+            <p className="anim-fade-up mt-3 text-sm text-paper/60" style={{ "--d": "500ms" } as CSSProperties}>
+              No obligation. We’ll call you to confirm a time that suits you.
+            </p>
           </div>
 
           <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -196,7 +199,7 @@ export default function ContactPage() {
                 </span>
               </Link>
             </Reveal>
-            {projectsByHandover.map((p, i) => (
+            {projectsNewestFirst.map((p, i) => (
               <Reveal as="li" key={p.slug} delay={(i + 1) * 60}>
                 <div className="card-dark flex h-full gap-4 p-3">
                   <Link href={`/homes/${p.slug}`} className="relative block aspect-square w-24 shrink-0 overflow-hidden rounded-lg">

@@ -53,7 +53,7 @@ export function DayInTheSun() {
   const t = phase / (phases.length - 2); // the sun sets at Dusk; at Night it is gone
 
   return (
-    <section data-tone="light" aria-labelledby="sun-title" className="surface-ivory py-24 md:py-32">
+    <section data-tone="light" aria-labelledby="sun-title" className="surface-ivory py-16 md:py-24">
       <div className="shell grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-5">
           <Label n="03" className="text-mute">
