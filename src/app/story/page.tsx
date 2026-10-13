@@ -5,7 +5,7 @@ import { AmbientFilm } from "@/components/AmbientFilm";
 import { PageHero } from "@/components/PageHero";
 import { CoreBand } from "@/components/home/Origins";
 import { ArrowLink, Label, Lines, Reveal } from "@/components/ui";
-import { company, homemakers } from "@/lib/site";
+import { company, dishaFamily, formatIndian, homemakerProfiles, homemakers, stats, thisIsUs } from "@/lib/site";
 import { projectsByHandover } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -153,66 +153,123 @@ export default function StoryPage() {
 
       <CoreBand full />
 
+      {/* This is us */}
+      <section data-tone="dark" aria-labelledby="us-title" className="layer surface-deep grain py-16 md:py-24">
+        <div className="shell">
+          <div className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="eyebrow text-paper/65">This is us</p>
+              <Lines id="us-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Our homes are truly", <em key="e">where our hearts are.</em>]} />
+            </div>
+            <div className="space-y-4 text-[1.05rem] leading-relaxed text-paper/75 lg:col-span-6 lg:col-start-7">
+              {thisIsUs.map((t) => (
+                <Reveal as="p" key={t}>
+                  {t}
+                </Reveal>
+              ))}
+            </div>
+          </div>
+          <dl className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-paper/10 bg-paper/10 md:grid-cols-5">
+            {stats.map((st, i) => (
+              <Reveal key={st.label} delay={i * 70} className="flex flex-col-reverse bg-forest-deep/80 p-6">
+                <dt className="mt-2 text-sm text-paper/60">{st.label}</dt>
+                <dd className="serif text-[clamp(1.8rem,2.8vw,2.6rem)] leading-none tabular-nums">
+                  {formatIndian(st.value)}
+                  {st.suffix}
+                </dd>
+              </Reveal>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {/* Homemakers */}
-      <section data-tone="light" aria-labelledby="homemakers-title" className="surface-ivory py-28 md:py-40">
+      <section id="homemakers" data-tone="light" aria-labelledby="homemakers-title" className="layer surface-ivory py-16 md:py-24">
         <div className="shell">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
-              <Label n="04" className="text-mute">
-                Our homemakers
-              </Label>
-              <Lines
-                id="homemakers-title"
-                className="serif mt-6 text-[clamp(2.4rem,4.8vw,4.8rem)]"
-                lines={["The people who", <em key="e">nurture every home.</em>]}
-              />
+              <p className="eyebrow text-mute">Our homemakers</p>
+              <Lines id="homemakers-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Come along,", <em key="e">meet the homemakers.</em>]} />
             </div>
             <p className="leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
-              A home well managed is all credit to the homemaker who nurtures it, with utmost care and consideration.
-              Every thought invested in a Disha Habitat home comes from much the same sincerity.
+              A home well managed is all credit to the homemaker who nurtures it, with utmost care and consideration. Every thought
+              invested in a Disha Habitat home comes from much the same sincerity and compassion.
             </p>
           </div>
 
-          <div className="mt-20 grid gap-16 md:grid-cols-2 md:gap-10 lg:gap-16">
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
             {homemakers.map((h, i) => (
-              <Reveal as="article" key={h.name} delay={i * 120} className="border-t border-ink pt-8">
-                <p className="serif text-[clamp(2.2rem,3.4vw,3.2rem)] italic leading-[1.05]">{h.signature}</p>
-                <h3 className="mt-10 text-[1.15rem] font-medium">{h.name}</h3>
-                <p className="label mt-1 text-mute">{h.role}</p>
-                <div className="mt-6 space-y-4 leading-relaxed text-mute">
-                  {h.bio.map((para) => (
-                    <p key={para}>{para}</p>
-                  ))}
+              <Reveal as="article" key={h.name} delay={i * 120} className="card overflow-hidden">
+                <div className="grid sm:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]">
+                  <div className="relative aspect-[4/5] sm:aspect-auto">
+                    <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="(min-width: 768px) 22vw, 100vw" className="object-cover" />
+                  </div>
+                  <div className="flex flex-col p-6 md:p-7">
+                    <p className="text-sm text-mute">{h.role}</p>
+                    <h3 className="serif mt-1 text-[2rem] leading-tight">{h.name}</h3>
+                    <blockquote className="serif mt-4 text-[1.3rem] leading-snug text-earth">
+                      <em>{h.signature}</em>
+                    </blockquote>
+                    <p className="mt-4 text-[0.98rem] leading-relaxed text-ink/75">{h.bio[0]}</p>
+                  </div>
                 </div>
+                <details className="group border-t border-ink/10">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-6 py-4 text-[0.95rem] font-semibold text-forest [&::-webkit-details-marker]:hidden md:px-7">
+                    Read {h.short}’s story
+                    <span aria-hidden className="text-lg transition-transform group-open:rotate-45">+</span>
+                  </summary>
+                  <div className="space-y-4 px-6 pb-6 text-[0.98rem] leading-relaxed text-ink/75 md:px-7">
+                    {homemakerProfiles[h.name].map((t) => (
+                      <p key={t}>{t}</p>
+                    ))}
+                  </div>
+                </details>
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-24 grid gap-3 md:grid-cols-12">
-            <Reveal variant="bloom" className="relative aspect-[16/11] overflow-hidden md:col-span-7">
-              <Image
-                src="/images/community/leadership-team.jpg"
-                alt="Members of the Disha Habitat team reviewing plans together, one wearing a hard hat"
-                fill
-                sizes="(min-width: 768px) 58vw, 100vw"
-                className="object-cover"
-              />
-            </Reveal>
-            <Reveal
-              variant="bloom"
-              delay={150}
-              className="relative aspect-[16/11] overflow-hidden md:col-span-5 md:aspect-auto"
-            >
-              <Image
-                src="/images/community/sales-team.jpg"
-                alt="Members of the Disha Habitat team standing together outdoors in front of a gazebo"
-                fill
-                sizes="(min-width: 768px) 42vw, 100vw"
-                className="object-cover object-[50%_35%]"
-              />
-            </Reveal>
+      {/* The Disha family */}
+      <section data-tone="dark" aria-labelledby="family-title" className="layer surface-forest grain py-16 md:py-24">
+        <div className="shell">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow text-paper/65">The Disha family</p>
+              <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
+            </div>
+            <p className="max-w-sm text-paper/70">The families who live in our homes, and the people who build them.</p>
           </div>
-          <p className="label mt-4 text-mute">Members of the Disha Habitat team</p>
+          <ul className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+            {dishaFamily.map((f, i) => (
+              <Reveal as="li" key={f.src} variant="mask" delay={(i % 4) * 80} className={i === 0 || i === 5 ? "col-span-2 row-span-2" : ""}>
+                <figure className="group relative h-full overflow-hidden rounded-xl">
+                  <div className={`relative ${i === 0 || i === 5 ? "aspect-square" : "aspect-[4/3]"}`}>
+                    <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 25vw, 50vw" className="object-cover transition-transform duration-[1200ms] ease-out-expo group-hover:scale-105" />
+                  </div>
+                  <figcaption className="absolute bottom-3 left-3 rounded-full bg-forest-deep/65 px-3 py-1 text-xs backdrop-blur-sm">{f.kind}</figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Events and collaborations */}
+      <section data-tone="light" aria-labelledby="events-title" className="layer surface-stone py-16 md:py-24">
+        <div className="shell grid items-center gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="eyebrow text-mute">Events and collaborations</p>
+            <Lines id="events-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Evenings the whole", <em key="e">community remembers.</em>]} />
+            <p className="mt-5 max-w-md leading-relaxed text-mute">
+              Concerts, celebrations and collaborations that bring Disha residents together, as featured on dishahabitat.com.
+            </p>
+          </div>
+          <Reveal variant="mask" className="lg:col-span-6 lg:col-start-7">
+            <div className="relative mx-auto aspect-[1084/1456] max-w-md overflow-hidden rounded-2xl shadow-[0_40px_80px_-40px_rgb(21_26_23/0.5)]">
+              <Image src="/images/people/events.webp" alt="A collage of event posters and photographs from Disha Habitat community concerts and celebrations" fill sizes="(min-width: 1024px) 28rem, 100vw" className="object-cover" />
+            </div>
+          </Reveal>
         </div>
       </section>
 

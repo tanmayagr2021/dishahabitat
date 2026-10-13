@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 import { ButtonLink, Lines, Reveal } from "@/components/ui";
-import { elements } from "@/lib/elements";
+import { ComposeButton } from "@/components/ComposeButton";
+import { SocialIcons } from "@/components/Socials";
 
 /* The close of the home page: one invitation, two ways to act. */
 export function CtaBand() {
   return (
-    <section data-tone="dark" aria-labelledby="cta-title" className="relative isolate overflow-hidden bg-forest-deep py-20 text-paper md:py-28">
+    <section data-tone="dark" aria-labelledby="cta-title" className="layer isolate bg-forest-deep pb-24 pt-20 text-paper md:pb-28 md:pt-24">
       <Image src="/images/central-park/clubhouse-night.jpg" alt="" fill sizes="100vw" className="depth-slow -z-10 scale-[1.15] object-cover opacity-35" />
       <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-deep via-forest-deep/80 to-forest-deep/40" />
       <div className="shell flex flex-col items-start justify-between gap-10 md:flex-row md:items-end">
@@ -19,20 +20,21 @@ export function CtaBand() {
             Visit Pursuit of the Elements in Gunjur, or meet us for coffee at our office on Whitefield Main Road. We’ll explain
             everything, until you’re as informed as anyone on the project.
           </Reveal>
+          <div className="mt-8 flex items-center gap-4">
+            <span className="text-sm text-paper/60">Follow along</span>
+            <SocialIcons className="text-paper/80" itemClassName="hover:text-paper" />
+          </div>
         </div>
         <Reveal delay={250} className="flex flex-col gap-3 sm:flex-row">
           <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
             Book a site visit
           </ButtonLink>
-          <a
-            href={`${elements.whatsapp}&text=${encodeURIComponent("Hello Disha Habitat, I'd like to know more about your homes.")}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <ComposeButton
+            channel="whatsapp"
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-paper/30 bg-white/[0.04] px-5 text-[0.95rem] font-medium backdrop-blur-sm transition-colors hover:border-paper/60"
           >
-            <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Chat on WhatsApp
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
+            <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Message us on WhatsApp
+          </ComposeButton>
         </Reveal>
       </div>
     </section>

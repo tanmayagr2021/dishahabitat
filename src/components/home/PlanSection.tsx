@@ -5,7 +5,7 @@ import { ArrowLink, Lines, Reveal } from "@/components/ui";
 /* The EMI calculator beside a home at Disha Central Park. */
 export function PlanSection() {
   return (
-    <section id="plan" data-tone="light" aria-labelledby="plan-title" className="surface-stone overflow-hidden">
+    <section id="plan" data-tone="light" aria-labelledby="plan-title" className="layer surface-stone">
       <div className="grid lg:grid-cols-12">
         <div className="relative min-h-[22rem] overflow-hidden lg:col-span-4 lg:min-h-full">
           <Image
@@ -19,7 +19,7 @@ export function PlanSection() {
           <p className="absolute bottom-5 left-5 text-sm text-paper/90">A home at Disha Central Park</p>
         </div>
 
-        <div className="px-5 py-20 md:px-10 md:py-24 lg:col-span-8 lg:px-14">
+        <div className="px-5 py-16 md:px-10 md:py-20 lg:col-span-8 lg:px-14">
           <Reveal as="p" className="eyebrow text-mute">
             Plan your home
           </Reveal>

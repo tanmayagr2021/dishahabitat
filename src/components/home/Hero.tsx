@@ -107,6 +107,7 @@ export function Hero() {
     >
       {/* Photographs */}
       <div aria-hidden className="anim-develop absolute inset-0 -z-10">
+        <div className="hero-frame absolute inset-0">
         {slides.map((s, n) => (
           <div key={s.src} className={`hero-slide absolute inset-0 ${n === i ? "is-on" : ""}`}>
             <Image src={s.src} alt="" fill priority={n === 0} sizes="100vw" className="object-cover" style={{ objectPosition: s.position }} />
@@ -115,9 +116,10 @@ export function Hero() {
         <div className="absolute inset-0 z-[2] bg-gradient-to-r from-forest-deep/85 via-forest-deep/45 to-forest-deep/5" />
         <div className="absolute inset-x-0 top-0 z-[2] h-40 bg-gradient-to-b from-forest-deep/70 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 z-[2] h-56 bg-gradient-to-t from-forest-deep/80 to-transparent" />
+        </div>
       </div>
 
-      <div className="shell flex flex-1 flex-col justify-end pb-10 pt-32 md:pb-14">
+      <div className="hero-lift shell flex flex-1 flex-col justify-end pb-16 pt-32 md:pb-20">
         <div className="max-w-2xl">
           <p className="eyebrow anim-fade text-paper/80" style={d(200)}>
             Residential developers · East Bengaluru · Since 2014

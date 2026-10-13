@@ -26,7 +26,7 @@ export function HomeownersSpeak() {
   const go = (d: number) => setI((v) => (v + d + n) % n);
 
   return (
-    <section data-tone="light" aria-labelledby="speak-title" className="surface-ivory py-24 md:py-32">
+    <section data-tone="light" aria-labelledby="speak-title" className="layer surface-ivory py-16 md:py-24">
       <div className="shell grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-3">
           <Reveal as="p" className="eyebrow text-mute">

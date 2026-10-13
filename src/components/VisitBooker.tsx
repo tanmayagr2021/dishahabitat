@@ -1,8 +1,9 @@
 "use client";
 
 import { useId, useMemo, useState, useSyncExternalStore } from "react";
-import { ArrowLeft, ArrowRight, Building2, CalendarPlus, Check, Coffee, MessageCircle, PhoneCall } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, CalendarPlus, Check, Coffee, Mail, MessageCircle, PhoneCall } from "lucide-react";
 import { elements } from "@/lib/elements";
+import { mailtoUrl } from "@/lib/messaging";
 import { company } from "@/lib/site";
 
 /*
@@ -279,7 +280,7 @@ export function VisitBooker() {
           {step === 3 && p && (
             <div>
               <p className="serif text-[1.9rem] leading-tight">Almost done, {name.trim().split(" ")[0]}.</p>
-              <p className="mt-2 text-mute">Send this to our sales team on WhatsApp and they will confirm the time with you.</p>
+              <p className="mt-2 text-mute">Send this to our sales team on WhatsApp or by email, and they will confirm the time with you.</p>
               <dl className="mt-6 divide-y divide-ink/10 rounded-xl border border-ink/10 bg-white/60">
                 {[
                   [isCall ? "Request" : "Visit", p.title],
@@ -295,7 +296,7 @@ export function VisitBooker() {
                   </div>
                 ))}
               </dl>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-6 flex flex-col flex-wrap gap-3 sm:flex-row">
                 <a
                   href={`${elements.whatsapp}&text=${encodeURIComponent(message)}`}
                   target="_blank"
@@ -305,6 +306,13 @@ export function VisitBooker() {
                   <MessageCircle aria-hidden className="size-5" strokeWidth={1.8} />
                   Send on WhatsApp
                   <span className="sr-only">(opens in a new tab)</span>
+                </a>
+                <a
+                  href={mailtoUrl(`${isCall ? "Call back request" : "Site visit request"}: ${p.title}`, message)}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-ink/20 bg-white/60 px-5 font-medium transition-colors hover:border-ink/45"
+                >
+                  <Mail aria-hidden className="size-5" strokeWidth={1.6} />
+                  Send by email
                 </a>
                 {!isCall && (
                   <button

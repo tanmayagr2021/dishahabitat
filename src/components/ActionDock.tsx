@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CalendarCheck, MessageCircle, Phone } from "lucide-react";
 import { elements } from "@/lib/elements";
+import { openComposer } from "@/lib/messaging";
 
 /*
  * The one action that matters, always within reach: book a site visit, with WhatsApp and a call
@@ -12,7 +13,6 @@ import { elements } from "@/lib/elements";
  * has scrolled past the opening, and steps aside while a booking form is already on screen.
  * Numbers are the published sales line for Disha's current projects.
  */
-const whatsapp = `${elements.whatsapp}&text=${encodeURIComponent("Hello Disha Habitat, I'd like to know more and plan a site visit.")}`;
 
 export function ActionDock() {
   const pathname = usePathname();
@@ -51,16 +51,14 @@ export function ActionDock() {
           <Phone aria-hidden className="size-4" strokeWidth={1.7} />
           Call
         </a>
-        <a
-          href={whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
+          onClick={() => openComposer({ channel: "whatsapp" })}
           className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-3 py-1.5 text-[0.72rem] text-paper/85 transition-colors hover:bg-paper/10 md:flex-none md:flex-row md:gap-2 md:px-4 md:text-sm"
         >
           <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" strokeWidth={1.7} />
           WhatsApp
-          <span className="sr-only">(opens in a new tab)</span>
-        </a>
+        </button>
         <Link
           href={bookHref}
           className="flex flex-[1.6] items-center justify-center gap-2 rounded-xl bg-paper px-4 py-3 text-[0.92rem] font-semibold text-ink transition-colors hover:bg-white md:flex-none md:px-5"

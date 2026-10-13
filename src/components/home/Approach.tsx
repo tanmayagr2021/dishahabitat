@@ -63,7 +63,7 @@ export function Approach() {
   }, []);
 
   return (
-    <section ref={ref} id="approach" data-tone="light" aria-labelledby="approach-title" className="surface-ivory overflow-hidden py-24 md:py-32">
+    <section ref={ref} id="approach" data-tone="light" aria-labelledby="approach-title" className="layer surface-ivory py-16 md:py-24">
       <div className="shell grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
         {/* Statement */}
         <div className="lg:col-span-4">
@@ -88,7 +88,7 @@ export function Approach() {
           <div className="depth-slow absolute left-0 top-10 w-[38%]">
             <Reveal variant="mask">
               <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
-                <Image src="/images/courtyard/giant-chess.jpg" alt="A young boy among giant chess pieces at Disha Courtyard" fill sizes="180px" className="object-cover" />
+                <Image src="/images/life/kitchen.jpg" alt="A woman cooking in the kitchen of her home" fill sizes="180px" className="object-cover" />
               </div>
             </Reveal>
           </div>
@@ -96,11 +96,11 @@ export function Approach() {
             <Reveal variant="mask">
               <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
                 <Image
-                  src="/images/central-park/staircase.jpg"
-                  alt="An open white staircase rising beside a reflecting pool at Disha Central Park"
+                  src="/images/life/welcome-home.jpg"
+                  alt="A man at the front door of his home as the children peek out"
                   fill
                   sizes="(min-width: 1024px) 22vw, 70vw"
-                  className="object-cover object-[32%_50%]"
+                  className="object-cover object-[60%_50%]"
                 />
               </div>
             </Reveal>
@@ -108,7 +108,7 @@ export function Approach() {
           <div className="depth-fast absolute bottom-6 right-0 z-20 w-[36%]">
             <Reveal variant="mask" delay={200}>
               <div className="relative aspect-square overflow-hidden rounded-xl border-4 border-paper">
-                <Image src="/images/community/gardening.jpg" alt="Children planting seedlings in a Disha community garden" fill sizes="170px" className="object-cover" />
+                <Image src="/images/life/together.jpg" alt="A mother and daughter laughing together at home" fill sizes="170px" className="object-cover" />
               </div>
             </Reveal>
           </div>

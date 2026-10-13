@@ -7,6 +7,8 @@ import { Footer } from "@/components/Footer";
 import { RevealObserver } from "@/components/RevealObserver";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ActionDock } from "@/components/ActionDock";
+import { Cursor } from "@/components/Cursor";
+import { MessageComposer } from "@/components/MessageComposer";
 import "./globals.css";
 
 /* Headlines: Newsreader, an editorial serif with optical sizes and a true italic. */
@@ -89,6 +91,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <RevealObserver />
         <SmoothScroll />
         <ActionDock />
+        <Cursor />
+        <MessageComposer />
         <Script id="bootstrap" strategy="beforeInteractive">
           {bootstrap}
         </Script>

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { ComposeButton } from "@/components/ComposeButton";
 import { ArrowUpRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { SocialIcons } from "@/components/Socials";
 import { company } from "@/lib/site";
 import { projects, projectsByHandover } from "@/lib/projects";
 import { elements } from "@/lib/elements";
@@ -48,6 +50,8 @@ export function Footer() {
               {[
                 ["/homes", "All homes"],
                 ["/story", "Our story"],
+                ["/story#homemakers", "Homemakers"],
+                ["/checklist", "The checklist"],
                 ["/plan", "EMI calculator"],
                 ["/contact", "Contact"],
               ].map(([href, label]) => (
@@ -78,28 +82,19 @@ export function Footer() {
                   {p.display}
                 </a>
               ))}
-              <a href={`mailto:${company.email}`} className={linkCls}>
+              <ComposeButton channel="email" className={linkCls}>
                 {company.email}
-              </a>
+              </ComposeButton>
             </p>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-paper/10 pt-6 text-xs leading-relaxed text-paper/45 md:flex-row md:items-center md:justify-between">
           <p>
-            © {company.copyrightYear} {company.legalName}
+            © {company.copyrightYear}, {company.copyrightHolder}
             {sunshine?.rera && <> · {sunshine.shortName} RERA {sunshine.rera}</>}
           </p>
-          <ul className="flex flex-wrap gap-x-4">
-            {company.socials.map((s) => (
-              <li key={s.href}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-paper">
-                  {s.label}
-                  <span className="sr-only"> (opens in a new tab)</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <SocialIcons className="text-paper/75" itemClassName="hover:text-paper" />
         </div>
         <p className="mt-2 text-[0.7rem] text-paper/35">
           Redesign prototype for client review. Images marked “Artist’s impression” are renders; the EMI calculator is illustrative.

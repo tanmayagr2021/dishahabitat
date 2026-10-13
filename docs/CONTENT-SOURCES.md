@@ -93,3 +93,23 @@ project site and are labelled artist’s impressions; the master plan is labelle
 23. **Logo film.** The supplied logo animation appears to be AI-generated (it carries a generator’s sparkle mark in
     the lower right, which the site softens). Its logo matches the official artwork closely, and the site always hands
     over to the official SVG logo. Confirm the client is happy to publish the film, ideally with a clean export.
+
+## Added from dishahabitat.com (fourth pass)
+
+- **The checklist** (`/checklist`): the five must-knows (khata certificate, occupancy certificate, carpet area,
+  deviation assessment, sewage treatment plants), text from dishahabitat.com/solution/*, lightly edited for grammar.
+  Images: the site's own checklist photographs (`public/images/checklist/`).
+- **This is us**: the-core text and all five figures, including 20,000+ walk-ins.
+- **Homemakers**: fuller profiles of Gunaranjan J and K Raja Sekhar from /homemakers, condensed in their words.
+  Portraits `people/gunaranjan-j.jpg` (grid-imgs-3) and `people/k-raja-sekhar.jpg` (grid-imgs-4), matched by their
+  position beside each biography on /homemakers. **Confirm with the client.**
+- **The Disha family and Events & collaborations** (/our-journey): homeowner family photographs, team photographs and
+  the events collage (`public/images/people/`). Family photos are labelled "Homeowners" without names.
+- **Home-life photographs** from the homepage poem section (`public/images/life/`).
+- **Socials**: Instagram, Facebook, LinkedIn and YouTube links from the site footer.
+- **Copyright line**: the live footer reads "© 2026, Disha Habitat Projects LLP", while the contact page names the
+  corporate office as Disha Habitat Ventures Pvt. Ltd. Both are used as published. **Confirm which entity to show.**
+
+24. **Messages.** Every WhatsApp and email action opens a form; the composed message is shown in full and opens in
+    WhatsApp (+91 95053 33333) or the visitor's email app. Emails about Pursuit of the Elements go to
+    info@dishapursuitoftheelements.com; others to info@dishahabitat.com. Confirm these are the right inboxes.

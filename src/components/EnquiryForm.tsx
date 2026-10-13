@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { Mail, MessageCircle } from "lucide-react";
+import { buildMessage, mailtoUrl, whatsappUrl } from "@/lib/messaging";
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
 import { buttonClass, ButtonInner } from "@/components/ui";
 import { elements } from "@/lib/elements";
@@ -109,10 +111,20 @@ export function EnquiryForm({
       requestAnimationFrame(() => summaryRef.current?.focus());
       return;
     }
-    // Demo only: no network request is made.
+    // Nothing is sent from the website: the next step opens WhatsApp or email with this exact message.
     setSubmitted(values.name.trim().split(/\s+/)[0]);
     requestAnimationFrame(() => successRef.current?.focus());
   };
+
+  const message = buildMessage(
+    `I'd like to know more about ${values.interest}.`,
+    [
+      ["Name", values.name],
+      ["Mobile", values.phone],
+      ["Email", values.email],
+    ],
+    values.message,
+  );
 
   if (submitted) {
     return (
@@ -123,22 +135,28 @@ export function EnquiryForm({
         className={`outline-none ${dark ? "text-paper" : "text-ink"}`}
       >
         <CheckCircle2 aria-hidden className="size-8" strokeWidth={1.25} />
-        <h3 className="serif mt-6 text-[2.8rem] leading-none">Thank you, {submitted}.</h3>
-        <p className={`mt-4 max-w-md leading-relaxed ${dark ? "text-paper/75" : "text-mute"}`}>
-          Your details passed validation. On the live website, this is where your enquiry would reach the Disha
-          Habitat team.
+        <h3 className="serif mt-6 text-[2.4rem] leading-none">Ready to send, {submitted}.</h3>
+        <p className={`mt-3 max-w-md leading-relaxed ${dark ? "text-paper/75" : "text-mute"}`}>
+          This is exactly what we will receive. Choose how to send it.
         </p>
-        <p
-          className={`mt-6 flex max-w-md gap-3 border p-4 text-sm leading-relaxed ${
-            dark ? "border-paper/25 text-paper/85" : "border-ink/15 bg-paper-2 text-mute"
-          }`}
-        >
-          <Info aria-hidden className="mt-0.5 size-4 shrink-0" />
-          <span>
-            <strong className="font-semibold">Prototype preview:</strong> this form is not connected to any system, so
-            nothing has been sent or stored.
-          </span>
-        </p>
+        <p className={`mt-5 whitespace-pre-wrap rounded-xl p-4 text-sm leading-relaxed ${dark ? "bg-paper/10 text-paper/90" : "bg-paper-2 text-ink"}`}>{message}</p>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <a
+            href={whatsappUrl(message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1f8f4e] px-5 font-semibold text-white hover:bg-[#187a41]"
+          >
+            <MessageCircle aria-hidden className="size-5" strokeWidth={1.8} /> Send on WhatsApp
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+          <a
+            href={mailtoUrl(`Enquiry: ${values.interest}`, message)}
+            className={`inline-flex h-12 items-center justify-center gap-2 rounded-lg border px-5 font-medium ${dark ? "border-paper/30 text-paper" : "border-ink/20 text-ink"}`}
+          >
+            <Mail aria-hidden className="size-5" strokeWidth={1.6} /> Send by email
+          </a>
+        </div>
         <button
           type="button"
           onClick={() => {
@@ -334,11 +352,11 @@ export function EnquiryForm({
           type="submit"
           className={buttonClass(dark ? "paper" : "ink", "shrink-0 whitespace-nowrap")}
         >
-          <ButtonInner>Send enquiry</ButtonInner>
+          <ButtonInner>Continue</ButtonInner>
         </button>
         <p id={id("demo-note")} className={`flex items-center gap-2 text-xs ${dark ? "text-paper/60" : "text-mute"}`}>
           <Info aria-hidden className="size-3.5 shrink-0" />
-          Prototype: submissions are validated but not sent.
+          Next, choose WhatsApp or email to send it.
         </p>
       </div>
     </form>

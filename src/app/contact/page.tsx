@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { VisitBooker } from "@/components/VisitBooker";
+import { ComposeButton } from "@/components/ComposeButton";
+import { SocialCards } from "@/components/Socials";
 import { Lines, Reveal } from "@/components/ui";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
@@ -14,14 +16,13 @@ export const metadata: Metadata = {
   description: "Book a site visit, call, WhatsApp or write to Disha Habitat, Whitefield Main Road, Bengaluru.",
 };
 
-const whatsapp = `${elements.whatsapp}&text=${encodeURIComponent("Hello Disha Habitat, I have a question about your homes.")}`;
 const mapQuery = encodeURIComponent(`${company.legalName}, ${company.office.lines.join(", ")}`);
 
 const channels = [
   { Icon: Phone, title: "Call sales", value: elements.phone.display, note: "Pursuit of the Elements and new enquiries", href: elements.phone.href, cta: "Call now" },
-  { Icon: MessageCircle, title: "WhatsApp", value: elements.phone.display, note: "Send us a question or a photo of what you’re looking for", href: whatsapp, cta: "Open chat", external: true },
+  { Icon: MessageCircle, title: "WhatsApp", value: elements.phone.display, note: "Write your message here; it opens in WhatsApp ready to send", compose: "whatsapp" as const, cta: "Write a message" },
   { Icon: Phone, title: "Call the office", value: company.phones[0].display, note: `or ${company.phones[1].display}`, href: company.phones[0].href, cta: "Call now" },
-  { Icon: Mail, title: "Write to us", value: company.email, note: `Pursuit of the Elements: ${elements.email}`, href: `mailto:${company.email}`, cta: "Send an email" },
+  { Icon: Mail, title: "Email", value: company.email, note: "Write your message here; it opens in your email app", compose: "email" as const, cta: "Write an email" },
 ];
 
 const next = [
@@ -51,37 +52,43 @@ export default function ContactPage() {
               <a href="#book" className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-paper px-6 font-semibold text-ink transition-colors hover:bg-white">
                 Book a site visit
               </a>
-              <a
-                href={whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
+              <ComposeButton
+                channel="whatsapp"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-paper/30 bg-white/5 px-6 font-medium transition-colors hover:border-paper/60"
               >
-                <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Chat on WhatsApp
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
+                <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> Message us on WhatsApp
+              </ComposeButton>
             </div>
           </div>
 
           <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {channels.map((c, i) => (
               <Reveal as="li" key={c.title} delay={i * 80}>
-                <a
-                  href={c.href}
-                  {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="card-dark group flex h-full flex-col p-5 transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-paper/30"
-                >
-                  <span className="inline-flex size-10 items-center justify-center rounded-full bg-paper/10">
-                    <c.Icon aria-hidden className="size-[1.1rem]" strokeWidth={1.6} />
-                  </span>
-                  <span className="mt-5 text-sm text-paper/60">{c.title}</span>
-                  <span className="mt-1 break-all text-[1.15rem] font-medium">{c.value}</span>
-                  <span className="mt-1 text-sm text-paper/55">{c.note}</span>
-                  <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-brass">
-                    {c.cta} <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  </span>
-                  {c.external && <span className="sr-only">(opens in a new tab)</span>}
-                </a>
+                {(() => {
+                  const body = (
+                    <>
+                      <span className="inline-flex size-10 items-center justify-center rounded-full bg-paper/10">
+                        <c.Icon aria-hidden className="size-[1.1rem]" strokeWidth={1.6} />
+                      </span>
+                      <span className="mt-5 text-sm text-paper/60">{c.title}</span>
+                      <span className="mt-1 break-all text-[1.15rem] font-medium">{c.value}</span>
+                      <span className="mt-1 text-sm text-paper/55">{c.note}</span>
+                      <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-brass">
+                        {c.cta} <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </span>
+                    </>
+                  );
+                  const cls = "card-dark group flex h-full w-full flex-col p-5 text-left transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-paper/30";
+                  return "compose" in c && c.compose ? (
+                    <ComposeButton channel={c.compose} className={cls}>
+                      {body}
+                    </ComposeButton>
+                  ) : (
+                    <a href={"href" in c ? c.href : undefined} className={cls}>
+                      {body}
+                    </a>
+                  );
+                })()}
               </Reveal>
             ))}
           </ul>
@@ -142,6 +149,23 @@ export default function ContactPage() {
               </div>
             </div>
           </aside>
+        </div>
+      </section>
+
+      {/* Social */}
+      <section data-tone="light" aria-labelledby="follow-title" className="surface-stone py-14 md:py-16">
+        <div className="shell">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow text-mute">Follow along</p>
+              <h2 id="follow-title" className="serif mt-3 text-[clamp(1.9rem,3vw,2.6rem)] leading-tight">
+                Life at Disha, <em>day to day.</em>
+              </h2>
+            </div>
+          </div>
+          <div className="mt-8">
+            <SocialCards />
+          </div>
         </div>
       </section>
 

@@ -209,7 +209,7 @@ export function DayAtDisha() {
   };
 
   return (
-    <section ref={section} data-tone="dark" aria-labelledby="day-title" className="surface-forest grain py-24 md:py-32">
+    <section ref={section} data-tone="dark" aria-labelledby="day-title" className="layer surface-forest grain py-16 md:py-24">
       <div className="shell grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
         {/* The photograph and the sky */}
         <div className="lg:col-span-8">
@@ -236,7 +236,7 @@ export function DayAtDisha() {
             ))}
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-forest-deep/25" />
 
-            <div className="absolute inset-x-0 bottom-[5.5rem] top-6 sm:bottom-24">
+            <div className="absolute inset-x-0 bottom-[5.5rem] top-6 sm:bottom-24" data-cursor="Drag">
               <svg
                 ref={svg}
                 viewBox={`0 0 ${W} ${CY + 10}`}

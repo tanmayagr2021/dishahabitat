@@ -894,3 +894,141 @@ html.lenis body {
 .house {
   clip-path: polygon(50% 0, 100% 42%, 100% 100%, 0 100%, 0 42%);
 }
+
+/* ---------- Alive: layers, scroll-linked hero, marquee, cursor ---------- */
+
+/* Each section slides over the one before it, with rounded shoulders. overflow: clip (not hidden)
+   keeps position: sticky working inside. */
+.layer {
+  position: relative;
+  z-index: 1;
+  margin-top: -2rem;
+  border-radius: 2rem 2rem 0 0;
+  overflow: clip;
+  box-shadow: 0 -30px 60px -40px rgb(0 0 0 / 0.45);
+}
+
+@media (min-width: 768px) {
+  .layer {
+    margin-top: -2.5rem;
+    border-radius: 2.75rem 2.75rem 0 0;
+  }
+}
+
+/* Hero: as the page scrolls, the photograph pulls back into a rounded frame and the words lift away. */
+@supports (animation-timeline: scroll()) {
+  .hero-frame {
+    animation: hero-frame linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 90vh;
+  }
+
+  @keyframes hero-frame {
+    to {
+      clip-path: inset(7% 4% 10% 4% round 2rem);
+      scale: 0.97;
+    }
+  }
+
+  .hero-lift {
+    animation: hero-lift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 70vh;
+  }
+
+  @keyframes hero-lift {
+    to {
+      opacity: 0;
+      translate: 0 -12vh;
+    }
+  }
+}
+
+/* Marquee */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Stacking cards: each card pins a little lower than the one before it. */
+.stack-card {
+  position: sticky;
+  top: calc(6.5rem + var(--i, 0) * 1.4rem);
+}
+
+/* Custom cursor (fine pointers only). */
+.cursor-dot {
+  display: none !important;
+}
+
+html.has-cursor .cursor-dot {
+  display: grid !important;
+}
+
+.cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  mix-blend-mode: difference;
+  transition:
+    width 0.35s var(--ease-out-expo),
+    height 0.35s var(--ease-out-expo),
+    margin 0.35s var(--ease-out-expo),
+    opacity 0.3s;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.cursor-dot.is-label {
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  mix-blend-mode: normal;
+  background: var(--color-paper);
+  box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.45);
+}
+
+.cursor-dot span {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cursor-dot.is-label span {
+  opacity: 1;
+}
+
+[data-magnetic] {
+  transition: translate 0.35s var(--ease-out-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-frame,
+  .hero-lift,
+  .marquee-track {
+    animation: none !important;
+  }
+
+  [data-magnetic] {
+    translate: none !important;
+  }
+}

@@ -20,7 +20,7 @@ export function Developments() {
   const step = (d: number) => setStart((s) => (s + d + n) % n);
 
   return (
-    <section id="developments" data-tone="dark" aria-labelledby="dev-title" className="surface-forest grain py-24 md:py-32">
+    <section id="developments" data-tone="dark" aria-labelledby="dev-title" className="layer surface-forest grain py-16 md:py-24">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -45,7 +45,7 @@ export function Developments() {
         <div className="mt-12 grid gap-5 lg:grid-cols-12 lg:gap-6">
           {/* Featured: on sale now */}
           <Reveal variant="mask" className="lg:col-span-8">
-            <Link href={elements.href} className="group relative block aspect-[4/5] overflow-hidden rounded-2xl sm:aspect-[16/11] lg:aspect-auto lg:h-full lg:min-h-[34rem]">
+            <Link href={elements.href} data-cursor="View" className="group relative block aspect-[4/5] overflow-hidden rounded-2xl sm:aspect-[16/11] lg:aspect-auto lg:h-full lg:min-h-[34rem]">
               <Image
                 src={elements.cover.src}
                 alt={elements.cover.alt}
@@ -90,6 +90,7 @@ export function Developments() {
               <Link
                 key={`${p.slug}-${start}`}
                 href={p.href}
+                data-cursor="View"
                 className="swap-in group relative block aspect-[4/3] overflow-hidden rounded-2xl lg:aspect-auto lg:min-h-[16.25rem]"
                 style={{ animationDelay: `${k * 90}ms` }}
               >

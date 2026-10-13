@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ComposeButton } from "@/components/ComposeButton";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { SocialIcons } from "@/components/Socials";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
 import { projectsByHandover } from "@/lib/projects";
@@ -13,6 +15,8 @@ import { projectsByHandover } from "@/lib/projects";
 const nav = [
   { href: "/homes", label: "Our homes" },
   { href: "/story", label: "Our story" },
+  { href: "/story#homemakers", label: "Homemakers" },
+  { href: "/checklist", label: "Checklist" },
   { href: "/plan", label: "EMI calculator" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -231,9 +235,10 @@ export function Header() {
                 Office · {p.display}
               </a>
             ))}
-            <a href={`mailto:${company.email}`} className="py-1.5 hover:text-paper">
+            <ComposeButton channel="email" className="py-1.5 text-left hover:text-paper">
               {company.email}
-            </a>
+            </ComposeButton>
+            <SocialIcons className="mt-4 text-paper/80" />
           </div>
         </nav>
       </div>

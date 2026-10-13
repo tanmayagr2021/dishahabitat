@@ -45,7 +45,7 @@ export function ButtonLink({
   ...props
 }: LinkProps & { variant?: ButtonVariant; icon?: boolean }) {
   return (
-    <Link className={buttonClass(variant, className)} {...props}>
+    <Link className={buttonClass(variant, className)} data-magnetic="" {...props}>
       <ButtonInner icon={icon}>{children}</ButtonInner>
     </Link>
   );

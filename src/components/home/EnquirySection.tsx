@@ -1,3 +1,4 @@
+import { ComposeButton } from "@/components/ComposeButton";
 import Image from "next/image";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { Label, Lines, Reveal } from "@/components/ui";
@@ -63,9 +64,9 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
               <div>
                 <dt className="label text-paper/50">Write</dt>
                 <dd className="mt-2">
-                  <a href={`mailto:${company.email}`} className="text-[1.1rem] text-paper transition-colors hover:text-cyan">
+                  <ComposeButton channel="email" className="text-left text-[1.1rem] text-paper transition-colors hover:text-cyan">
                     {company.email}
-                  </a>
+                  </ComposeButton>
                 </dd>
               </div>
             </dl>

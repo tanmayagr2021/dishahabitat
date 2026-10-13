@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { ArrowUpRight, MessageCircle, Phone } from "lucide-react";
 import { GalleryGrid } from "@/components/Lightbox";
 import { PageHero } from "@/components/PageHero";
+import { ComposeButton } from "@/components/ComposeButton";
 import { EnquirySection } from "@/components/home/EnquirySection";
 import { ButtonLink, Label, Lines, Reveal } from "@/components/ui";
 import { elements as e } from "@/lib/elements";
@@ -57,9 +58,13 @@ export default function ElementsPage() {
             <ButtonLink href="#enquire" variant="paper">
               Book a site visit
             </ButtonLink>
-            <ButtonLink href={e.whatsapp} variant="outline-light" target="_blank" rel="noopener noreferrer">
-              WhatsApp us
-            </ButtonLink>
+            <ComposeButton
+              channel="whatsapp"
+              topic={e.name}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-paper/30 bg-white/[0.04] px-5 text-[0.95rem] font-medium backdrop-blur-sm hover:border-paper/60"
+            >
+              Message us on WhatsApp
+            </ComposeButton>
           </div>
         }
       />
@@ -244,18 +249,12 @@ export default function ElementsPage() {
               <a href={e.phone.href} className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium">
                 <Phone aria-hidden className="size-4" strokeWidth={1.6} /> {e.phone.display}
               </a>
-              <a
-                href={e.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium"
-              >
+              <ComposeButton channel="whatsapp" topic={e.name} className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium">
                 <MessageCircle aria-hidden className="size-4" strokeWidth={1.6} /> WhatsApp us
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
-              <a href={`mailto:${e.email}`} className="inline-flex min-h-11 items-center break-all text-mute hover:text-ink">
+              </ComposeButton>
+              <ComposeButton channel="email" topic={e.name} className="inline-flex min-h-11 items-center break-all text-left text-mute hover:text-ink">
                 {e.email}
-              </a>
+              </ComposeButton>
               <a
                 href={e.website.href}
                 target="_blank"
