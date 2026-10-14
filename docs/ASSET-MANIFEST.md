@@ -65,3 +65,14 @@ No generated brand film was found in the project. If one is produced, put it in 
 
 No image-generation tool was available, so the background system is an algorithmic contour map rather than a generated
 image. It is reproducible and editable: change the seed or the thresholds in the script.
+
+## Added after the first pass (12 to 14 October 2026)
+
+| Folder (`public/…`) | Files | Source | Used on | Status |
+| --- | --- | --- | --- | --- |
+| `images/pursuit-of-the-elements/` | Renders of towers, clubhouse, interiors, amenities; master plan | dishapursuitoftheelements.com (home, gallery, floor plans) | Elements page, home, sold-out bands | **Render**, labelled “Artist’s impression”; master plan labelled Plan |
+| `images/people/` | Founder portraits, homeowner families, team, events collage | dishahabitat.com /homemakers and /our-journey | Our story, home | Company photos; founders matched by position on /homemakers (client to confirm) |
+| `images/life/` | Home-life photographs | dishahabitat.com homepage poem section | Home | Company photos |
+| `images/checklist/` | Checklist illustrations | dishahabitat.com /checklist and /solution/* | Checklist pages | Company images |
+| `images/events/` | Six concert posters, four backstage photos, the ET award certificate and stage photo | Cut from the events collage on dishahabitat.com /our-journey (`people/events.webp`) | Our story events wall, Elements page | Company images; dates and venues only as printed on the posters |
+| `images/grain.png` | Paper-grain texture tile | Generated for the site | Section backgrounds | **Original design asset** |

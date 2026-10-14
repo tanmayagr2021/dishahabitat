@@ -73,7 +73,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
           </Reveal>
         </div>
 
-        <Reveal delay={150} className="lg:col-span-5 lg:col-start-8">
+        <Reveal delay={150} className="order-first lg:order-none lg:col-span-5 lg:col-start-8">
           <div className="card-dark relative p-6 text-paper sm:p-10">
             <p className="serif text-[2.4rem] leading-none">Book a site visit</p>
             <p className="mb-8 mt-2 text-sm text-paper/65">Tell us a little about what you’re looking for. You’ll see the message before you send it. Fields marked * are required.</p>

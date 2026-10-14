@@ -197,6 +197,23 @@ export default function StoryPage() {
         </div>
       </section>
 
+      {/* The family, under the homemakers (as the revamp proposal asks) */}
+      <section data-tone="dark" aria-labelledby="family-title" className="layer surface-forest grain overflow-x-clip py-16 md:py-24">
+        <div className="shell grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-8">
+          <div className="lg:col-span-4">
+            <p className="eyebrow text-paper/65">Our homemakers · The Disha family</p>
+            <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
+            <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
+              The families who live in our homes, and the people who build them. Pull up a chair and go through the album.
+            </p>
+            <p className="mt-6 font-[family-name:var(--font-caveat)] text-[1.6rem] leading-none text-brass">tap a photo for the next one →</p>
+          </div>
+          <div className="lg:col-span-8">
+            <FamilyStacks />
+          </div>
+        </div>
+      </section>
+
       {/* Chapter three: the first community */}
       <section id="ch-3" data-chapter="ch-3" data-tone="dark" aria-labelledby="ch-3-title" className="layer surface-forest grain scroll-mt-24 py-16 md:py-24">
         <div className="shell grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
@@ -371,23 +388,6 @@ export default function StoryPage() {
           </div>
           <div className="mt-12">
             <GigWall />
-          </div>
-        </div>
-      </section>
-
-      {/* The family (part of chapter six) */}
-      <section data-tone="dark" aria-labelledby="family-title" className="layer surface-forest grain overflow-x-clip py-16 md:py-24">
-        <div className="shell grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="lg:col-span-4">
-            <p className="eyebrow text-paper/65">The Disha family</p>
-            <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
-            <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
-              The families who live in our homes, and the people who build them. Pull up a chair and go through the album.
-            </p>
-            <p className="mt-6 font-[family-name:var(--font-caveat)] text-[1.6rem] leading-none text-brass">tap a photo for the next one →</p>
-          </div>
-          <div className="lg:col-span-8">
-            <FamilyStacks />
           </div>
         </div>
       </section>
