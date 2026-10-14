@@ -3,9 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AmbientFilm } from "@/components/AmbientFilm";
 import { PageHero } from "@/components/PageHero";
-import { CoreBand } from "@/components/home/Origins";
 import { ArrowLink, ButtonLink, Lines, Reveal } from "@/components/ui";
-import { Hammer, Megaphone, Scale } from "lucide-react";
 import { CountUp } from "@/components/CountUp";
 import { FamilyStacks } from "@/components/story/FamilyStacks";
 import { GigWall } from "@/components/story/GigWall";
@@ -278,32 +276,60 @@ export default function StoryPage() {
         </div>
       </section>
 
-      {/* Chapter five: the promises, in our own manifesto */}
-      <div id="ch-5" data-chapter="ch-5" className="scroll-mt-24">
-        <section data-tone="light" aria-labelledby="ch-5-title" className="surface-ivory pb-4 pt-16 md:pt-24">
-          <div className="shell grid gap-8 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <ChapterHead i={4} id="ch-5-title" />
-            </div>
-            <ul className="grid gap-5 sm:grid-cols-3 lg:col-span-12">
-              {[
-                { Icon: Megaphone, title: "Explain everything", text: "No question is too small. If something needs explaining, we sit down and explain it, over coffee if we can." },
-                { Icon: Hammer, title: "Build it properly", text: "Build quality and mindfulness have always been our biggest strengths. Our residents are the ones who tell people so." },
-                { Icon: Scale, title: "Price it mindfully", text: "Every home, from an apartment to an independent villa, is created, and priced, with the same care." },
-              ].map(({ Icon, title, text }, i) => (
-                <Reveal as="li" key={title} delay={i * 90} className="card p-6">
-                  <span className="inline-flex size-10 items-center justify-center rounded-full bg-forest text-paper">
-                    <Icon aria-hidden className="size-5" strokeWidth={1.6} />
-                  </span>
-                  <p className="serif mt-4 text-[1.5rem] leading-tight">{title}</p>
-                  <p className="mt-2 text-[0.98rem] leading-relaxed text-ink/75">{text}</p>
-                </Reveal>
-              ))}
-            </ul>
+      {/* Chapter five: the promises, as a letter from the founders */}
+      <section id="ch-5" data-chapter="ch-5" data-tone="light" aria-labelledby="ch-5-title" className="layer surface-stone scroll-mt-24 py-16 md:py-24">
+        <div className="shell">
+          <div className="mx-auto max-w-3xl">
+            <ChapterHead i={4} id="ch-5-title" />
           </div>
-        </section>
-        <CoreBand full />
-      </div>
+          <Reveal className="mx-auto mt-10 max-w-3xl">
+            <article className="letter relative px-6 pb-10 pt-12 md:px-14 md:pb-14 md:pt-16">
+              <span aria-hidden className="letter-tape" />
+              <p className="font-[family-name:var(--font-caveat)] text-[1.7rem] leading-none text-ink/80">Dear future neighbour,</p>
+              <p className="mt-5 text-[1.08rem] leading-[1.9] text-ink/80">
+                Everyone who builds homes makes promises. We wanted ours to be the kind you can check. So these are the three we
+                made ourselves, and still hold ourselves to:
+              </p>
+              <ol className="mt-6 space-y-5">
+                {[
+                  ["Explain everything.", "No question is too small. If something needs explaining, we sit down and explain it, over coffee if we can."],
+                  ["Build it properly.", "Build quality has always been our biggest strength, and our residents are the ones who tell people so."],
+                  ["Price it mindfully.", "Every home, from an apartment to an independent villa, is created, and priced, with the same care."],
+                ].map(([t, d], i) => (
+                  <li key={t} className="grid grid-cols-[2.2rem_1fr] gap-x-3">
+                    <span className="serif text-[2rem] leading-none text-earth">{i + 1}.</span>
+                    <span>
+                      <span className="serif block text-[1.55rem] leading-tight text-ink">{t}</span>
+                      <span className="mt-1 block text-[1rem] leading-[1.8] text-ink/70">{d}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-8 text-[1.08rem] leading-[1.9] text-ink/80">
+                Life is colourful, and every colour is open to interpretation. Your turmeric yellow could be someone’s mustard.
+                That is why, when it comes to promises, we only deal in two:
+              </p>
+              <p className="serif mt-4 text-[clamp(1.6rem,2.6vw,2.1rem)] leading-snug text-ink">
+                Our promises are inked in <span className="font-semibold">Black</span>. Our approach is clear White.
+              </p>
+              <div className="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-dashed border-ink/20 pt-6">
+                <div>
+                  <p className="text-sm text-mute">With warm regards,</p>
+                  <p className="mt-1 font-[family-name:var(--font-caveat)] text-[2.3rem] leading-none text-forest">Guna &amp; Raja</p>
+                  <p className="mt-2 text-sm text-mute">Gunaranjan J and K Raja Sekhar, founders</p>
+                </div>
+                <div className="flex -space-x-3">
+                  {homemakers.map((h) => (
+                    <span key={h.name} className="relative inline-block size-16 overflow-hidden rounded-full ring-4 ring-[#fbf8f1]">
+                      <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="64px" className="object-cover" />
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        </div>
+      </section>
 
       {/* Chapter six: the people */}
       <section id="this-is-us" data-chapter="this-is-us" data-tone="dark" aria-labelledby="ch-6-title" className="layer surface-deep grain scroll-mt-24 py-16 md:py-24">

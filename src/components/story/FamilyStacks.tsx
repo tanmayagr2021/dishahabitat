@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { dishaFamily } from "@/lib/site";
 
@@ -39,25 +39,60 @@ function Pile({ kind, note, photos, tilt, delay }: (typeof piles)[number] & { de
   const n = photos.length;
   const [order, setOrder] = useState(() => photos.map((_, i) => i));
   const [tossing, setTossing] = useState<{ index: number; dir: 1 | -1 } | null>(null);
+  const busy = useRef(false);
+  const touched = useRef(false);
+  const root = useRef<HTMLDivElement>(null);
 
-  const next = () => {
-    if (tossing) return;
-    const top = order[0];
-    setTossing({ index: top, dir: 1 });
+  // Toss the top print to the back of the pile. Uses the latest order, so timers can call it too.
+  const toss = () => {
+    if (busy.current) return;
+    busy.current = true;
+    setOrder((o) => {
+      setTossing({ index: o[0], dir: 1 });
+      return o;
+    });
     window.setTimeout(() => {
       setOrder((o) => [...o.slice(1), o[0]]);
       setTossing(null);
+      busy.current = false;
     }, 380);
   };
+  const next = () => {
+    touched.current = true;
+    toss();
+  };
   const prev = () => {
-    if (tossing) return;
+    touched.current = true;
+    if (busy.current) return;
     setOrder((o) => [o[n - 1], ...o.slice(0, n - 1)]);
   };
+
+  // A short demo when the album first comes into view: two prints go over on their own, then it
+  // waits for the visitor. Any tap stops it.
+  useEffect(() => {
+    const el = root.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ts: number[] = [];
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        [1400, 3600].forEach((ms) => ts.push(window.setTimeout(() => !touched.current && toss(), ms + delay * 4)));
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      ts.forEach(clearTimeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const top = order[0];
 
   return (
-    <div className="mx-auto w-full max-w-[26rem]">
+    <div ref={root} className="mx-auto w-full max-w-[26rem]">
       <p className="font-[family-name:var(--font-caveat)] text-[2rem] leading-none text-brass">{kind}</p>
       <p className="mt-1 text-sm text-paper/60">{note}</p>
 
@@ -80,7 +115,7 @@ function Pile({ kind, note, photos, tilt, delay }: (typeof piles)[number] & { de
               aria-hidden={!isTop}
               aria-label={isTop ? `${f.alt}. Photo ${i + 1} of ${n}. Press for the next photo.` : undefined}
               onClick={isTop ? next : undefined}
-              className={`stack-print block bg-[#fbf8f1] p-3 pb-0 text-left text-ink shadow-[0_24px_40px_-18px_rgb(0_0_0/0.65)] ${isTop ? "cursor-pointer" : "pointer-events-none"}`}
+              className={`stack-print block bg-[#fbf8f1] p-3 pb-0 text-left text-ink shadow-[0_16px_28px_-16px_rgb(0_0_0/0.6)] ${isTop ? "cursor-pointer" : "pointer-events-none"}`}
               style={style}
             >
               <span className="relative block aspect-[4/3] overflow-hidden bg-ink">

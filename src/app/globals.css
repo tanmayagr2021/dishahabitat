@@ -230,9 +230,10 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.07;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* A small pre-rendered noise tile: no live SVG filter or blend mode to repaint on scroll. */
+    opacity: 0.5;
+    background-image: url("/images/grain.png");
+    background-size: 200px 200px;
   }
 
   /* Architectural hairlines: the column grid, drawn faintly. */
@@ -995,9 +996,9 @@ html.has-cursor .cursor-dot {
   height: 12px;
   margin: -6px 0 0 -6px;
   border-radius: 999px;
-  background: var(--color-paper);
+  background: var(--color-ink);
   color: var(--color-ink);
-  mix-blend-mode: difference;
+  box-shadow: 0 0 0 2px rgb(241 235 223 / 0.85);
   opacity: 0;
   transition:
     width 0.35s var(--ease-out-expo),
@@ -1012,7 +1013,6 @@ html.has-cursor .cursor-dot {
   width: 84px;
   height: 84px;
   margin: -42px 0 0 -42px;
-  mix-blend-mode: normal;
   background: var(--color-paper);
   box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.45);
 }
@@ -1174,7 +1174,6 @@ main img {
 }
 .gig-hit {
   position: relative;
-  perspective: 1400px;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
@@ -1205,30 +1204,48 @@ main img {
   rotate: -4deg;
   background: rgb(241 235 223 / 0.72);
   box-shadow: 0 1px 2px rgb(21 26 23 / 0.18);
-  backdrop-filter: blur(1px);
 }
 .gig-flip {
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.75s cubic-bezier(0.3, 1.2, 0.4, 1);
 }
-.gig-flip.is-flipped {
-  transform: rotateY(180deg);
+/* Turning a poster over: it squashes to an edge, swaps face, and opens out again (2D only). */
+.gig-flip.is-turning {
+  animation: gig-turn 0.42s cubic-bezier(0.45, 0, 0.25, 1);
+}
+@keyframes gig-turn {
+  50% {
+    transform: scaleX(0.04) skewY(-2deg);
+  }
 }
 .gig-face {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
-.gig-back {
-  transform: rotateY(180deg);
+.gig-face[data-hidden] {
+  visibility: hidden;
+}
+/* The demo hand that shows the wall can be touched. */
+.gig-hint {
+  position: absolute;
+  z-index: 60;
+  pointer-events: none;
+  transition: left 0.7s cubic-bezier(0.3, 0.9, 0.3, 1), top 0.7s cubic-bezier(0.3, 0.9, 0.3, 1), opacity 0.4s;
+}
+.gig-hint.is-tap span {
+  animation: gig-tap 0.42s ease;
+}
+@keyframes gig-tap {
+  50% {
+    transform: scale(0.82);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .gig-hit,
-  .gig-flip,
   .gig-piece {
     transition: none;
+  }
+  .gig-flip.is-turning {
+    animation: none;
   }
   .gig-wall:not(.is-pinned) .gig-hit {
     opacity: 1;
@@ -1276,4 +1293,39 @@ main img {
   font-size: 3.6em;
   line-height: 0.8;
   color: var(--color-forest);
+}
+
+/* The founders' letter (Our story, chapter five): a sheet of ruled paper, taped to the page. */
+.letter {
+  background-color: #fbf8f1;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 calc(2.052rem - 1px), rgb(57 170 225 / 0.1) calc(2.052rem - 1px) 2.052rem);
+  background-position: 0 3.4rem;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 0 rgb(21 26 23 / 0.06),
+    0 24px 50px -30px rgb(21 26 23 / 0.45);
+  rotate: -0.4deg;
+}
+.letter::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 2.6rem;
+  width: 1px;
+  background: rgb(162 77 44 / 0.25);
+}
+@media (max-width: 767px) {
+  .letter::before {
+    left: 1rem;
+  }
+}
+.letter-tape {
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  width: 7rem;
+  height: 1.5rem;
+  translate: -50% 0;
+  rotate: 2deg;
+  background: rgb(214 204 184 / 0.75);
+  box-shadow: 0 1px 2px rgb(21 26 23 / 0.15);
 }
