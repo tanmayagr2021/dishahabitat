@@ -27,7 +27,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-r from-forest-deep via-forest-deep/80 to-forest-deep/20" />
       </div>
 
-      <div className="shell pointer-events-none relative grid gap-16 py-16 md:py-24 lg:grid-cols-12 lg:gap-8 [&>*]:pointer-events-auto">
+      <div className="shell pointer-events-none relative grid gap-16 py-16 md:py-14 lg:grid-cols-12 lg:items-center lg:gap-8 [&>*]:pointer-events-auto">
         <div className="flex flex-col justify-between gap-12 lg:col-span-6">
           <div>
             <Label n={n} className="text-paper/60">
@@ -35,7 +35,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
             </Label>
             <Lines
               id="enquire-title"
-              className="serif mt-8 text-[clamp(2.5rem,4.8vw,4.8rem)] leading-[0.9]"
+              className="serif mt-8 t-section leading-[0.9]"
               lines={["“Let’s meet", <em key="c">for coffee.”</em>]}
             />
             <Reveal delay={200} className="mt-8 max-w-md">
@@ -74,9 +74,9 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
         </div>
 
         <Reveal delay={150} className="order-first lg:order-none lg:col-span-5 lg:col-start-8">
-          <div className="card-dark relative p-6 text-paper sm:p-10">
+          <div className="card-dark relative p-6 text-paper sm:p-8">
             <p className="serif text-[2.4rem] leading-none">Book a site visit</p>
-            <p className="mb-8 mt-2 text-sm text-paper/65">Tell us a little about what you’re looking for. You’ll see the message before you send it. Fields marked * are required.</p>
+            <p className="mb-6 mt-2 text-sm text-paper/65">Tell us a little about what you’re looking for. You’ll see the message before you send it. Fields marked * are required.</p>
             <EnquiryForm defaultInterest={defaultInterest} tone="dark" />
           </div>
         </Reveal>

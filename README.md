@@ -27,6 +27,11 @@ npx tsc --noEmit     # types
 npm run lint
 ```
 
+## Launch
+
+Search engines are kept out until launch. Set `SITE_URL` and `SITE_INDEXING=true` in Vercel on launch day. Redirects
+from every old dishahabitat.com address are in `next.config.ts`. The full checklist is in [`docs/LAUNCH.md`](docs/LAUNCH.md).
+
 ## What’s inside
 
 Every page is built around the buyer’s questions, each answered with proof (research in
@@ -101,4 +106,4 @@ labelled.
 - [`docs/ASSET-MANIFEST.md`](docs/ASSET-MANIFEST.md): every file, its source URL, where it’s used, and whether it shows a
   verified development.
 
-The site sets `robots: noindex` because it’s a prototype.
+Until launch day the site sets `noindex` (see Launch above).

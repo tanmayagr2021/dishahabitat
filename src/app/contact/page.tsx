@@ -41,7 +41,7 @@ export default function ContactPage() {
         <div className="shell">
           <div className="max-w-3xl">
             <p className="eyebrow anim-fade text-paper/70">Contact and site visits</p>
-            <h1 id="contact-title" className="serif anim-rise mt-5 text-[clamp(2.8rem,6vw,5.6rem)] leading-[1.02]">
+            <h1 id="contact-title" className="serif anim-rise mt-5 t-hero leading-[1.02]">
               Let’s meet <em>for coffee.</em>
             </h1>
             <p className="anim-fade-up mt-6 max-w-xl text-[1.1rem] leading-relaxed text-paper/80" style={{ "--d": "250ms" } as CSSProperties}>
@@ -103,13 +103,13 @@ export default function ContactPage() {
         <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-8">
             <p className="eyebrow text-mute">Book a site visit</p>
-            <Lines id="book-title" className="serif mt-4 text-[clamp(2.2rem,3.6vw,3.4rem)] leading-[1.04]" lines={["Four steps,", <em key="e">under a minute.</em>]} />
+            <Lines id="book-title" className="serif mt-4 t-section leading-[1.04]" lines={["Four steps,", <em key="e">under a minute.</em>]} />
             <div className="mt-8">
               <VisitBooker />
             </div>
           </div>
 
-          <aside className="space-y-6 lg:col-span-4 lg:pt-[7.5rem]">
+          <div className="space-y-6 lg:col-span-4 lg:pt-[7.5rem]">
             <div className="card p-6">
               <h2 className="serif text-[1.6rem]">What happens next</h2>
               <ol className="mt-5 space-y-5">
@@ -151,7 +151,7 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -161,7 +161,7 @@ export default function ContactPage() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="eyebrow text-mute">Follow along</p>
-              <h2 id="follow-title" className="serif mt-3 text-[clamp(1.9rem,3vw,2.6rem)] leading-tight">
+              <h2 id="follow-title" className="serif mt-3 t-sub leading-tight">
                 Life at Disha, <em>day to day.</em>
               </h2>
             </div>
@@ -178,7 +178,7 @@ export default function ContactPage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="eyebrow text-paper/65">Our communities</p>
-              <Lines id="sites-title" className="serif mt-4 text-[clamp(2.2rem,3.6vw,3.4rem)] leading-[1.04]" lines={["Where to", <em key="e">find us.</em>]} />
+              <Lines id="sites-title" className="serif mt-4 t-section leading-[1.04]" lines={["Where to", <em key="e">find us.</em>]} />
             </div>
             <Link href="/homes" className="inline-flex items-center gap-1.5 text-[0.95rem] font-medium text-paper/80 hover:text-paper">
               Compare all communities <ArrowUpRight aria-hidden className="size-4" />

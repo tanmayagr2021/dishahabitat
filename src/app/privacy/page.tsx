@@ -33,7 +33,7 @@ export default function PrivacyPage() {
     <section data-tone="light" className="surface-ivory pb-20 pt-32 md:pb-28 md:pt-40">
       <div className="shell max-w-3xl">
         <Breadcrumbs tone="light" trail={[{ label: "Home", href: "/" }, { label: "Privacy" }]} />
-        <h1 className="serif mt-6 text-[clamp(2.6rem,5vw,4rem)] leading-[1.04]">Privacy</h1>
+        <h1 className="serif mt-6 t-hero-sm leading-[1.04]">Privacy</h1>
         <p className="mt-4 text-[1.08rem] leading-relaxed text-mute">What this website does, and does not do, with your information.</p>
         <ul className="mt-10 space-y-4">
           {points.map((p) => (

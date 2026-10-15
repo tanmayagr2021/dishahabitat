@@ -32,7 +32,7 @@ export function HomeownersSpeak() {
           <Reveal as="p" className="eyebrow text-mute">
             Real stories
           </Reveal>
-          <Lines id="speak-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["What home means", <em key="e">to the people in ours.</em>]} />
+          <Lines id="speak-title" className="serif mt-5 t-section leading-[1.04]" lines={["What home means", <em key="e">to the people in ours.</em>]} />
           <p className="mt-5 text-[1.02rem] leading-relaxed text-mute">From across India, to a place called home, in their own words.</p>
           <div className="mt-8 flex items-center gap-3">
             <button type="button" onClick={() => go(-1)} aria-label="Previous story" className="inline-flex size-12 items-center justify-center rounded-full border border-ink/20 transition-colors hover:bg-ink hover:text-paper">

@@ -75,4 +75,4 @@ image. It is reproducible and editable: change the seed or the thresholds in the
 | `images/life/` | Home-life photographs | dishahabitat.com homepage poem section | Home | Company photos |
 | `images/checklist/` | Checklist illustrations | dishahabitat.com /checklist and /solution/* | Checklist pages | Company images |
 | `images/events/` | Six concert posters, four backstage photos, the ET award certificate and stage photo | Cut from the events collage on dishahabitat.com /our-journey (`people/events.webp`) | Our story events wall, Elements page | Company images; dates and venues only as printed on the posters |
-| `images/grain.png` | Paper-grain texture tile | Generated for the site | Section backgrounds | **Original design asset** |
+| `images/grain.webp` | Paper-grain texture tile | Generated for the site | Section backgrounds | **Original design asset** |

@@ -51,7 +51,7 @@ function ChapterHead({ i, tone = "light", id }: { i: number; tone?: "light" | "d
       <p className={`font-[family-name:var(--font-caveat)] text-[1.7rem] leading-none ${tone === "dark" ? "text-brass" : "text-earth"}`}>
         Chapter {c.n.toLowerCase()}
       </p>
-      <h2 id={id} className="serif mt-3 text-[clamp(2.3rem,4vw,3.8rem)] leading-[1.04] text-balance">
+      <h2 id={id} className="serif mt-3 t-section leading-[1.04] text-balance">
         {c.title}
       </h2>
     </div>
@@ -202,7 +202,7 @@ export default function StoryPage() {
         <div className="shell grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-8">
           <div className="lg:col-span-4">
             <p className="eyebrow text-paper/65">Our homemakers · The Disha family</p>
-            <Lines id="family-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
+            <Lines id="family-title" className="serif mt-5 t-section leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
             <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
               The families who live in our homes, and the people who build them. Pull up a chair and go through the album.
             </p>
@@ -379,7 +379,7 @@ export default function StoryPage() {
           <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <p className="eyebrow text-mute">Events and collaborations</p>
-              <Lines id="events-title" className="serif mt-5 text-[clamp(2.3rem,3.8vw,3.6rem)] leading-[1.04]" lines={["Evenings the whole", <em key="e">community remembers.</em>]} />
+              <Lines id="events-title" className="serif mt-5 t-section leading-[1.04]" lines={["Evenings the whole", <em key="e">community remembers.</em>]} />
             </div>
             <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
               A home is also the evenings you spend with your neighbours. Some of India’s best-loved artists have been on stage in

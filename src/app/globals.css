@@ -232,8 +232,8 @@
     pointer-events: none;
     /* A small pre-rendered noise tile: no live SVG filter or blend mode to repaint on scroll. */
     opacity: 0.5;
-    background-image: url("/images/grain.png");
-    background-size: 200px 200px;
+    background-image: url("/images/grain.webp");
+    background-size: 128px 128px;
   }
 
   /* Architectural hairlines: the column grid, drawn faintly. */
@@ -351,10 +351,11 @@ img.mono-img {
 }
 
 /* The same word entrance on page load (hero), waiting for the intro to hand over. */
+/* Words start faint rather than invisible, so the headline is on screen from the first frame. */
 @keyframes word-in {
   from {
-    opacity: 0;
-    filter: blur(12px);
+    opacity: 0.18;
+    filter: blur(10px);
     transform: translateY(0.5em);
   }
   to {
@@ -482,9 +483,10 @@ html[data-intro="on"] .hero-stage .anim-words .w {
   }
 }
 
+/* Photographs develop from a soft first view rather than from nothing, so they show at once. */
 @keyframes develop {
   from {
-    opacity: 0;
+    opacity: 0.45;
     transform: scale(1.05);
   }
   to {
@@ -527,7 +529,7 @@ html[data-intro="on"] .hero-stage .anim-words .w {
 }
 
 .anim-develop {
-  animation: develop 1.8s var(--ease-out-expo) both;
+  animation: develop 1.4s var(--ease-out-expo) both;
   animation-delay: var(--d, 0ms);
 }
 
@@ -1328,4 +1330,28 @@ main img {
   rotate: 2deg;
   background: rgb(214 204 184 / 0.75);
   box-shadow: 0 1px 2px rgb(21 26 23 / 0.15);
+}
+
+/* ---------- Type scale ----------
+ * Three headline sizes used across the site, so every page reads as one publication:
+ * page titles, compact page titles, and section headlines. */
+.t-hero {
+  font-size: clamp(2.8rem, 6vw, 5.6rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.t-hero-sm {
+  font-size: clamp(2.6rem, 5vw, 4.6rem);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+.t-section {
+  font-size: clamp(2.3rem, 4vw, 3.8rem);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.t-sub {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.1;
+  text-wrap: balance;
 }

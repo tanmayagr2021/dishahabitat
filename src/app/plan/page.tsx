@@ -49,7 +49,7 @@ export default function PlanPage() {
           <Label n="01" className="text-mute">
             The fine print
           </Label>
-          <h2 id="notes-title" className="serif mt-6 text-[clamp(2.4rem,4.4vw,4rem)]">
+          <h2 id="notes-title" className="serif mt-6 t-section">
             About these <em>estimates</em>
           </h2>
           <div className="mt-10 grid gap-x-8 md:grid-cols-3">

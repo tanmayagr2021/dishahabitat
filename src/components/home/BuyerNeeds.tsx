@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { SlashBreaks } from "@/components/ui";
 import { elements } from "@/lib/elements";
 import { homemakers, formatIndian } from "@/lib/site";
-import { breakAtSlashes, commuteDestinations, directionsUrl, homesHandedOver, quickestBuild, residentRating } from "@/lib/proof";
+import { commuteDestinations, directionsUrl, homesHandedOver, quickestBuild, residentRating } from "@/lib/proof";
 
 /*
  * The heart of the home page: the visitor's own wish list for a home, in their words, and the
@@ -49,7 +50,7 @@ const needs: Need[] = [
           <li key={r.no} className="flex items-start gap-2 text-[0.82rem] leading-snug text-ink/70">
             <ShieldCheck aria-hidden className="mt-0.5 size-4 shrink-0 text-forest" strokeWidth={1.8} />
             <span>
-              <span className="font-semibold text-ink">{r.phase}</span> <span>{breakAtSlashes(r.no)}</span>
+              <span className="font-semibold text-ink">{r.phase}</span> <span><SlashBreaks text={r.no} /></span>
             </span>
           </li>
         ))}
@@ -119,7 +120,7 @@ export function BuyerNeeds() {
       <div className="shell">
         <div className="max-w-3xl">
           <p className="eyebrow text-mute">What you’re looking for</p>
-          <h2 id="looking-title" className="serif mt-5 text-[clamp(2.3rem,4vw,3.8rem)] leading-[1.04] text-balance">
+          <h2 id="looking-title" className="serif mt-5 t-section leading-[1.04] text-balance">
             You’re not looking for a house. <em>Neither were we.</em>
           </h2>
           <p className="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-ink/75">
@@ -132,18 +133,16 @@ export function BuyerNeeds() {
           {/* The visitor's list */}
           <div className="lg:col-span-5">
             <p className="font-[family-name:var(--font-caveat)] text-[1.6rem] leading-none text-earth">my list for a home…</p>
-            <ul className="mt-4 space-y-2" role="tablist" aria-label="What you’re looking for in a home" aria-orientation="vertical">
+            <ul className="mt-4 space-y-2" aria-label="What you’re looking for in a home">
               {needs.map((it, i) => {
                 const on = i === active;
                 return (
-                  <li key={it.key} role="presentation">
+                  <li key={it.key}>
                     <button
                       type="button"
-                      role="tab"
                       id={`need-tab-${it.key}`}
-                      aria-selected={on}
+                      aria-expanded={on}
                       aria-controls="need-panel need-panel-m"
-                      tabIndex={on ? 0 : -1}
                       onClick={() => setActive(i)}
                       onKeyDown={(e) => {
                         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -173,7 +172,7 @@ export function BuyerNeeds() {
                       <ArrowRight aria-hidden className={`size-4 shrink-0 transition-transform ${on ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-60"}`} />
                     </button>
                     {on && (
-                      <div id="need-panel-m" role="tabpanel" aria-labelledby={`need-tab-${it.key}`} className="mt-3 lg:hidden">
+                      <div id="need-panel-m" role="region" aria-labelledby={`need-tab-${it.key}`} className="mt-3 lg:hidden">
                         <Answer n={it} />
                       </div>
                     )}
@@ -185,7 +184,7 @@ export function BuyerNeeds() {
 
           {/* Our answer */}
           <div className="lg:col-span-7">
-            <div id="need-panel" role="tabpanel" aria-labelledby={`need-tab-${n.key}`} className="hidden lg:sticky lg:top-28 lg:block">
+            <div id="need-panel" role="region" aria-live="polite" aria-labelledby={`need-tab-${n.key}`} className="hidden lg:sticky lg:top-28 lg:block">
               <Answer key={n.key} n={n} />
             </div>
           </div>

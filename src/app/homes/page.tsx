@@ -4,8 +4,9 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { CtaBand } from "@/components/home/CtaBand";
 import { ProjectExplorer } from "@/components/home/ProjectExplorer";
-import { Label, Lines, MediaBadge, Reveal } from "@/components/ui";
+import { ButtonLink, Label, Lines, MediaBadge, Reveal } from "@/components/ui";
 import { elements } from "@/lib/elements";
 import { projects, projectsByHandover } from "@/lib/projects";
 import { formatIndian } from "@/lib/site";
@@ -34,6 +35,16 @@ export default function HomesPage() {
           </>
         }
         intro={`Pursuit of the Elements is selling now in Gunjur. The five communities we have handed over since 2014, ${formatIndian(totalHomes)} homes in all, are lived in today. Look at them closely: they are our proof.`}
+        aside={
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
+            <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
+              Book a site visit
+            </ButtonLink>
+            <ButtonLink href={elements.href} variant="outline-light">
+              See what’s selling now
+            </ButtonLink>
+          </div>
+        }
       />
 
       {/* The index */}
@@ -148,7 +159,7 @@ export default function HomesPage() {
             </Label>
             <Lines
               id="pace-title"
-              className="serif mt-6 text-[clamp(2.6rem,5vw,4.8rem)]"
+              className="serif mt-6 t-section"
               lines={["Ground broken", <em key="e">to work complete.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-mute">
@@ -192,7 +203,7 @@ export default function HomesPage() {
               <Label n="02" className="text-mute">
                 At a glance
               </Label>
-              <h2 id="glance-title" className="serif mt-6 text-[clamp(2.4rem,4.4vw,4rem)]">
+              <h2 id="glance-title" className="serif mt-6 t-section">
                 Side by side
               </h2>
             </div>
@@ -234,6 +245,7 @@ export default function HomesPage() {
           </div>
         </div>
       </section>
+      <CtaBand />
     </>
   );
 }

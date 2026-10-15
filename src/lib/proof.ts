@@ -66,6 +66,3 @@ export const award = {
   project: elements.shortName,
   image: "/images/events/et-award-certificate.webp",
 };
-
-/* Long registration numbers wrap only at their slashes, never mid-number. */
-export const breakAtSlashes = (s: string) => s.replaceAll("/", "/\u200b");

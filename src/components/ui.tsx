@@ -103,7 +103,7 @@ export function Label({
   as?: "p" | "span" | "h2" | "h3";
 }) {
   return (
-    <Tag className={`label ${className}`} data-n={n}>
+    <Tag className={`eyebrow ${className}`} data-n={n}>
       {children}
     </Tag>
   );
@@ -208,7 +208,7 @@ export function SectionHead({
         {eyebrow}
         {center && <span aria-hidden className={`h-px w-8 ${tone === "dark" ? "bg-paper/35" : "bg-ink/25"}`} />}
       </Reveal>
-      <Lines id={id} className="serif mt-5 text-[clamp(2.3rem,4.4vw,4.2rem)] leading-[1.04]" lines={title} />
+      <Lines id={id} className="serif mt-5 t-section leading-[1.04]" lines={title} />
       {intro && (
         <Reveal delay={150} as="p" className={`mt-5 text-[1.08rem] leading-relaxed ${muted} ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}>
           {intro}
@@ -226,5 +226,27 @@ export function MediaBadge({ kind, className = "" }: { kind: "photo" | "render" 
     >
       {kind === "render" ? "Artist’s impression" : "Plan"}
     </span>
+  );
+}
+
+/*
+ * Long registration numbers wrap only at their slashes, never mid-number. <wbr> marks the break
+ * points without adding characters, so a copied RERA number pastes cleanly into a search.
+ */
+export function SlashBreaks({ text }: { text: string }) {
+  const parts = text.split("/");
+  return (
+    <>
+      {parts.map((part, i) => (
+        <span key={i}>
+          {part}
+          {i < parts.length - 1 && (
+            <>
+              /<wbr />
+            </>
+          )}
+        </span>
+      ))}
+    </>
   );
 }

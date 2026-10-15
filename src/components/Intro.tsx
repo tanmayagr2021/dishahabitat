@@ -104,6 +104,8 @@ export function Intro() {
       if (v.currentTime >= SETTLED_AT) handover();
     };
 
+    // The layout's inline script normally sets the source before this runs; this covers anything else.
+    if (!v.getAttribute("src") && v.dataset.src) v.src = v.dataset.src;
     v.playbackRate = RATE;
     v.addEventListener("timeupdate", onTime);
     v.addEventListener("ended", handover);
@@ -148,7 +150,8 @@ export function Intro() {
         <div className="absolute left-1/2 top-1/2 aspect-video w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2 portrait:w-[200vw] portrait:[mask-image:linear-gradient(transparent,black_18%,black_82%,transparent)]">
           <video
             ref={video}
-            src="/media/logo-intro.mp4"
+            data-src="/media/logo-intro.mp4"
+            suppressHydrationWarning
             autoPlay
             muted
             playsInline

@@ -59,7 +59,7 @@ export function DayInTheSun() {
           <Label n="03" className="text-mute">
             A day here
           </Label>
-          <h2 id="sun-title" className="serif mt-5 text-[clamp(2.4rem,4.6vw,4.4rem)]">
+          <h2 id="sun-title" className="serif mt-5 t-section">
             A step closer <em>to the Sun.</em>
           </h2>
 

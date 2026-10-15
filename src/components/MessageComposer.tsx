@@ -174,26 +174,32 @@ export function MessageComposer() {
                 {message}
               </p>
             </div>
-            <a
-              href={ok ? href : undefined}
-              target={channel === "whatsapp" ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              role="button"
-              aria-disabled={!ok}
-              onClick={(e) => {
-                if (!ok) {
-                  e.preventDefault();
-                  setTried(true);
-                  return;
-                }
-                setTimeout(() => ref.current?.close(), 300);
-              }}
-              className={`mt-4 inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 font-semibold transition-colors ${
+            {(() => {
+              const cls = `mt-4 inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 font-semibold transition-colors ${
                 channel === "whatsapp" ? "bg-[#1f8f4e] text-white hover:bg-[#187a41]" : "bg-forest text-paper hover:bg-forest-2"
-              } ${ok ? "" : "opacity-60"}`}
-            >
-              <Send aria-hidden className="size-4" /> Send on {d.label}
-            </a>
+              }`;
+              const label = (
+                <>
+                  <Send aria-hidden className="size-4" /> Send on {d.label}
+                </>
+              );
+              // Until the form is complete this is a button that shows what is missing; then a real link.
+              return ok ? (
+                <a
+                  href={href}
+                  target={channel === "whatsapp" ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  onClick={() => setTimeout(() => ref.current?.close(), 300)}
+                  className={cls}
+                >
+                  {label}
+                </a>
+              ) : (
+                <button type="button" onClick={() => setTried(true)} className={`${cls} opacity-60`}>
+                  {label}
+                </button>
+              );
+            })()}
             <p className="mt-2 text-xs text-mute">
               Opens {channel === "whatsapp" ? "WhatsApp" : "your email app"} with this message ready to send. The website does not store it.
             </p>

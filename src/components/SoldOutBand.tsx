@@ -12,7 +12,7 @@ export function SoldOutBand({ name }: { name: string }) {
       <div className="shell grid items-center gap-10 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <p className="eyebrow text-paper/65">Every home handed over</p>
-          <h2 id="soldout-title" className="serif mt-5 text-[clamp(2.2rem,3.8vw,3.4rem)] leading-[1.05] text-balance">
+          <h2 id="soldout-title" className="serif mt-5 t-section leading-[1.05] text-balance">
             Families live at {name} today. <em>Looking for a home like theirs?</em>
           </h2>
           <p className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-paper/75">

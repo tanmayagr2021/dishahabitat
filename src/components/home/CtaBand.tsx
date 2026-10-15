@@ -20,7 +20,7 @@ export function CtaBand() {
           <Reveal as="p" className="eyebrow text-paper/65">
             Come and meet us
           </Reveal>
-          <Lines id="cta-title" className="serif mt-5 text-[clamp(2.4rem,4.4vw,4.2rem)] leading-[1.04]" lines={["Bring every question.", <em key="e">We’ll bring the coffee.</em>]} />
+          <Lines id="cta-title" className="serif mt-5 t-section leading-[1.04]" lines={["Bring every question.", <em key="e">We’ll bring the coffee.</em>]} />
           <Reveal delay={150} as="p" className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-paper/75">
             Walk Pursuit of the Elements in Gunjur, or sit down with us at our office on Whitefield Main Road. We’ll explain
             everything, from the RERA papers to the structure, until you’re as informed as anyone on the project.

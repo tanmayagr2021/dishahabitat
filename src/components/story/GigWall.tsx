@@ -206,7 +206,7 @@ export function GigWall() {
             <div key={p.id} ref={(el) => { els.current[p.id] = el; }} className="gig-piece" style={style}>
               <button
                 type="button"
-                aria-label={flippable ? `${p.alt}. ${isFlipped ? "Showing the ticket; press to see the poster" : "Press to turn it over"}` : p.alt}
+                aria-label={flippable ? `${p.alt}. ${isFlipped ? "Showing the ticket; press to see the poster" : "Press to turn it over"}` : p.kind === "polaroid" ? `${p.caption}: ${p.alt}` : p.alt}
                 aria-pressed={flippable ? isFlipped : undefined}
                 onPointerDown={(e) => onDown(e, p.id)}
                 onPointerMove={onMove}

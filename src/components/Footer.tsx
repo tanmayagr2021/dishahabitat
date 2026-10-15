@@ -139,7 +139,7 @@ export function Footer() {
         <div className="mt-10 border-t border-paper/10 pt-6 text-xs leading-relaxed text-paper/45">
           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <p>
-              © {company.copyrightYear}, {company.copyrightHolder}. {company.legalName}.
+              © {company.copyrightYear}, {company.copyrightHolder}. {company.legalName.replace(/\.$/, "")}.
             </p>
             <ul className="flex flex-wrap gap-x-4 gap-y-1">
               <li>

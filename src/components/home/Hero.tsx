@@ -127,7 +127,7 @@ export function Hero() {
           <p className="eyebrow anim-fade text-paper/80" style={d(200)}>
             Residential developers · East Bengaluru · Since 2014
           </p>
-          <h1 id="hero-title" className="serif anim-words mt-5 text-[clamp(2.9rem,6vw,5.9rem)] leading-[1.02]" style={d(300)}>
+          <h1 id="hero-title" className="serif anim-words mt-5 t-hero leading-[1.02]" style={d(300)}>
             {[
               ["Come", "home", "to"],
               [<em key="m">mindful</em>, "living"],

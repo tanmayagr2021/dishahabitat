@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight, Car, MapPin, Navigation } from "lucide-react";
 import { commuteDestinations, commuteFrom, directionsUrl } from "@/lib/proof";
 
@@ -11,11 +11,13 @@ import { commuteDestinations, commuteFrom, directionsUrl } from "@/lib/proof";
  */
 export function CommuteChecker() {
   const [office, setOffice] = useState("");
+  const go = useRef<HTMLAnchorElement>(null);
+  const href = office.trim() ? directionsUrl(`${office.trim()}, Bengaluru`) : undefined;
 
+  // A real link opens the route (pop-up blockers allow it); Enter in the field follows the same link.
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!office.trim()) return;
-    window.open(directionsUrl(`${office.trim()}, Bengaluru`), "_blank", "noopener,noreferrer");
+    if (href) go.current?.click();
   };
 
   return (
@@ -40,13 +42,22 @@ export function CommuteChecker() {
             autoComplete="off"
             className="min-h-12 flex-1 rounded-lg border border-ink/20 bg-white/70 px-4 text-[1rem] outline-none transition-colors placeholder:text-ink/40 focus:border-forest"
           />
-          <button
-            type="submit"
-            disabled={!office.trim()}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper transition-colors hover:bg-forest-2 disabled:opacity-40"
-          >
-            <Navigation aria-hidden className="size-4" /> Show my route
-          </button>
+          {href ? (
+            <a
+              ref={go}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper transition-colors hover:bg-forest-2"
+            >
+              <Navigation aria-hidden className="size-4" /> Show my route
+              <span className="sr-only">(opens Google Maps in a new tab)</span>
+            </a>
+          ) : (
+            <button type="submit" aria-disabled className="inline-flex min-h-12 cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper opacity-40">
+              <Navigation aria-hidden className="size-4" /> Show my route
+            </button>
+          )}
         </div>
         <p className="mt-3 text-xs text-mute">Opens Google Maps in a new tab. Nothing you type is stored.</p>
       </form>

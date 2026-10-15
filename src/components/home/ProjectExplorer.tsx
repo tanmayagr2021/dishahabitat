@@ -149,7 +149,7 @@ export function ProjectExplorer() {
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="eyebrow text-paper/60">Compare</p>
-            <h2 id="explore-title" className="serif mt-8 text-[clamp(2.3rem,4.4vw,4.4rem)] leading-[1.02]">
+            <h2 id="explore-title" className="serif mt-8 t-section leading-[1.02]">
               Every Disha community, <em>side by side.</em>
             </h2>
           </div>

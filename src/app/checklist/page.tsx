@@ -21,7 +21,7 @@ export default function ChecklistPage() {
         <div className="shell grid gap-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="eyebrow anim-fade text-paper/70">The checklist</p>
-            <h1 className="serif anim-rise mt-5 text-[clamp(2.8rem,6vw,5.4rem)] leading-[1.02]">
+            <h1 className="serif anim-rise mt-5 t-hero leading-[1.02]">
               Must-knows while <em>investing in a home.</em>
             </h1>
           </div>
@@ -38,7 +38,7 @@ export default function ChecklistPage() {
 
           <div className="card-dark mt-12 flex print:hidden flex-col items-start justify-between gap-6 bg-forest p-7 text-paper md:flex-row md:items-center md:p-9">
             <div>
-              <Lines className="serif text-[clamp(1.8rem,3vw,2.6rem)] leading-tight" as="h2" lines={["Still have a question?", <em key="e">Ask us directly.</em>]} />
+              <Lines className="serif t-sub leading-tight" as="h2" lines={["Still have a question?", <em key="e">Ask us directly.</em>]} />
               <p className="mt-2 text-paper/75">Our team will explain any document for any Disha home, as plainly as you need.</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">

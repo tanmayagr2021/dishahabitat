@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { indexing, siteUrl } from "@/lib/launch";
 import Script from "next/script";
 import { Caveat, Hanken_Grotesk, Newsreader } from "next/font/google";
 import { Header } from "@/components/Header";
@@ -11,6 +12,7 @@ import { Cursor } from "@/components/Cursor";
 import { MessageComposer } from "@/components/MessageComposer";
 import { Diniee } from "@/components/Diniee";
 import "./globals.css";
+import { company } from "@/lib/site";
 
 /* Headlines: Newsreader, an editorial serif with optical sizes and a true italic. */
 const newsreader = Newsreader({
@@ -36,7 +38,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Disha Habitat | Come home to mindful living spaces",
     template: "%s · Disha Habitat",
@@ -49,8 +51,8 @@ export const metadata: Metadata = {
     locale: "en_IN",
     images: [{ url: "/images/central-park/clubhouse-dusk.jpg", width: 1920, height: 1274 }],
   },
-  /* Prototype build: keep it out of search indexes. */
-  robots: { index: false, follow: false },
+  /* Out of search indexes until launch day (SITE_INDEXING=true; see lib/launch.ts). */
+  robots: indexing ? { index: true, follow: true } : { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
@@ -64,9 +66,31 @@ export const viewport: Viewport = {
  *  1. marks the page for scroll reveals (removed after 3s if the app never hydrates);
  *  2. picks the hero photograph for the time of day in Bengaluru (IST);
  *  3. decides whether the logo film plays: once per visit, on whichever page the visitor arrives
- *     at, in about 3.5 seconds (never with reduced motion; `?nointro` skips it for automated
+ *     at, in about two and a half seconds (never with reduced motion; `?nointro` skips it for automated
  *     checks). It autoplays from the HTML.
  */
+/* What search engines read about the company: published facts only (lib/site.ts). */
+const organisation = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: company.name,
+  legalName: company.legalName,
+  url: siteUrl,
+  logo: `${siteUrl}/icon.svg`,
+  foundingDate: String(company.founded),
+  email: company.email,
+  telephone: company.phones.map((p) => p.display),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: company.office.lines[0],
+    addressLocality: "Bengaluru",
+    postalCode: "560066",
+    addressRegion: "Karnataka",
+    addressCountry: "IN",
+  },
+  sameAs: company.socials.map((s) => s.href),
+};
+
 const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);var seen=sessionStorage.getItem('disha-intro');d.dataset.intro=(!rm&&!skip&&!seen)?'on':'off'}catch(e){d.dataset.intro='off'}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -83,7 +107,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organisation) }} />
         <Intro />
+        {/* The logo film downloads only when it will play (first visit, motion allowed): about 2 MB saved on every other visit. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var v=document.querySelector('.intro video');if(v&&document.documentElement.dataset.intro==='on'&&!v.getAttribute('src'))v.src=v.dataset.src})();`,
+          }}
+        />
         <Header />
         <main id="main" className="flex-1">
           {children}

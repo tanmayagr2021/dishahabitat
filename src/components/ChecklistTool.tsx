@@ -73,7 +73,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
   return (
     <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
       {/* Progress and actions */}
-      <aside className="min-w-0 lg:col-span-4 print:hidden">
+      <div className="min-w-0 lg:col-span-4 print:hidden">
         <div className="lg:sticky lg:top-28">
           <div className="rounded-2xl bg-forest p-6 text-paper md:p-7">
             <div className="flex items-center gap-5">
@@ -141,7 +141,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
             </button>
           </div>
         </div>
-      </aside>
+      </div>
 
       {/* The list */}
       <ol className="min-w-0 space-y-3 lg:col-span-8">

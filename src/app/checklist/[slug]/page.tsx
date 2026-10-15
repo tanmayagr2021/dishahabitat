@@ -33,7 +33,7 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
           <p className="mt-6 text-sm text-paper/60">
             Must-know {i + 1} of {checklist.length}
           </p>
-          <h1 id="item-title" className="serif anim-rise mt-2 text-[clamp(2.8rem,6vw,5rem)] leading-[1.02]">
+          <h1 id="item-title" className="serif anim-rise mt-2 t-hero-sm leading-[1.02]">
             {c.title}
           </h1>
           <p className="anim-fade-up mt-4 text-[1.15rem] text-paper/80">{c.summary}</p>
@@ -62,7 +62,7 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
             </Link>
           </article>
 
-          <aside className="space-y-6 lg:col-span-4 lg:col-start-9">
+          <div className="space-y-6 lg:col-span-4 lg:col-start-9">
             <div className="lg:sticky lg:top-28 lg:space-y-6">
               <div className="rounded-2xl bg-forest p-6 text-paper">
                 <p className="serif text-[1.5rem] leading-tight">Have a question about this for a Disha home?</p>
@@ -78,7 +78,7 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
                 <ArrowLeft aria-hidden className="size-4" /> Back to your checklist
               </Link>
             </div>
-          </aside>
+          </div>
         </div>
       </section>
     </>

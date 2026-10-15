@@ -229,7 +229,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 </Label>
                 <Lines
                   id="gallery-title"
-                  className="serif mt-6 text-[clamp(2.3rem,4.2vw,4.2rem)]"
+                  className="serif mt-6 t-section"
                   lines={[
                     <>
                       Inside <em>{p.shortName}</em>
@@ -266,7 +266,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
                 </Label>
                 <Lines
                   id="highlights-title"
-                  className="serif mt-6 text-[clamp(2.4rem,4.6vw,4.6rem)]"
+                  className="serif mt-6 t-section"
                   lines={["An ode", <em key="e">to the Sun.</em>]}
                 />
               </div>
@@ -311,7 +311,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               <Label n="05" className="text-mute">
                 Built to last
               </Label>
-              <h2 id="specs-title" className="serif mt-6 text-[clamp(2.6rem,4.4vw,4.2rem)]">
+              <h2 id="specs-title" className="serif mt-6 t-section">
                 Specifications
               </h2>
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-mute">

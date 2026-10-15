@@ -28,7 +28,7 @@ export function Developments() {
             <Reveal as="p" className="eyebrow text-paper/65">
               Our developments
             </Reveal>
-            <Lines id="dev-title" className="serif mt-5 text-[clamp(2.4rem,4.2vw,4rem)] leading-[1.04]" lines={["One community selling now.", <em key="e">Five lived in, as proof.</em>]} />
+            <Lines id="dev-title" className="serif mt-5 t-section leading-[1.04]" lines={["One community selling now.", <em key="e">Five lived in, as proof.</em>]} />
           </div>
           <div className="flex items-center gap-2">
             <p className="mr-3 text-sm tabular-nums text-paper/60" aria-live="polite">
@@ -54,7 +54,7 @@ export function Developments() {
                 sizes="(min-width: 1024px) 64vw, 100vw"
                 className="object-cover transition-transform duration-[1600ms] ease-out-expo group-hover:scale-[1.04]"
               />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep/90 via-forest-deep/20 to-transparent" />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/55 via-45% to-transparent to-75%" />
               <div className="absolute left-5 top-5 flex gap-2 md:left-7 md:top-7">
                 <span className="rounded-full bg-cyan px-3 py-1 text-xs font-semibold text-forest-deep">Now selling</span>
                 <span className="rounded-full bg-forest-deep/60 px-3 py-1 text-xs font-medium backdrop-blur-sm">Artist’s impression</span>

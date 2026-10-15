@@ -179,7 +179,7 @@ export function EnquiryForm({
   const describedBy = (k: keyof Values) => (errors[k] ? id(`${k}-error`) : undefined);
 
   return (
-    <form noValidate onSubmit={onSubmit} aria-describedby={id("demo-note")} className="space-y-8">
+    <form noValidate onSubmit={onSubmit} aria-describedby={id("demo-note")} className="space-y-6">
       {touched && errorKeys.length > 0 && (
         <div
           ref={summaryRef}
@@ -207,7 +207,7 @@ export function EnquiryForm({
         </div>
       )}
 
-      <div className="grid gap-8 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor={id("name")} className={labelBase}>
             Full name <span aria-hidden>*</span>

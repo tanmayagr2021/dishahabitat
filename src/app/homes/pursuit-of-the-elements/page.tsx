@@ -7,10 +7,10 @@ import { GalleryGrid } from "@/components/Lightbox";
 import { PageHero } from "@/components/PageHero";
 import { ComposeButton } from "@/components/ComposeButton";
 import { EnquirySection } from "@/components/home/EnquirySection";
-import { ButtonLink, Label, Lines, Reveal } from "@/components/ui";
+import { ButtonLink, Label, Lines, Reveal, SlashBreaks } from "@/components/ui";
 import { elements as e } from "@/lib/elements";
 import { CommuteChecker } from "@/components/CommuteChecker";
-import { award, breakAtSlashes, homesHandedOver, reraSearch } from "@/lib/proof";
+import { award, homesHandedOver, reraSearch } from "@/lib/proof";
 import { formatIndian } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -103,7 +103,7 @@ export default function ElementsPage() {
               </Label>
               <Lines
                 id="idea-title"
-                className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]"
+                className="serif mt-5 t-section"
                 lines={["Inspired by", <em key="e">the five elements.</em>]}
               />
             </div>
@@ -134,7 +134,7 @@ export default function ElementsPage() {
             </Label>
             <Lines
               id="homes-title"
-              className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]"
+              className="serif mt-5 t-section"
               lines={["Seven towers", <em key="e">and a row of villas.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
@@ -164,7 +164,7 @@ export default function ElementsPage() {
               <Label n="03" className="text-mute">
                 Gallery
               </Label>
-              <h2 id="gallery-title" className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]">
+              <h2 id="gallery-title" className="serif mt-5 t-section">
                 A look <em>inside</em>
               </h2>
             </div>
@@ -190,7 +190,7 @@ export default function ElementsPage() {
             </Label>
             <Lines
               id="amenities-title"
-              className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]"
+              className="serif mt-5 t-section"
               lines={["Over 40,", <em key="e">indoors and out.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-mute">
@@ -229,7 +229,7 @@ export default function ElementsPage() {
               <Label n="05" className="text-mute">
                 Your commute
               </Label>
-              <Lines id="commute-title" className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]" lines={["Check the drive", <em key="e">before you decide.</em>]} />
+              <Lines id="commute-title" className="serif mt-5 t-section" lines={["Check the drive", <em key="e">before you decide.</em>]} />
             </div>
             <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
               Gunjur sits between Whitefield and Sarjapur Road in East Bengaluru. Bengaluru traffic changes by the hour, so we
@@ -250,7 +250,7 @@ export default function ElementsPage() {
               <Label n="06" className="text-mute">
                 Papers and progress
               </Label>
-              <Lines id="papers-title" className="serif mt-5 text-[clamp(2.3rem,4.2vw,4rem)]" lines={["Check everything.", <em key="e">We’d want you to.</em>]} />
+              <Lines id="papers-title" className="serif mt-5 t-section" lines={["Check everything.", <em key="e">We’d want you to.</em>]} />
             </div>
             <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
               The registration numbers, the construction photographs and our record on every community we have built. Ask us for
@@ -266,7 +266,7 @@ export default function ElementsPage() {
                 {e.rera.map((r) => (
                   <li key={r.no}>
                     <span className="block text-sm font-semibold">{r.phase}</span>
-                    <span className="block text-[0.82rem] tabular-nums text-mute">{breakAtSlashes(r.no)}</span>
+                    <span className="block text-[0.82rem] tabular-nums text-mute"><SlashBreaks text={r.no} /></span>
                   </li>
                 ))}
               </ul>
