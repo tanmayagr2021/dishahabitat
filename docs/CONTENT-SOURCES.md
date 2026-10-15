@@ -111,3 +111,21 @@ project site and are labelled artist’s impressions; the master plan is labelle
 24. **Messages.** Every WhatsApp and email action opens a form; the composed message is shown in full and opens in
     WhatsApp (+91 95053 33333) or the visitor's email app. Emails about Pursuit of the Elements go to
     info@dishapursuitoftheelements.com; others to info@dishahabitat.com. Confirm these are the right inboxes.
+
+## Research-led revamp (13 to 15 October 2026)
+
+- **Copy built on research** (`docs/RESEARCH-BRIEF.md`; the client version is `documents/Disha Habitat - Website Research Dossier.pdf`).
+- **Third-party proof:** the MyGate rating for Disha Central Park (4.7 out of 5, about 29 reviews, checked October 2026), linked
+  from the home page. The ET Business Awards 2025 Certificate of Excellence comes from the certificate photographed in
+  the /our-journey events collage.
+- **Commute:** no travel times are quoted. Each destination opens live Google Maps directions from the project.
+- **Events wall:** posters and photographs cut from the /our-journey collage. Dates and venues come only from what is
+  printed on each poster; backstage captions are generic and name nobody.
+
+25. **Founders’ memoir and letter.** Our story is written in the founders’ first person from their published profiles,
+    and chapter five is a letter signed “Guna & Raja”. Both are drafts for the founders’ approval.
+26. **Hidden until confirmed.** Water arrangements, Khata and OC status, bank approvals and RERA promised completion
+    dates are not shown until the client confirms them (listed in the launch checklist).
+27. **Other projects.** Listings show Pursuit of Sunshine (possession December 2026 on RERA), Harmony Gardens, Symphony
+    Heights and Pursuit of Radiance. The site shows only Pursuit of the Elements as selling until the client confirms.
+28. **ET award link.** A press link or note for the award, so a buyer who searches for it can find it.

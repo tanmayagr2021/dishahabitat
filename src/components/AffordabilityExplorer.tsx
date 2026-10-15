@@ -283,7 +283,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 |
           <MoneyInput id={id("income")} value={v.income} onChange={set("income")} error={errors.monthlyIncome} placeholder="Leave blank to skip" />
         </Field>
 
-        <button type="button" onClick={() => setV(EXAMPLE)} className="text-sm font-medium text-mute underline underline-offset-4 hover:text-ink">
+        <button type="button" onClick={() => setV(EXAMPLE)} className="min-h-11 text-sm font-medium text-mute underline underline-offset-4 hover:text-ink">
           Reset to the example
         </button>
       </form>

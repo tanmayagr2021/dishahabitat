@@ -86,7 +86,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
       <PageHero
         label={
           <>
-            <Link href="/homes" className="hover:text-paper">
+            <Link href="/homes" className="inline-block py-1 hover:text-paper">
               Our homes
             </Link>
             <span aria-hidden className="mx-3 inline-block h-px w-6 bg-current align-middle opacity-40" />

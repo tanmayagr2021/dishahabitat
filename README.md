@@ -1,4 +1,4 @@
-# Disha Habitat — website redesign prototype
+# Disha Habitat: website redesign
 
 A standalone, front-end-only redesign prototype for [Disha Habitat](https://www.dishahabitat.com/), built for client review.
 It is **not** connected to the live website, its CMS, hosting or domain.
@@ -22,83 +22,54 @@ npm start            # http://localhost:3000
 Checks:
 
 ```bash
-npm test             # loan maths (node:test) — EMI, zero-rate, schedule, validation, ₹ formatting
+npm test             # loan maths (node:test): EMI, zero-rate, schedule, validation, ₹ formatting
 npx tsc --noEmit     # types
 npm run lint
 ```
 
 ## What’s inside
 
+Every page is built around the buyer’s questions, each answered with proof (research in
+[`docs/RESEARCH-BRIEF.md`](docs/RESEARCH-BRIEF.md)).
+
 | Route | Page |
 | --- | --- |
-| `/` | Cinematic homepage — see below |
-| `/homes` | Now selling, then all five delivered communities, a time-to-build chart and a comparison table |
-| `/homes/pursuit-of-the-elements` | The project on sale now: facts, homes, gallery, amenities, construction updates, RERA, enquiry |
-| `/homes/[slug]` | Each community: full-bleed hero, facts band, timeline, location, gallery and lightbox; amenities and specifications where published; homeowner words; enquiry; next/previous |
-| `/plan` | Home Affordability Explorer, with notes on how the estimates are made |
-| `/story` | Journey, “Our core” manifesto, founders, community timeline, brand film |
-| `/contact` | Office, phones, email, socials, enquiry form, community addresses |
+| `/` | Hero with proof in the first screen → “What you’re looking for” (the buyer’s list, answered by the founders) → the home on sale and the delivered communities → the delivery record → life in a community (drag the sun) → homeowners → the founders’ invitation |
+| `/homes` | “One to choose now. Five to judge us by.”: Pursuit of the Elements first, then the delivered communities, the explorer, build times and a comparison |
+| `/homes/pursuit-of-the-elements` | The project on sale: facts, homes, gallery, amenities, a live commute checker, papers and progress (RERA, quarterly updates, record, ET award), enquiry |
+| `/homes/[slug]` | Each delivered community: facts, timeline, gallery, homeowner words; ends by pointing to the project on sale |
+| `/story` | The founders’ memoir in seven chapters (draft wording for their approval), with the family album, the events wall and the brand film |
+| `/contact` | Every channel, a four-step visit booker, what happens next, office map, every community with directions |
+| `/checklist`, `/checklist/[slug]` | A working checklist of five must-knows, with a guide for each |
+| `/plan` | EMI calculator with notes on how the estimate is made |
+| `/privacy` | What the site does and doesn’t do with information |
 
-**Concept — “The Line Home”.** Built from Disha’s own logo film: on deep forest green a single cyan line draws a roof,
-and the name resolves beneath it. Forest and charcoal give depth; ivory and stone give light; the logo’s cyan is the
-drawn line (active states, progress, focus, the seam in the hero); brass is the warm metal of the film’s ribbon; earth
-is the terracotta of the buildings. Each community keeps a signature hue for data and card accents.
+**Look.** Built from Disha’s own logo film: forest green with a cyan line, brass and ivory. Newsreader for headlines,
+Hanken Grotesk for text, Caveat for hand-written notes. Surfaces and tokens live in `src/app/globals.css`.
 
-**Homepage sequence** (laid out after the client's reference):
+**Interaction.** A corner button opens Call, WhatsApp, Diniee and booking from anywhere. Every WhatsApp or email
+action opens a short form that shows the exact message before the visitor sends it; the site stores nothing. On Our
+story, posters on the events wall can be dragged and turned over, and the family album flicks through on a tap; both
+demonstrate themselves once on first view. Everything is static or calmer under reduced motion.
 
-0. Logo film — plays whenever someone arrives at the site, on any page (from the layout); the official SVG logo takes
-   over and glides into the header. Skip at any time; never with reduced motion; capped at 11 s.
-1. Hero — Disha's buildings full bleed, crossing over with a soft wipe and a slow zoom; headline on the left; "Explore
-   our projects" and "Watch our story" (the brand film in a dialog).
-2. Our approach — statement, a layered collage of community photographs with a hand-written card quoting the company
-   poem, and the record (1,102 homes, 5 communities, 1,000+ families, 20,25,000+ sq ft), counting up.
-3. Our developments — Pursuit of the Elements as the featured card; the five delivered communities two at a time.
-4. Plan your home — EMI calculator beside a home at Central Park.
-5. Why Disha — the manifesto and four proof cards.
-6. Spaces that bring people closer — drag the sun across a day at a Disha community.
-7. Homeowners speak — published homeowner words beside their community.
-8. Begin your journey — book a site visit or talk to us. Compact footer.
+**Honesty rules.** Only published or client-confirmed facts appear. Unconfirmed sections (water, paperwork status,
+promised RERA dates) are not shown. No call-back is promised. Renders are labelled. No em dashes in site copy.
 
-Calls to action: one primary action everywhere, "Book a site visit" (header, hero, each key section, and a sticky
-dock with Call and WhatsApp that appears after the hero and steps aside when a booking form is on screen). WhatsApp
-links carry a pre-filled message to the published sales line.
-
-`/contact`: every channel as a card (sales, WhatsApp, office, email), a four-step visit booker (place, day and time,
-details, review) that sends the request to the sales WhatsApp with all details and offers a calendar invite (.ics),
-"what happens next", an office map, and every community with directions. No data is stored by the site.
-
-Why Disha: three proof cards, then "Timelines in the open" with animated build-time bars beside 1,102 house-shaped
-blocks that fill with each community's colour in order of handover (choose a community to light only its homes).
-
-A day at Disha: play the whole day, drag the sun, jump to a time with thumbnails, or "Now in Bengaluru"; each time
-of day names the place and links to its community.
-
-No em dashes appear in site copy.
-
-Motion: Lenis smooth scrolling; words rise from soft focus; photographs open like a window; collage layers drift at
-different depths; counters; hover zoom with a turning arrow. All off or static under reduced motion.
-
-**Design system** (`src/app/globals.css`): Newsreader (headlines, optical sizes, true italic for emphasis) and Hanken
-Grotesk (text, labels and figures — clear numerals and ₹). Labels are plain sentence case. Translucent cards: `.card`
-(light) and `.card-dark`. Surfaces: `surface-forest`,
-`surface-deep`, `surface-charcoal`, `surface-earth`, `surface-ivory`, `surface-stone`, with a fine grain on dark ones.
-Cards: `src/components/ProjectCards.tsx` (interactive, editorial, compact); data from `src/lib/portfolio.ts`.
-Motion: shutter reveals for images, rising lines for headlines, hairlines that draw, CSS scroll-driven parallax where
-supported; under `prefers-reduced-motion` everything is static and no video autoplays.
-
-Stack: Next.js 16 (App Router, fully static), TypeScript, Tailwind CSS v4 and `lucide-react`. Nothing else is needed at
-runtime.
+Stack: Next.js 16 (App Router, fully static), React 19, TypeScript, Tailwind CSS v4, `lucide-react`, Lenis.
 
 ```
 src/
   app/                    routes, layout, design tokens (globals.css)
-  components/             Header, Footer, Logo, PageHero, Lightbox, EnquiryForm, AffordabilityExplorer, AmbientFilm
-  components/home/        homepage sections (Hero, Manifesto, Collection, DayInTheSun, HomesField, Journeys, BlackWhite, PlanTeaser, EnquirySection)
+  components/             Header, Footer, ActionDock, Diniee, MessageComposer, VisitBooker, CommuteChecker, ChecklistTool, …
+  components/home/        homepage sections (Hero, BuyerNeeds, Developments, RecordSection, DayAtDisha, HomeownersSpeak, CtaBand, …)
+  components/story/       GigWall, FamilyStacks, ChapterRibbon
   lib/site.ts             company facts, stats, homeowner quotes, founders
-  lib/projects.ts         the five communities (facts, timelines, media)
+  lib/projects.ts         the five delivered communities; lib/elements.ts the project on sale
+  lib/proof.ts            delivery record, commute destinations, award, third-party rating
   lib/emi.ts (+ .test.ts) loan maths and ₹ formatting
-public/                   official imagery, brand film, logo, contour texture
-docs/                     content sources, asset manifest, open questions
+public/                   Disha’s own imagery, brand film, logo film
+docs/                     research brief, content sources, asset manifest
+documents/                client documents (PDF)
 ```
 
 All copy and figures live in `src/lib/`. Change them there, not in the components.
@@ -116,13 +87,10 @@ The explorer is an **illustrative planning tool**, not a Disha Habitat financing
   year-by-year table.
 - **Privacy:** no data leaves the browser.
 
-## The enquiry form is a demo
+## Enquiries
 
-The form validates in the browser and shows a success state that **says plainly that nothing was sent**. No data leaves
-the browser.
-
-Real delivery needs an approved backend or form integration, plus a privacy notice suited to India’s DPDP Act. Replace
-the `onSubmit` handler in `src/components/EnquiryForm.tsx`.
+The site has no backend. Every enquiry is composed on the page and sent from the visitor’s own WhatsApp or email
+app, so nothing is stored. Saving enquiries automatically (Google Sheet or CRM) is a planned addition.
 
 ## Content and assets
 
