@@ -158,14 +158,16 @@ export function Diniee() {
     if (!q) return;
     setText("");
     const l = q.toLowerCase();
+    // Whole words only (so "premium" isn't "emi" and "separate" isn't "rate"), and loans before
+    // prices, because "EMI on a 1 crore loan" is a loan question that happens to mention crore.
     const match =
-      /price|cost|rate|budget|lakh|crore/.test(l) ? "price"
-      : /rera|registr|approv/.test(l) ? "rera"
-      : /where|location|address|gunjur|map/.test(l) ? "where"
-      : /amenit|club|pool|gym|park/.test(l) ? "amenities"
-      : /visit|see|tour|meet/.test(l) ? "visit"
-      : /emi|loan|finance/.test(l) ? "emi"
-      : /bhk|villa|apartment|flat|home|house/.test(l) ? "home"
+      /\b(emis?|loans?|finance|financing|mortgage|interest)\b/.test(l) ? "emi"
+      : /\b(prices?|pricing|costs?|budget|lakhs?|crores?|rates?|expensive|cheap)\b/.test(l) ? "price"
+      : /\b(rera|registered|registration|approvals?|approved)\b/.test(l) ? "rera"
+      : /\b(where|location|located|address|gunjur|maps?|directions?)\b/.test(l) ? "where"
+      : /\b(amenity|amenities|clubhouse|club|pool|gym|parks?|playground)\b/.test(l) ? "amenities"
+      : /\b(visits?|see|tour|meet|meeting)\b/.test(l) ? "visit"
+      : /\b(bhk|villas?|apartments?|flats?|homes?|house|towers?|units?)\b|\d\s?bhk/.test(l) ? "home"
       : null;
     if (match === "emi") {
       me(q);

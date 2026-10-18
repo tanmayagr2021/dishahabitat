@@ -93,7 +93,10 @@ const clock = (h: number) => {
   const q = Math.round(h * 4) / 4;
   const hh = Math.floor(q);
   const mm = Math.round((q - hh) * 60);
-  return new Date(2000, 0, 1, hh, mm).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
+  // Formatted by hand: browsers format times differently from the server ("8:00 am" vs "8:00 AM"),
+  // which breaks hydration in Safari.
+  const h12 = hh % 12 === 0 ? 12 : hh % 12;
+  return `${h12}:${String(mm).padStart(2, "0")} ${hh < 12 ? "am" : "pm"}`;
 };
 
 /* Arc geometry, in the SVG's own units. */
@@ -120,6 +123,7 @@ export function DayAtDisha() {
   const section = useRef<HTMLElement>(null);
   const svg = useRef<SVGSVGElement>(null);
   const dragging = useRef(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
   const raf = useRef(0);
   const hourRef = useRef(8);
   const setHour = useCallback((h: number) => {
@@ -241,16 +245,46 @@ export function DayAtDisha() {
                 ref={svg}
                 viewBox={`0 0 ${W} ${CY + 10}`}
                 preserveAspectRatio="xMidYMax meet"
-                className="block h-full w-full touch-none select-none"
+                className="block h-full w-full touch-pan-y select-none"
                 onPointerDown={(e) => {
+                  // On touch, wait to see the gesture: a vertical swipe scrolls the page as usual.
+                  if (e.pointerType === "touch") {
+                    touchStart.current = { x: e.clientX, y: e.clientY };
+                    return;
+                  }
                   dragging.current = true;
                   takeOver();
                   e.currentTarget.setPointerCapture(e.pointerId);
                   fromPointer(e);
                 }}
-                onPointerMove={(e) => dragging.current && fromPointer(e)}
-                onPointerUp={() => (dragging.current = false)}
-                onPointerCancel={() => (dragging.current = false)}
+                onPointerMove={(e) => {
+                  if (dragging.current) return fromPointer(e);
+                  const t = touchStart.current;
+                  if (!t) return;
+                  const dx = e.clientX - t.x;
+                  const dy = e.clientY - t.y;
+                  if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+                    dragging.current = true;
+                    touchStart.current = null;
+                    takeOver();
+                    e.currentTarget.setPointerCapture(e.pointerId);
+                    fromPointer(e);
+                  }
+                }}
+                onPointerUp={(e) => {
+                  const t = touchStart.current;
+                  // A tap without movement still moves the sun to that point.
+                  if (t && Math.hypot(e.clientX - t.x, e.clientY - t.y) < 8) {
+                    takeOver();
+                    fromPointer(e);
+                  }
+                  touchStart.current = null;
+                  dragging.current = false;
+                }}
+                onPointerCancel={() => {
+                  touchStart.current = null;
+                  dragging.current = false;
+                }}
                 aria-hidden
               >
                 <defs>

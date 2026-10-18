@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { indexing, siteUrl } from "@/lib/launch";
-import Script from "next/script";
 import { Caveat, Hanken_Grotesk, Newsreader } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Intro } from "@/components/Intro";
@@ -101,6 +100,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-svh flex-col">
+        {/* Runs as the HTML is parsed, before anything paints (a plain inline script; Next's
+            beforeInteractive scripts only run once the app boots, which is too late here). */}
+        <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
         <a
           href="#main"
           className="sr-only z-[100] rounded-full bg-ink px-5 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
@@ -126,9 +128,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Cursor />
         <MessageComposer />
         <Diniee />
-        <Script id="bootstrap" strategy="beforeInteractive">
-          {bootstrap}
-        </Script>
       </body>
     </html>
   );

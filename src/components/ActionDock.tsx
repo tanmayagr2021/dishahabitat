@@ -61,6 +61,8 @@ export function ActionDock() {
   if (lastPath !== pathname) {
     setLastPath(pathname);
     setOpen(false);
+    // A new page may have no booking form at all, so the button must not stay hidden.
+    setFormInView(false);
   }
 
   const visible = show && !formInView;
