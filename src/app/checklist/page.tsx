@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +8,11 @@ import { ChecklistTool } from "@/components/ChecklistTool";
 import { Lines } from "@/components/ui";
 import { checklist } from "@/lib/checklist";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "The checklist: must-knows while investing in a home",
   description: "Khata certificate, occupancy certificate, carpet area, deviation assessment and sewage treatment plants, explained by Disha Habitat.",
-};
+  path: "/checklist",
+});
 
 export default function ChecklistPage() {
   return (

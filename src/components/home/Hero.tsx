@@ -145,8 +145,8 @@ export function Hero() {
             ))}
           </h1>
           <p className="anim-fade-up mt-6 max-w-lg text-[1.08rem] leading-relaxed text-paper/85 md:text-[1.15rem]" style={d(900)}>
-            Keys on the day they’re promised, papers in order, neighbours who feel like family. We wanted the same things as
-            homebuyers in 2014. Since then we have built them, one community at a time, in East Bengaluru.
+            Keys on the day they’re promised, papers in order, neighbours who feel like family. We wanted the same things when
+            we were homebuyers, and since 2014 we have built five communities around them in East Bengaluru.
           </p>
           <div className="anim-fade-up mt-9 flex flex-col gap-3 sm:flex-row sm:items-center" style={d(1050)}>
             <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
@@ -167,7 +167,7 @@ export function Hero() {
             </button>
           </div>
           <p className="anim-fade mt-3 text-sm text-paper/65" style={d(1200)}>
-            Free site visits, no obligation. Or call{" "}
+            Site visits with no obligation. Or call{" "}
             <a href={elements.phone.href} className="underline decoration-paper/40 underline-offset-4 hover:text-paper">
               {elements.phone.display}
             </a>
@@ -189,7 +189,7 @@ export function Hero() {
             <li className="flex items-center gap-2">
               <Award aria-hidden className="size-4 text-brass" strokeWidth={1.7} />
               <span>
-                <strong className="font-semibold text-paper">{award.title}</strong>, {award.citation}
+                <strong className="font-semibold text-paper">{award.title}</strong>, {award.honour}
               </span>
             </li>
           </ul>

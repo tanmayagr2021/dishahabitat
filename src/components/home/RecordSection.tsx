@@ -19,7 +19,7 @@ export function RecordSection() {
             <Reveal as="p" className="eyebrow text-mute">
               Our record
             </Reveal>
-            <Lines id="record-title" className="serif mt-5 t-section leading-[1.04]" lines={["Every community we started,", <em key="e">we finished.</em>]} />
+            <Lines id="record-title" className="serif mt-5 t-section leading-[1.04]" lines={["Five communities,", <em key="e">start to handover.</em>]} />
           </div>
           <Reveal delay={150} as="p" className="max-w-md leading-relaxed text-ink/75 lg:col-span-4 lg:col-start-9">
             Delays are the biggest worry for anyone buying a home in Bengaluru. So here is ours, in full: {delivered.length} communities, {formatIndian(homesHandedOver)} homes, and the month each one started and was handed over.

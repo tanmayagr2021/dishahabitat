@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
@@ -11,11 +12,12 @@ import { elements } from "@/lib/elements";
 import { projects, projectsByHandover } from "@/lib/projects";
 import { formatIndian } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Our homes",
   description:
     "Pursuit of the Elements, now selling in Gunjur, and the five Disha Habitat communities handed over since 2014: Pursuit of Sunshine, Courtyard, Central Park, Park West and Windsor Gardens.",
-};
+  path: "/homes",
+});
 
 const value = (p: (typeof projects)[number], label: string) => p.facts.find((f) => f.label === label)?.value ?? "";
 const totalHomes = projects.reduce((n, p) => n + Number(value(p, "Homes")), 0);

@@ -25,7 +25,7 @@ export function Marquee() {
             <span className="serif block text-[1.5rem] leading-none md:text-[1.8rem]">{p.shortName}</span>
             <span className="mt-1 flex items-center gap-2 text-sm text-paper/60">
               <span aria-hidden className="size-1.5 rounded-full" style={{ background: p.hue }} />
-              {p.status === "Now selling" ? "Now selling" : `Delivered ${p.handoverYear}`} · {p.locality.replace(", Bengaluru", "").replace(", East Bengaluru", "")}
+              {p.status === "Now selling" ? "Now selling" : `Handed over ${p.handoverYear}`} · {p.locality.replace(", Bengaluru", "").replace(", East Bengaluru", "")}
             </span>
           </span>
         </Link>

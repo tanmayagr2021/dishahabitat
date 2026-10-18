@@ -26,7 +26,7 @@ function StatusLine({ p, className = "" }: { p: PortfolioItem; className?: strin
   return (
     <span className={`label flex items-center gap-2 ${className}`}>
       <span aria-hidden className="size-2 rounded-full" style={{ background: p.hue }} />
-      {p.status === "Now selling" ? "Now selling" : `Delivered ${p.handoverYear}`} · {p.locality.replace(", Bengaluru", "")}
+      {p.status === "Now selling" ? "Now selling" : `Handed over ${p.handoverYear}`} · {p.locality.replace(", Bengaluru", "")}
     </span>
   );
 }

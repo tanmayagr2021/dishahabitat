@@ -40,7 +40,7 @@ const phases = [
   },
   {
     name: "Night",
-    line: "Stars from your own 8 ft × 12 ft sundeck, every home has one.",
+    line: "Stars from your own 8 ft × 12 ft sundeck. Every home has one.",
     src: "/images/pursuit-of-sunshine/render-sundeck.jpg",
     alt: "Artist’s impression of a sundeck at night with lounge chair, plants and a telescope",
     kind: "render" as const,

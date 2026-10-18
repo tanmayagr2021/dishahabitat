@@ -42,7 +42,14 @@ const subscribe = (l: () => void) => {
 export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
   const uid = useId();
   const raw = useSyncExternalStore(subscribe, read, () => "{}");
-  const state: State = JSON.parse(raw);
+  const state: State = (() => {
+    try {
+      const v = JSON.parse(raw);
+      return v && typeof v === "object" ? v : {};
+    } catch {
+      return {};
+    }
+  })();
   const [open, setOpen] = useState<string | null>(items[0].slug);
 
   const done = (slug: string) => Boolean(state[slug]);

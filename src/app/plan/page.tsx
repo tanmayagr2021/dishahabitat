@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import { AffordabilityExplorer } from "@/components/AffordabilityExplorer";
 import { PageHero } from "@/components/PageHero";
 import { Label, Reveal } from "@/components/ui";
 
-export const metadata: Metadata = {
-  title: "Plan your home",
-  description:
-    "An illustrative home affordability explorer: estimate a monthly EMI, total interest and repayment from your own figures.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "EMI calculator",
+  description: "Estimate a monthly EMI, total interest and repayment from your own figures. Illustrative only; nothing you enter leaves your browser.",
+  path: "/plan",
+});
 
 const notes = [
   {

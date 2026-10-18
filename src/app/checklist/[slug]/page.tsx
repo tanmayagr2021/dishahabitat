@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -14,7 +15,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/checklist/[slug]">): Promise<Metadata> {
   const c = getChecklistItem((await params).slug);
-  return c ? { title: `${c.title} | The checklist`, description: c.body[0] } : {};
+  return c ? pageMeta({ title: `${c.title} | The checklist`, description: c.body[0], path: `/checklist/${c.slug}` }) : {};
 }
 
 export default async function ChecklistItemPage({ params }: PageProps<"/checklist/[slug]">) {

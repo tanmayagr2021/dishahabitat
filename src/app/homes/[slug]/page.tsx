@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -23,11 +24,12 @@ export async function generateMetadata(props: PageProps<"/homes/[slug]">): Promi
   const { slug } = await props.params;
   const p = getProject(slug);
   if (!p) return {};
-  return {
+  return pageMeta({
     title: p.name,
     description: `${p.name}, ${p.locality}. ${p.intro}`,
-    openGraph: { images: [{ url: p.cover.src, width: p.cover.width, height: p.cover.height, alt: p.cover.alt }] },
-  };
+    path: `/homes/${p.slug}`,
+    image: { url: p.cover.src, width: p.cover.width, height: p.cover.height, alt: p.cover.alt },
+  });
 }
 
 const galleryTiles = [

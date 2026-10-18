@@ -144,7 +144,7 @@ export function Intro() {
   if (gone) return null;
 
   return (
-    <div ref={root} onClick={(e) => e.target === e.currentTarget && video.current?.dispatchEvent(new Event("error"))} className="intro fixed inset-0 z-[70] overflow-hidden bg-forest-deep">
+    <div ref={root} onClick={(e) => !(e.target as HTMLElement).closest("button") && video.current?.dispatchEvent(new Event("error"))} className="intro fixed inset-0 z-[70] overflow-hidden bg-forest-deep">
       <div data-film className="absolute inset-0">
         {/* Cover on landscape screens; on portrait the film is sized so the whole logo fits. */}
         <div className="absolute left-1/2 top-1/2 aspect-video w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2 portrait:w-[200vw] portrait:[mask-image:linear-gradient(transparent,black_18%,black_82%,transparent)]">

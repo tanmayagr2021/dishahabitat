@@ -30,7 +30,7 @@ const needs: Need[] = [
   {
     key: "keys",
     wish: "Keys on the day they promise.",
-    answer: `We have never left a community unfinished. ${formatIndian(homesHandedOver)} homes across five communities are lived in today, and we publish when each one started and when its keys were handed over.`,
+    answer: `${formatIndian(homesHandedOver)} homes across five communities are lived in today. For every one of them we publish the month construction began and the month the keys were handed over, so you can judge our record for yourself.`,
     figure: formatIndian(homesHandedOver),
     figureNote: `homes handed over since 2014. Quickest build: ${quickestBuild.name}, ${quickestBuild.months} months.`,
     image: { src: "/images/central-park/front-door.jpg", alt: "The front door of a home at Disha Central Park" },
@@ -42,7 +42,7 @@ const needs: Need[] = [
     answer: `${elements.shortName} is registered with Karnataka RERA in two phases, and both numbers are printed on every page we publish. Bring our checklist of must-knows and ask us about any of them.`,
     figure: "RERA",
     figureNote: "registered, Phase I and Phase II",
-    image: { src: "/images/checklist/khata.webp", alt: "Property papers laid out on a desk" },
+    image: { src: "/images/checklist/khata.webp", alt: "A hand signing a property document beside a pair of reading glasses" },
     link: { href: "/checklist", label: "The homebuyer’s checklist" },
     extra: (
       <ul className="mt-5 space-y-2">
@@ -85,18 +85,18 @@ const needs: Need[] = [
   {
     key: "green",
     wish: "Green, quiet and safe for the children.",
-    answer: `${elements.shortName} sits on 20 acres, with ${elements.outdoor.length} outdoor spaces: a lily pond, a kitchen garden, an aroma garden, a sculpture park and lawns to run on. Guna is a practising horticulturist, and every garden we plant shows it.`,
+    answer: `${elements.shortName} sits on 20 acres, with a lily pond, a kitchen garden, an aroma garden, a sculpture park and a jogging track among its outdoor spaces. Guna is a practising horticulturist, and every garden we plant shows it.`,
     figure: "20 acres",
-    figureNote: `${elements.outdoor.length} outdoor spaces, 40+ amenities in all`,
+    figureNote: "with 40+ amenities, indoors and out",
     image: { src: "/images/pursuit-of-the-elements/play-lawn.webp", alt: "Artist’s impression of the children’s play lawn at Pursuit of the Elements", render: true },
     link: { href: elements.href, label: `Explore ${elements.shortName}` },
   },
   {
     key: "neighbours",
     wish: "Neighbours who feel like family.",
-    answer: `More than 1,000 families live in Disha homes. Our first four communities sold out by word of mouth, and the evenings bring everyone together, from Shreya Ghoshal to Shankar Ehsaan Loy.`,
+    answer: `More than 1,000 families live in Disha homes, and our first four communities sold out by word of mouth. Disha has also brought some of India’s best-loved artists to Bengaluru, from Shreya Ghoshal to Shankar Ehsaan Loy.`,
     figure: residentRating.score,
-    figureNote: `out of ${residentRating.outOf}: how residents rate ${residentRating.community} on ${residentRating.source} (${residentRating.checked})`,
+    figureNote: `out of ${residentRating.outOf}: ${residentRating.community} on ${residentRating.source}, from ${residentRating.reviews} resident reviews (${residentRating.checked})`,
     image: { src: "/images/people/family-2.jpg", alt: "Three generations of a Disha homeowner family together in their living room" },
     link: { href: residentRating.href, label: `Read the reviews on ${residentRating.source}`, external: true },
   },
@@ -105,7 +105,7 @@ const needs: Need[] = [
     wish: "Someone who’ll explain everything.",
     answer: "“Let’s meet for coffee” is Guna’s favourite invitation. It means he will explain until you leave as informed as any engineer on the project, and Raja will take you through the structure until the maths of the building is clear.",
     figure: "2",
-    figureNote: "founders you can meet, in person, before you decide",
+    figureNote: "founders who still invite buyers for coffee",
     image: { src: "/images/people/founders.jpg", alt: "Disha Habitat founders Gunaranjan J and K Raja Sekhar" },
     link: { href: "/contact#book", label: "Meet us for coffee" },
   },
@@ -124,7 +124,7 @@ export function BuyerNeeds() {
             You’re not looking for a house. <em>Neither were we.</em>
           </h2>
           <p className="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-ink/75">
-            In 2014 we were homebuyers too, with the same list you probably have. Pick anything on it, and we’ll show you what
+            We were homebuyers before we were builders, with the same list you probably have. Pick anything on it, and we’ll show you what
             we did about it.
           </p>
         </div>
@@ -215,7 +215,7 @@ function Answer({ n }: { n: Need }) {
               ))}
             </span>
             <p className="text-sm text-mute">
-              <span className="font-semibold text-ink">Guna and Raja</span>, founders
+              <span className="font-semibold text-ink">Guna, Raja</span> and the Disha team
             </p>
           </div>
           <p className="mt-4 text-[1.08rem] leading-relaxed text-ink/85">{n.answer}</p>

@@ -117,7 +117,7 @@ export function EnquiryForm({
   };
 
   const message = buildMessage(
-    `I'd like to know more about ${values.interest}.`,
+    `I’d like to know more about ${values.interest}.`,
     [
       ["Name", values.name],
       ["Mobile", values.phone],
@@ -137,7 +137,7 @@ export function EnquiryForm({
         <CheckCircle2 aria-hidden className="size-8" strokeWidth={1.25} />
         <h3 className="serif mt-6 text-[2.4rem] leading-none">Ready to send, {submitted}.</h3>
         <p className={`mt-3 max-w-md leading-relaxed ${dark ? "text-paper/75" : "text-mute"}`}>
-          This is exactly what we will receive. Choose how to send it.
+          This is the message you’ll send. Choose how to send it.
         </p>
         <p className={`mt-5 whitespace-pre-wrap rounded-xl p-4 text-sm leading-relaxed ${dark ? "bg-paper/10 text-paper/90" : "bg-paper-2 text-ink"}`}>{message}</p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -151,7 +151,7 @@ export function EnquiryForm({
             <span className="sr-only">(opens in a new tab)</span>
           </a>
           <a
-            href={mailtoUrl(`Enquiry: ${values.interest}`, message)}
+            href={mailtoUrl(`Enquiry: ${values.interest}`, message, values.interest === elements.name ? elements.email : undefined)}
             className={`inline-flex h-12 items-center justify-center gap-2 rounded-lg border px-5 font-medium ${dark ? "border-paper/30 text-paper" : "border-ink/20 text-ink"}`}
           >
             <Mail aria-hidden className="size-5" strokeWidth={1.6} /> Send by email

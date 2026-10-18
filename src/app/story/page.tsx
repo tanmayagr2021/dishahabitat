@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import Image from "next/image";
 import Link from "next/link";
 import { AmbientFilm } from "@/components/AmbientFilm";
@@ -11,11 +12,12 @@ import { ChapterRibbon } from "@/components/story/ChapterRibbon";
 import { company, homemakerProfiles, homemakers, poem, stats } from "@/lib/site";
 import { projects, projectsByHandover } from "@/lib/projects";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Our story",
   description:
-    "The Disha Habitat story in the founders' own words: two homebuyers in 2014 who became builders, and the five communities they have handed over since.",
-};
+    "The Disha Habitat story in the founders’ own words: how two homebuyers became builders, and the five communities handed over since 2014.",
+  path: "/story",
+});
 
 /*
  * A memoir in seven short chapters, told by the two founders. People identify with a brand that
@@ -38,9 +40,9 @@ const chapters = [
   { id: "ch-1", n: "One", title: "We were homebuyers first" },
   { id: "homemakers", n: "Two", title: "Two very different careers" },
   { id: "ch-3", n: "Three", title: "Ninety-two homes among the palms" },
-  { id: "ch-4", n: "Four", title: "One community at a time" },
+  { id: "ch-4", n: "Four", title: "Five communities, start to finish" },
   { id: "ch-5", n: "Five", title: "What we promised ourselves" },
-  { id: "this-is-us", n: "Six", title: "The people who make it home" },
+  { id: "this-is-us", n: "Six", title: "This is us" },
   { id: "ch-7", n: "Seven", title: "Come and have coffee" },
 ];
 
@@ -110,8 +112,8 @@ export default function StoryPage() {
           <div className="memoir space-y-6 text-[1.15rem] leading-[1.75] text-ink/80 lg:col-span-6 lg:col-start-7">
             <Reveal>
               <p className="drop-cap">
-                In 2014 we were doing what you are doing now: looking for a house that would become a home. We asked the
-                questions every buyer asks.
+                We began where you are now: looking for a house that would become a home. We asked the questions every
+                buyer asks.
               </p>
             </Reveal>
             <Reveal delay={80}>
@@ -228,8 +230,8 @@ export default function StoryPage() {
                 on 1.25 acres, among coconut palms.
               </p>
               <p>
-                We broke ground in {windsor.timeline.start}. The families moved in from {windsor.timeline.handover}, and the work was complete
-                {" "}{windsor.timeline.months} months after the first dig. It is where everything we know began.
+                We broke ground in {windsor.timeline.start} and handed over the keys in {windsor.timeline.handover}. It is where everything
+                we know began.
               </p>
             </div>
             <ArrowLink href={`/homes/${windsor.slug}`} className="mt-7 text-paper">
@@ -247,7 +249,7 @@ export default function StoryPage() {
               <ChapterHead i={3} tone="dark" id="ch-4-title" />
             </div>
             <p className="max-w-md leading-relaxed text-paper/70 lg:col-span-4 lg:col-start-9">
-              We never start a community we can’t give our full attention to. Our first four sold out without any concentrated
+              Our first four communities sold out without any concentrated
               brand marketing: our homebuyers told their friends. Each bar runs from construction start to completion, as
               published.
             </p>
@@ -304,7 +306,7 @@ export default function StoryPage() {
               <span aria-hidden className="letter-tape" />
               <p className="font-[family-name:var(--font-caveat)] text-[1.7rem] leading-none text-ink/80">Dear future neighbour,</p>
               <p className="mt-5 text-[1.08rem] leading-[1.9] text-ink/80">
-                Everyone who builds homes makes promises. We wanted ours to be the kind you can check. So these are the three we
+                Everyone who builds homes makes promises. We wanted ours to be few and plain. So these are the three we
                 made ourselves, and still hold ourselves to:
               </p>
               <ol className="mt-6 space-y-5">

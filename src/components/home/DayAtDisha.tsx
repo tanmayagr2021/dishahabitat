@@ -124,6 +124,7 @@ export function DayAtDisha() {
   const svg = useRef<SVGSVGElement>(null);
   const dragging = useRef(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const playRaf = useRef(0);
   const raf = useRef(0);
   const hourRef = useRef(8);
   const setHour = useCallback((h: number) => {
@@ -177,6 +178,7 @@ export function DayAtDisha() {
   useEffect(() => {
     if (!playing) return;
     cancelAnimationFrame(raf.current);
+    cancelAnimationFrame(playRaf.current);
     let last = performance.now();
     const step = (now: number) => {
       const dt = (now - last) / 1000;
@@ -188,14 +190,15 @@ export function DayAtDisha() {
         return;
       }
       setHour(next);
-      raf.current = requestAnimationFrame(step);
+      playRaf.current = requestAnimationFrame(step);
     };
-    raf.current = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf.current);
+    playRaf.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(playRaf.current);
   }, [playing, setHour]);
 
   const takeOver = useCallback(() => {
     cancelAnimationFrame(raf.current);
+    cancelAnimationFrame(playRaf.current);
     setPlaying(false);
     setTouched(true);
   }, []);

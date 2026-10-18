@@ -14,6 +14,7 @@ import { projectsNewestFirst } from "@/lib/projects";
 const topics = [
   `${elements.name}`,
   "Booking a site visit",
+  "Documents and approvals",
   ...projectsNewestFirst.map((p) => p.name),
   "Something else",
 ];
@@ -33,7 +34,8 @@ export function MessageComposer() {
     const open = (e: Event) => {
       const d = (e as CustomEvent<{ channel?: Channel; topic?: string }>).detail ?? {};
       if (d.channel) setChannel(d.channel);
-      if (d.topic && topics.includes(d.topic)) setTopic(d.topic);
+      // Each opening starts from its own topic (or the default), never the last visitor action's.
+      setTopic(d.topic && topics.includes(d.topic) ? d.topic : topics[0]);
       setTried(false);
       ref.current?.showModal();
     };
@@ -41,14 +43,18 @@ export function MessageComposer() {
     return () => window.removeEventListener("disha:compose", open);
   }, []);
 
-  const digits = phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
+  const digits = phone.replace(/\D/g, "").replace(/^(?:0091|91|0)(?=\d{10}$)/, "");
   const phoneOk = digits === "" ? channel === "email" : /^[6-9]\d{9}$/.test(digits);
   const emailOk = email.trim() === "" ? true : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const nameOk = name.trim().length >= 2;
   const ok = nameOk && phoneOk && emailOk;
 
   const message = buildMessage(
-    `I'd like to know more about ${topic === "Something else" ? "your homes" : topic}.`,
+    topic === "Booking a site visit"
+      ? "I’d like to book a site visit."
+      : topic === "Documents and approvals"
+        ? `I’d like to see the documents and approvals for ${elements.name}.`
+        : `I’d like to know more about ${topic === "Something else" ? "your homes" : topic}.`,
     [
       ["Name", name],
       ["Mobile", digits ? `+91 ${digits}` : undefined],
@@ -56,7 +62,7 @@ export function MessageComposer() {
     ],
     note,
   );
-  const emailTo = topic === elements.name ? elements.email : destinations.email.to;
+  const emailTo = topic === elements.name || topic === "Documents and approvals" ? elements.email : destinations.email.to;
   const href = channel === "whatsapp" ? whatsappUrl(message) : mailtoUrl(`Enquiry: ${topic}`, message, emailTo);
   const d = channel === "whatsapp" ? destinations.whatsapp : { ...destinations.email, to: emailTo };
 
@@ -75,7 +81,7 @@ export function MessageComposer() {
           <div>
             <p className="eyebrow text-mute">Message us</p>
             <h2 id={`${uid}-title`} className="serif mt-2 text-[1.9rem] leading-tight">
-              Write to us on {d.label}.
+              {channel === "whatsapp" ? "Write to us on WhatsApp." : "Write to us by email."}
             </h2>
           </div>
           <button type="button" onClick={() => ref.current?.close()} aria-label="Close" className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-ink/5 hover:bg-ink/10">
@@ -145,7 +151,7 @@ export function MessageComposer() {
               <label htmlFor={`${uid}-note`} className="text-sm font-medium">
                 Your message <span className="font-normal text-mute">(optional)</span>
               </label>
-              <textarea
+              <textarea maxLength={500}
                 id={`${uid}-note`}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
@@ -180,7 +186,7 @@ export function MessageComposer() {
               }`;
               const label = (
                 <>
-                  <Send aria-hidden className="size-4" /> Send on {d.label}
+                  <Send aria-hidden className="size-4" /> {channel === "whatsapp" ? "Send on WhatsApp" : "Send by email"}
                 </>
               );
               // Until the form is complete this is a button that shows what is missing; then a real link.

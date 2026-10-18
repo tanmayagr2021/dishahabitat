@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import Image from "next/image";
@@ -13,11 +14,12 @@ import { CommuteChecker } from "@/components/CommuteChecker";
 import { award, homesHandedOver, reraSearch } from "@/lib/proof";
 import { formatIndian } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: e.name,
   description: `${e.name}, ${e.locality}. ${e.offer}. ${e.intro}`,
-  openGraph: { images: [{ url: e.cover.src, width: e.cover.width, height: e.cover.height, alt: e.cover.alt }] },
-};
+  path: e.href,
+  image: { url: e.cover.src, width: e.cover.width, height: e.cover.height, alt: e.cover.alt },
+});
 
 const galleryTiles = [
   "col-span-2 aspect-[16/10] md:col-span-8 md:aspect-[16/10]",
@@ -138,7 +140,7 @@ export default function ElementsPage() {
               lines={["Seven towers", <em key="e">and a row of villas.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
-              2, 3 and 4 bedroom apartments, and 4 and 5 bedroom villas. Ask us for the floor plans of the home you’re
+              2, 3 and 4 BHK apartments, and 4 and 5 BHK villas. Ask us for the floor plans of the home you’re
               considering.
             </p>
           </div>
@@ -194,7 +196,7 @@ export default function ElementsPage() {
               lines={["Over 40,", <em key="e">indoors and out.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-mute">
-              Not ten or twenty, but over forty mindful amenities, created to bring you outdoors and closer to nature.
+              Not ten or twenty, but more than 40 mindful amenities, created to bring you outdoors and closer to nature.
             </p>
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
@@ -331,7 +333,7 @@ export default function ElementsPage() {
             </div>
             <ComposeButton
               channel="whatsapp"
-              topic={`documents for ${e.name}`}
+              topic="Documents and approvals"
               className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper hover:bg-forest-2"
             >
               <MessageCircle aria-hidden className="size-4" strokeWidth={1.8} /> Ask for any document

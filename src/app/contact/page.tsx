@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,10 +12,11 @@ import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
 import { projectsNewestFirst } from "@/lib/projects";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Contact and site visits",
   description: "Book a site visit, call, WhatsApp or write to Disha Habitat, Whitefield Main Road, Bengaluru.",
-};
+  path: "/contact",
+});
 
 const mapQuery = encodeURIComponent(`${company.legalName}, ${company.office.lines.join(", ")}`);
 
@@ -26,8 +28,8 @@ const channels = [
 ];
 
 const next = [
-  { n: "1", title: "Send your request", text: "Choose where and when. Your details go straight to our sales team on WhatsApp." },
-  { n: "2", title: "We confirm the time", text: "Someone from Disha calls or messages you to confirm the visit and answer first questions." },
+  { n: "1", title: "Send your request", text: "Choose where and when, then send the request from your own WhatsApp or email." },
+  { n: "2", title: "We confirm the time", text: "Once it reaches us, someone from Disha calls or messages you to confirm the visit." },
   { n: "3", title: "Meet us", text: "Walk the site or sit down for coffee. We’ll explain everything, as plainly as you need." },
 ];
 
@@ -45,7 +47,7 @@ export default function ContactPage() {
               Let’s meet <em>for coffee.</em>
             </h1>
             <p className="anim-fade-up mt-6 max-w-xl text-[1.1rem] leading-relaxed text-paper/80" style={{ "--d": "250ms" } as CSSProperties}>
-              It’s our founder’s favourite invitation. Visit a site, sit down with us at the office, or simply ask a question. Whatever
+              It’s Guna’s favourite invitation. Visit a site, sit down with us at the office, or simply ask a question. Whatever
               suits you.
             </p>
             <div className="anim-fade-up mt-8 flex flex-col gap-3 sm:flex-row" style={{ "--d": "400ms" } as CSSProperties}>
@@ -207,7 +209,7 @@ export default function ContactPage() {
                     <span className="sr-only">{p.name}</span>
                   </Link>
                   <span className="min-w-0 py-1">
-                    <span className="text-xs text-paper/55">Delivered {p.handoverYear}</span>
+                    <span className="text-xs text-paper/55">Handed over {p.handoverYear}</span>
                     <Link href={`/homes/${p.slug}`} className="serif mt-1 block text-[1.4rem] leading-tight hover:underline">
                       {p.shortName}
                     </Link>

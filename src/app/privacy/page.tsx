@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { company } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Privacy",
   description: "What this website does and does not do with your information.",
-};
+  path: "/privacy",
+});
 
 /* A plain statement of what this website actually does with information. It describes the site as built. */
 const points = [
@@ -21,6 +23,14 @@ const points = [
   {
     title: "The EMI calculator runs in your browser",
     text: "Figures you enter are calculated on your device and are never sent anywhere.",
+  },
+  {
+    title: "When you send us a message",
+    text: "If you choose to send a WhatsApp message or an email, it reaches Disha Habitat like any other message. We use your name, number and email only to reply to you about your enquiry or site visit, and we do not sell or share them.",
+  },
+  {
+    title: "The opening film",
+    text: "So the logo film plays only once per visit, your browser remembers for that visit that you have seen it. Nothing else is recorded.",
   },
   {
     title: "Maps and links",
@@ -44,11 +54,15 @@ export default function PrivacyPage() {
           ))}
         </ul>
         <p className="mt-10 text-sm text-mute">
-          Questions? Write to{" "}
-          <Link href="/contact" className="underline underline-offset-4">
+          Questions, or want us to delete your messages? Write to{" "}
+          <a href={`mailto:${company.email}`} className="underline underline-offset-4">
             {company.email}
-          </Link>{" "}
-          via our contact page.
+          </a>{" "}
+          or see our{" "}
+          <Link href="/contact" className="underline underline-offset-4">
+            contact page
+          </Link>
+          .
         </p>
       </div>
     </section>

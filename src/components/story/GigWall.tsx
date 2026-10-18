@@ -22,7 +22,7 @@ const pieces: Piece[] = [
   { kind: "poster", id: "shreya", src: "/images/events/shreya-ghoshal.webp", ratio: 285 / 467, alt: "Poster: Shreya Ghoshal, All Hearts Tour", artist: "Shreya Ghoshal", billing: "All Hearts Tour", when: "11 May 2024", where: "New Horizon College of Engineering, Bellandur", d: { x: 18.5, y: 8, w: 15, r: 4 }, m: { x: 52, y: 9, w: 44, r: 4 } },
   { kind: "award", id: "award", src: "/images/events/et-award-certificate.webp", ratio: 315 / 227, alt: "ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements, Innovation Real Estate Project of the Year", d: { x: 36, y: 4, w: 21, r: -2 }, m: { x: 5, y: 80, w: 72, r: -3 } },
   { kind: "poster", id: "armaan", src: "/images/events/armaan-malik.webp", ratio: 308 / 499, alt: "Poster: Armaan Malik, live in Bengaluru", artist: "Armaan Malik", billing: "Live in Bengaluru", when: "13 September", where: "Phoenix Marketcity, Whitefield", d: { x: 60, y: 1.5, w: 15.5, r: -3 }, m: { x: 4, y: 140, w: 44, r: -4 } },
-  { kind: "poster", id: "piyush", src: "/images/events/piyush-mishra.webp", ratio: 216 / 435, alt: "Poster: Piyush Mishra's Ballimaaraan, live in concert", artist: "Piyush Mishra", billing: "Ballimaaraan, live in concert", d: { x: 81, y: 4, w: 12.5, r: 6 }, m: { x: 55, y: 152, w: 38, r: 6 } },
+  { kind: "poster", id: "piyush", src: "/images/events/piyush-mishra.webp", ratio: 216 / 435, alt: "Poster: Piyush Mishra’s Ballimaaraan, live in concert", artist: "Piyush Mishra", billing: "Ballimaaraan, live in concert", d: { x: 81, y: 4, w: 12.5, r: 6 }, m: { x: 55, y: 152, w: 38, r: 6 } },
   { kind: "polaroid", id: "stage", src: "/images/events/et-award-stage.webp", ratio: 300 / 146, alt: "Receiving the ET Business Award on stage", caption: "Award night!", d: { x: 39, y: 21, w: 15, r: 5 }, m: { x: 47, y: 117, w: 50, r: 5 } },
   { kind: "polaroid", id: "b1", src: "/images/events/backstage-1.webp", ratio: 365 / 204, alt: "The Disha Habitat team with visiting artists, backstage", caption: "Backstage", d: { x: 2, y: 33, w: 15, r: 5 }, m: { x: 52, y: 260, w: 44, r: -5 } },
   { kind: "poster", id: "chithra", src: "/images/events/ks-chithra.webp", ratio: 372 / 167, alt: "Poster: K S Chithra, live in concert", artist: "K S Chithra", billing: "Live in concert, multilingual", d: { x: 18, y: 37.5, w: 25, r: 3 }, m: { x: 3, y: 213, w: 80, r: 3 } },
@@ -47,6 +47,7 @@ export function GigWall() {
   const [hand, setHand] = useState<{ x: number; y: number; on: boolean; tap: number } | null>(null);
   const drag = useRef<{ id: string; sx: number; sy: number; ox: number; oy: number; moved: boolean } | null>(null);
   const touched = useRef(false);
+  const lastPointer = useRef(0);
   const timers = useRef<number[]>([]);
 
   const later = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
@@ -210,7 +211,23 @@ export function GigWall() {
                 aria-pressed={flippable ? isFlipped : undefined}
                 onPointerDown={(e) => onDown(e, p.id)}
                 onPointerMove={onMove}
-                onPointerUp={(e) => onUp(e, p.id, flippable)}
+                onPointerUp={(e) => {
+                  lastPointer.current = Date.now();
+                  onUp(e, p.id, flippable);
+                }}
+                onPointerCancel={() => {
+                  if (drag.current?.id === p.id) els.current[p.id]?.classList.remove("is-dragging");
+                  drag.current = null;
+                }}
+                onClick={() => {
+                  // Screen readers and voice control "click" without pointer events.
+                  if (flippable && Date.now() - lastPointer.current > 400) {
+                    touched.current = true;
+                    stopDemo();
+                    toFront(p.id);
+                    turn(p.id);
+                  }
+                }}
                 onKeyDown={(e) => {
                   if (flippable && (e.key === "Enter" || e.key === " ")) {
                     e.preventDefault();
@@ -247,7 +264,7 @@ export function GigWall() {
                     </span>
                     <span aria-hidden className="absolute -right-[7%] -top-[12%] grid aspect-square w-[30%] rotate-12 place-items-center rounded-full bg-earth text-center text-paper shadow-lg ring-4 ring-earth/30">
                       <span className="font-[family-name:var(--font-caveat)] text-[clamp(0.85rem,1.4cqw,1.35rem)] leading-[0.95]">
-                        Winner
+                        ET
                         <br />
                         2025
                       </span>
@@ -268,7 +285,7 @@ function Ticket({ poster: p, hidden }: { poster: Poster; hidden: boolean }) {
   return (
     <span data-hidden={hidden ? "" : undefined} className="gig-face flex flex-col overflow-hidden rounded-[6px] bg-paper text-ink shadow-[0_18px_30px_-14px_rgb(21_26_23/0.55)]">
       <span className="flex items-center justify-between bg-forest px-[8%] py-[5%] text-paper">
-        <span className="text-[clamp(0.55rem,0.8cqw,0.75rem)] font-semibold uppercase tracking-[0.2em]">Admit one</span>
+        <span className="text-[clamp(0.55rem,0.8cqw,0.75rem)] font-semibold uppercase tracking-[0.2em]">Presented by</span>
         <span className="text-[clamp(0.55rem,0.8cqw,0.75rem)] text-brass">Disha Habitat</span>
       </span>
       <span className="flex flex-1 flex-col justify-center gap-[0.4em] border-b-2 border-dashed border-ink/20 px-[8%] py-[6%]">

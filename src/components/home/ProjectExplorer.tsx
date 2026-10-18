@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
 import { CompactProjectCard } from "@/components/ProjectCards";
 import { buttonClass, ButtonInner, MediaBadge } from "@/components/ui";
+import { elements } from "@/lib/elements";
 import { portfolio, type PortfolioItem } from "@/lib/portfolio";
 
 /*
@@ -61,7 +62,7 @@ function Segmented<T extends string>({
 function Selected({ p }: { p: PortfolioItem }) {
   const [shot, setShot] = useState(0);
   const m = p.gallery[shot] ?? p.gallery[0];
-  const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : "/contact#book";
+  const enquireHref = p.status === "Now selling" ? `${p.href}#enquire` : elements.href;
 
   return (
     <article key={p.slug} aria-labelledby="explorer-name" className="swap-in card-dark overflow-hidden p-3 md:p-4" style={{ "--hue": p.hue } as CSSProperties}>
@@ -101,7 +102,7 @@ function Selected({ p }: { p: PortfolioItem }) {
         <div className="md:col-span-7">
           <p className="label flex items-center gap-2 text-paper/70">
             <span aria-hidden className="size-2" style={{ background: p.hue }} />
-            {p.status === "Now selling" ? "Now selling" : `Delivered ${p.handoverYear}`} · {p.locality}
+            {p.status === "Now selling" ? "Now selling" : `Handed over ${p.handoverYear}`} · {p.locality}
           </p>
           <h3 id="explorer-name" className="serif mt-3 text-[clamp(2.2rem,3.6vw,3.6rem)] leading-[0.95]">
             {p.name}
@@ -123,7 +124,7 @@ function Selected({ p }: { p: PortfolioItem }) {
               <ButtonInner>See {p.shortName}</ButtonInner>
             </Link>
             <Link href={enquireHref} className={buttonClass("outline-light")}>
-              <ButtonInner>Enquire about this</ButtonInner>
+              <ButtonInner>{p.status === "Now selling" ? "Book a site visit" : "See what’s selling now"}</ButtonInner>
             </Link>
           </div>
         </div>

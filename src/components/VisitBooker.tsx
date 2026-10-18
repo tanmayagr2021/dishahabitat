@@ -42,43 +42,71 @@ const slots = [
 ];
 const steps = ["Where", "When", "You", "Confirm"];
 
+/* Today's date in Bengaluru, whatever the visitor's own time zone. */
+const istToday = () => {
+  const [y, m, d] = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit" })
+    .format(new Date())
+    .split("-")
+    .map(Number);
+  return { y, m: m - 1, d };
+};
 function nextDays(n: number) {
-  const out: Date[] = [];
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  for (let i = 1; i <= n; i++) out.push(new Date(d.getFullYear(), d.getMonth(), d.getDate() + i));
-  return out;
+  const { y, m, d } = istToday();
+  return Array.from({ length: n }, (_, i) => new Date(y, m, d + i + 1));
 }
-/* Dates depend on today, so they are computed in the browser (empty while rendering on the server). */
+/* Dates depend on today, so they are computed in the browser (empty while rendering on the server),
+   and recomputed if the page has been left open past midnight. */
 let cachedDays: Date[] | null = null;
+let cachedFor = "";
 const EMPTY: Date[] = [];
 const noop = () => () => {};
-const clientDays = () => (cachedDays ??= nextDays(14));
+const clientDays = () => {
+  const t = istToday();
+  const key = `${t.y}-${t.m}-${t.d}`;
+  if (!cachedDays || cachedFor !== key) {
+    cachedDays = nextDays(14);
+    cachedFor = key;
+  }
+  return cachedDays;
+};
 const serverDays = () => EMPTY;
 
 const dayFmt = new Intl.DateTimeFormat("en-IN", { weekday: "short" });
 const dateFmt = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short" });
 const longFmt = new Intl.DateTimeFormat("en-IN", { weekday: "long", day: "numeric", month: "long" });
 
-function icsFile(title: string, where: string, start: Date, hours: number) {
+/*
+ * A calendar invite (RFC 5545). Times are written in UTC, converted from the chosen hour in
+ * Bengaluru (IST, UTC+5:30), so every calendar app shows the right local time. The UID is stable,
+ * so saving the same visit twice updates one event instead of making two.
+ */
+function icsFile(title: string, where: string, day: Date, istHour: number, hours: number, key: string) {
   const pad = (n: number) => String(n).padStart(2, "0");
-  const stamp = (d: Date) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const utc = (d: Date) => `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}00Z`;
+  const start = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate(), istHour, 0) - 330 * 60_000);
   const end = new Date(start.getTime() + hours * 3600_000);
-  return [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Disha Habitat//Site visit//EN",
-    "BEGIN:VEVENT",
-    `UID:${Date.now()}@dishahabitat`,
-    `DTSTAMP:${stamp(new Date())}`,
-    `DTSTART;TZID=Asia/Kolkata:${stamp(start)}`,
-    `DTEND;TZID=Asia/Kolkata:${stamp(end)}`,
-    `SUMMARY:${title}`,
-    `LOCATION:${where.replace(/,/g, "\\,")}`,
-    `DESCRIPTION:Requested with Disha Habitat. The sales team will confirm the exact time. Sales: ${elements.phone.display}`,
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ].join("\r\n");
+  const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/[,;]/g, (c) => `\\${c}`).replace(/\n/g, "\\n");
+  // Lines longer than 75 octets are folded, as the standard requires.
+  const fold = (line: string) => line.match(/.{1,73}/g)!.join("\r\n ");
+  return (
+    [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Disha Habitat//Site visit//EN",
+      "BEGIN:VEVENT",
+      `UID:${key}@dishahabitat.com`,
+      `DTSTAMP:${utc(new Date())}`,
+      `DTSTART:${utc(start)}`,
+      `DTEND:${utc(end)}`,
+      `SUMMARY:${esc(title)}`,
+      `LOCATION:${esc(where)}`,
+      `DESCRIPTION:${esc(`Requested with Disha Habitat. The sales team will confirm the exact time. Sales: ${elements.phone.display}`)}`,
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ]
+      .map(fold)
+      .join("\r\n") + "\r\n"
+  );
 }
 
 export function VisitBooker() {
@@ -97,7 +125,7 @@ export function VisitBooker() {
   const p = places.find((x) => x.id === place);
   const s = slots.find((x) => x.id === slot);
   const isCall = place === "call";
-  const digits = phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
+  const digits = phone.replace(/\D/g, "").replace(/^(?:0091|91|0)(?=\d{10}$)/, "");
   const phoneOk = /^[6-9]\d{9}$/.test(digits);
   const nameOk = name.trim().length >= 2;
 
@@ -107,7 +135,7 @@ export function VisitBooker() {
   const message = useMemo(() => {
     if (!p) return "";
     const lines = [
-      `Hello Disha Habitat, I'd like to ${isCall ? "request a call back" : "book a visit"}.`,
+      `Hello Disha Habitat, I’d like to ${isCall ? "request a call back" : "book a visit"}.`,
       `${isCall ? "About" : "Visit"}: ${p.title}`,
       !isCall && when ? `Date: ${when}` : "",
       s ? `Preferred time: ${s.label} (${s.hint})` : "",
@@ -129,14 +157,19 @@ export function VisitBooker() {
 
   const downloadIcs = () => {
     if (!p || day === null || !s) return;
-    const start = new Date(days[day]);
-    start.setHours(s.h, 0, 0, 0);
-    const blob = new Blob([icsFile(`Disha Habitat: ${p.title}`, p.where, start, 2)], { type: "text/calendar" });
+    const d = days[day];
+    const key = `${d.getFullYear()}${d.getMonth() + 1}${d.getDate()}-${s.id}-${p.id}`;
+    const blob = new Blob([icsFile(`Disha Habitat: ${p.title}`, p.where, d, s.h, 2, key)], { type: "text/calendar;charset=utf-8" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "disha-habitat-site-visit.ics";
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(a.href);
+    // Safari reads the file after the click returns, so the link is released a moment later.
+    setTimeout(() => {
+      a.remove();
+      URL.revokeObjectURL(a.href);
+    }, 1500);
   };
 
   const choice = (on: boolean) =>
@@ -308,7 +341,7 @@ export function VisitBooker() {
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
                 <a
-                  href={mailtoUrl(`${isCall ? "Call back request" : "Site visit request"}: ${p.title}`, message)}
+                  href={mailtoUrl(`${isCall ? "Call back request" : "Site visit request"}: ${p.title}`, message, place === "elements" ? elements.email : undefined)}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-ink/20 bg-white/60 px-5 font-medium transition-colors hover:border-ink/45"
                 >
                   <Mail aria-hidden className="size-5" strokeWidth={1.6} />

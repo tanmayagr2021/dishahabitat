@@ -2,9 +2,14 @@ import { ComposeButton } from "@/components/ComposeButton";
 import Image from "next/image";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { Label, Lines, Reveal } from "@/components/ui";
+import { elements } from "@/lib/elements";
 import { company, homemakers } from "@/lib/site";
 
 export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?: string; n?: string }) {
+  // On the project on sale, enquiries go to its own sales line and inbox; elsewhere, to the office.
+  const forElements = defaultInterest === elements.name;
+  const phones = forElements ? [elements.phone] : company.phones;
+  const email = forElements ? elements.email : company.email;
   const guna = homemakers[0];
   return (
     <section
@@ -40,7 +45,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
             />
             <Reveal delay={200} className="mt-8 max-w-md">
               <p className="text-[1.05rem] leading-relaxed text-paper/75">
-                It’s our founder’s favourite invitation. It means he wants to explain something properly, until you
+                It’s the favourite invitation of our founder Guna. It means he wants to explain something properly, until you
                 leave as informed as any engineer, architect or site supervisor on the project.
               </p>
               <p className="label mt-5 text-paper/55">
@@ -54,7 +59,7 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
               <div>
                 <dt className="label text-paper/50">Call</dt>
                 <dd className="mt-2 space-y-1">
-                  {company.phones.map((p) => (
+                  {phones.map((p) => (
                     <a key={p.href} href={p.href} className="block py-0.5 text-[1.1rem] text-paper transition-colors hover:text-cyan">
                       {p.display}
                     </a>
@@ -64,8 +69,8 @@ export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?
               <div>
                 <dt className="label text-paper/50">Write</dt>
                 <dd className="mt-2">
-                  <ComposeButton channel="email" className="text-left text-[1.1rem] text-paper transition-colors hover:text-cyan">
-                    {company.email}
+                  <ComposeButton channel="email" topic={forElements ? elements.name : undefined} className="text-left text-[1.1rem] text-paper transition-colors hover:text-cyan">
+                    {email}
                   </ComposeButton>
                 </dd>
               </div>

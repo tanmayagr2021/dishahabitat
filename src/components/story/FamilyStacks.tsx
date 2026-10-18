@@ -115,6 +115,15 @@ function Pile({ kind, note, photos, tilt, delay }: (typeof piles)[number] & { de
               aria-hidden={!isTop}
               aria-label={isTop ? `${f.alt}. Photo ${i + 1} of ${n}. Press for the next photo.` : undefined}
               onClick={isTop ? next : undefined}
+              onKeyDown={(e) => {
+                if (isTop && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  next();
+                  // The next print comes to the top; keep keyboard focus on it.
+                  const pile = e.currentTarget.parentElement;
+                  window.setTimeout(() => pile?.querySelector<HTMLElement>("button[tabindex='0']")?.focus(), 420);
+                }
+              }}
               className={`stack-print block bg-[#fbf8f1] p-3 pb-0 text-left text-ink shadow-[0_16px_28px_-16px_rgb(0_0_0/0.6)] ${isTop ? "cursor-pointer" : "pointer-events-none"}`}
               style={style}
             >

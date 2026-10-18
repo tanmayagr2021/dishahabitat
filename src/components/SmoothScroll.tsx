@@ -11,7 +11,7 @@ import Lenis from "lenis";
 export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true, anchors: { offset: -80 } });
+    const lenis = new Lenis({ duration: 1.15, smoothWheel: true, allowNestedScroll: true, anchors: { offset: -80 } });
     let raf = 0;
     const loop = (t: number) => {
       lenis.raf(t);

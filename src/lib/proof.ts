@@ -26,6 +26,7 @@ export const quickestBuild = delivered.reduce((a, b) => (b.months < a.months ? b
 export const residentRating = {
   community: "Disha Central Park",
   score: "4.7",
+  reviews: 29,
   outOf: "5",
   source: "MyGate",
   href: "https://mygate.com/bengaluru/disha-central-park-499.html",

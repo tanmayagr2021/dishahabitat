@@ -12,7 +12,8 @@ import { calculateLoan, formatINR, formatINRShort, LIMITS, validateLoan, type Lo
  */
 const EXAMPLE = { price: "7500000", down: "1500000", rate: "8.5", years: "20", income: "" };
 
-const digits = (s: string) => s.replace(/[^\d]/g, "");
+/* Whole rupees: anything after a decimal point is dropped, never read as more digits. */
+const digits = (s: string) => s.split(".")[0].replace(/[^\d]/g, "");
 const decimal = (s: string) => s.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1");
 const toNum = (s: string) => (s.trim() === "" ? Number.NaN : Number(s));
 

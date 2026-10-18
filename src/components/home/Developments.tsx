@@ -59,7 +59,7 @@ export function Developments() {
                 <span className="rounded-full bg-cyan px-3 py-1 text-xs font-semibold text-forest-deep">Now selling</span>
                 <span className="rounded-full bg-forest-deep/60 px-3 py-1 text-xs font-medium backdrop-blur-sm">Artist’s impression</span>
                 <span className="hidden items-center gap-1.5 rounded-full bg-brass px-3 py-1 text-xs font-semibold text-forest-deep sm:inline-flex">
-                  <Award aria-hidden className="size-3.5" strokeWidth={2} /> {award.title}: {award.citation}
+                  <Award aria-hidden className="size-3.5" strokeWidth={2} /> {award.title}: {award.honour}
                 </span>
               </div>
               <div className="absolute inset-x-5 bottom-5 md:inset-x-8 md:bottom-8">

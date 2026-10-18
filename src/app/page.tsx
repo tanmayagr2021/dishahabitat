@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMeta } from "@/lib/launch";
 import { Hero } from "@/components/home/Hero";
 import { BuyerNeeds } from "@/components/home/BuyerNeeds";
 import { Developments } from "@/components/home/Developments";
@@ -14,6 +16,16 @@ import { CtaBand } from "@/components/home/CtaBand";
  * (RecordSection) → what is life like there (DayAtDisha, HomeownersSpeak) → meet the people (CtaBand).
  * Each section slides over the one before it (.layer).
  */
+export const metadata: Metadata = {
+  ...pageMeta({
+    title: "Disha Habitat | Come home to mindful living spaces",
+    description:
+      "Since 2014, Disha Habitat has built five residential communities across East Bengaluru. Pursuit of the Elements is selling now in Gunjur.",
+    path: "/",
+  }),
+  title: { absolute: "Disha Habitat | Come home to mindful living spaces" },
+};
+
 export default function HomePage() {
   return (
     <>

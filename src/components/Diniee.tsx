@@ -19,7 +19,13 @@ type Msg = { from: "bot" | "me"; body: ReactNode };
 type Step = "start" | "type" | "when" | "details" | "done";
 
 const homeTypes = ["2 BHK apartment", "3 BHK apartment", "4 BHK apartment", "4 or 5 BHK villa", "Just exploring"];
-const timelines = ["Within 3 months", "3 to 6 months", "Later this year", "Just researching"];
+const timelines = ["Within 3 months", "3 to 6 months", "6 to 12 months", "Just researching"];
+
+/* "A, B, C and D", in sentence case, keeping proper names such as "Five Elements Sculpture Park". */
+const list = (items: string[]) => {
+  const words = items.map((t) => (/^[A-Z][a-z]* [A-Z]/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1)));
+  return words.length > 1 ? `${words.slice(0, -1).join(", ")} and ${words[words.length - 1]}` : words.join("");
+};
 
 export function Diniee() {
   const uid = useId();
@@ -34,11 +40,32 @@ export function Diniee() {
   const [typing, setTyping] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
 
+  const panel = useRef<HTMLDivElement>(null);
+  const returnTo = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
-    const onOpen = () => setOpen(true);
+    const onOpen = () => {
+      returnTo.current = document.activeElement as HTMLElement | null;
+      setOpen(true);
+    };
     window.addEventListener("disha:diniee", onOpen);
     return () => window.removeEventListener("disha:diniee", onOpen);
   }, []);
+
+  // Open: focus moves into the chat. Escape closes it, and focus goes back where it came from.
+  useEffect(() => {
+    if (!open) return;
+    const t = window.setTimeout(() => panel.current?.querySelector<HTMLElement>("input, button")?.focus(), 50);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKey);
+      returnTo.current?.focus?.();
+    };
+  }, [open]);
 
 
   useEffect(() => {
@@ -63,7 +90,7 @@ export function Diniee() {
     visit: (said = "I’d like to book a site visit") => {
       me(said);
       setStep("details");
-      say(`Happy to arrange that at ${elements.shortName}, ${elements.locality}. What’s your name and mobile number? I’ll write the message for you to send us on WhatsApp, and our team will call to confirm a time.`);
+      say(`Happy to arrange that at ${elements.shortName}, ${elements.locality}. What’s your name and mobile number? I’ll write the message for you to send us on WhatsApp; once it reaches us, our team will confirm a time with you.`);
     },
     where: (said = "Where are your projects?") => {
       me(said);
@@ -101,12 +128,12 @@ export function Diniee() {
     amenities: (said = "What amenities are there?") => {
       me(said);
       say(
-        `${elements.shortName} has 40+ amenities and a clubhouse of 1,35,000+ sq ft, with ${elements.clubhouse.slice(0, 4).join(", ").toLowerCase()} and more. Outdoors there are ${elements.outdoor.slice(0, 5).join(", ").toLowerCase()}.`,
+        `${elements.shortName} has 40+ amenities and a clubhouse of 1,35,000+ sq ft, with ${list(elements.clubhouse.slice(0, 4))} and more. Outdoors there are ${list(elements.outdoor.slice(0, 5))}, among others.`,
       );
     },
     price: (said = "What are the prices?") => {
       me(said);
-      say("Prices depend on the home and the floor, so our sales team shares the current ones directly. Shall I arrange a call?");
+      say("Prices depend on the home and the floor, so our sales team shares the current ones directly. Shall I help you ask them?");
       setStep("details");
     },
   };
@@ -140,7 +167,7 @@ export function Diniee() {
     say("Thank you. Share your name and mobile number and I’ll write a message for you to send us; once it reaches us, our sales team can call and arrange a visit.");
   };
 
-  const digits = lead.phone.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
+  const digits = lead.phone.replace(/\D/g, "").replace(/^(?:0091|91|0)(?=\d{10}$)/, "");
   const detailsOk = lead.name.trim().length >= 2 && /^[6-9]\d{9}$/.test(digits);
   const message = buildMessage(
     "I chatted with Diniee on your website and would like a call back.",
@@ -205,6 +232,7 @@ export function Diniee() {
     <>
       {open && (
         <div
+          ref={panel}
           role="dialog"
           aria-labelledby={`${uid}-title`}
           className="fixed inset-x-2 bottom-2 z-[60] flex max-h-[min(40rem,calc(100svh-1rem))] flex-col overflow-hidden rounded-2xl bg-paper text-ink shadow-[0_30px_90px_-20px_rgb(0_0_0/0.55)] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[24rem]"

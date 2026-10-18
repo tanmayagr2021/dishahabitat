@@ -215,7 +215,7 @@ export function Header() {
           </Link>
 
           <div>
-            <p className="label text-paper/50">Delivered communities</p>
+            <p className="label text-paper/50">Handed over, lived in today</p>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-[0.95rem]">
               {projectsNewestFirst.map((p) => (
                 <li key={p.slug}>

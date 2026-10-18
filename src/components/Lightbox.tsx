@@ -99,7 +99,7 @@ export function GalleryGrid({ items, tileClasses, gridClassName, sizes }: Props)
         aria-label="Image viewer"
         className="m-0 h-dvh max-h-none w-screen max-w-none bg-ink/95 p-0 text-paper backdrop:bg-ink/80"
         onClick={(e) => {
-          if (e.target === e.currentTarget) close();
+          if (!(e.target as HTMLElement).closest("img, button, figcaption, a")) close();
         }}
       >
         {current && index !== null && (
