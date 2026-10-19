@@ -1370,3 +1370,150 @@ main img {
   line-height: 1.1;
   text-wrap: balance;
 }
+
+/* ---------- Home hero: the house window ---------- */
+/* The window's size: tall, with the low roof pitch of the logo (the roof rises 19% of the width). */
+.hero-open {
+  --p: 0;
+  --t: 1;
+  --c: 0;
+  --wh: min(34svh, 22rem);
+  --ww: calc(var(--wh) * 0.68);
+}
+
+.hero-house {
+  clip-path: polygon(0 100%, 0 12.9%, 50% 0, 100% 12.9%, 100% 100%);
+}
+
+@media (min-width: 1024px) {
+  .hero-open {
+    --wh: min(60svh, 38rem);
+  }
+
+  .hero-words {
+    opacity: var(--t);
+  }
+
+  /* The photograph fills the stage; this polygon is the window, opening to the full screen as --p goes to 1. */
+  .hero-aperture {
+    --wt: calc(50% - var(--wh) / 2);
+    --wb: calc(50% + var(--wh) / 2);
+    clip-path: polygon(
+      calc((50% - var(--ww) / 2) * (1 - var(--p))) calc(var(--wb) + (100% - var(--wb)) * var(--p)),
+      calc((50% - var(--ww) / 2) * (1 - var(--p))) calc((var(--wt) + var(--ww) * 0.19) * (1 - var(--p))),
+      50% calc(var(--wt) * (1 - var(--p))),
+      calc(100% - (50% - var(--ww) / 2) * (1 - var(--p))) calc((var(--wt) + var(--ww) * 0.19) * (1 - var(--p))),
+      calc(100% - (50% - var(--ww) / 2) * (1 - var(--p))) calc(var(--wb) + (100% - var(--wb)) * var(--p))
+    );
+  }
+
+  .hero-outline-lg {
+    left: calc(50% - var(--ww) / 2 - 12px);
+    top: calc(50% - var(--wh) / 2 - 12px);
+    width: calc(var(--ww) + 24px);
+    height: calc(var(--wh) + 12px);
+    opacity: var(--t);
+  }
+
+  .hero-mast-lg {
+    left: calc(50% - 0.75px);
+    height: 6svh;
+    top: calc(50% - var(--wh) / 2 - 12px - 6svh - 8px);
+    opacity: var(--t);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .hero-open {
+    height: 170svh;
+  }
+
+  .hero-open .hero-stick {
+    position: sticky;
+    top: 0;
+  }
+
+  .hero-zoom {
+    transform: scale(calc(1.12 - 0.12 * var(--p)));
+  }
+}
+
+.hero-outline polyline {
+  fill: none;
+  stroke: #39aae1;
+  stroke-width: 1.5;
+}
+
+/* The frame rises from the ground to the roof, then the mast goes up. */
+.hero-outline {
+  overflow: visible;
+  clip-path: inset(100% -4px -4px -4px);
+  animation: hero-rise 1.8s var(--ease-in-out-cine) 0.15s forwards;
+}
+
+@keyframes hero-rise {
+  to {
+    clip-path: inset(-4px -4px -4px -4px);
+  }
+}
+
+.hero-mast {
+  transform-origin: bottom;
+  animation: hero-mast 0.9s var(--ease-out-expo) 1.7s both;
+}
+
+@keyframes hero-mast {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/* A slow breath inside the window on phones. */
+.hero-breathe {
+  animation: hero-breathe 18s ease-in-out infinite alternate;
+}
+
+@keyframes hero-breathe {
+  to {
+    transform: scale(1.07);
+  }
+}
+
+/* The scroll cue: a thin line that keeps drawing downwards. */
+.hero-cue {
+  transform-origin: top;
+  animation: hero-cue 2.4s var(--ease-in-out-cine) infinite;
+}
+
+@keyframes hero-cue {
+  0% {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+html[data-intro="on"] .hero-stage .hero-outline,
+html[data-intro="on"] .hero-stage .hero-mast {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-outline {
+    animation: none;
+    clip-path: none;
+  }
+
+  .hero-mast,
+  .hero-breathe,
+  .hero-cue {
+    animation: none;
+  }
+}
