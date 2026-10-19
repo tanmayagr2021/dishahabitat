@@ -935,7 +935,7 @@ html.lenis body {
   }
 }
 
-/* Hero: as the page scrolls, the photograph pulls back into a rounded frame and the words lift away. */
+/* Hero: as the page scrolls, the photograph pulls back into a rounded frame and (on larger screens) the words lift away. */
 @supports (animation-timeline: scroll()) {
   .hero-frame {
     animation: hero-frame linear both;
@@ -950,10 +950,14 @@ html.lenis body {
     }
   }
 
-  .hero-lift {
-    animation: hero-lift linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 70vh;
+  /* Only where the whole hero fits on screen: on phones its last lines (the proof) only come into
+     view as you scroll, so fading them then would hide them. */
+  @media (min-width: 768px) and (min-height: 640px) {
+    .hero-lift {
+      animation: hero-lift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 10vh 75vh;
+    }
   }
 
   @keyframes hero-lift {

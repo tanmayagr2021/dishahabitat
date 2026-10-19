@@ -216,7 +216,7 @@ export function DayAtDisha() {
   };
 
   return (
-    <section ref={section} data-tone="dark" aria-labelledby="day-title" className="layer surface-forest grain py-16 md:py-24">
+    <section ref={section} data-tone="dark" aria-labelledby="day-title" className="layer surface-forest py-16 md:py-24">
       <div className="shell grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
         {/* The photograph and the sky */}
         <div className="lg:col-span-8">
@@ -316,7 +316,7 @@ export function DayAtDisha() {
 
             {/* Clock, play and the time line */}
             <div className="absolute inset-x-3 bottom-3 sm:inset-x-5 sm:bottom-5">
-              <div className="card-dark flex items-center gap-3 px-3 py-3 sm:px-4">
+              <div className="card-dark flex items-center gap-3 bg-forest-deep/85 px-3 py-3 sm:px-4">
                 <button
                   type="button"
                   onClick={() => {
@@ -424,7 +424,7 @@ export function DayAtDisha() {
               <Clock aria-hidden className="size-4" /> Bengaluru, right now
             </button>
           </div>
-          <p className={`mt-5 text-sm text-paper/55 transition-opacity duration-700 ${touched ? "opacity-0" : "opacity-100"}`}>
+          <p className={`mt-5 text-sm text-paper/70 transition-opacity duration-700 ${touched ? "opacity-0" : "opacity-100"}`}>
             Tip: the sun can be dragged across the sky.
           </p>
         </div>

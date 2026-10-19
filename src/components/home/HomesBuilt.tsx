@@ -64,7 +64,7 @@ export function HomesBuilt() {
   const current = focus ? groups.find((g) => g.slug === focus)! : stage > 0 ? groups[stage - 1] : null;
 
   return (
-    <div ref={ref} className="surface-forest grain mt-8 grid gap-8 overflow-hidden rounded-[1.75rem] p-6 md:mt-10 md:p-9 lg:grid-cols-12 lg:gap-10">
+    <div ref={ref} className="surface-forest mt-8 grid gap-8 overflow-hidden rounded-[1.75rem] p-6 md:mt-10 md:p-9 lg:grid-cols-12 lg:gap-10">
       {/* Timeline */}
       <div className="lg:col-span-4">
         <h3 className="serif text-[1.6rem] leading-tight">Timelines in the open</h3>
@@ -110,7 +110,7 @@ export function HomesBuilt() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <p className="text-[0.98rem] text-paper/75">
             Every block is a home we have handed over.
-            <span className="mt-1 block min-h-[1.5em] text-sm text-paper/55" aria-live="polite">
+            <span className="mt-1 block min-h-[1.5em] text-sm text-paper/70" aria-live="polite">
               {current ? `${current.name}: ${current.homes} homes, ${current.year}` : "2014: ground is broken at Windsor Gardens"}
             </span>
           </p>

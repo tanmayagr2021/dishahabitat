@@ -21,7 +21,7 @@ export function Developments() {
   const step = (d: number) => setStart((s) => (s + d + n) % n);
 
   return (
-    <section id="developments" data-tone="dark" aria-labelledby="dev-title" className="layer surface-forest grain py-16 md:py-24">
+    <section id="developments" data-tone="dark" aria-labelledby="dev-title" className="layer surface-forest py-16 md:py-24">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -54,16 +54,16 @@ export function Developments() {
                 sizes="(min-width: 1024px) 64vw, 100vw"
                 className="object-cover transition-transform duration-[1600ms] ease-out-expo group-hover:scale-[1.04]"
               />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/55 via-45% to-transparent to-75%" />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/85 via-45% to-forest-deep/10 to-90%" />
               <div className="absolute left-5 top-5 flex gap-2 md:left-7 md:top-7">
                 <span className="rounded-full bg-cyan px-3 py-1 text-xs font-semibold text-forest-deep">Now selling</span>
-                <span className="rounded-full bg-forest-deep/60 px-3 py-1 text-xs font-medium backdrop-blur-sm">Artist’s impression</span>
+                <span className="rounded-full bg-forest-deep/85 px-3 py-1 text-xs font-medium">Artist’s impression</span>
                 <span className="hidden items-center gap-1.5 rounded-full bg-brass px-3 py-1 text-xs font-semibold text-forest-deep sm:inline-flex">
                   <Award aria-hidden className="size-3.5" strokeWidth={2} /> {award.title}: {award.honour}
                 </span>
               </div>
-              <div className="absolute inset-x-5 bottom-5 md:inset-x-8 md:bottom-8">
-                <p className="flex items-center gap-1.5 text-sm text-paper/80">
+              <div className="absolute inset-x-5 bottom-5 [text-shadow:0_1px_12px_rgb(8_22_15/0.7)] md:inset-x-8 md:bottom-8">
+                <p className="flex items-center gap-1.5 text-sm text-paper/90">
                   <MapPin aria-hidden className="size-4" strokeWidth={1.6} /> {elements.locality}
                 </p>
                 <h3 className="serif mt-2 text-[clamp(2.2rem,4vw,3.6rem)] leading-[1.02]">{elements.name}</h3>
@@ -76,7 +76,7 @@ export function Developments() {
                       ["40+", "Amenities"],
                     ].map(([v, k]) => (
                       <div key={k} className="flex flex-col-reverse">
-                        <dt className="mt-1 text-sm text-paper/65">{k}</dt>
+                        <dt className="mt-1 text-sm text-paper/85">{k}</dt>
                         <dd className="text-[1.05rem] font-medium sm:text-[1.2rem]">{v}</dd>
                       </div>
                     ))}
@@ -107,14 +107,14 @@ export function Developments() {
                   className="object-cover transition-transform duration-[1600ms] ease-out-expo group-hover:scale-[1.05]"
                   style={{ objectPosition: p.image.position }}
                 />
-                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/10 to-transparent" />
-                <span className="absolute left-4 top-4 rounded-full bg-forest-deep/60 px-3 py-1 text-xs font-medium backdrop-blur-sm">
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/55 via-40% to-transparent to-75%" />
+                <span className="absolute left-4 top-4 rounded-full bg-forest-deep/85 px-3 py-1 text-xs font-medium">
                   Handed over {p.handoverYear} · lived in today
                 </span>
                 <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
                   <div>
                     <h3 className="serif text-[1.8rem] leading-tight">{p.shortName}</h3>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-sm text-paper/75">
+                    <p className="mt-0.5 flex items-center gap-1.5 text-sm text-paper/90">
                       <MapPin aria-hidden className="size-3.5" strokeWidth={1.6} />
                       {p.locality.replace(", Bengaluru", "")} · {p.homes} homes
                     </p>

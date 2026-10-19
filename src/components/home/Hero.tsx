@@ -117,15 +117,17 @@ export function Hero() {
             <Image src={s.src} alt="" fill priority={n === 0} sizes="100vw" className="object-cover" style={{ objectPosition: s.position }} />
           </div>
         ))}
-        <div className="absolute inset-0 z-[2] bg-gradient-to-r from-forest-deep/85 via-forest-deep/45 to-forest-deep/5" />
+        {/* Calm, even shade behind the words: on phones the text covers the photo, so the whole photo is dimmed. */}
+        <div className="absolute inset-0 z-[2] bg-forest-deep/60 md:bg-forest-deep/15" />
+        <div className="absolute inset-0 z-[2] bg-gradient-to-r from-forest-deep/90 via-forest-deep/65 via-45% to-transparent" />
         <div className="absolute inset-x-0 top-0 z-[2] h-40 bg-gradient-to-b from-forest-deep/70 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 z-[2] h-56 bg-gradient-to-t from-forest-deep/80 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 z-[2] h-80 bg-gradient-to-t from-forest-deep/95 via-forest-deep/60 to-transparent" />
         </div>
       </div>
 
       <div className="hero-lift shell flex flex-1 flex-col justify-end pb-16 pt-32 md:pb-20">
         <div className="max-w-2xl">
-          <p className="eyebrow anim-fade text-paper/80" style={d(200)}>
+          <p className="eyebrow anim-fade text-paper/90" style={d(200)}>
             Residential developers · East Bengaluru · Since 2014
           </p>
           <h1 id="hero-title" className="serif anim-words mt-5 t-hero leading-[1.02]" style={d(300)}>
@@ -145,7 +147,7 @@ export function Hero() {
               </span>
             ))}
           </h1>
-          <p className="anim-fade-up mt-6 max-w-lg text-[1.08rem] leading-relaxed text-paper/85 md:text-[1.15rem]" style={d(900)}>
+          <p className="anim-fade-up mt-6 max-w-lg text-[1.08rem] leading-relaxed text-paper md:text-[1.15rem]" style={d(900)}>
             Keys on the day they’re promised, papers in order, neighbours who feel like family. We wanted the same things when
             we were homebuyers, and since 2014 we have built five communities around them in East Bengaluru.
           </p>
@@ -167,7 +169,7 @@ export function Hero() {
               Watch our story
             </button>
           </div>
-          <p className="anim-fade mt-3 text-sm text-paper/65" style={d(1200)}>
+          <p className="anim-fade mt-3 text-sm text-paper/85" style={d(1200)}>
             Site visits with no obligation. Or call{" "}
             <a href={elements.phone.href} className="underline decoration-paper/40 underline-offset-4 hover:text-paper">
               {elements.phone.display}
@@ -179,7 +181,7 @@ export function Hero() {
             </a>
             .
           </p>
-          <ul className="anim-fade mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-paper/15 pt-5 text-sm text-paper/80" style={d(1350)} aria-label="Proof">
+          <ul className="anim-fade mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-paper/15 pt-5 text-sm text-paper/90" style={d(1350)} aria-label="Proof">
             <li className="flex items-center gap-2">
               <KeyRound aria-hidden className="size-4 text-brass" strokeWidth={1.7} />
               <span>
@@ -202,13 +204,13 @@ export function Hero() {
         </div>
 
         <div className="anim-fade mt-10 flex items-end justify-between gap-6" style={d(1450)}>
-          <a href="#looking" className="group flex items-center gap-3 text-sm text-paper/75 hover:text-paper">
+          <a href="#looking" className="group hidden items-center gap-3 text-sm text-paper/85 hover:text-paper md:flex">
             <span className="inline-flex size-10 items-center justify-center rounded-full border border-paper/35 transition-colors group-hover:border-paper">
               <ArrowDown aria-hidden className="scroll-nudge size-4" strokeWidth={1.6} />
             </span>
             Scroll to explore
           </a>
-          <div className="flex items-center gap-4 text-sm text-paper/70">
+          <div className="ml-auto flex items-center gap-4 text-sm text-paper/85">
             <span key={i} className="swap-in hidden md:inline">
               {slides[i].caption}
             </span>
