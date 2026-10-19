@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { ArrowDown, Award, KeyRound, Play, ShieldCheck, X } from "lucide-react";
+import { ArrowDown, Award, KeyRound, Pause, Play, ShieldCheck, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui";
 import { elements } from "@/lib/elements";
 import { award, homesHandedOver } from "@/lib/proof";
@@ -77,9 +77,10 @@ function FilmDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
 export function Hero() {
   const [i, setI] = useState(0);
   const [film, setFilm] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const html = document.documentElement;
     let timer = 0;
     const start = () => {
@@ -100,7 +101,7 @@ export function Hero() {
     }
     start();
     return () => window.clearTimeout(timer);
-  }, [i]);
+  }, [i, paused]);
 
   return (
     <section
@@ -152,8 +153,8 @@ export function Hero() {
             <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
               Book a site visit
             </ButtonLink>
-            <ButtonLink href="#looking" variant="outline-light">
-              What you’re looking for
+            <ButtonLink href={elements.href} variant="outline-light">
+              See what’s selling now
             </ButtonLink>
             <button
               type="button"
@@ -171,6 +172,11 @@ export function Hero() {
             <a href={elements.phone.href} className="underline decoration-paper/40 underline-offset-4 hover:text-paper">
               {elements.phone.display}
             </a>
+            , or{" "}
+            <a href={elements.whatsapp} target="_blank" rel="noopener noreferrer" className="underline decoration-paper/40 underline-offset-4 hover:text-paper">
+              WhatsApp us
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
             .
           </p>
           <ul className="anim-fade mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-paper/15 pt-5 text-sm text-paper/80" style={d(1350)} aria-label="Proof">
@@ -183,7 +189,7 @@ export function Hero() {
             <li className="flex items-center gap-2">
               <ShieldCheck aria-hidden className="size-4 text-brass" strokeWidth={1.7} />
               <span>
-                <strong className="font-semibold text-paper">RERA</strong> registered
+                <strong className="font-semibold text-paper">RERA</strong> registered: Pursuit of the Elements
               </span>
             </li>
             <li className="flex items-center gap-2">
@@ -202,15 +208,24 @@ export function Hero() {
             </span>
             Scroll to explore
           </a>
-          <div className="hidden items-center gap-4 text-sm text-paper/70 md:flex">
-            <span key={i} className="swap-in">
+          <div className="flex items-center gap-4 text-sm text-paper/70">
+            <span key={i} className="swap-in hidden md:inline">
               {slides[i].caption}
             </span>
-            <span className="flex gap-1.5" aria-hidden>
+            <span className="hidden gap-1.5 md:flex" aria-hidden>
               {slides.map((s, n) => (
                 <span key={s.src} className={`h-[2px] w-8 rounded-full transition-colors duration-700 ${n === i ? "bg-paper" : "bg-paper/30"}`} />
               ))}
             </span>
+            <button
+              type="button"
+              onClick={() => setPaused((v) => !v)}
+              aria-pressed={paused}
+              className="inline-flex size-11 items-center justify-center rounded-full border border-paper/35 text-paper/85 transition-colors hover:border-paper hover:text-paper motion-reduce:hidden"
+            >
+              {paused ? <Play aria-hidden className="size-4" strokeWidth={1.6} /> : <Pause aria-hidden className="size-4" strokeWidth={1.6} />}
+              <span className="sr-only">Pause the photographs</span>
+            </button>
           </div>
         </div>
       </div>

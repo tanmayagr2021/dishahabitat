@@ -70,14 +70,14 @@ export function SocialCards({ tone = "light" }: { tone?: "light" | "dark" }) {
   return (
     <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {company.socials.map((s) => (
-        <li key={s.href}>
-          <a href={s.href} target="_blank" rel="noopener noreferrer" className={`${card} group flex items-center gap-4 p-4 transition-[transform,border-color] duration-300 hover:-translate-y-0.5`}>
+        <li key={s.href} className="min-w-0">
+          <a href={s.href} target="_blank" rel="noopener noreferrer" className={`${card} group flex min-w-0 items-center gap-4 p-4 transition-[transform,border-color] duration-300 hover:-translate-y-0.5`}>
             <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-current/[0.07]">
               <Mark label={s.label} />
             </span>
             <span className="min-w-0">
               <span className="block font-semibold">{s.label}</span>
-              <span className={`block truncate text-sm ${muted}`}>
+              <span className={`block text-sm [overflow-wrap:anywhere] ${muted}`}>
                 {s.label === "YouTube" || s.label === "LinkedIn" ? "Disha Habitat" : socialHandle} · {notes[s.label]}
               </span>
             </span>

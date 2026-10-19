@@ -10,6 +10,7 @@ import { SocialCards } from "@/components/Socials";
 import { Lines, Reveal } from "@/components/ui";
 import { company } from "@/lib/site";
 import { elements } from "@/lib/elements";
+import { siteDirectionsUrl } from "@/lib/proof";
 import { projectsNewestFirst } from "@/lib/projects";
 
 export const metadata: Metadata = pageMeta({
@@ -103,7 +104,7 @@ export default function ContactPage() {
       {/* Booking */}
       <section id="book" data-tone="light" aria-labelledby="book-title" className="surface-ivory py-20 md:py-28">
         <div className="shell grid gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-8">
+          <div className="min-w-0 lg:col-span-8">
             <p className="eyebrow text-mute">Book a site visit</p>
             <Lines id="book-title" className="serif mt-4 t-section leading-[1.04]" lines={["Four steps,", <em key="e">under a minute.</em>]} />
             <div className="mt-8">
@@ -187,29 +188,37 @@ export default function ContactPage() {
             </Link>
           </div>
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Reveal as="li" className="sm:col-span-2 lg:col-span-1">
-              <Link href={elements.href} className="card-dark group flex h-full gap-4 p-3">
-                <span className="relative block aspect-square w-24 shrink-0 overflow-hidden rounded-lg">
+            <Reveal as="li" className="min-w-0 sm:col-span-2 lg:col-span-1">
+              <div className="card-dark flex h-full gap-4 p-3">
+                <Link href={elements.href} className="relative block aspect-square w-[min(6rem,28%)] shrink-0 self-start overflow-hidden rounded-lg">
                   <Image src={elements.cover.src} alt="" fill sizes="96px" className="object-cover" />
-                </span>
-                <span className="py-1">
-                  <span className="rounded-full bg-cyan px-2 py-0.5 text-[0.7rem] font-semibold text-forest-deep">Now selling</span>
-                  <span className="serif mt-2 block text-[1.4rem] leading-tight">{elements.shortName}</span>
+                  <span className="sr-only">{elements.name}</span>
+                </Link>
+                <span className="min-w-0 py-1 [overflow-wrap:anywhere]">
+                  <span className="rounded-full bg-cyan px-2 py-0.5 text-[0.78rem] font-semibold text-forest-deep">Now selling</span>
+                  <Link href={elements.href} className="serif mt-2 block text-[1.4rem] leading-tight hover:underline">
+                    {elements.shortName}
+                  </Link>
                   <span className="mt-1 flex items-center gap-1.5 text-sm text-paper/65">
                     <MapPin aria-hidden className="size-3.5" /> {elements.locality}
                   </span>
+                  <a href={siteDirectionsUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brass">
+                    Directions <span className="sr-only">to {elements.shortName}</span>
+                    <ArrowUpRight aria-hidden className="size-3.5" />
+                    <span className="sr-only">(opens in a new tab)</span>
+                  </a>
                 </span>
-              </Link>
+              </div>
             </Reveal>
             {projectsNewestFirst.map((p, i) => (
-              <Reveal as="li" key={p.slug} delay={(i + 1) * 60}>
+              <Reveal as="li" key={p.slug} delay={(i + 1) * 60} className="min-w-0">
                 <div className="card-dark flex h-full gap-4 p-3">
-                  <Link href={`/homes/${p.slug}`} className="relative block aspect-square w-24 shrink-0 overflow-hidden rounded-lg">
+                  <Link href={`/homes/${p.slug}`} className="relative block aspect-square w-[min(6rem,28%)] shrink-0 self-start overflow-hidden rounded-lg">
                     <Image src={p.cover.src} alt="" fill sizes="96px" className="object-cover" />
                     <span className="sr-only">{p.name}</span>
                   </Link>
-                  <span className="min-w-0 py-1">
-                    <span className="text-xs text-paper/55">Handed over {p.handoverYear}</span>
+                  <span className="min-w-0 py-1 [overflow-wrap:anywhere]">
+                    <span className="text-xs text-paper/65">Handed over {p.handoverYear}</span>
                     <Link href={`/homes/${p.slug}`} className="serif mt-1 block text-[1.4rem] leading-tight hover:underline">
                       {p.shortName}
                     </Link>
@@ -220,7 +229,8 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brass"
                     >
-                      Directions <ArrowUpRight aria-hidden className="size-3.5" />
+                      Directions <span className="sr-only">to {p.shortName}</span>
+                      <ArrowUpRight aria-hidden className="size-3.5" />
                       <span className="sr-only">(opens in a new tab)</span>
                     </a>
                   </span>

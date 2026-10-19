@@ -30,7 +30,7 @@ export function SoldOutBand({ name }: { name: string }) {
         </div>
         <div className="relative aspect-[16/10] overflow-hidden rounded-2xl lg:col-span-6">
           <Image src={elements.cover.src} alt={elements.cover.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
-          <span className="absolute right-3 top-3 rounded-full bg-forest-deep/65 px-2.5 py-1 text-[0.7rem] font-medium backdrop-blur-sm">Artist’s impression</span>
+          <span className="absolute right-3 top-3 rounded-full bg-forest-deep/65 px-2.5 py-1 text-[0.8rem] font-medium backdrop-blur-sm">Artist’s impression</span>
         </div>
       </div>
     </section>

@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, Send, X } from "lucide-react";
 import { RoofMark } from "@/components/ui";
 import { elements } from "@/lib/elements";
-import { buildMessage, whatsappUrl } from "@/lib/messaging";
+import { buildMessage, cleanPhoneInput, parsePhone, whatsappUrl } from "@/lib/messaging";
 import { projectsNewestFirst } from "@/lib/projects";
 
 /*
@@ -31,7 +31,7 @@ export function Diniee() {
   const uid = useId();
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([
-    { from: "bot", body: "Hi, I’m Diniee from Disha Habitat. I can tell you about our homes, share the RERA details or arrange a site visit." },
+    { from: "bot", body: "Hi, I’m Diniee, Disha Habitat’s automated guide. I can tell you about our homes, share the RERA details or help you arrange a site visit." },
     { from: "bot", body: "What would you like to do?" },
   ]);
   const [step, setStep] = useState<Step>("start");
@@ -58,6 +58,22 @@ export function Diniee() {
     const t = window.setTimeout(() => panel.current?.querySelector<HTMLElement>("input, button")?.focus(), 50);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
+      // Tab stays inside the chat while it is open.
+      if (e.key === "Tab" && panel.current) {
+        const all = Array.from(panel.current.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input, textarea, select")).filter(
+          (el) => el.offsetParent !== null,
+        );
+        if (!all.length) return;
+        const first = all[0];
+        const last = all[all.length - 1];
+        if (e.shiftKey && (document.activeElement === first || !panel.current.contains(document.activeElement))) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (document.activeElement === last || !panel.current.contains(document.activeElement))) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
@@ -147,7 +163,7 @@ export function Diniee() {
       <>
         {t === "Just exploring"
           ? `Our current project is ${elements.shortName} in Gunjur: 2, 3 and 4 BHK apartments and 4 and 5 BHK villas on 20 acres, with 40+ amenities.`
-          : `${elements.shortName} in Gunjur has ${villa ? "4 and 5 BHK villas" : "2, 3 and 4 BHK apartments"} on a 20-acre community with 40+ amenities. ${elements.offer} are available now.`}
+          : `${elements.shortName} in Gunjur has ${villa ? "4 and 5 BHK villas" : "2, 3 and 4 BHK apartments"} in a 20-acre community with 40+ amenities. ${elements.offer} are available now.`}
         <Link href={elements.href} className="mt-3 flex items-center gap-3 rounded-xl bg-white p-2 text-ink">
           <span className="relative block size-12 shrink-0 overflow-hidden rounded-lg">
             <Image src={elements.cover.src} alt="" fill sizes="48px" className="object-cover" />
@@ -167,17 +183,33 @@ export function Diniee() {
     say("Thank you. Share your name and mobile number and I’ll write a message for you to send us; once it reaches us, our sales team can call and arrange a visit.");
   };
 
-  const digits = lead.phone.replace(/\D/g, "").replace(/^(?:0091|91|0)(?=\d{10}$)/, "");
-  const detailsOk = lead.name.trim().length >= 2 && /^[6-9]\d{9}$/.test(digits);
+  const parsedPhone = parsePhone(lead.phone);
+  const detailsOk = lead.name.trim().length >= 2 && parsedPhone.ok;
   const message = buildMessage(
     "I chatted with Diniee on your website and would like a call back.",
     [
       ["Looking for", lead.type],
       ["Planning to buy", lead.when],
       ["Name", lead.name],
-      ["Mobile", digits ? `+91 ${digits}` : undefined],
+      ["Mobile", parsedPhone.ok ? parsedPhone.display : undefined],
     ],
   );
+
+  /* "What is…" questions about the words buyers meet, with a link to the full explanation. */
+  const terms: [RegExp, string, string?][] = [
+    [/\bbhk\b/, "BHK means bedroom, hall, kitchen. A 3 BHK home has three bedrooms, a living room and a kitchen."],
+    [/\b(oc|occupancy)\b/, "An OC (occupancy certificate) is issued by the local authority when a building is complete and fit to live in.", "/checklist/occupancy-certificate"],
+    [/\be?-?khata\b/, "A khata is a property’s entry in the city’s tax register. It is not proof of ownership on its own; that comes from the sale deed and title documents.", "/checklist/khata-certificate"],
+    [/\bsuper\s?built|\bbuilt-?\s?up\b/, "Super built-up area is the carpet area plus the walls, balconies and a share of the common areas such as lobbies and the clubhouse.", "/checklist/carpet-area"],
+    [/\bcarpet\b/, "Carpet area is the usable floor area inside a home’s walls. Under RERA, a developer must state each home’s carpet area.", "/checklist/carpet-area"],
+    [/\brera\b/, `RERA is the Real Estate (Regulation and Development) Act, 2016. A project must be registered with the state’s RERA authority before it is sold. ${elements.shortName} is registered with Karnataka RERA.`],
+    [/\bemis?\b/, "An EMI (equated monthly instalment) is the fixed monthly payment on a home loan. You can estimate yours with our EMI calculator.", "/plan"],
+    [/\b(stps?|sewage)\b/, "An STP (sewage treatment plant) treats a community’s waste water on site so the water can be reused.", "/checklist/sewage-treatment-plants"],
+  ];
+  const define = (l: string) => {
+    if (!/\b(what(’s|'s| is| are| does)|meaning|means?|define|explain|stand for)\b/.test(l)) return null;
+    return terms.find(([re]) => re.test(l)) ?? null;
+  };
 
   /* A few typed questions, matched by keyword; anything else goes to a person. */
   const ask = () => {
@@ -185,6 +217,25 @@ export function Diniee() {
     if (!q) return;
     setText("");
     const l = q.toLowerCase();
+    const term = define(l);
+    if (term) {
+      me(q);
+      say(
+        <>
+          {term[1]}
+          {term[2] && (
+            <>
+              {" "}
+              <Link href={term[2]} className="underline">
+                {term[2] === "/plan" ? "Open the EMI calculator" : "Read more"}
+              </Link>
+              .
+            </>
+          )}
+        </>,
+      );
+      return;
+    }
     // Whole words only (so "premium" isn't "emi" and "separate" isn't "rate"), and loans before
     // prices, because "EMI on a 1 crore loan" is a loan question that happens to mention crore.
     const match =
@@ -234,6 +285,7 @@ export function Diniee() {
         <div
           ref={panel}
           role="dialog"
+          aria-modal="true"
           aria-labelledby={`${uid}-title`}
           className="fixed inset-x-2 bottom-2 z-[60] flex max-h-[min(40rem,calc(100svh-1rem))] flex-col overflow-hidden rounded-2xl bg-paper text-ink shadow-[0_30px_90px_-20px_rgb(0_0_0/0.55)] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[24rem]"
         >
@@ -267,9 +319,10 @@ export function Diniee() {
             ))}
             {typing && (
               <div className="flex">
-                <span className="inline-flex gap-1 rounded-2xl rounded-bl-md bg-white px-3.5 py-3 shadow-sm" aria-label="Diniee is typing">
+                <span className="inline-flex gap-1 rounded-2xl rounded-bl-md bg-white px-3.5 py-3 shadow-sm">
+                  <span className="sr-only">Diniee is typing</span>
                   {[0, 1, 2].map((k) => (
-                    <span key={k} className="size-1.5 animate-bounce rounded-full bg-mute" style={{ animationDelay: `${k * 120}ms` }} />
+                    <span key={k} aria-hidden className="size-1.5 animate-bounce rounded-full bg-mute" style={{ animationDelay: `${k * 120}ms` }} />
                   ))}
                 </span>
               </div>
@@ -294,7 +347,7 @@ export function Diniee() {
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (detailsOk) {
-                    me(`${lead.name.trim()}, +91 ${digits}`);
+                    me(`${lead.name.trim()}, ${parsedPhone.display}`);
                     setStep("done");
                     say("Thank you! Press Send and your request goes to our sales team on WhatsApp, with these details filled in.");
                   }
@@ -303,7 +356,7 @@ export function Diniee() {
                 <label className="sr-only" htmlFor={`${uid}-n`}>
                   Your name
                 </label>
-                <input id={`${uid}-n`} placeholder="Your name" value={lead.name} onChange={(e) => setLead((l) => ({ ...l, name: e.target.value }))} autoComplete="name" className="h-11 w-full rounded-lg border border-ink/15 px-3 outline-none focus:border-ink" />
+                <input id={`${uid}-n`} placeholder="Your name" value={lead.name} onChange={(e) => setLead((l) => ({ ...l, name: e.target.value }))} autoComplete="name" className="h-11 w-full rounded-lg border border-ink/45 px-3 outline-none focus:border-ink" />
                 <label className="sr-only" htmlFor={`${uid}-p`}>
                   Mobile number
                 </label>
@@ -311,10 +364,10 @@ export function Diniee() {
                   id={`${uid}-p`}
                   placeholder="Mobile number"
                   value={lead.phone}
-                  onChange={(e) => setLead((l) => ({ ...l, phone: e.target.value.replace(/[^\d\s+]/g, "").slice(0, 15) }))}
+                  onChange={(e) => setLead((l) => ({ ...l, phone: cleanPhoneInput(e.target.value) }))}
                   inputMode="tel"
                   autoComplete="tel"
-                  className="h-11 w-full rounded-lg border border-ink/15 px-3 outline-none focus:border-ink"
+                  className="h-11 w-full rounded-lg border border-ink/45 px-3 outline-none focus:border-ink"
                 />
                 <button type="submit" disabled={!detailsOk} className="h-11 w-full rounded-lg bg-forest font-semibold text-paper disabled:opacity-40">
                   Continue
@@ -324,7 +377,7 @@ export function Diniee() {
             {!typing && step === "done" && (
               <div className="space-y-2">
                 <p className="whitespace-pre-wrap rounded-2xl bg-[#e7f6e9] p-3 text-sm">{message}</p>
-                <a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" className="flex h-11 items-center justify-center gap-2 rounded-lg bg-[#1f8f4e] font-semibold text-white hover:bg-[#187a41]">
+                <a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" className="flex h-11 items-center justify-center gap-2 rounded-lg bg-[#187a41] font-semibold text-white hover:bg-[#187a41]">
                   <Send aria-hidden className="size-4" /> Send on WhatsApp
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
@@ -345,12 +398,12 @@ export function Diniee() {
             <label htmlFor={`${uid}-q`} className="sr-only">
               Type a question
             </label>
-            <input id={`${uid}-q`} value={text} onChange={(e) => setText(e.target.value)} placeholder="Ask about homes, RERA, location…" className="h-11 flex-1 rounded-lg border border-ink/15 bg-white px-3 text-[0.95rem] outline-none focus:border-ink" />
+            <input id={`${uid}-q`} value={text} onChange={(e) => setText(e.target.value)} placeholder="Ask about homes, RERA, location…" className="h-11 min-w-0 flex-1 rounded-lg border border-ink/45 bg-white px-3 text-[0.95rem] outline-none focus:border-ink" />
             <button type="submit" aria-label="Send question" className="inline-flex size-11 items-center justify-center rounded-lg bg-forest text-paper">
               <Send aria-hidden className="size-4" />
             </button>
           </form>
-          <p className="bg-paper px-3 pb-2 text-center text-[0.68rem] text-mute">Diniee answers from published Disha Habitat information. Nothing you type is stored.</p>
+          <p className="bg-paper px-3 pb-2 text-center text-xs text-mute">Diniee answers from published Disha Habitat information. Nothing you type is stored.</p>
         </div>
       )}
     </>

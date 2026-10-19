@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Mail, MessageCircle } from "lucide-react";
-import { buildMessage, mailtoUrl, whatsappUrl } from "@/lib/messaging";
+import { buildMessage, mailtoUrl, parsePhone, phoneHelp, whatsappUrl } from "@/lib/messaging";
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
 import { buttonClass, ButtonInner } from "@/components/ui";
 import { elements } from "@/lib/elements";
@@ -39,9 +39,8 @@ function validate(v: Values): Errors {
   if (!name) errors.name = "Please tell us your name.";
   else if (name.length < 2) errors.name = "Please enter your full name.";
 
-  const digits = v.phone.replace(/[\s()-]/g, "").replace(/^(\+91|0091|0)/, "");
   if (!v.phone.trim()) errors.phone = "Please add a mobile number so our team can reach you.";
-  else if (!/^[6-9]\d{9}$/.test(digits)) errors.phone = "Enter a 10-digit Indian mobile number, e.g. 98765 43210.";
+  else if (!parsePhone(v.phone).ok) errors.phone = phoneHelp;
 
   if (v.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim()))
     errors.email = "That email address doesn’t look right.";
@@ -91,7 +90,7 @@ export function EnquiryForm({
 
   const dark = tone === "dark";
   const fieldBase = `peer block w-full border-0 border-b bg-transparent px-0 pb-3 pt-2 text-base outline-none transition-colors placeholder:text-current placeholder:opacity-40 focus:ring-0 ${
-    dark ? "border-paper/35 text-paper focus:border-paper" : "border-ink/25 text-ink focus:border-ink"
+    dark ? "border-paper/55 text-paper focus:border-paper" : "border-ink/45 text-ink focus:border-ink"
   }`;
   const labelBase = `label ${dark ? "text-paper/70" : "text-mute"}`;
   const errorText = dark ? "text-[#ffb4a8]" : "text-error";
@@ -120,7 +119,7 @@ export function EnquiryForm({
     `I’d like to know more about ${values.interest}.`,
     [
       ["Name", values.name],
-      ["Mobile", values.phone],
+      ["Mobile", parsePhone(values.phone).display || values.phone],
       ["Email", values.email],
     ],
     values.message,
@@ -145,7 +144,7 @@ export function EnquiryForm({
             href={whatsappUrl(message)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1f8f4e] px-5 font-semibold text-white hover:bg-[#187a41]"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#187a41] px-5 font-semibold text-white hover:bg-[#12613a]"
           >
             <MessageCircle aria-hidden className="size-5" strokeWidth={1.8} /> Send on WhatsApp
             <span className="sr-only">(opens in a new tab)</span>
@@ -337,7 +336,7 @@ export function EnquiryForm({
             className={`mt-0.5 size-5 shrink-0 cursor-pointer ${dark ? "accent-paper" : "accent-ink"}`}
           />
           <label htmlFor={id("consent")} className={`text-sm leading-relaxed ${dark ? "text-paper/80" : "text-mute"}`}>
-            I agree to be contacted by Disha Habitat by phone or email about this enquiry.
+            I agree to be contacted by Disha Habitat by phone, WhatsApp or email about this enquiry.
           </label>
         </div>
         {errors.consent && (

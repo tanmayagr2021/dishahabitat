@@ -68,7 +68,7 @@ const delivered: PortfolioItem[] = [...projectsByHandover].reverse().map((p) => 
   handoverYear: p.handoverYear,
   homes: Number(fact(p, "Homes") ?? 0) || null,
   acres: parseFloat(fact(p, "Project size") ?? "0"),
-  configurations: fact(p, "Homes offered") ?? null,
+  configurations: fact(p, "Home types") ?? null,
   intro: p.intro,
   image: { ...cardImage[p.slug], kind: "photo" },
   gallery: [p.cover, ...p.gallery.filter((g) => g.kind !== "plan")].slice(0, 5),

@@ -72,7 +72,7 @@ function Box({ prefix, suffix, invalid, children }: { prefix?: string; suffix?: 
   return (
     <div
       className={`flex h-12 items-center gap-2 rounded-lg border bg-white/70 px-3.5 transition-[border-color,box-shadow] focus-within:border-ink focus-within:shadow-[0_0_0_3px_rgb(57_170_225/0.25)] ${
-        invalid ? "border-error" : "border-ink/15"
+        invalid ? "border-error" : "border-ink/45"
       }`}
     >
       {prefix && <span className="text-mute">{prefix}</span>}
@@ -214,7 +214,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 |
                   aria-pressed={on}
                   onClick={() => set("down")(String(Math.round((input.price * pct) / 100)))}
                   className={`h-9 rounded-md border px-3.5 text-sm font-medium transition-colors disabled:opacity-40 ${
-                    on ? "border-ink bg-ink text-paper" : "border-ink/15 bg-white/50 text-ink hover:border-ink/40"
+                    on ? "border-ink bg-ink text-paper" : "border-ink/30 bg-white/50 text-ink hover:border-ink/55"
                   }`}
                 >
                   {pct}%
@@ -225,7 +225,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 |
         </Field>
 
         <div className="grid gap-7 sm:grid-cols-2 sm:gap-5">
-          <Field id={id("rate")} label="Interest rate" error={errors.annualRate} hint="Per year">
+          <Field id={id("rate")} label="Interest rate" error={errors.annualRate} hint="Per year, as your bank quotes it">
             <Box suffix="% p.a." invalid={!!errors.annualRate}>
               <input
                 id={id("rate")}
@@ -249,7 +249,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 |
             />
           </Field>
 
-          <Field id={id("years")} label="Loan tenure" error={errors.years} hint="1 to 30 years">
+          <Field id={id("years")} label="Loan length (tenure)" error={errors.years} hint="1 to 30 years">
             <Box suffix="years" invalid={!!errors.years}>
               <input
                 id={id("years")}
@@ -263,7 +263,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 |
               />
             </Box>
             <Range
-              aria-label="Loan tenure"
+              aria-label="Loan length in years"
               min={LIMITS.years.min}
               max={LIMITS.years.max}
               step={1}
@@ -292,7 +292,7 @@ export function AffordabilityExplorer({ headingLevel = 2 }: { headingLevel?: 1 |
       {/* Results */}
       <div className="flex flex-col border-t border-ink/10 bg-white/30 p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
         <div aria-live="polite" aria-atomic="true">
-          <H className="text-[0.95rem] font-medium text-mute">Your monthly EMI</H>
+          <H className="text-[0.95rem] font-medium text-mute">Your monthly EMI (loan instalment)</H>
           {result ? (
             <>
               <p className="mt-2 text-[clamp(2.6rem,5vw,3.6rem)] font-semibold leading-none tabular-nums text-ink">

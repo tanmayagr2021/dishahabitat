@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Disha Habitat",
     locale: "en_IN",
-    images: [{ url: "/images/central-park/clubhouse-dusk.jpg", width: 1920, height: 1274 }],
+    images: [{ url: "/images/og/home.jpg", width: 1200, height: 630 }],
   },
   /* Out of search indexes until launch day (SITE_INDEXING=true; see lib/launch.ts). */
   robots: indexing ? { index: true, follow: true } : { index: false, follow: false },
@@ -65,7 +65,7 @@ export const viewport: Viewport = {
  *  1. marks the page for scroll reveals (removed after 3s if the app never hydrates);
  *  2. picks the hero photograph for the time of day in Bengaluru (IST);
  *  3. decides whether the logo film plays: once per visit, on whichever page the visitor arrives
- *     at, in about two and a half seconds (never with reduced motion; `?nointro` skips it for automated
+ *     at, in about two and a half seconds (never with reduced motion, data saver or a 2G/3G connection; `?nointro` skips it for automated
  *     checks). It autoplays from the HTML.
  */
 /* What search engines read about the company: published facts only (lib/site.ts). */
@@ -90,7 +90,7 @@ const organisation = {
   sameAs: company.socials.map((s) => s.href),
 };
 
-const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);var seen=sessionStorage.getItem('disha-intro');d.dataset.intro=(!rm&&!skip&&!seen)?'on':'off'}catch(e){d.dataset.intro='off'}})();`;
+const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);var seen=sessionStorage.getItem('disha-intro');var c=navigator.connection;var slow=!!(c&&(c.saveData||/(^|-)2g|3g/.test(c.effectiveType||'')));d.dataset.intro=(!rm&&!skip&&!seen&&!slow)?'on':'off'}catch(e){d.dataset.intro='off'}setTimeout(function(){if(d.dataset.intro==='on')d.dataset.intro='off'},6500);})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

@@ -15,7 +15,7 @@ import { projects, projectsByHandover } from "@/lib/projects";
 export const metadata: Metadata = pageMeta({
   title: "Our story",
   description:
-    "The Disha Habitat story in the founders’ own words: how two homebuyers became builders, and the five communities handed over since 2014.",
+    "The Disha Habitat story in the founders’ own words: how two homebuyers became builders, and the five communities built since 2014.",
   path: "/story",
 });
 
@@ -73,7 +73,7 @@ export default function StoryPage() {
             We began where <em>you are now.</em>
           </>
         }
-        intro="Seven short chapters by Gunaranjan J and K Raja Sekhar: how two homebuyers became builders, and what we promised ourselves along the way."
+        intro="Seven short chapters by Gunaranjan J and K Raja Sekhar: how two homebuyers became builders, and what they promised themselves along the way."
         image={{
           src: "/images/community/site-team.jpg",
           alt: "The Disha Habitat site and engineering team gathered on a landscaped lawn",
@@ -107,7 +107,7 @@ export default function StoryPage() {
         <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <ChapterHead i={0} id="ch-1-title" />
-            <p className="mt-4 text-sm tabular-nums text-mute">Bengaluru, 2014</p>
+            <p className="mt-4 text-sm text-mute">Where it began</p>
           </div>
           <div className="memoir space-y-6 text-[1.15rem] leading-[1.75] text-ink/80 lg:col-span-6 lg:col-start-7">
             <Reveal>
@@ -118,7 +118,7 @@ export default function StoryPage() {
             </Reveal>
             <Reveal delay={80}>
               <p>
-                So we became homebuyers first, then investors, and then, taking the plunge, developers and builders. We learnt
+                We became homebuyers first, then investors, and then, taking the plunge, developers and builders. We learnt
                 all of it coming from a place of not knowing. Every stumble opened a new window of understanding, and we
                 realised what it takes to keep a promise and meet an expectation.
               </p>
@@ -141,7 +141,7 @@ export default function StoryPage() {
               <ChapterHead i={1} id="ch-2-title" />
             </div>
             <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
-              Neither of us started out in construction. We think that is exactly why we explain everything.
+              Neither of us started out building homes. We think that is exactly why we explain everything.
             </p>
           </div>
 
@@ -208,7 +208,7 @@ export default function StoryPage() {
             <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
               The families who live in our homes, and the people who build them. Pull up a chair and go through the album.
             </p>
-            <p className="mt-6 font-[family-name:var(--font-caveat)] text-[1.6rem] leading-none text-brass">tap a photo for the next one →</p>
+            <p className="mt-6 text-[0.95rem] font-medium text-brass">Tap or click a photo for the next one →</p>
           </div>
           <div className="lg:col-span-8">
             <FamilyStacks />
@@ -249,13 +249,38 @@ export default function StoryPage() {
               <ChapterHead i={3} tone="dark" id="ch-4-title" />
             </div>
             <p className="max-w-md leading-relaxed text-paper/70 lg:col-span-4 lg:col-start-9">
-              Our first four communities sold out without any concentrated
-              brand marketing: our homebuyers told their friends. Each bar runs from construction start to completion, as
+              Our first four communities sold out by word of mouth: our homebuyers told their friends. Each bar runs from construction start to completion, as
               published.
             </p>
           </div>
 
-          <div className="mt-14 overflow-x-auto pb-2 md:mt-20">
+          {/* Phones: one row per community, each bar on the same 2014 to 2026 scale, full width. */}
+          <ol className="mt-12 space-y-5 md:hidden">
+            {projectsByHandover.map((p) => {
+              const a = toYear(p.timeline.start);
+              const b = toYear(p.timeline.completion);
+              return (
+                <li key={p.slug} className="border-t border-paper/12 pt-4">
+                  <Link href={`/homes/${p.slug}`} className="flex items-baseline justify-between gap-3">
+                    <span className="serif text-[1.5rem] leading-tight">{p.shortName}</span>
+                    <span className="label shrink-0 tabular-nums text-paper/55">{p.timeline.months} months</span>
+                  </Link>
+                  <span className="relative mt-3 block h-2.5 rounded-full bg-paper/10">
+                    <span aria-hidden className="absolute inset-y-0 rounded-full" style={{ left: `${pct(a)}%`, width: `${pct(b) - pct(a)}%`, background: p.hue }} />
+                  </span>
+                  <span className="label mt-2 block tabular-nums text-paper/55">
+                    {p.timeline.start} to {p.timeline.completion} · {p.facts.find((f) => f.label === "Homes")?.value} homes
+                  </span>
+                </li>
+              );
+            })}
+            <li className="label flex justify-between pt-1 tabular-nums text-paper/65" aria-hidden>
+              <span>{AXIS.from}</span>
+              <span>{AXIS.to}</span>
+            </li>
+          </ol>
+
+          <div className="mt-14 hidden overflow-x-auto pb-2 md:mt-20 md:block">
             <div className="grid min-w-[46rem] grid-cols-[12rem_1fr] gap-x-6">
               <ol className="contents">
                 {projectsByHandover.map((p, i) => {
@@ -381,11 +406,10 @@ export default function StoryPage() {
           <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <p className="eyebrow text-mute">Events and collaborations</p>
-              <Lines id="events-title" className="serif mt-5 t-section leading-[1.04]" lines={["Evenings the whole", <em key="e">community remembers.</em>]} />
+              <Lines id="events-title" className="serif mt-5 t-section leading-[1.04]" lines={["Concerts we’ve brought", <em key="e">to Bengaluru.</em>]} />
             </div>
             <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
-              A home is also the evenings you spend with your neighbours. Some of India’s best-loved artists have been on stage in
-              Bengaluru with us.
+              Disha Habitat has presented or supported concerts in Bengaluru by some of India’s best-loved artists.
             </p>
           </div>
           <div className="mt-12">

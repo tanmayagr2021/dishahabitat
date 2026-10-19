@@ -61,7 +61,7 @@ export const projects: Project[] = [
     facts: [
       { label: "Project size", value: "4 acres" },
       { label: "Homes", value: "322" },
-      { label: "Homes offered", value: "2 & 3 bedroom" },
+      { label: "Home types", value: "2 & 3 BHK" },
       { label: "Floors", value: "19 + basement" },
       { label: "Built-up area", value: "6,20,000 sq ft" },
       { label: "Signature feature", value: "8 ft × 12 ft sundecks" },
@@ -225,7 +225,8 @@ export const projects: Project[] = [
       },
     ],
     rera: "PRM/KA/RERA/1251/446/PR/100323/005790",
-    website: { label: "dishapursuitofsunshine.com", href: "https://dishapursuitofsunshine.com/" },
+    // website: dishapursuitofsunshine.com fails its secure connection (TLS "unrecognized name", 18 Oct 2026).
+    // Restore the link once the client fixes it: { label: "dishapursuitofsunshine.com", href: "https://dishapursuitofsunshine.com/" }
     salesPhone: { display: "+91 95053 33333", href: "tel:+919505333333" },
   },
   {

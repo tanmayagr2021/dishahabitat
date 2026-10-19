@@ -16,9 +16,9 @@ import { formatIndian } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: e.name,
-  description: `${e.name}, ${e.locality}. ${e.offer}. ${e.intro}`,
+  description: `${e.name}, Gunjur, East Bengaluru: 2, 3 & 4 BHK apartments and 4 & 5 BHK villas on 20 acres. RERA registered.`,
   path: e.href,
-  image: { url: e.cover.src, width: e.cover.width, height: e.cover.height, alt: e.cover.alt },
+  image: { url: "/images/og/pursuit-of-the-elements.jpg", width: 1200, height: 630, alt: e.cover.alt },
 });
 
 const galleryTiles = [
@@ -46,9 +46,9 @@ export default function ElementsPage() {
           </span>
         }
         title={
-          <>
+          <span translate="no">
             Pursuit of the <em>Elements</em>
-          </>
+          </span>
         }
         intro={
           <>
@@ -97,6 +97,16 @@ export default function ElementsPage() {
               </Reveal>
             ))}
           </dl>
+          <div className="mt-6 flex flex-col gap-3 border-t border-paper/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl leading-relaxed text-paper/75">Prices depend on the home and the floor, so our sales team shares the current ones on request.</p>
+            <ComposeButton
+              channel="whatsapp"
+              topic="Current prices"
+              className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-lg bg-paper px-5 font-semibold text-ink hover:bg-white"
+            >
+              <MessageCircle aria-hidden className="size-4" strokeWidth={1.8} /> Ask for current prices
+            </ComposeButton>
+          </div>
 
           <div className="mt-20 grid gap-10 lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-4">
@@ -137,19 +147,26 @@ export default function ElementsPage() {
             <Lines
               id="homes-title"
               className="serif mt-5 t-section"
-              lines={["Seven towers", <em key="e">and a row of villas.</em>]}
+              lines={["Seven towers,", <em key="e">and independent villas.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
-              2, 3 and 4 BHK apartments, and 4 and 5 BHK villas. Ask us for the floor plans of the home you’re
-              considering.
+              2, 3 and 4 BHK apartments, and 4 and 5 BHK villas. Ask us for the floor plans and carpet areas of the
+              home you’re considering.
             </p>
+            <ComposeButton
+              channel="whatsapp"
+              topic="Floor plans and carpet areas"
+              className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-lg border border-paper/30 px-5 font-medium text-paper hover:border-paper/60"
+            >
+              <MessageCircle aria-hidden className="size-4" strokeWidth={1.8} /> Get floor plans on WhatsApp
+            </ComposeButton>
           </div>
           <ul className="lg:col-span-7 lg:col-start-6">
             {e.towers.map((t) => (
               <li key={t.name} className="grid gap-1 border-t border-paper/15 py-5 last:border-b sm:grid-cols-[1fr_auto] sm:items-baseline sm:gap-6">
                 <p>
-                  <span className="serif text-[1.9rem] leading-tight">{t.name}</span>
-                  <span className="ml-3 text-paper/60">{t.which}</span>
+                  <span className="serif text-[1.9rem] leading-tight">{t.name}</span>{" "}
+                  <span className="ml-2 text-paper/60">{t.which}</span>
                 </p>
                 <p className="text-sm text-paper/65 sm:text-right">{t.floors}</p>
               </li>
@@ -196,7 +213,7 @@ export default function ElementsPage() {
               lines={["Over 40,", <em key="e">indoors and out.</em>]}
             />
             <p className="mt-6 max-w-sm leading-relaxed text-mute">
-              Not ten or twenty, but more than 40 mindful amenities, created to bring you outdoors and closer to nature.
+              Not ten or twenty, but more than 40 mindful amenities (a selection below), created to bring you outdoors and closer to nature.
             </p>
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
@@ -272,6 +289,7 @@ export default function ElementsPage() {
                   </li>
                 ))}
               </ul>
+              <p className="mt-3 text-[0.85rem] leading-relaxed text-mute">Each phase’s completion date is registered with Karnataka RERA.</p>
               <a href={reraSearch} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-sm font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
                 Verify on Karnataka RERA <ArrowUpRight aria-hidden className="size-4" />
                 <span className="sr-only">(opens in a new tab)</span>
@@ -294,7 +312,7 @@ export default function ElementsPage() {
               <KeyRound aria-hidden className="size-6 text-forest" strokeWidth={1.6} />
               <h3 className="serif mt-4 text-[1.5rem] leading-tight">Our record</h3>
               <p className="mt-3 text-[0.95rem] leading-relaxed text-mute">
-                {formatIndian(homesHandedOver)} homes handed over across five communities since 2014. Every start and handover date is published.
+                {formatIndian(homesHandedOver)} homes handed over across five communities built since 2014. Every start and handover date is published.
               </p>
               <Link href="/#record" className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-4 text-sm font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
                 See every timeline
@@ -316,7 +334,7 @@ export default function ElementsPage() {
           </div>
 
           <div className="mt-10 flex flex-col items-start justify-between gap-5 border-t border-ink/10 pt-8 md:flex-row md:items-center">
-            <div>
+            <div className="min-w-0 max-w-full">
               <p className="label text-mute">Talk to the sales team</p>
               <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-1">
                 <a href={e.phone.href} className="inline-flex min-h-11 items-center gap-2 text-[1.1rem] font-medium">
@@ -325,7 +343,7 @@ export default function ElementsPage() {
                 <ComposeButton channel="email" topic={e.name} className="inline-flex min-h-11 items-center break-all text-left text-mute hover:text-ink">
                   {e.email}
                 </ComposeButton>
-                <a href={e.website.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 text-mute hover:text-ink">
+                <a href={e.website.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 min-w-0 items-center gap-1.5 text-mute [overflow-wrap:anywhere] hover:text-ink">
                   {e.website.label} <ArrowUpRight aria-hidden className="size-3.5" />
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
@@ -346,7 +364,7 @@ export default function ElementsPage() {
 
       <nav aria-label="Our delivered communities" data-tone="light" className="surface-ivory py-12">
         <div className="shell flex flex-wrap items-center justify-between gap-4">
-          <p className="text-mute">Five communities delivered since 2014.</p>
+          <p className="text-mute">Five communities built since 2014.</p>
           <Link href="/homes" className="font-medium underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
             See all our homes
           </Link>

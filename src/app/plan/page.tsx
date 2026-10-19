@@ -17,7 +17,7 @@ const notes = [
   },
   {
     title: "What it doesn’t include",
-    text: "Processing fees, insurance, stamp duty, registration, maintenance deposits and changes in floating rates are not included. Lenders may round or schedule payments differently.",
+    text: "GST, processing fees, insurance, stamp duty, registration, maintenance deposits and changes in floating rates are not included. Banks usually lend at most 75 to 90% of a home’s value, depending on the loan size. Lenders may round or schedule payments differently.",
   },
   {
     title: "What it is not",

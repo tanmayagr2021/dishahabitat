@@ -49,13 +49,13 @@ export function Footer() {
               <li>
                 <Link href={elements.href} className={`${linkCls} inline-flex items-center gap-2`}>
                   {elements.shortName}
-                  <span className="rounded-full bg-cyan/15 px-2 py-0.5 text-[0.72rem] text-cyan">Now selling</span>
+                  <span className="rounded-full bg-cyan/15 px-2 py-0.5 text-[0.78rem] text-cyan">Now selling</span>
                 </Link>
               </li>
               {projectsNewestFirst.map((p) => (
                 <li key={p.slug}>
                   <Link href={`/homes/${p.slug}`} className={linkCls}>
-                    {p.shortName} <span className="text-paper/40">· {p.handoverYear}</span>
+                    {p.shortName} <span className="text-paper/60">· {p.handoverYear}</span>
                   </Link>
                 </li>
               ))}
@@ -89,7 +89,8 @@ export function Footer() {
             <h2 className={head}>Talk to us</h2>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <a href={elements.phone.href} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-paper text-sm font-semibold text-ink hover:bg-white">
-                <Phone aria-hidden className="size-4" /> Call now
+                <Phone aria-hidden className="size-4" /> <span className="lg:hidden">Call now</span>
+                <span className="hidden tabular-nums lg:inline">{elements.phone.display}</span>
               </a>
               <ComposeButton channel="whatsapp" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-paper/25 text-sm font-medium hover:border-paper/60">
                 <MessageCircle aria-hidden className="size-4 text-[#5ad17a]" /> WhatsApp
@@ -97,7 +98,7 @@ export function Footer() {
             </div>
             <dl className="mt-5 space-y-3 text-[0.95rem]">
               <div>
-                <dt className="text-xs text-paper/45">Sales</dt>
+                <dt className="text-xs text-paper/65">Sales</dt>
                 <dd>
                   <a href={elements.phone.href} className={linkCls}>
                     {elements.phone.display}
@@ -105,7 +106,7 @@ export function Footer() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-paper/45">Office</dt>
+                <dt className="text-xs text-paper/65">Office</dt>
                 <dd className="flex flex-wrap gap-x-4">
                   {company.phones.map((p) => (
                     <a key={p.href} href={p.href} className={linkCls}>
@@ -115,7 +116,7 @@ export function Footer() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-paper/45">Email</dt>
+                <dt className="text-xs text-paper/65">Email</dt>
                 <dd>
                   <ComposeButton channel="email" className={`${linkCls} text-left`}>
                     {company.email}
@@ -123,7 +124,7 @@ export function Footer() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-paper/45">Corporate office</dt>
+                <dt className="text-xs text-paper/65">Corporate office</dt>
                 <dd className="text-paper/75">
                   {company.office.lines.join(", ")}{" "}
                   <a href={company.office.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-paper underline decoration-paper/30 underline-offset-4 hover:decoration-paper">
@@ -136,12 +137,12 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-paper/10 pt-6 text-xs leading-relaxed text-paper/45">
-          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-            <p>
+        <div className="mt-10 border-t border-paper/10 pt-6 text-xs leading-relaxed text-paper/65">
+          <div className="flex flex-col gap-3 [overflow-wrap:anywhere] md:flex-row md:items-start md:justify-between">
+            <p className="min-w-0 md:shrink-0">
               © {company.copyrightYear}, {company.copyrightHolder}. {company.legalName.replace(/\.$/, "")}.
             </p>
-            <ul className="flex flex-wrap gap-x-4 gap-y-1">
+            <ul className="flex min-w-0 flex-wrap gap-x-4 gap-y-1">
               <li>
                 <Link href="/privacy" className="inline-block py-1 hover:text-paper">
                   Privacy
@@ -159,7 +160,7 @@ export function Footer() {
               )}
             </ul>
           </div>
-          <p className="mt-3 text-paper/35">Images marked “Artist’s impression” are renders. The EMI calculator is illustrative and is not an offer of finance.</p>
+          <p className="mt-3 text-paper/60">Images marked “Artist’s impression” are renders. The EMI calculator is illustrative and is not an offer of finance.</p>
         </div>
       </div>
     </footer>

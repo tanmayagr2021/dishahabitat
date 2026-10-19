@@ -32,7 +32,7 @@ export function Developments() {
           </div>
           <div className="flex items-center gap-2">
             <p className="mr-3 text-sm tabular-nums text-paper/60" aria-live="polite">
-              {String((start % n) + 1).padStart(2, "0")}–{String(((start + 1) % n) + 1).padStart(2, "0")} of {String(n).padStart(2, "0")} delivered
+              {(start % n) + 1}–{((start + 1) % n) + 1} of {n} handed over
             </p>
             <button type="button" onClick={() => step(-1)} aria-label="Previous communities" className="inline-flex size-12 items-center justify-center rounded-full border border-paper/30 transition-colors hover:bg-paper hover:text-ink">
               <ArrowLeft aria-hidden className="size-4" strokeWidth={1.6} />

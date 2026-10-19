@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { Lines, Reveal } from "@/components/ui";
+import { residentRating } from "@/lib/proof";
 import { homeowners } from "@/lib/site";
 
 /*
@@ -34,6 +35,15 @@ export function HomeownersSpeak() {
           </Reveal>
           <Lines id="speak-title" className="serif mt-5 t-section leading-[1.04]" lines={["What home means", <em key="e">to the people in ours.</em>]} />
           <p className="mt-5 text-[1.02rem] leading-relaxed text-mute">From across India, to a place called home, in their own words.</p>
+          <a
+            href={residentRating.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-forest underline decoration-forest/30 underline-offset-4 hover:decoration-forest"
+          >
+            Rated {residentRating.score} out of {residentRating.outOf} on {residentRating.source} ({residentRating.community}, {residentRating.reviews} reviews)
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
           <div className="mt-8 flex items-center gap-3">
             <button type="button" onClick={() => go(-1)} aria-label="Previous story" className="inline-flex size-12 items-center justify-center rounded-full border border-ink/20 transition-colors hover:bg-ink hover:text-paper">
               <ArrowLeft aria-hidden className="size-4" strokeWidth={1.6} />

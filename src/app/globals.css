@@ -70,6 +70,13 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
+    overflow-wrap: break-word;
+  }
+
+  /* With large text settings, grid columns may shrink below their longest word (which then wraps)
+     instead of pushing the page wider than the screen. A min-width class on an item still wins. */
+  :where(.grid) > * {
+    min-width: 0;
   }
 
   ::selection {
@@ -334,6 +341,7 @@ img.mono-img {
 
 .js-reveal [data-reveal="words"] .w {
   display: inline-block;
+  max-width: 100%;
   opacity: 0;
   filter: blur(10px);
   transform: translateY(0.45em);
@@ -367,6 +375,7 @@ img.mono-img {
 
 .anim-words .w {
   display: inline-block;
+  max-width: 100%;
   animation: word-in 1.2s var(--ease-out-expo) both;
   animation-delay: calc(var(--d, 0ms) + var(--wi, 0) * 70ms);
 }
@@ -967,7 +976,9 @@ html.lenis body {
 }
 
 .marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track {
+.marquee:active .marquee-track,
+.marquee:focus-within .marquee-track,
+.marquee:has(.marquee-pause:checked) .marquee-track {
   animation-play-state: paused;
 }
 

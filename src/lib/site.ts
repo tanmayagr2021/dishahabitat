@@ -38,7 +38,7 @@ export const company = {
 export const stats = [
   { value: 5, suffix: "", label: "Communities created" },
   { value: 1000, suffix: "+", label: "Happy families" },
-  { value: 20000, suffix: "+", label: "Walk-ins" },
+  { value: 20000, suffix: "+", label: "Site visits" },
   { value: 2025000, suffix: "+", label: "Sq ft delivered" },
   { value: 3200000, suffix: "+", label: "Sq ft in the making" },
 ] as const;

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useId, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useEffect, useId, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { ArrowUpRight, Check, ChevronDown, MessageCircle, Printer, RotateCcw, Share2 } from "lucide-react";
 import type { ChecklistItem } from "@/lib/checklist";
 import { openComposer } from "@/lib/messaging";
@@ -18,6 +18,7 @@ type State = Record<string, boolean>;
 /* A tiny store over localStorage, safe on the server and in private windows. */
 const listeners = new Set<() => void>();
 let cache: string | null = null;
+let saves = true; // false once the browser refuses to store (some private windows, full storage)
 const read = () => {
   if (cache !== null) return cache;
   try {
@@ -31,7 +32,10 @@ const write = (next: State) => {
   cache = JSON.stringify(next);
   try {
     localStorage.setItem(KEY, cache);
-  } catch {}
+    saves = true;
+  } catch {
+    saves = false;
+  }
   listeners.forEach((l) => l());
 };
 const subscribe = (l: () => void) => {
@@ -51,6 +55,12 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
     }
   })();
   const [open, setOpen] = useState<string | null>(items[0].slug);
+  const [cleared, setCleared] = useState<State | null>(null);
+  useEffect(() => {
+    if (!cleared) return;
+    const t = window.setTimeout(() => setCleared(null), 10000);
+    return () => window.clearTimeout(t);
+  }, [cleared]);
 
   const done = (slug: string) => Boolean(state[slug]);
   const count = items.filter((c) => done(c.slug)).length;
@@ -101,7 +111,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
               <div aria-live="polite">
                 <p className="serif text-[2.4rem] leading-none tabular-nums">
                   {count}
-                  <span className="text-paper/40">/{items.length}</span>
+                  <span className="text-paper/60">/{items.length}</span>
                 </p>
                 <p className="mt-1 text-sm text-paper/70">{complete ? "All checked. You’re ready." : "must-knows checked"}</p>
               </div>
@@ -119,7 +129,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
                 </Link>
               </div>
             ) : (
-              <p className="mt-6 text-sm leading-relaxed text-paper/65">Open each one, read it, and tick the points as you understand them. Your progress stays in this browser.</p>
+              <p className="mt-6 text-sm leading-relaxed text-paper/65">Open each one, read it, and tick the points as you understand them.</p>
             )}
           </div>
 
@@ -130,7 +140,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
               rel="noopener noreferrer"
               className="card flex items-center gap-2 px-3 py-3 text-sm font-medium hover:border-ink/25"
             >
-              <Share2 aria-hidden className="size-4 text-[#1f8f4e]" /> Send to myself
+              <Share2 aria-hidden className="size-4 text-[#187a41]" /> Send to myself
               <span className="sr-only">on WhatsApp (opens in a new tab)</span>
             </a>
             <button type="button" onClick={() => window.print()} className="card flex items-center gap-2 px-3 py-3 text-left text-sm font-medium hover:border-ink/25">
@@ -143,9 +153,39 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
             >
               <MessageCircle aria-hidden className="size-4" /> Ask Disha
             </button>
-            <button type="button" onClick={() => write({})} disabled={raw === "{}"} className="card flex items-center gap-2 px-3 py-3 text-left text-sm font-medium hover:border-ink/25 disabled:opacity-40">
+            <button
+              type="button"
+              onClick={() => {
+                setCleared(state);
+                write({});
+              }}
+              disabled={raw === "{}"}
+              className="card flex items-center gap-2 px-3 py-3 text-left text-sm font-medium hover:border-ink/25 disabled:opacity-40"
+            >
               <RotateCcw aria-hidden className="size-4" /> Start over
             </button>
+          </div>
+          <div aria-live="polite" className="mt-3 text-sm leading-relaxed">
+            {cleared && (
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg bg-ink/5 px-3 py-2">
+                Your ticks are cleared.
+                <button
+                  type="button"
+                  onClick={() => {
+                    write(cleared);
+                    setCleared(null);
+                  }}
+                  className="inline-flex min-h-11 items-center font-semibold text-forest underline underline-offset-4"
+                >
+                  Undo
+                </button>
+              </p>
+            )}
+            {!saves && (
+              <p className="mt-2 rounded-lg bg-ink/5 px-3 py-2 text-mute">
+                This browser isn’t saving your ticks (a private window can do this). Use “Send to myself” to keep a copy.
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -172,17 +212,18 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
                   aria-label={`${c.title}: ${d ? "checked" : "not checked"}`}
                   onClick={() => toggle(c.slug)}
                   className={`relative inline-flex size-9 shrink-0 items-center justify-center rounded-full border-2 transition-[background-color,border-color,transform] duration-300 active:scale-90 ${
-                    d ? "border-forest bg-forest text-paper" : "border-ink/25 hover:border-forest"
+                    d ? "border-forest bg-forest text-paper print:bg-transparent print:text-ink" : "border-ink/45 hover:border-forest"
                   }`}
                 >
                   <Check aria-hidden className={`size-4 transition-[opacity,transform] duration-300 ${d ? "scale-100 opacity-100" : "scale-50 opacity-0"}`} strokeWidth={3} />
                 </button>
+                <h2 className="min-w-0 flex-1">
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   aria-controls={panel}
                   onClick={() => setOpen(isOpen ? null : c.slug)}
-                  className="flex min-w-0 flex-1 items-center gap-4 text-left"
+                  className="flex w-full min-w-0 items-center gap-4 text-left"
                 >
                   <span className="relative hidden aspect-square w-14 shrink-0 overflow-hidden rounded-xl sm:block">
                     <Image src={c.image} alt="" fill sizes="56px" className="object-cover" />
@@ -190,10 +231,11 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
                   <span className="min-w-0 flex-1">
                     <span className="text-xs tabular-nums text-mute">Must-know {i + 1}</span>
                     <span className={`serif block text-[1.45rem] leading-tight md:text-[1.65rem] ${d ? "text-ink/70 line-through decoration-forest/40" : ""}`}>{c.title}</span>
-                    <span className="block truncate text-sm text-mute">{c.summary}</span>
+                    <span className="mt-0.5 block text-sm leading-snug text-mute">{c.summary}</span>
                   </span>
-                  <ChevronDown aria-hidden className={`size-5 shrink-0 text-mute transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown aria-hidden className={`size-5 shrink-0 text-mute transition-transform duration-300 print:hidden ${isOpen ? "rotate-180" : ""}`} />
                 </button>
+                </h2>
               </div>
 
               <div id={panel} className={`grid transition-[grid-template-rows] duration-500 ease-out-expo ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} print:grid-rows-[1fr]`} inert={!isOpen}>
@@ -204,7 +246,8 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
                         <p key={t}>{t}</p>
                       ))}
                       <Link href={`/checklist/${c.slug}`} className="inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-forest print:hidden">
-                        Read the full guide <ArrowUpRight aria-hidden className="size-4" />
+                        Open as a page <span className="sr-only">: {c.title}</span>
+                        <ArrowUpRight aria-hidden className="size-4" />
                       </Link>
                     </div>
                     {c.checks && (
@@ -252,6 +295,9 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
           );
         })}
       </ol>
+      <p className="hidden text-sm print:col-span-full print:block">
+        From the homebuyer’s checklist at dishahabitat.com/checklist. Ticked points are marked with a tick or a line through.
+      </p>
     </div>
   );
 }

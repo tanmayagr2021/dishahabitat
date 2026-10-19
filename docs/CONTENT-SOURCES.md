@@ -129,3 +129,28 @@ project site and are labelled artist’s impressions; the master plan is labelle
 27. **Other projects.** Listings show Pursuit of Sunshine (possession December 2026 on RERA), Harmony Gardens, Symphony
     Heights and Pursuit of Radiance. The site shows only Pursuit of the Elements as selling until the client confirms.
 28. **ET award link.** A press link or note for the award, so a buyer who searches for it can find it.
+
+## Customer review (18 to 19 October 2026)
+
+A review of the finished site from 100 buyer points of view (families, NRIs, first-time buyers, investors, older
+buyers, people using screen readers or large text) found these questions only the client can answer:
+
+29. **Pursuit of Sunshine website.** dishapursuitofsunshine.com fails over HTTPS (it opens over plain HTTP only), so
+    the site no longer links to it. Fix the certificate, or confirm the link should stay off.
+30. **Park West company name.** The Park West sign in the photographs reads “Disha Dwellings Pvt. Ltd.”. Confirm how
+    this company relates to Disha Habitat, so the site can name it correctly.
+31. **Elements master plan.** The published master plan lists 1 BHK homes; the site lists 2, 3 and 4 BHK apartments
+    and 4 and 5 BHK villas. Confirm which is current.
+32. **Built-up and saleable areas.** On one published plan the built-up area is larger than the saleable area. Confirm
+    the figures before carpet areas go on the site.
+33. **Villas.** Confirm whether villas are still available, and whether they share the towers’ RERA phases.
+34. **Water, security, specifications, floor plans, carpet areas.** These came up first in the review; they stay off
+    the site until the client supplies them.
+35. **Bank tie-ups, Vastu, Kannada.** The review asked which banks have approved Pursuit of the Elements, whether
+    homes are Vastu compliant, and for Kannada. Each can be added once confirmed.
+36. **Real photographs and a walkthrough.** The review asked for photographs of the site today and a video walkthrough of
+    a sample flat. Quarterly construction updates are linked; site photographs would sit beside them.
+37. **Testimonial consent.** Confirm that the homeowners quoted agreed to be quoted on the new site.
+38. **Analytics.** The live site runs Google Tag Manager (GTM-5KSNNT9), Google Analytics 4 (G-HC29P7H7MP) and Hotjar
+    (3286801). The new site runs none. Decide which to keep; the privacy notice changes with the answer.
+39. **Tile selection.** The old /tile-selection page now redirects (temporarily) to the supplier’s site. Confirm.

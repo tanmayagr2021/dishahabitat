@@ -32,7 +32,7 @@ const needs: Need[] = [
     wish: "Keys on the day they promise.",
     answer: `${formatIndian(homesHandedOver)} homes across five communities are lived in today. For every one of them we publish the month construction began and the month the keys were handed over, so you can judge our record for yourself.`,
     figure: formatIndian(homesHandedOver),
-    figureNote: `homes handed over since 2014. Quickest build: ${quickestBuild.name}, ${quickestBuild.months} months.`,
+    figureNote: `homes handed over, in communities built since 2014. Quickest build: ${quickestBuild.name}, ${quickestBuild.months} months.`,
     image: { src: "/images/central-park/front-door.jpg", alt: "The front door of a home at Disha Central Park" },
     link: { href: "#record", label: "See every timeline" },
   },
@@ -84,8 +84,8 @@ const needs: Need[] = [
   },
   {
     key: "green",
-    wish: "Green, quiet and safe for the children.",
-    answer: `${elements.shortName} sits on 20 acres, with a lily pond, a kitchen garden, an aroma garden, a sculpture park and a jogging track among its outdoor spaces. Guna is a practising horticulturist, and every garden we plant shows it.`,
+    wish: "Green and quiet, with room for children.",
+    answer: `${elements.shortName} sits on 20 acres, with a lily pond, a kitchen garden, an aroma garden and a jogging track. For children there is a play lawn, a skating rink and a day care centre. Guna is a practising horticulturist, and every garden we plant shows it.`,
     figure: "20 acres",
     figureNote: "with 40+ amenities, indoors and out",
     image: { src: "/images/pursuit-of-the-elements/play-lawn.webp", alt: "Artist’s impression of the children’s play lawn at Pursuit of the Elements", render: true },
@@ -94,7 +94,7 @@ const needs: Need[] = [
   {
     key: "neighbours",
     wish: "Neighbours who feel like family.",
-    answer: `More than 1,000 families live in Disha homes, and our first four communities sold out by word of mouth. Disha has also brought some of India’s best-loved artists to Bengaluru, from Shreya Ghoshal to Shankar Ehsaan Loy.`,
+    answer: `More than 1,000 families live in Disha homes, and our first four communities sold out by word of mouth. Disha Habitat has also presented concerts by artists such as Shreya Ghoshal and Shankar Ehsaan Loy.`,
     figure: residentRating.score,
     figureNote: `out of ${residentRating.outOf}: ${residentRating.community} on ${residentRating.source}, from ${residentRating.reviews} resident reviews (${residentRating.checked})`,
     image: { src: "/images/people/family-2.jpg", alt: "Three generations of a Disha homeowner family together in their living room" },
@@ -201,7 +201,7 @@ function Answer({ n }: { n: Need }) {
       <div className="relative aspect-[16/8] bg-ink">
         <Image src={n.image.src} alt={n.image.alt} fill sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" />
         {n.image.render && (
-          <span className="absolute right-3 top-3 rounded-full bg-forest-deep/65 px-2.5 py-1 text-[0.7rem] font-medium text-paper backdrop-blur-sm">Artist’s impression</span>
+          <span className="absolute right-3 top-3 rounded-full bg-forest-deep/65 px-2.5 py-1 text-[0.8rem] font-medium text-paper backdrop-blur-sm">Artist’s impression</span>
         )}
       </div>
       <div className="grid gap-6 p-6 md:grid-cols-[minmax(0,1fr)_auto] md:p-8">

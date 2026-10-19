@@ -10,7 +10,7 @@ import { DayInTheSun } from "@/components/DayInTheSun";
 import { PageHero } from "@/components/PageHero";
 import { EnquirySection } from "@/components/home/EnquirySection";
 import { SoldOutBand } from "@/components/SoldOutBand";
-import { Label, Lines, Reveal } from "@/components/ui";
+import { Label, Lines, Reveal, SlashBreaks } from "@/components/ui";
 import { getProject, projectsByHandover, projectsNewestFirst } from "@/lib/projects";
 import { homeowners } from "@/lib/site";
 
@@ -26,9 +26,9 @@ export async function generateMetadata(props: PageProps<"/homes/[slug]">): Promi
   if (!p) return {};
   return pageMeta({
     title: p.name,
-    description: `${p.name}, ${p.locality}. ${p.intro}`,
+    description: `${p.name}, ${p.locality}: ${p.facts.find((f) => f.label === "Homes")?.value} homes, handed over in ${p.handoverYear}. Photographs, facts and timeline.`,
     path: `/homes/${p.slug}`,
-    image: { url: p.cover.src, width: p.cover.width, height: p.cover.height, alt: p.cover.alt },
+    image: { url: `/images/og/${p.slug}.jpg`, width: 1200, height: 630, alt: p.cover.alt },
   });
 }
 
@@ -100,11 +100,11 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
         }
         title={
           p.shortName.includes(" ") ? (
-            <>
+            <span translate="no">
               {p.shortName.split(" ").slice(0, -1).join(" ")} <em>{p.shortName.split(" ").at(-1)}</em>
-            </>
+            </span>
           ) : (
-            p.shortName
+            <span translate="no">{p.shortName}</span>
           )
         }
         intro={p.intro}
@@ -138,7 +138,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
             </h2>
             <dl className="mt-8 border-b border-ink/20">
               {p.facts.map((f) => (
-                <div key={f.label} className="flex items-baseline justify-between gap-6 border-t border-ink/20 py-4">
+                <div key={f.label} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-ink/20 py-4">
                   <dt className="label text-ink/70">{f.label}</dt>
                   <dd className="serif text-right text-[1.6rem] leading-tight">{f.value}</dd>
                 </div>
@@ -319,7 +319,9 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-mute">
                 Selected items from the published project specification.
                 {p.rera && (
-                  <span className="label mt-6 block text-ink">RERA No. {p.rera}</span>
+                  <span className="label mt-6 block text-ink">
+                    RERA No. <SlashBreaks text={p.rera} />
+                  </span>
                 )}
               </p>
             </div>
@@ -344,7 +346,7 @@ export default async function ProjectPage(props: PageProps<"/homes/[slug]">) {
               ))}
               {p.salesPhone && (
                 <p className="mt-8 text-sm text-mute">
-                  Project enquiries:{" "}
+                  Sales:{" "}
                   <a href={p.salesPhone.href} className="font-medium text-ink underline underline-offset-4">
                     {p.salesPhone.display}
                   </a>

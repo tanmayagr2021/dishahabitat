@@ -111,10 +111,10 @@ export function Header() {
       >
         {/* How far down the page you are */}
         <span aria-hidden className="scroll-progress absolute inset-x-0 bottom-0 h-[2px] origin-left bg-brass" />
-        <div className="shell flex h-16 items-center justify-between gap-6 md:h-[5rem]">
-          <Link href="/" className="relative z-10 -ml-1 p-1" aria-label="Disha Habitat home">
+        <div className="shell flex h-16 items-center justify-between gap-3 sm:gap-6 md:h-[5rem]">
+          <Link href="/" className="relative z-10 -ml-1 min-w-0 shrink p-1" aria-label="Disha Habitat home">
             <span data-header-logo className="block">
-              <Logo className="block h-9 w-auto md:h-11" />
+              <Logo className="block h-9 w-auto max-w-full md:h-11" />
             </span>
           </Link>
 
@@ -158,7 +158,7 @@ export function Header() {
               aria-controls="site-menu"
               onClick={() => setOpen((v) => !v)}
             >
-              <span>{open ? "Close" : "Menu"}</span>
+              <span className="max-[22rem]:sr-only">{open ? "Close" : "Menu"}</span>
               <span aria-hidden className="relative block h-2.5 w-4">
                 <span
                   className={`absolute left-0 h-px w-full bg-current transition-transform duration-300 ${

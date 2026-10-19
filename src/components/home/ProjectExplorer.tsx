@@ -51,7 +51,7 @@ function Segmented<T extends string>({
             }`}
           >
             {o.label}
-            {count && <span className={on ? "text-ink/50" : "text-paper/40"}>{count(o.value)}</span>}
+            {count && <span className={on ? "text-ink/65" : "text-paper/60"}>{count(o.value)}</span>}
           </button>
         );
       })}
@@ -163,7 +163,7 @@ export function ProjectExplorer() {
         <div className="card-dark mt-12 flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-5">
           <Segmented
             label="Status"
-            options={statuses.map((s) => ({ value: s, label: s }))}
+            options={statuses.map((s) => ({ value: s, label: s === "Delivered" ? "Handed over" : s }))}
             value={status}
             onChange={setStatus}
             count={(v) => portfolio.filter((p) => v === "All" || p.status === v).length}

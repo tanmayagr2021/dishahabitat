@@ -29,3 +29,5 @@ export const destinations = {
 export function openComposer(detail: { channel?: Channel; topic?: string } = {}) {
   window.dispatchEvent(new CustomEvent("disha:compose", { detail }));
 }
+
+export { cleanPhoneInput, parsePhone, phoneHelp } from "./phone";

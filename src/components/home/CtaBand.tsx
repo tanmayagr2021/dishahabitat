@@ -23,7 +23,7 @@ export function CtaBand() {
           <Lines id="cta-title" className="serif mt-5 t-section leading-[1.04]" lines={["Bring every question.", <em key="e">We’ll bring the coffee.</em>]} />
           <Reveal delay={150} as="p" className="mt-5 max-w-lg text-[1.05rem] leading-relaxed text-paper/75">
             Walk Pursuit of the Elements in Gunjur, or sit down with us at our office on Whitefield Main Road. We’ll explain
-            everything, from the RERA papers to the structure, until you’re as informed as anyone on the project.
+            everything, from the RERA papers to the structure, as plainly as you need.
           </Reveal>
           <Reveal delay={250} className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/contact#book" variant="paper" className="font-semibold">

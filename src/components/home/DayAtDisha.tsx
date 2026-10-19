@@ -330,12 +330,12 @@ export function DayAtDisha() {
                   {playing ? <Pause aria-hidden className="size-4" fill="currentColor" /> : <Play aria-hidden className="ml-0.5 size-4" fill="currentColor" />}
                 </button>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline justify-between gap-3 text-sm">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 text-sm">
                     <span className="tabular-nums">
                       <span className="font-semibold">{clock(hour)}</span>
                       <span className="text-paper/65"> · {ph.name}</span>
                     </span>
-                    <span className="truncate text-paper/75">{ph.community}</span>
+                    <span className="text-paper/75">{ph.community}</span>
                   </div>
                   <label className="sr-only" htmlFor="day-hour">
                     Time of day
@@ -387,7 +387,7 @@ export function DayAtDisha() {
         </div>
 
         {/* Words */}
-        <div className="lg:col-span-4 lg:sticky lg:top-28">
+        <div className="order-first lg:order-none lg:col-span-4 lg:sticky lg:top-28">
           <Reveal as="p" className="eyebrow text-paper/65">
             Life, long after the keys
           </Reveal>
@@ -421,7 +421,7 @@ export function DayAtDisha() {
               }}
               className="inline-flex min-h-12 items-center gap-2 rounded-lg border border-paper/30 px-4 text-[0.95rem] font-medium text-paper/90 hover:border-paper/60"
             >
-              <Clock aria-hidden className="size-4" /> Now in Bengaluru
+              <Clock aria-hidden className="size-4" /> Bengaluru, right now
             </button>
           </div>
           <p className={`mt-5 text-sm text-paper/55 transition-opacity duration-700 ${touched ? "opacity-0" : "opacity-100"}`}>

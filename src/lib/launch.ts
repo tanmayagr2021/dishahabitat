@@ -42,7 +42,7 @@ export function pageMeta({
       url: path,
       title,
       description,
-      images: [image ?? { url: "/images/central-park/clubhouse-dusk.jpg", width: 1920, height: 1274, alt: "Disha Central Park at dusk" }],
+      images: [image ?? { url: "/images/og/home.jpg", width: 1200, height: 630, alt: "Disha Central Park at dusk" }],
     },
   };
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { Mail, MessageCircle, Send, X } from "lucide-react";
-import { buildMessage, destinations, mailtoUrl, whatsappUrl, type Channel } from "@/lib/messaging";
+import { buildMessage, cleanPhoneInput, destinations, mailtoUrl, parsePhone, phoneHelp, whatsappUrl, type Channel } from "@/lib/messaging";
 import { elements } from "@/lib/elements";
 import { projectsNewestFirst } from "@/lib/projects";
 
@@ -15,6 +15,8 @@ const topics = [
   `${elements.name}`,
   "Booking a site visit",
   "Documents and approvals",
+  "Current prices",
+  "Floor plans and carpet areas",
   ...projectsNewestFirst.map((p) => p.name),
   "Something else",
 ];
@@ -29,6 +31,7 @@ export function MessageComposer() {
   const [email, setEmail] = useState("");
   const [note, setNote] = useState("");
   const [tried, setTried] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const open = (e: Event) => {
@@ -37,14 +40,16 @@ export function MessageComposer() {
       // Each opening starts from its own topic (or the default), never the last visitor action's.
       setTopic(d.topic && topics.includes(d.topic) ? d.topic : topics[0]);
       setTried(false);
+      setCopied(false);
       ref.current?.showModal();
     };
     window.addEventListener("disha:compose", open);
     return () => window.removeEventListener("disha:compose", open);
   }, []);
 
-  const digits = phone.replace(/\D/g, "").replace(/^(?:0091|91|0)(?=\d{10}$)/, "");
-  const phoneOk = digits === "" ? channel === "email" : /^[6-9]\d{9}$/.test(digits);
+  const parsed = parsePhone(phone);
+  // Optional on both channels (WhatsApp already shows your number), but checked when given.
+  const phoneOk = parsed.empty || parsed.ok;
   const emailOk = email.trim() === "" ? true : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const nameOk = name.trim().length >= 2;
   const ok = nameOk && phoneOk && emailOk;
@@ -54,20 +59,24 @@ export function MessageComposer() {
       ? "I’d like to book a site visit."
       : topic === "Documents and approvals"
         ? `I’d like to see the documents and approvals for ${elements.name}.`
+        : topic === "Current prices"
+          ? `Please share the current prices for homes at ${elements.name}.`
+          : topic === "Floor plans and carpet areas"
+            ? `Please send the floor plans and carpet areas for homes at ${elements.name}.`
         : `I’d like to know more about ${topic === "Something else" ? "your homes" : topic}.`,
     [
       ["Name", name],
-      ["Mobile", digits ? `+91 ${digits}` : undefined],
+      ["Mobile", parsed.ok ? parsed.display : undefined],
       ["Email", email],
     ],
     note,
   );
-  const emailTo = topic === elements.name || topic === "Documents and approvals" ? elements.email : destinations.email.to;
+  const emailTo = [elements.name, "Documents and approvals", "Current prices", "Floor plans and carpet areas"].includes(topic) ? elements.email : destinations.email.to;
   const href = channel === "whatsapp" ? whatsappUrl(message) : mailtoUrl(`Enquiry: ${topic}`, message, emailTo);
   const d = channel === "whatsapp" ? destinations.whatsapp : { ...destinations.email, to: emailTo };
 
   const field =
-    "mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-3.5 py-3 text-[1rem] outline-none transition-shadow focus:border-ink focus:shadow-[0_0_0_3px_rgb(57_170_225/0.25)] aria-[invalid=true]:border-error";
+    "mt-1.5 w-full rounded-lg border border-ink/45 bg-white px-3.5 py-3 text-[1rem] outline-none transition-shadow focus:border-ink focus:shadow-[0_0_0_3px_rgb(57_170_225/0.25)] aria-[invalid=true]:border-error";
 
   return (
     <dialog
@@ -103,7 +112,7 @@ export function MessageComposer() {
                     channel === c ? "bg-white shadow-sm" : "text-mute hover:text-ink"
                   }`}
                 >
-                  {c === "whatsapp" ? <MessageCircle aria-hidden className="size-4 text-[#1f8f4e]" /> : <Mail aria-hidden className="size-4" />}
+                  {c === "whatsapp" ? <MessageCircle aria-hidden className="size-4 text-[#187a41]" /> : <Mail aria-hidden className="size-4" />}
                   {destinations[c].label}
                 </button>
               ))}
@@ -127,12 +136,12 @@ export function MessageComposer() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor={`${uid}-phone`} className="text-sm font-medium">
-                  Mobile {channel === "email" && <span className="font-normal text-mute">(optional)</span>}
+                  Mobile <span className="font-normal text-mute">(optional)</span>
                 </label>
                 <input
                   id={`${uid}-phone`}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/[^\d\s+]/g, "").slice(0, 15))}
+                  onChange={(e) => setPhone(cleanPhoneInput(e.target.value))}
                   inputMode="tel"
                   autoComplete="tel"
                   placeholder="98765 43210"
@@ -157,13 +166,17 @@ export function MessageComposer() {
                 onChange={(e) => setNote(e.target.value)}
                 rows={3}
                 placeholder="A good time to call, the size of home you’re looking for…"
+                aria-describedby={`${uid}-note-count`}
                 className={field}
               />
+              <p id={`${uid}-note-count`} className="mt-1 text-right text-xs tabular-nums text-mute">
+                {note.length}/500
+              </p>
             </div>
             {tried && !ok && (
               <p role="alert" className="text-sm text-error">
                 {!nameOk ? "Please add your name. " : ""}
-                {!phoneOk ? "Enter a 10-digit Indian mobile number. " : ""}
+                {!phoneOk ? `${phoneHelp} ` : ""}
                 {!emailOk ? "Check the email address." : ""}
               </p>
             )}
@@ -182,7 +195,7 @@ export function MessageComposer() {
             </div>
             {(() => {
               const cls = `mt-4 inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 font-semibold transition-colors ${
-                channel === "whatsapp" ? "bg-[#1f8f4e] text-white hover:bg-[#187a41]" : "bg-forest text-paper hover:bg-forest-2"
+                channel === "whatsapp" ? "bg-[#187a41] text-white hover:bg-[#12613a]" : "bg-forest text-paper hover:bg-forest-2"
               }`;
               const label = (
                 <>
@@ -207,8 +220,29 @@ export function MessageComposer() {
               );
             })()}
             <p className="mt-2 text-xs text-mute">
-              Opens {channel === "whatsapp" ? "WhatsApp" : "your email app"} with this message ready to send. The website does not store it.
+              Opens {channel === "whatsapp" ? "WhatsApp" : "your email app"} with this message ready to send. The website does not store it.{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(`${channel === "email" ? `To: ${emailTo}\n\n` : ""}${message}`).then(
+                    () => setCopied(true),
+                    () => setCopied(false),
+                  );
+                }}
+                className="font-semibold text-forest underline underline-offset-2"
+              >
+                {copied ? "Copied" : "Copy the message instead"}
+              </button>
             </p>
+            {channel === "whatsapp" && (
+              <p className="mt-2 text-xs text-mute">
+                Rather write it yourself?{" "}
+                <a href={elements.whatsapp} target="_blank" rel="noopener noreferrer" className="font-semibold text-forest underline underline-offset-2">
+                  Just open WhatsApp
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>

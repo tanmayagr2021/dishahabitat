@@ -114,12 +114,13 @@ export function Intro() {
     // settle point by the time this runs, hand over at once.
     if (v.currentTime >= SETTLED_AT || v.ended) handover();
     else v.play()?.catch(skip);
-    // If the film has not started within 2.5 s (slow network, autoplay blocked), go straight in.
+    // If the film has not started within 1.5 s (slow network, autoplay blocked), go straight in.
     const stall = window.setTimeout(() => {
       if (v.currentTime < 0.1) skip();
     }, 1500);
-    // Whatever happens (a stalled network, a blocked autoplay mid-way), the site appears by 5 s.
-    const cap = window.setTimeout(skip, 5000);
+    // Whatever happens (a stalled network, a blocked autoplay mid-way), the site appears about 5 s
+    // after the page began loading, however long the scripts took to arrive.
+    const cap = window.setTimeout(skip, Math.max(800, 5000 - performance.now()));
 
     const interrupt = (e: Event) => {
       if (e.type === "keydown" && (e as KeyboardEvent).key === "Tab") return;

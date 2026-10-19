@@ -51,8 +51,17 @@ export const commuteDestinations = [
   { label: "Wipro, Sarjapur Road", query: "Wipro Corporate Office, Sarjapur Road, Bengaluru" },
   { label: "Manyata Tech Park", query: "Embassy Manyata Business Park, Bengaluru" },
   { label: "Whitefield metro", query: "Whitefield (Kadugodi) Metro Station, Bengaluru" },
-  { label: "Kempegowda Airport", query: "Kempegowda International Airport, Bengaluru" },
+  { label: "Kempegowda International Airport", query: "Kempegowda International Airport, Bengaluru" },
 ];
+
+/* What's around the site, as live Google Maps searches: no distances or names are claimed by us. */
+export const nearbySearches = [
+  { label: "Schools nearby", query: "schools near Gunjur, Bengaluru" },
+  { label: "Hospitals nearby", query: "hospitals near Gunjur, Bengaluru" },
+];
+export const mapsSearchUrl = (query: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+/* Directions to the site from wherever the visitor is. */
+export const siteDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(commuteFrom.query)}`;
 
 export function directionsUrl(destination: string, origin = commuteFrom.query) {
   const q = new URLSearchParams({ api: "1", origin, destination, travelmode: "driving" });
@@ -63,7 +72,7 @@ export function directionsUrl(destination: string, origin = commuteFrom.query) {
 export const award = {
   title: "ET Business Awards 2025",
   honour: "Certificate of Excellence",
-  citation: "Innovation Real Estate Project of the Year",
+  citation: "Innovation Real Estate Project of the Year (Residential)",
   project: elements.shortName,
   image: "/images/events/et-award-certificate.webp",
 };

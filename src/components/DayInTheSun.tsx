@@ -18,7 +18,7 @@ const phases = [
     kind: "photo" as const,
   },
   {
-    name: "Noon",
+    name: "Midday",
     line: "Lengths of the temperature-controlled pool at the clubhouse.",
     src: "/images/pursuit-of-sunshine/pool-aerial.webp",
     alt: "Overhead view of a swimmer in the turquoise pool",

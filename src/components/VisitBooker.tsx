@@ -1,9 +1,9 @@
 "use client";
 
-import { useId, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, ArrowRight, Building2, CalendarPlus, Check, Coffee, Mail, MessageCircle, PhoneCall } from "lucide-react";
 import { elements } from "@/lib/elements";
-import { mailtoUrl } from "@/lib/messaging";
+import { cleanPhoneInput, mailtoUrl, parsePhone, phoneHelp } from "@/lib/messaging";
 import { company } from "@/lib/site";
 
 /*
@@ -36,9 +36,9 @@ const places: Place[] = [
   },
 ];
 const slots = [
-  { id: "morning", label: "Morning", hint: "10 am to 12 pm", h: 10 },
-  { id: "afternoon", label: "Afternoon", hint: "12 pm to 3 pm", h: 12 },
-  { id: "evening", label: "Evening", hint: "3 pm to 6 pm", h: 15 },
+  { id: "morning", label: "Morning", hint: "10 am to 12 pm IST", h: 10 },
+  { id: "afternoon", label: "Afternoon", hint: "12 pm to 3 pm IST", h: 12 },
+  { id: "evening", label: "Evening", hint: "3 pm to 6 pm IST", h: 15 },
 ];
 const steps = ["Where", "When", "You", "Confirm"];
 
@@ -125,8 +125,18 @@ export function VisitBooker() {
   const p = places.find((x) => x.id === place);
   const s = slots.find((x) => x.id === slot);
   const isCall = place === "call";
-  const digits = phone.replace(/\D/g, "").replace(/^(?:0091|91|0)(?=\d{10}$)/, "");
-  const phoneOk = /^[6-9]\d{9}$/.test(digits);
+  const parsed = parsePhone(phone);
+  const phoneOk = parsed.ok;
+  const stepBox = useRef<HTMLDivElement>(null);
+  const firstStep = useRef(true);
+  useEffect(() => {
+    // Moves focus to the new step's question so screen readers announce it; skipped on first load.
+    if (firstStep.current) {
+      firstStep.current = false;
+      return;
+    }
+    stepBox.current?.querySelector<HTMLElement>("[data-step-title]")?.focus({ preventScroll: true });
+  }, [step]);
   const nameOk = name.trim().length >= 2;
 
   const canNext = [Boolean(place), isCall ? Boolean(slot) : day !== null && Boolean(slot), nameOk && phoneOk, true][step];
@@ -141,10 +151,10 @@ export function VisitBooker() {
       s ? `Preferred time: ${s.label} (${s.hint})` : "",
       !isCall ? `People: ${people}` : "",
       `Name: ${name.trim()}`,
-      `Phone: +91 ${digits}`,
+      `Phone: ${parsed.display}`,
     ].filter(Boolean);
     return lines.join("\n");
-  }, [p, isCall, when, s, people, name, digits]);
+  }, [p, isCall, when, s, people, name, parsed.display]);
 
   const next = () => {
     if (!canNext) {
@@ -178,7 +188,7 @@ export function VisitBooker() {
     }`;
 
   return (
-    <div className="card overflow-hidden">
+    <div className="card min-w-0 overflow-hidden">
       {/* Progress */}
       <ol className="grid grid-cols-4 border-b border-ink/10 bg-white/40" aria-label="Booking steps">
         {steps.map((label, i) => (
@@ -191,7 +201,7 @@ export function VisitBooker() {
               >
                 {i < step ? <Check aria-hidden className="size-3.5" /> : i + 1}
               </span>
-              <span className="hidden sm:inline">{label}</span>
+              <span className="sr-only sm:not-sr-only">{label}</span>
             </span>
             <span aria-hidden className={`absolute inset-x-0 bottom-0 h-[2px] origin-left bg-forest transition-transform duration-500 ${i <= step ? "scale-x-100" : "scale-x-0"}`} />
           </li>
@@ -199,10 +209,10 @@ export function VisitBooker() {
       </ol>
 
       <div className="p-5 sm:p-8 lg:p-10">
-        <div key={step} className="swap-in min-h-[22rem]">
+        <div key={step} ref={stepBox} className="swap-in min-h-[22rem]">
           {step === 0 && (
-            <fieldset>
-              <legend className="serif text-[1.9rem] leading-tight">Where would you like to meet us?</legend>
+            <fieldset className="min-w-0">
+              <legend data-step-title tabIndex={-1} className="serif text-[1.9rem] leading-tight outline-none">Where would you like to meet us?</legend>
               <div className="mt-6 grid gap-3 md:grid-cols-3">
                 {places.map((x) => (
                   <button key={x.id} type="button" aria-pressed={place === x.id} onClick={() => setPlace(x.id)} className={`${choice(place === x.id)} p-5`}>
@@ -212,15 +222,20 @@ export function VisitBooker() {
                   </button>
                 ))}
               </div>
+              {tried && !canNext && (
+                <p role="alert" className="mt-4 text-sm text-error">
+                  Choose where you’d like to meet us to continue.
+                </p>
+              )}
             </fieldset>
           )}
 
           {step === 1 && (
-            <div>
+            <div className="min-w-0">
               {!isCall && (
-                <fieldset>
-                  <legend className="serif text-[1.9rem] leading-tight">Pick a day</legend>
-                  <div className="-mx-1 mt-5 flex gap-2 overflow-x-auto px-1 pb-2" role="group" aria-label="The next 14 days">
+                <fieldset className="min-w-0">
+                  <legend data-step-title tabIndex={-1} className="serif text-[1.9rem] leading-tight outline-none">Pick a day</legend>
+                  <div className="-mx-1 mt-5 flex snap-x gap-2 overflow-x-auto overscroll-x-contain px-1 pb-2" role="group" aria-label="The next 14 days">
                     {days.map((dt, i) => (
                       <button
                         key={dt.toISOString()}
@@ -228,7 +243,7 @@ export function VisitBooker() {
                         aria-pressed={day === i}
                         aria-label={longFmt.format(dt)}
                         onClick={() => setDay(i)}
-                        className={`${choice(day === i)} flex w-[4.6rem] shrink-0 flex-col items-center py-3`}
+                        className={`${choice(day === i)} flex w-[4.6rem] shrink-0 snap-start flex-col items-center py-3`}
                       >
                         <span className={`text-xs ${day === i ? "text-paper/70" : "text-mute"}`}>{dayFmt.format(dt)}</span>
                         <span className="serif mt-1 text-[1.6rem] leading-none">{dt.getDate()}</span>
@@ -238,8 +253,8 @@ export function VisitBooker() {
                   </div>
                 </fieldset>
               )}
-              <fieldset className={isCall ? "" : "mt-8"}>
-                <legend className="serif text-[1.9rem] leading-tight">{isCall ? "When should we call?" : "Preferred time"}</legend>
+              <fieldset className={`min-w-0 ${isCall ? "" : "mt-8"}`}>
+                <legend {...(isCall ? { "data-step-title": "", tabIndex: -1 } : {})} className="serif text-[1.9rem] leading-tight outline-none">{isCall ? "When should we call?" : "Preferred time"}</legend>
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   {slots.map((x) => (
                     <button key={x.id} type="button" aria-pressed={slot === x.id} onClick={() => setSlot(x.id)} className={`${choice(slot === x.id)} p-4`}>
@@ -249,13 +264,17 @@ export function VisitBooker() {
                   ))}
                 </div>
               </fieldset>
-              {tried && !canNext && <p className="mt-4 text-sm text-error">Choose {isCall ? "a time" : "a day and a time"} to continue.</p>}
+              {tried && !canNext && (
+                <p role="alert" className="mt-4 text-sm text-error">
+                  Choose {isCall ? "a time" : "a day and a time"} to continue.
+                </p>
+              )}
             </div>
           )}
 
           {step === 2 && (
-            <fieldset>
-              <legend className="serif text-[1.9rem] leading-tight">Who should we expect?</legend>
+            <fieldset className="min-w-0">
+              <legend data-step-title tabIndex={-1} className="serif text-[1.9rem] leading-tight outline-none">Who should we expect?</legend>
               <div className="mt-6 grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor={`${uid}-name`} className="text-sm font-medium">
@@ -267,34 +286,41 @@ export function VisitBooker() {
                     onChange={(e) => setName(e.target.value)}
                     autoComplete="name"
                     aria-invalid={tried && !nameOk}
-                    className="mt-2 h-12 w-full rounded-lg border border-ink/15 bg-white/70 px-3.5 text-[1.05rem] outline-none focus:border-ink focus:shadow-[0_0_0_3px_rgb(57_170_225/0.25)] aria-[invalid=true]:border-error"
+                    aria-describedby={tried && !nameOk ? `${uid}-name-error` : undefined}
+                    className="mt-2 h-12 w-full rounded-lg border border-ink/45 bg-white/70 px-3.5 text-[1.05rem] outline-none focus:border-ink focus:shadow-[0_0_0_3px_rgb(57_170_225/0.25)] aria-[invalid=true]:border-error"
                   />
-                  {tried && !nameOk && <p className="mt-1.5 text-sm text-error">Please enter your name.</p>}
+                  {tried && !nameOk && (
+                    <p id={`${uid}-name-error`} className="mt-1.5 text-sm text-error">
+                      Please enter your name.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor={`${uid}-phone`} className="text-sm font-medium">
                     Mobile number
                   </label>
-                  <div className="mt-2 flex h-12 items-center gap-2 rounded-lg border border-ink/15 bg-white/70 px-3.5 focus-within:border-ink focus-within:shadow-[0_0_0_3px_rgb(57_170_225/0.25)]">
-                    <span className="text-mute">+91</span>
+                  <div className="mt-2 flex h-12 items-center gap-2 rounded-lg border border-ink/45 bg-white/70 px-3.5 focus-within:border-ink focus-within:shadow-[0_0_0_3px_rgb(57_170_225/0.25)]">
                     <input
                       id={`${uid}-phone`}
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/[^\d\s]/g, "").slice(0, 14))}
+                      onChange={(e) => setPhone(cleanPhoneInput(e.target.value))}
                       inputMode="tel"
-                      autoComplete="tel-national"
+                      autoComplete="tel"
                       aria-invalid={tried && !phoneOk}
+                      aria-describedby={`${uid}-phone-hint`}
                       placeholder="98765 43210"
                       className="w-full border-0 bg-transparent p-0 text-[1.05rem] tabular-nums outline-none placeholder:text-mute/60 focus:ring-0"
                     />
                   </div>
-                  {tried && !phoneOk && <p className="mt-1.5 text-sm text-error">Enter a 10-digit Indian mobile number.</p>}
+                  <p id={`${uid}-phone-hint`} className={`mt-1.5 text-sm ${tried && !phoneOk ? "text-error" : "text-mute"}`}>
+                    {tried && !phoneOk ? phoneHelp : "Outside India? Add your country code, e.g. +971."}
+                  </p>
                 </div>
               </div>
               {!isCall && (
                 <div className="mt-6">
                   <p className="text-sm font-medium">How many people are coming?</p>
-                  <div className="mt-2 inline-flex items-center rounded-lg border border-ink/15 bg-white/70">
+                  <div className="mt-2 inline-flex items-center rounded-lg border border-ink/45 bg-white/70">
                     <button type="button" onClick={() => setPeople((n) => Math.max(1, n - 1))} aria-label="Fewer people" className="size-11 text-lg">
                       −
                     </button>
@@ -312,7 +338,7 @@ export function VisitBooker() {
 
           {step === 3 && p && (
             <div>
-              <p className="serif text-[1.9rem] leading-tight">Almost done, {name.trim().split(" ")[0]}.</p>
+              <h3 data-step-title tabIndex={-1} className="serif text-[1.9rem] leading-tight outline-none">Almost done, {name.trim().split(" ")[0]}.</h3>
               <p className="mt-2 text-mute">Send this to our sales team on WhatsApp or by email, and they will confirm the time with you.</p>
               <dl className="mt-6 divide-y divide-ink/10 rounded-xl border border-ink/10 bg-white/60">
                 {[
@@ -321,7 +347,7 @@ export function VisitBooker() {
                   ["Time", s ? `${s.label}, ${s.hint}` : ""],
                   ...(isCall ? [] : [["People", String(people)]]),
                   ["Name", name.trim()],
-                  ["Mobile", `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`],
+                  ["Mobile", parsed.display],
                 ].map(([k, v]) => (
                   <div key={k} className="flex justify-between gap-6 px-4 py-3 text-[0.98rem]">
                     <dt className="text-mute">{k}</dt>
@@ -334,7 +360,7 @@ export function VisitBooker() {
                   href={`${elements.whatsapp}&text=${encodeURIComponent(message)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1f8f4e] px-5 font-semibold text-white transition-colors hover:bg-[#187a41]"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#187a41] px-5 font-semibold text-white transition-colors hover:bg-[#12613a]"
                 >
                   <MessageCircle aria-hidden className="size-5" strokeWidth={1.8} />
                   Send on WhatsApp
@@ -382,7 +408,7 @@ export function VisitBooker() {
               onClick={next}
               aria-disabled={!canNext}
               className={`inline-flex h-12 items-center gap-2 rounded-lg px-6 text-[0.98rem] font-semibold transition-colors ${
-                canNext ? "bg-forest text-paper hover:bg-forest-2" : "bg-ink/10 text-ink/45"
+                canNext ? "bg-forest text-paper hover:bg-forest-2" : "bg-ink/8 text-ink/70 ring-1 ring-inset ring-ink/20"
               }`}
             >
               {step === 2 ? "Review" : "Continue"} <ArrowRight aria-hidden className="size-4" />

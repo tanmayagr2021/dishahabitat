@@ -12,22 +12,22 @@ import { Pointer, RotateCcw, Shuffle } from "lucide-react";
  */
 type Spot = { x: number; y: number; w: number; r: number };
 type Base = { id: string; src: string; ratio: number; alt: string; d: Spot; m: Spot };
-type Poster = Base & { kind: "poster"; artist: string; billing: string; when?: string; where?: string };
+type Poster = Base & { kind: "poster"; artist: string; billing: string; credit: string; when?: string; where?: string };
 type Polaroid = Base & { kind: "polaroid"; caption: string };
 type Award = Base & { kind: "award" };
 type Piece = Poster | Polaroid | Award;
 
 const pieces: Piece[] = [
-  { kind: "poster", id: "sel", src: "/images/events/shankar-ehsaan-loy.webp", ratio: 306 / 490, alt: "Poster: Shankar Ehsaan Loy, a Red Live concert", artist: "Shankar Ehsaan Loy", billing: "A Red Live concert", when: "21 December 2024", where: "New Horizon College of Engineering, Bellandur", d: { x: 1.5, y: 3, w: 15.5, r: -6 }, m: { x: 2, y: 2, w: 44, r: -5 } },
-  { kind: "poster", id: "shreya", src: "/images/events/shreya-ghoshal.webp", ratio: 285 / 467, alt: "Poster: Shreya Ghoshal, All Hearts Tour", artist: "Shreya Ghoshal", billing: "All Hearts Tour", when: "11 May 2024", where: "New Horizon College of Engineering, Bellandur", d: { x: 18.5, y: 8, w: 15, r: 4 }, m: { x: 52, y: 9, w: 44, r: 4 } },
+  { kind: "poster", id: "sel", credit: "Presented by", src: "/images/events/shankar-ehsaan-loy.webp", ratio: 306 / 490, alt: "Poster: Shankar Ehsaan Loy, a Red Live concert", artist: "Shankar Ehsaan Loy", billing: "A Red Live concert", when: "21 December 2024", where: "New Horizon College of Engineering, Bellandur", d: { x: 1.5, y: 3, w: 15.5, r: -6 }, m: { x: 2, y: 2, w: 44, r: -5 } },
+  { kind: "poster", id: "shreya", credit: "Presented by", src: "/images/events/shreya-ghoshal.webp", ratio: 285 / 467, alt: "Poster: Shreya Ghoshal, All Hearts Tour", artist: "Shreya Ghoshal", billing: "All Hearts Tour", when: "11 May 2024", where: "New Horizon College of Engineering, Bellandur", d: { x: 18.5, y: 8, w: 15, r: 4 }, m: { x: 52, y: 9, w: 44, r: 4 } },
   { kind: "award", id: "award", src: "/images/events/et-award-certificate.webp", ratio: 315 / 227, alt: "ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements, Innovation Real Estate Project of the Year", d: { x: 36, y: 4, w: 21, r: -2 }, m: { x: 5, y: 80, w: 72, r: -3 } },
-  { kind: "poster", id: "armaan", src: "/images/events/armaan-malik.webp", ratio: 308 / 499, alt: "Poster: Armaan Malik, live in Bengaluru", artist: "Armaan Malik", billing: "Live in Bengaluru", when: "13 September", where: "Phoenix Marketcity, Whitefield", d: { x: 60, y: 1.5, w: 15.5, r: -3 }, m: { x: 4, y: 140, w: 44, r: -4 } },
-  { kind: "poster", id: "piyush", src: "/images/events/piyush-mishra.webp", ratio: 216 / 435, alt: "Poster: Piyush Mishra’s Ballimaaraan, live in concert", artist: "Piyush Mishra", billing: "Ballimaaraan, live in concert", d: { x: 81, y: 4, w: 12.5, r: 6 }, m: { x: 55, y: 152, w: 38, r: 6 } },
+  { kind: "poster", id: "armaan", credit: "With", src: "/images/events/armaan-malik.webp", ratio: 308 / 499, alt: "Poster: Armaan Malik, live in Bengaluru", artist: "Armaan Malik", billing: "Live in Bengaluru", when: "13 September", where: "Phoenix Marketcity, Whitefield", d: { x: 60, y: 1.5, w: 15.5, r: -3 }, m: { x: 4, y: 140, w: 44, r: -4 } },
+  { kind: "poster", id: "piyush", credit: "Presented by", src: "/images/events/piyush-mishra.webp", ratio: 216 / 435, alt: "Poster: Piyush Mishra’s Ballimaaraan, live in concert", artist: "Piyush Mishra", billing: "Ballimaaraan, live in concert", d: { x: 81, y: 4, w: 12.5, r: 6 }, m: { x: 55, y: 152, w: 38, r: 6 } },
   { kind: "polaroid", id: "stage", src: "/images/events/et-award-stage.webp", ratio: 300 / 146, alt: "Receiving the ET Business Award on stage", caption: "Award night!", d: { x: 39, y: 21, w: 15, r: 5 }, m: { x: 47, y: 117, w: 50, r: 5 } },
   { kind: "polaroid", id: "b1", src: "/images/events/backstage-1.webp", ratio: 365 / 204, alt: "The Disha Habitat team with visiting artists, backstage", caption: "Backstage", d: { x: 2, y: 33, w: 15, r: 5 }, m: { x: 52, y: 260, w: 44, r: -5 } },
-  { kind: "poster", id: "chithra", src: "/images/events/ks-chithra.webp", ratio: 372 / 167, alt: "Poster: K S Chithra, live in concert", artist: "K S Chithra", billing: "Live in concert, multilingual", d: { x: 18, y: 37.5, w: 25, r: 3 }, m: { x: 3, y: 213, w: 80, r: 3 } },
+  { kind: "poster", id: "chithra", credit: "With", src: "/images/events/ks-chithra.webp", ratio: 372 / 167, alt: "Poster: K S Chithra, live in concert", artist: "K S Chithra", billing: "Live in concert, multilingual", d: { x: 18, y: 37.5, w: 25, r: 3 }, m: { x: 3, y: 213, w: 80, r: 3 } },
   { kind: "polaroid", id: "b3", src: "/images/events/backstage-3.webp", ratio: 305 / 205, alt: "The Disha Habitat team with a visiting artist after the show", caption: "After the show", d: { x: 44.5, y: 34, w: 13, r: -4 }, m: { x: 6, y: 334, w: 44, r: 5 } },
-  { kind: "poster", id: "sunil", src: "/images/events/sunil-grover.webp", ratio: 220 / 334, alt: "Poster: Sunil Grover live", artist: "Sunil Grover", billing: "Live", when: "2 December 2023", where: "Phoenix Marketcity", d: { x: 59, y: 29, w: 13, r: -5 }, m: { x: 5, y: 258, w: 42, r: -4 } },
+  { kind: "poster", id: "sunil", credit: "Co-powered by", src: "/images/events/sunil-grover.webp", ratio: 220 / 334, alt: "Poster: Sunil Grover live", artist: "Sunil Grover", billing: "Live", when: "2 December 2023", where: "Phoenix Marketcity", d: { x: 59, y: 29, w: 13, r: -5 }, m: { x: 5, y: 258, w: 42, r: -4 } },
   { kind: "polaroid", id: "b2", src: "/images/events/backstage-2.webp", ratio: 287 / 218, alt: "The Disha Habitat team with a visiting artist, backstage", caption: "Meet and greet", d: { x: 73.5, y: 31, w: 12.5, r: 6 }, m: { x: 52, y: 302, w: 44, r: 6 } },
   { kind: "polaroid", id: "b4", src: "/images/events/backstage-4.webp", ratio: 282 / 175, alt: "The Disha Habitat team with a visiting artist in the green room", caption: "Green room", d: { x: 86, y: 27, w: 12.5, r: -7 }, m: { x: 50, y: 352, w: 46, r: -6 } },
 ];
@@ -169,7 +169,7 @@ export function GigWall() {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <p className="font-[family-name:var(--font-caveat)] text-[1.5rem] leading-none text-earth">
+        <p className="text-[0.95rem] font-medium text-earth">
           <span className="hidden md:inline">Drag them around. </span>Tap a poster to turn it over ↓
         </p>
         <div className="flex gap-2">
@@ -285,7 +285,7 @@ function Ticket({ poster: p, hidden }: { poster: Poster; hidden: boolean }) {
   return (
     <span data-hidden={hidden ? "" : undefined} className="gig-face flex flex-col overflow-hidden rounded-[6px] bg-paper text-ink shadow-[0_18px_30px_-14px_rgb(21_26_23/0.55)]">
       <span className="flex items-center justify-between bg-forest px-[8%] py-[5%] text-paper">
-        <span className="text-[clamp(0.55rem,0.8cqw,0.75rem)] font-semibold uppercase tracking-[0.2em]">Presented by</span>
+        <span className="text-[clamp(0.55rem,0.8cqw,0.75rem)] font-semibold uppercase tracking-[0.2em]">{p.credit}</span>
         <span className="text-[clamp(0.55rem,0.8cqw,0.75rem)] text-brass">Disha Habitat</span>
       </span>
       <span className="flex flex-1 flex-col justify-center gap-[0.4em] border-b-2 border-dashed border-ink/20 px-[8%] py-[6%]">

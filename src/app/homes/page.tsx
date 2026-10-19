@@ -15,7 +15,7 @@ import { formatIndian } from "@/lib/site";
 export const metadata: Metadata = pageMeta({
   title: "Our homes",
   description:
-    "Pursuit of the Elements, now selling in Gunjur, and the five Disha Habitat communities handed over since 2014: Pursuit of Sunshine, Courtyard, Central Park, Park West and Windsor Gardens.",
+    "Pursuit of the Elements, selling now in Gunjur, and the five communities Disha Habitat has built since 2014.",
   path: "/homes",
 });
 
@@ -36,7 +36,7 @@ export default function HomesPage() {
             <em className="text-paper/55">Five to judge us by.</em>
           </>
         }
-        intro={`Pursuit of the Elements is selling now in Gunjur. The five communities we have handed over since 2014, ${formatIndian(totalHomes)} homes in all, are lived in today. Look at them closely: they are our proof.`}
+        intro={`Pursuit of the Elements is selling now in Gunjur. The five communities we have built since 2014, ${formatIndian(totalHomes)} homes in all, are lived in today. Look at them closely: they are our proof.`}
         aside={
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
             <ButtonLink href="/contact#book" variant="paper" className="font-semibold">
@@ -96,7 +96,7 @@ export default function HomesPage() {
               <li key={p.slug} className="border-t border-paper/15">
                 <Link
                   href={`/homes/${p.slug}`}
-                  className="bloom-on-hover group relative grid grid-cols-12 items-center gap-x-4 gap-y-5 py-8 md:py-10"
+                  className="bloom-on-hover group relative grid grid-cols-1 items-center md:grid-cols-12 gap-x-4 gap-y-5 py-8 md:py-10"
                 >
                   {/* A line in the community's colour draws across on hover. */}
                   <span
@@ -104,17 +104,17 @@ export default function HomesPage() {
                     className="absolute -top-px left-0 h-px w-full origin-left scale-x-0 transition-transform duration-700 ease-out-expo group-hover:scale-x-100"
                     style={{ background: p.hue }}
                   />
-                  <span className="label col-span-12 flex items-center gap-3 text-paper/55 md:col-span-1">
+                  <span className="label flex items-center gap-3 text-paper/55 md:col-span-1">
                     <span className="size-2 " style={{ background: p.hue }} />
                     {p.index}
                   </span>
-                  <span className="col-span-12 md:col-span-5">
+                  <span className="md:col-span-5">
                     <span className="serif block text-[clamp(2.3rem,4.2vw,4.2rem)] leading-[1] transition-transform duration-700 ease-out-expo group-hover:translate-x-3">
                       {p.shortName}
                     </span>
                     <span className="mt-3 block text-sm text-paper/60">{p.locality}</span>
                   </span>
-                  <dl className="col-span-12 grid grid-cols-3 gap-4 md:col-span-3">
+                  <dl className="grid grid-cols-3 gap-4 md:col-span-3">
                     {[
                       ["Homes", value(p, "Homes")],
                       ["Land", value(p, "Project size")],
@@ -126,7 +126,7 @@ export default function HomesPage() {
                       </div>
                     ))}
                   </dl>
-                  <span className="relative col-span-12 block aspect-[16/10] overflow-hidden bg-ink-3 md:col-span-3 md:aspect-[4/3]">
+                  <span className="relative block aspect-[16/10] overflow-hidden bg-ink-3 md:col-span-3 md:aspect-[4/3]">
                     <ViewTransition name={`cover-${p.slug}`} share="morph" default="none">
                       <span className="absolute inset-0 block">
                         <Image
@@ -171,7 +171,7 @@ export default function HomesPage() {
           <ol className="lg:col-span-7 lg:col-start-6">
             {projectsByHandover.map((p, i) => (
               <Reveal as="li" key={p.slug} delay={i * 90} className="border-t border-ink/15 py-5 last:border-b">
-                <div className="flex items-baseline justify-between gap-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
                   <Link href={`/homes/${p.slug}`} className="serif text-[1.9rem] leading-none hover:italic">
                     {p.shortName}
                   </Link>
@@ -213,7 +213,8 @@ export default function HomesPage() {
               Completion dates are as per each project’s occupancy certificate (OC), as published by Disha Habitat.
             </p>
           </div>
-          <div className="mt-12 overflow-x-auto">
+          <p className="mt-8 text-sm text-mute md:hidden">Swipe sideways to see every column →</p>
+          <div className="mt-4 overflow-x-auto md:mt-12">
             <table className="w-full min-w-[52rem] border-collapse text-left text-[0.95rem]">
               <caption className="sr-only">Comparison of the five Disha Habitat communities</caption>
               <thead>

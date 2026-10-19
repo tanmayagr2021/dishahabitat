@@ -8,11 +8,11 @@ export const checklist: ChecklistItem[] = [
   {
     "slug": "khata-certificate",
     "title": "Khata certificate",
-    "summary": "Who legally owns a property",
+    "summary": "The property’s record in the municipal tax register",
     "image": "/images/checklist/khata.webp",
     "body": [
-      "The Khata Certificate is a document that identifies who the owner of a particular property is. In other words, it “certifies” that a particular property belongs to a particular person.",
-      "These documents are compulsory in two situations: when the owner wishes to register the property, and when the owner wishes to sell it."
+      "A khata (in Bengaluru, now an e-khata) enters a property in the municipal tax register and names the person who pays its property tax. It is not proof of ownership on its own: ownership comes from the sale deed and the chain of title documents.",
+      "A khata is needed in two situations: when the owner wishes to register the property, and when the owner wishes to sell it."
     ]
   },
   {
@@ -30,9 +30,9 @@ export const checklist: ChecklistItem[] = [
     "summary": "What you are actually paying for",
     "image": "/images/checklist/carpet.webp",
     "body": [
-      "Carpet area is that area in the flat which you could cover using a carpet. It is also known as the net usable area. According to the Real Estate (Regulation and Development) Act, 2016 (RERA), carpet area is ‘the net usable floor area of an apartment, excluding the area covered by the external walls but including the area covered by internal partition walls of the apartment’. Under the government’s PMAY programme, carpet area is defined as the ‘area enclosed within the walls and the actual area to lay the carpet’.",
+      "Carpet area is that area in the flat which you could cover using a carpet. It is also known as the net usable area. The Real Estate (Regulation and Development) Act, 2016 (RERA) defines carpet area as “the net usable floor area of an apartment, excluding the area covered by the external walls, areas under services shafts, exclusive balcony or verandah area and exclusive open terrace area, but includes the area covered by the internal partition walls of the apartment”. RERA requires developers to state the carpet area of each home.",
       "The built-up area of a flat is its carpet area plus the space taken by the walls. It can also include areas such as balconies, terraces and flower beds. This is why a flat seems larger when it is described in built-up area.",
-      "Super built-up area is the built-up area of the property, along with the proportionate area of the common facilities in the housing project. These facilities may include the lobby, the lift shaft, the stairs, the swimming pool, the garden and the clubhouse. Developers arrive at the super built-up area of a unit by adding its built-up area to its share of the common areas, such as corridors, lift lobbies and lifts. Some builders also include amenities such as pools, gardens and clubhouses in the common area."
+      "Super built-up area is the built-up area of the property, along with the proportionate area of the common facilities in the housing project. These facilities may include the lobby, the lift shaft, the stairs, the swimming pool, the garden and the clubhouse. Developers arrive at the super built-up area of a unit by adding its built-up area to its share of the common areas, such as corridors, lift lobbies and lifts."
     ]
   },
   {
@@ -41,16 +41,16 @@ export const checklist: ChecklistItem[] = [
     "summary": "How far a building may differ from its plan",
     "image": "/images/checklist/deviation.webp",
     "body": [
-      "When builders seek approval for a project’s layout plan from government authorities, the project exists only on paper. Even though layout plans are usually prepared by reputed architects, there will always be some deviation from the approved plan, because once construction starts the builder meets unavoidable technical and architectural difficulties in carrying it out. Keeping this in mind, government authorities allow a deviation of up to 5% either way from the approved layout plan. This can be called an unintentional deviation."
+      "When a builder seeks approval for a building plan, the project exists only on paper. Once construction starts, small differences from the sanctioned plan can be unavoidable. Bengaluru’s building rules tolerate only small deviations when the occupancy certificate is issued; larger ones can delay or prevent it. Under RERA, a developer cannot alter the sanctioned plan without the consent of buyers that the Act requires."
     ]
   },
   {
     "slug": "sewage-treatment-plants",
     "title": "Sewage treatment plants",
-    "summary": "Why a community treats its own water",
+    "summary": "Why a community treats its own sewage",
     "image": "/images/checklist/stp.webp",
     "body": [
-      "A sewage treatment plant (STP) uses physical, biological and often chemical processes to remove contaminants. Its purpose is to produce sewage water that is environmentally friendly and suitable for disposal or reuse. By circulating air, a sewage treatment plant works to facilitate bacteria’s growth to break down sewage. The aim is to have much healthier, more eco-friendly waste. The process is comparable to a standard septic tank, with some important differences. Sewage treatment plants may handle waste from several domestic dwellings or commercial properties, depending on their size."
+      "A sewage treatment plant (STP) cleans a community’s waste water through physical, biological and sometimes chemical processes, so that it can be safely discharged or reused, for example in gardens. Air is circulated to help bacteria break the sewage down. The idea is like a septic tank, but on a larger scale and with cleaner results, and one plant can serve many homes."
     ]
   }
 ];
@@ -63,7 +63,7 @@ export const getChecklistItem = (slug: string) => checklist.find((c) => c.slug =
  */
 const checks: Record<string, string[]> = {
   "khata-certificate": [
-    "Ask whose name the property’s khata certificate is in.",
+    "Ask whose name the property’s khata is in, and compare it with the sale deed and title documents.",
     "Keep it ready: it is needed to register the property, and again if you sell it.",
   ],
   "occupancy-certificate": [
@@ -78,7 +78,7 @@ const checks: Record<string, string[]> = {
   ],
   "deviation-assessment": [
     "Ask how the finished building compares with its approved layout plan.",
-    "Know that authorities allow a deviation of plus or minus 5% from the approved plan.",
+    "Ask whether any deviation is within the limits allowed for the occupancy certificate.",
   ],
   "sewage-treatment-plants": [
     "Ask whether the community treats its own sewage with an STP.",

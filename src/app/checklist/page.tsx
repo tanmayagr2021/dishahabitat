@@ -14,6 +14,18 @@ export const metadata: Metadata = pageMeta({
   path: "/checklist",
 });
 
+/* Plain definitions of the terms buyers meet most often; the long versions are in the checklist above. */
+const words: [string, string][] = [
+  ["BHK", "Bedroom, hall, kitchen. A 3 BHK home has three bedrooms, a living room and a kitchen."],
+  ["RERA", "The Real Estate (Regulation and Development) Act, 2016. A project must be registered with the state’s RERA authority before it is sold, and the registration records its promised completion date."],
+  ["Carpet area", "The usable floor area inside a home’s walls. Under RERA, a developer must state each home’s carpet area."],
+  ["Super built-up area", "Carpet area plus the walls, balconies and a share of the common areas such as lobbies and the clubhouse."],
+  ["OC", "Occupancy certificate: issued by the local authority when a building is complete and fit to live in."],
+  ["Khata", "A property’s entry in the city’s tax register. It is not proof of ownership on its own."],
+  ["EMI", "Equated monthly instalment: the fixed monthly payment on a home loan, covering interest and part of the loan."],
+  ["STP", "Sewage treatment plant: it treats a community’s waste water on site so the water can be reused."],
+];
+
 export default function ChecklistPage() {
   return (
     <>
@@ -37,6 +49,21 @@ export default function ChecklistPage() {
       <section data-tone="light" aria-label="The five must-knows" className="layer surface-ivory py-12 md:py-16">
         <div className="shell">
           <ChecklistTool items={checklist} />
+
+          <section aria-labelledby="words-title" className="mt-12 rounded-2xl border border-ink/10 bg-white/60 p-6 md:p-9">
+            <h2 id="words-title" className="serif t-sub leading-tight">
+              Words you’ll hear
+            </h2>
+            <p className="mt-2 max-w-2xl text-mute">The short versions, for when a brochure or a sales call uses them.</p>
+            <dl className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+              {words.map(([term, meaning]) => (
+                <div key={term} className="min-w-0 border-t border-ink/10 pt-4">
+                  <dt className="font-semibold">{term}</dt>
+                  <dd className="mt-1 leading-relaxed text-ink/80">{meaning}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
 
           <div className="card-dark mt-12 flex print:hidden flex-col items-start justify-between gap-6 bg-forest p-7 text-paper md:flex-row md:items-center md:p-9">
             <div>

@@ -87,8 +87,8 @@ export function HomesBuilt() {
                   className={`w-full rounded-lg px-3 py-2.5 text-left transition-colors ${picked ? "bg-paper/10" : "hover:bg-paper/[0.05]"}`}
                 >
                   <span className="flex justify-between text-sm">
-                    <span className={on ? "text-paper" : "text-paper/45"}>
-                      {g.name} <span className="text-paper/45">· {g.year}</span>
+                    <span className={on ? "text-paper" : "text-paper/65"}>
+                      {g.name} <span className="text-paper/65">· {g.year}</span>
                     </span>
                     <span className="tabular-nums text-paper/80">{on ? `${g.months} months` : ""}</span>
                   </span>
@@ -117,7 +117,7 @@ export function HomesBuilt() {
           <div className="flex items-center gap-4">
             <p className="serif text-[2.2rem] leading-none tabular-nums">
               {formatIndian(focus ? current!.homes : lit)}
-              <span className="text-paper/35"> / {formatIndian(total)}</span>
+              <span className="text-paper/60"> / {formatIndian(total)}</span>
             </p>
             <button
               type="button"

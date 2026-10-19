@@ -222,7 +222,7 @@ export function MediaBadge({ kind, className = "" }: { kind: "photo" | "render" 
   if (kind === "photo") return null;
   return (
     <span
-      className={`absolute left-3 top-3 z-10 rounded-md bg-forest-deep/60 px-2 py-1 text-[0.72rem] font-medium text-paper backdrop-blur-sm ${className}`}
+      className={`absolute left-3 top-3 z-10 rounded-md bg-forest-deep/60 px-2 py-1 text-[0.8rem] font-medium text-paper backdrop-blur-sm ${className}`}
     >
       {kind === "render" ? "Artist’s impression" : "Plan"}
     </span>
