@@ -1,0 +1,277 @@
+/*
+ * V2 design tokens and primitives. Colour comes from Disha's real identity: the navy of its
+ * website and wordmark as ink, the sky blue of the house mark as a hairline accent, set on paper
+ * and limestone. Time of day carries the story: morning paper, dusk stone, evening navy.
+ */
+
+:root {
+  /* Palette */
+  --paper: #eee9e0;
+  --paper-deep: #e3dccf;
+  --stone: #d6dad8;
+  --evening: #141b2e;
+  --ink: #1b243a;
+  --ink-soft: #4a5267;
+  --sky: #39aae1;
+  --clay: #b5603a;
+
+  /* Tone (overridden per act) */
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --fg-soft: var(--ink-soft);
+  --rule: rgb(27 36 58 / 0.2);
+  --wire: rgb(27 36 58 / 0.42);
+
+  /* Type */
+  --font-serif: var(--font-display), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-text), "Helvetica Neue", Arial, sans-serif;
+  --fs-display: clamp(3.1rem, 1.2rem + 6.4vw, 7.4rem);
+  /* The gate's one-line inscription: as large as the width and height allow. */
+  --fs-head: min(7.4vw, 12vh, 7.4rem);
+  --fs-act: clamp(2.3rem, 1rem + 3.4vw, 4.1rem);
+  --fs-name: clamp(1.9rem, 1rem + 2.1vw, 3.15rem);
+  --fs-body: clamp(1rem, 0.94rem + 0.18vw, 1.0625rem);
+
+  /* Space */
+  --gutter: clamp(1.25rem, 6vw, 6.5rem);
+  --nav-h: clamp(3.75rem, 2.6rem + 2.4vh, 4.75rem);
+
+  /* Motion: one curve for architecture moving, one for things arriving. */
+  --ease-arch: cubic-bezier(0.72, 0, 0.18, 1);
+  --ease-arrive: cubic-bezier(0.16, 0.84, 0.24, 1);
+  --dur-quick: 240ms;
+  --dur-move: 1150ms;
+  --dur-tone: 1300ms;
+}
+
+.tone-stone {
+  --bg: var(--stone);
+}
+.tone-evening {
+  --bg: var(--evening);
+  --fg: var(--paper);
+  --fg-soft: rgb(238 233 224 / 0.74);
+  --rule: rgb(238 233 224 / 0.24);
+  --wire: rgb(238 233 224 / 0.42);
+}
+
+/* In the scroll sequence the whole page shares one tone, set from the act in view. */
+html.cine[data-act="courtyard"] {
+  --bg: var(--stone);
+}
+html.cine[data-act="door"],
+html.cine[data-act="communities"] {
+  --bg: var(--evening);
+  --fg: var(--paper);
+  --fg-soft: rgb(238 233 224 / 0.74);
+  --rule: rgb(238 233 224 / 0.24);
+  --wire: rgb(238 233 224 / 0.42);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+html.cine body {
+  background: var(--bg);
+  color: var(--fg);
+  transition:
+    background-color var(--dur-tone) var(--ease-arch),
+    color var(--dur-tone) var(--ease-arch);
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--sky);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 4px;
+}
+
+/* ---------- Type primitives ---------- */
+
+.t-label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.t-display {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-variation-settings: "opsz" 30;
+  font-size: var(--fs-display);
+  line-height: 0.95;
+  letter-spacing: -0.024em;
+}
+
+.t-act {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-variation-settings: "opsz" 30;
+  font-size: var(--fs-act);
+  line-height: 1.04;
+  letter-spacing: -0.016em;
+}
+
+.t-name {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-variation-settings: "opsz" 30;
+  font-size: var(--fs-name);
+  line-height: 1;
+  letter-spacing: -0.014em;
+}
+
+.t-body {
+  font-size: var(--fs-body);
+  line-height: 1.62;
+  color: var(--fg-soft);
+}
+
+.t-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.it {
+  font-style: italic;
+}
+
+/* ---------- Actions ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 3.25rem;
+  padding: 0 1.4rem 0 1.5rem;
+  white-space: nowrap;
+  background: var(--fg);
+  color: var(--bg);
+  font: 500 0.95rem/1 var(--font-sans);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-quick) ease,
+    color var(--dur-tone) var(--ease-arch);
+}
+.button svg {
+  transition: transform var(--dur-quick) var(--ease-arrive);
+}
+.button:hover {
+  background: color-mix(in srgb, var(--fg) 86%, var(--sky));
+}
+.button:hover svg {
+  transform: translateX(4px);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  color: var(--fg);
+  font: 500 0.95rem/1.2 var(--font-sans);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.45em;
+  transition: text-decoration-color var(--dur-quick) ease;
+}
+.link:hover {
+  text-decoration-color: var(--sky);
+}
+
+/* ---------- Accessibility ---------- */
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: 500 0.9rem var(--font-sans);
+}
+.skip:focus {
+  top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}

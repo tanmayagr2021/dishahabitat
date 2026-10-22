@@ -1,0 +1,82 @@
+.closing {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  color: var(--ink);
+  padding: clamp(5rem, 16vh, 10rem) var(--gutter) 2.5rem;
+}
+
+.invite {
+  max-width: 44rem;
+}
+.kicker {
+  color: var(--ink-soft);
+}
+.invite h2 {
+  margin-top: 1.1rem;
+}
+.body {
+  margin-top: 1.4rem;
+  max-width: 34rem;
+  color: var(--ink-soft);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.75rem;
+  margin-top: 2.2rem;
+}
+
+/* The closing is always paper, whatever tone the scroll sequence left behind. */
+.closing :global(.button) {
+  background: var(--ink);
+  color: var(--paper);
+}
+.closing :global(.link) {
+  color: var(--ink);
+  text-decoration-color: rgb(27 36 58 / 0.25);
+}
+
+.facts {
+  display: grid;
+  gap: 1.75rem;
+  margin: clamp(4rem, 12vh, 7rem) 0 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgb(27 36 58 / 0.16);
+}
+.facts dt {
+  color: var(--ink-soft);
+}
+.facts dd {
+  margin: 0.6rem 0 0;
+  max-width: 20rem;
+}
+.facts a {
+  text-decoration-color: rgb(27 36 58 / 0.3);
+  text-underline-offset: 0.3em;
+}
+
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  margin-top: 4rem;
+  color: var(--ink-soft);
+}
+.logo {
+  height: 2.25rem;
+  width: auto;
+  color: var(--ink);
+}
+.base p {
+  max-width: 40rem;
+}
+
+@media (min-width: 768px) {
+  .facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

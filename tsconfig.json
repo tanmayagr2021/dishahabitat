@@ -38,6 +38,9 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "v2",
+    "v2-city",
+    "v2-showroom"
   ]
 }

@@ -1,0 +1,146 @@
+.map {
+  container-type: inline-size;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow:
+    0 0 0 1px rgb(216 176 106 / 0.3),
+    0 24px 60px -28px rgb(0 0 0 / 0.8);
+}
+.base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+/* A neighbourhood plan: its own frame, so the photograph below it reads as a separate thing. */
+.hood {
+  margin: 0;
+}
+.city .base {
+  object-fit: cover;
+}
+
+.plots {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.plots polygon {
+  fill: var(--plot);
+  fill-opacity: 0.5;
+  stroke: var(--plot-light);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 5px rgb(57 170 225 / 0.8));
+}
+.plots polygon[data-on] {
+  fill-opacity: 0.92;
+  stroke-width: 1.5;
+}
+.plots polygon[data-build] {
+  fill-opacity: 0.25;
+  stroke-dasharray: 4 3;
+}
+
+.marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.mark {
+  position: absolute;
+  transform: translate(10px, -50%);
+}
+.mark[data-side="left"] {
+  transform: translate(calc(-100% - 10px), -50%);
+}
+.mark[data-side="left"]::before {
+  left: auto;
+  right: -10px;
+}
+.mark[data-side="above"] {
+  transform: translate(-50%, calc(-100% - 9px));
+}
+.mark[data-side="above"]::before {
+  left: 50%;
+  top: auto;
+  bottom: -12px;
+  margin: 0 0 0 -3.5px;
+}
+.mark {
+  white-space: nowrap;
+  font: 500 0.78rem/1 var(--font-sans);
+  font-stretch: 85%;
+  color: var(--ink);
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 8px var(--paper);
+  padding: 3px 5px 2px;
+}
+.mark::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--plot);
+  box-shadow: 0 0 8px 2px rgb(57 170 225 / 0.8);
+}
+.mark b {
+  color: var(--gold);
+  font-weight: 600;
+  margin-right: 0.25em;
+}
+
+.label {
+  position: absolute;
+  white-space: nowrap;
+  /* Never more than 2.9% of the map's width (LABEL_SIZE in StaticMap.tsx), so placement can be checked. */
+  font: 500 min(0.66rem, 2.9cqw) / 1 var(--font-sans);
+  font-stretch: 80%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(240 214 160 / 0.85);
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 8px var(--paper);
+}
+.label[data-kind="place"] {
+  letter-spacing: 0.16em;
+  color: rgb(244 236 220 / 0.55);
+}
+
+.cityFigure {
+  margin: 0;
+}
+.caption {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--ink-faint);
+}
+
+.scale {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 min(0.66rem, 2.9cqw) / 1 var(--font-sans);
+  letter-spacing: 0.06em;
+  color: var(--gold-soft);
+}
+.scale i {
+  display: block;
+  height: 5px;
+  margin-left: 12px;
+  border: 1px solid var(--gold);
+  border-top: 0;
+}

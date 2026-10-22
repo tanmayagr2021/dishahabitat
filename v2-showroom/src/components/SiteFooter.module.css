@@ -1,0 +1,54 @@
+.footer {
+  padding: 48px var(--gutter) 32px;
+}
+
+.notes {
+  display: grid;
+  gap: 8px;
+  max-width: 760px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.notes a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.notes sup {
+  font-size: 0.625rem;
+  line-height: 0;
+}
+
+/* RERA numbers break only at the slashes marked in the markup, never mid-figure. */
+.code {
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  margin-top: 32px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.links li {
+  padding-block: 3px;
+}
+
+.links a {
+  display: inline-block;
+  padding-block: 3px;
+  margin-block: -3px;
+}
+
+.links a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

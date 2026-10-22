@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // V2 prototype: a separate app with its own lint config (v2/eslint.config.mjs).
+    "v2/**",
+    "v2-city/**",
+    "v2-showroom/**",
   ]),
 ]);
 

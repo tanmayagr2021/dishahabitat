@@ -1,0 +1,6 @@
+node_modules
+.next
+.osm-cache
+*.tsbuildinfo
+scripts/__pycache__
+.env*

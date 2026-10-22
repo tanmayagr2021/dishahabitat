@@ -1,0 +1,9 @@
+/node_modules
+/.next/
+/out/
+/.osm-cache/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+.DS_Store
+.env*

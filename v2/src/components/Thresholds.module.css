@@ -1,0 +1,662 @@
+/*
+ * Two compositions share one markup.
+ *  - Static (default): every act carries its own framed picture. Phones, tablets, reduced motion,
+ *    and browsers without JavaScript see this.
+ *  - Cine (html.cine, large screens with motion allowed): one sticky stage holds every picture and
+ *    the drawn architecture; the inline pictures stay in the page for screen readers only.
+ */
+
+.story {
+  position: relative;
+}
+
+/* ================= Nested frames (static composition) ================= */
+
+/* Three lines around every picture, echoing the portals of the opening photograph: a sky-blue
+   line from the logo's house mark, then two in the page's ink. */
+.framed {
+  position: relative;
+}
+.framedImage {
+  position: relative;
+  aspect-ratio: var(--ratio, 4 / 5);
+  outline: 1px solid rgb(57 170 225 / 0.6);
+  outline-offset: 5px;
+}
+.framedImage::before,
+.framedImage::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid var(--rule);
+}
+.framedImage::before {
+  inset: -11px;
+}
+.framedImage::after {
+  inset: -18px;
+  opacity: 0.55;
+}
+.framedClip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.framedClip img {
+  transform: scale(var(--zoom, 1));
+  transform-origin: var(--zoom-at, 50% 50%);
+}
+.framedCaption {
+  margin-top: 2.1rem;
+  color: var(--fg-soft);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.8rem;
+}
+
+/* ================= Acts (static composition) ================= */
+
+.act {
+  position: relative;
+  background: var(--bg);
+  color: var(--fg);
+  padding: clamp(3.5rem, 9vh, 6.5rem) var(--gutter);
+}
+
+.kicker {
+  color: var(--fg-soft);
+}
+
+.headline {
+  margin-top: 1.4rem;
+}
+/* Each part of the headline rises out of its own slot when the page opens. */
+.line {
+  display: block;
+  overflow: hidden;
+  padding: 0 0.12em 0.14em 0;
+  margin-bottom: -0.14em;
+}
+.line > span {
+  display: block;
+  animation: rise 1000ms var(--ease-arrive) both;
+  animation-delay: calc(140ms + var(--i, 0) * 90ms);
+}
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+.lede {
+  max-width: 34rem;
+  animation: appear 900ms var(--ease-arrive) 520ms both;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.75rem;
+  animation: appear 900ms var(--ease-arrive) 640ms both;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.gate {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding-top: calc(var(--nav-h) + 1.25rem);
+}
+.figGate {
+  order: -1;
+  /* On small screens, step in towards the inner portals and the two figures. */
+  --zoom: 1.45;
+  --zoom-at: 49% 56%;
+}
+.figGate .framedImage {
+  aspect-ratio: auto;
+  height: min(40svh, 28rem);
+}
+/* On phones the invitation comes straight after the headline, so it is on the first screen. */
+.gateFoot {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1.6rem;
+}
+.cue {
+  display: none;
+}
+
+.passage {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.passage h2 {
+  margin-top: 1.1rem;
+  max-width: 12em;
+}
+.passageText > p:last-child {
+  margin-top: 1.25rem;
+  max-width: 30rem;
+}
+.figCourtyard {
+  --ratio: 1.3 / 1;
+}
+.figDoor {
+  --ratio: 0.89 / 1;
+  max-width: 34rem;
+}
+
+.communities {
+  padding-bottom: clamp(4rem, 12vh, 8rem);
+}
+.communitiesHead h2 {
+  margin-top: 1.1rem;
+  max-width: 13em;
+}
+.list {
+  margin-top: 2.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+.item {
+  border-top: 1px solid var(--rule);
+  padding: 1.6rem 0 2.2rem;
+}
+.itemLink {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--fg);
+}
+.itemIndex {
+  padding-top: 0.55rem;
+  color: var(--fg-soft);
+  transition: color var(--dur-quick) ease;
+}
+.itemBody {
+  display: grid;
+  gap: 0.55rem;
+}
+.itemName {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+.itemArrow {
+  flex: none;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity var(--dur-quick) ease,
+    transform 420ms var(--ease-arrive);
+}
+.itemMeta,
+.itemStatus {
+  color: var(--fg-soft);
+}
+.itemStatus[data-current] {
+  color: var(--fg);
+}
+.itemStatus[data-current]::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.6rem;
+  background: var(--sky);
+  vertical-align: 0.05em;
+}
+.itemLink:hover .itemArrow,
+.itemLink:focus-visible .itemArrow {
+  opacity: 1;
+  transform: none;
+}
+.itemLink:hover .itemIndex,
+.itemLink:focus-visible .itemIndex {
+  color: var(--sky);
+}
+.figCommunity {
+  --ratio: 16 / 10;
+  margin-top: 1.6rem;
+  padding-left: 3.1rem;
+}
+
+/* ---------- Tablets ---------- */
+@media (min-width: 700px) {
+  .figGate .framedImage {
+    height: min(52svh, 36rem);
+  }
+  .passage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3.5rem;
+  }
+  .figCommunity {
+    max-width: 30rem;
+  }
+}
+
+/* ---------- Large screens, static (reduced motion) ---------- */
+@media (min-width: 1024px) {
+  .gate {
+    display: grid;
+    grid-template-columns: minmax(0, 40vw) minmax(0, 1fr);
+    grid-template-areas:
+      "head figure"
+      "foot figure";
+    column-gap: 4vw;
+    row-gap: 0;
+    align-content: center;
+    min-height: 100svh;
+    padding-top: calc(var(--nav-h) + 3vh);
+    padding-bottom: 6vh;
+  }
+  .gateHead {
+    grid-area: head;
+    align-self: end;
+  }
+  .gateFoot {
+    grid-area: foot;
+    align-self: start;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1.6rem;
+  }
+  .figGate {
+    grid-area: figure;
+    align-self: center;
+  }
+  .figGate {
+    --zoom: 1.3;
+  }
+  .figGate .framedImage {
+    height: auto;
+    aspect-ratio: 1 / 1.02;
+    max-height: 72svh;
+  }
+  .passage {
+    min-height: 100svh;
+    grid-template-columns: minmax(0, 30vw) minmax(0, 1fr);
+    column-gap: 7vw;
+  }
+  .figDoor {
+    width: min(100%, 30rem);
+    justify-self: center;
+  }
+  .item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 22vw);
+    gap: 3vw;
+    align-items: start;
+  }
+  .figCommunity {
+    margin-top: 0.4rem;
+    padding-left: 0;
+  }
+}
+
+/* ================= Cine: the stage ================= */
+
+.stage {
+  display: none;
+}
+
+:global(html.cine) .stage {
+  display: block;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  margin-bottom: -100svh;
+  z-index: 0;
+  pointer-events: none;
+  container-type: size;
+
+  /*
+   * The gate. Its frame is the photograph's middle portal (1224 × 602 px of the source), sized to
+   * fit between the inscription above and the words below, with room for the drawn portals to
+   * rise 0.236 × its height above it. All lengths resolve against this stage (cq units).
+   */
+  --g-top: calc(var(--nav-h) + 1.4rem + 1.1rem + 1.1rem + var(--fs-head) + 1.8rem);
+  --g-foot: calc(4.5vh + 6.2rem + 2.6rem);
+  --g-room: calc(100cqh - var(--g-top) - var(--g-foot));
+  /* Bounded three ways: the room between the words, 62% of the width, and the outermost drawn
+     portal (1.62 × the frame) staying inside the page margins. */
+  --g-h: min(
+    calc(var(--g-room) / 1.236),
+    calc(62cqw / 2.0332),
+    calc((100cqw - 2 * var(--gutter)) / (1.62 * 2.0332))
+  );
+  --g-w: calc(var(--g-h) * 2.0332);
+  --g-s: calc(var(--g-w) / 1224);
+  --g-l: calc(50cqw - var(--g-w) / 2);
+  --g-t: calc(100cqh - var(--g-foot) - var(--g-h));
+
+  /* The frame for the act in view, as distances from the stage's edges. */
+  --t: var(--g-t);
+  --r: var(--g-l);
+  --b: var(--g-foot);
+  --l: var(--g-l);
+}
+:global(html.cine) .stage[data-act="courtyard"] {
+  --t: 12%;
+  --r: 4%;
+  --b: 10%;
+  --l: 38%;
+}
+:global(html.cine) .stage[data-act="door"] {
+  --t: 16%;
+  --r: 10%;
+  --b: 12%;
+  --l: 54%;
+}
+:global(html.cine) .stage[data-act="communities"] {
+  --t: 16%;
+  --r: 5%;
+  --b: 12%;
+  --l: 47%;
+}
+
+.window {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(var(--t) var(--r) var(--b) var(--l));
+  transition: clip-path var(--dur-move) var(--ease-arch);
+  /* The gate's picture rises from the ground line when the page opens. */
+  animation: frame-rise 1300ms var(--ease-arch) 120ms backwards;
+}
+@keyframes frame-rise {
+  from {
+    clip-path: inset(calc(100% - var(--g-foot)) var(--g-l) var(--g-foot) var(--g-l));
+  }
+}
+
+.layer {
+  position: absolute;
+  opacity: 0;
+  transform: scale(1.07);
+  transition:
+    opacity 950ms var(--ease-arch),
+    transform 1700ms var(--ease-arrive);
+}
+.layer[data-on] {
+  opacity: 1;
+  transform: none;
+}
+/* The whole gate photograph, placed so its outermost portal sits exactly on the frame. */
+.layer[data-rect="gate"] {
+  left: calc(var(--g-l) - 322 * var(--g-s));
+  top: calc(var(--g-t) - 358 * var(--g-s));
+  width: calc(1900 * var(--g-s));
+  height: calc(1200 * var(--g-s));
+  transform-origin: 49% 49%;
+}
+.layer[data-rect="courtyard"] {
+  inset: 12% 4% 10% 38%;
+}
+.layer[data-rect="door"] {
+  inset: 16% 10% 12% 54%;
+}
+.layer[data-rect="communities"] {
+  inset: 16% 5% 12% 47%;
+  transition:
+    opacity 650ms var(--ease-arch),
+    transform 1300ms var(--ease-arrive);
+}
+
+/* ---------- The drawn architecture (placed by Thresholds.tsx, see lib/geometry.ts) ---------- */
+
+.wall,
+.ground,
+.foot {
+  position: absolute;
+  visibility: hidden;
+  transition:
+    left var(--dur-move) var(--ease-arch),
+    top var(--dur-move) var(--ease-arch),
+    width var(--dur-move) var(--ease-arch),
+    height var(--dur-move) var(--ease-arch),
+    opacity var(--dur-move) var(--ease-arch),
+    border-color var(--dur-tone) var(--ease-arch);
+}
+.stage[data-ready] .wall,
+.stage[data-ready] .ground,
+.stage[data-ready] .foot {
+  visibility: visible;
+}
+.stage[data-still] .wall,
+.stage[data-still] .ground,
+.stage[data-still] .foot {
+  transition: none;
+}
+
+.wall {
+  border: 1px solid var(--wire);
+}
+.wall[data-i="0"] {
+  border-color: rgb(57 170 225 / 0.8);
+}
+.wall[data-i="2"] {
+  opacity: 0.66;
+}
+.wall[data-i="3"] {
+  opacity: 0.38;
+}
+
+.ground {
+  height: 0;
+  border-top: 1px solid var(--wire);
+}
+
+/* On arrival the ground is drawn first, then each portal rises from it, nearest last. */
+.stage[data-ready][data-act="gate"] .ground {
+  animation: ground-draw 1000ms var(--ease-arch) 60ms backwards;
+}
+.stage[data-ready][data-act="gate"] .wall {
+  animation: wall-rise 1100ms var(--ease-arch) backwards;
+  animation-delay: calc(520ms + var(--k, 0) * 150ms);
+}
+.wall[data-i="0"] {
+  --k: 0;
+}
+.wall[data-i="1"] {
+  --k: 1;
+}
+.wall[data-i="2"] {
+  --k: 2;
+}
+.wall[data-i="3"] {
+  --k: 3;
+}
+@keyframes ground-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes wall-rise {
+  from {
+    clip-path: inset(100% -2px -2px -2px);
+  }
+  to {
+    clip-path: inset(-2px -2px -2px -2px);
+  }
+}
+
+.foot {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 2rem;
+  color: var(--fg-soft);
+}
+.foot[data-centred="true"] {
+  justify-content: center;
+}
+.stage[data-ready] .foot {
+  animation: appear 900ms ease 1200ms backwards;
+}
+.caption {
+  animation: appear 800ms var(--ease-arrive) 260ms both;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 0.8rem;
+}
+
+/* ================= Cine: the words ================= */
+
+.flow {
+  position: relative;
+  z-index: 1;
+}
+
+:global(html.cine) .act {
+  background: transparent;
+  color: var(--fg);
+  transition: color var(--dur-tone) var(--ease-arch);
+}
+:global(html.cine) .kicker {
+  transition: color var(--dur-tone) var(--ease-arch);
+}
+
+/* The inline pictures stay for assistive technology; the stage shows them. */
+:global(html.cine) .framed {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The gate: an inscription over the portals, and the invitation below the ground line. */
+:global(html.cine) .gate {
+  display: block;
+  align-content: start;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 1.4rem) var(--gutter) 0;
+  text-align: center;
+}
+/* The gate's words return gently, and step aside quickly so they never sit over the next picture. */
+:global(html.cine) .gateHead,
+:global(html.cine) .gateFoot {
+  transition: opacity 600ms var(--ease-arrive) 150ms;
+}
+:global(html.cine:not([data-act="gate"])) .gateHead,
+:global(html.cine:not([data-act="gate"])) .gateFoot:not(:focus-within) {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+:global(html.cine) .gate .kicker {
+  line-height: 1.1rem;
+}
+:global(html.cine) .gate .headline {
+  margin-top: 1.1rem;
+  font-size: var(--fs-head);
+  line-height: 1;
+  white-space: nowrap;
+}
+:global(html.cine) .gate .line {
+  display: inline-block;
+  vertical-align: top;
+}
+:global(html.cine) .gateFoot {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 4.5vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 2.5rem;
+  text-align: left;
+}
+:global(html.cine) .lede {
+  max-width: 31rem;
+  font-size: 1rem;
+}
+:global(html.cine) .actions {
+  justify-self: end;
+  flex-wrap: nowrap;
+  margin-top: 0;
+}
+@media (max-width: 1199px) {
+  :global(html.cine) .gateFoot {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  :global(html.cine) .cue {
+    display: none !important;
+  }
+}
+:global(html.cine) .cue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.2rem;
+  color: var(--fg-soft);
+  text-decoration: none;
+  animation: appear 900ms ease 1300ms both;
+}
+.cueLine {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 2.2rem;
+  background: var(--rule);
+  overflow: hidden;
+}
+.cueLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform: scaleY(0.4);
+  transform-origin: top;
+  transition: transform 500ms var(--ease-arrive);
+}
+.cue:hover .cueLine::after,
+.cue:focus-visible .cueLine::after {
+  transform: scaleY(1);
+}
+
+:global(html.cine) .passage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 125svh;
+  padding: 0 var(--gutter);
+}
+:global(html.cine) .passageText {
+  max-width: min(29vw, 30rem);
+}
+
+:global(html.cine) .communities {
+  padding: 20vh var(--gutter) 38vh;
+}
+:global(html.cine) .communitiesHead,
+:global(html.cine) .list {
+  max-width: min(37vw, 38rem);
+}
+:global(html.cine) .list {
+  margin-top: 6vh;
+}
+:global(html.cine) .item {
+  display: block;
+  padding: 2.2vh 0 2.6vh;
+  opacity: 0.46;
+  transition: opacity 500ms var(--ease-arch);
+}
+:global(html.cine) .item[data-on] {
+  opacity: 1;
+}
+:global(html.cine) .item[data-on] .itemIndex {
+  color: var(--sky);
+}

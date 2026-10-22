@@ -1,0 +1,26 @@
+{
+  "name": "disha-habitat-v2-showroom",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Disha Habitat V2 (showroom): a homepage laid out like tesla.com, built from Disha's own photographs and verified facts.",
+  "scripts": {
+    "dev": "next dev -p 3400",
+    "build": "next build",
+    "start": "next start -p 3400",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.0",
+    "typescript": "^5"
+  }
+}

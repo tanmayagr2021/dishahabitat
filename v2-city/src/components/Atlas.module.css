@@ -1,0 +1,763 @@
+/*
+ * Two compositions share one markup.
+ *  - Still (default): text, then a still map and photograph for each community. Phones, tablets,
+ *    reduced motion and browsers without JavaScript see this.
+ *  - Cine (html.cine): a sticky night map behind a column of text; the camera moves between the
+ *    city and each neighbourhood as the visitor scrolls.
+ */
+
+.atlas {
+  position: relative;
+}
+
+/* ================= The text column ================= */
+
+.flow {
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  position: relative;
+  padding: clamp(3.2rem, 9vh, 5.5rem) var(--gutter);
+}
+.section + .section::before {
+  content: "";
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--rule), transparent);
+}
+.opening {
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--nav-h) + 2.2rem);
+  background: radial-gradient(90% 60% at 0% 0%, rgb(216 176 106 / 0.12), transparent 70%), var(--paper);
+}
+/* Phones: the invitation straight after the headline, then the map, then the list. */
+.opening .head {
+  order: 1;
+}
+.opening .actions {
+  order: 2;
+}
+.opening .still {
+  order: 3;
+}
+.opening .key {
+  order: 4;
+}
+
+.title {
+  margin-top: 1.2rem;
+}
+.title em,
+.section h2 em {
+  font-style: italic;
+  color: var(--gold-soft);
+}
+.lede {
+  margin-top: 1.3rem;
+  max-width: 33rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- The communities, as the opening's key ---------- */
+
+.key {
+  margin-top: 1.8rem;
+  padding-top: 0.6rem;
+  max-width: 34rem;
+  background: linear-gradient(90deg, var(--rule), transparent) top / 100% 1px no-repeat;
+}
+.key a {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.42rem 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+.keyNo {
+  font: 500 0.7rem/1 var(--font-sans);
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+.keyName {
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  line-height: 1.15;
+  transition: color var(--dur-quick) ease;
+}
+.keyYear {
+  font: 500 0.7rem/1 var(--font-sans);
+  font-stretch: 85%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.key a[data-current] .keyYear {
+  color: var(--plot-light);
+}
+.key a[data-current] .keyYear::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--plot);
+  box-shadow: 0 0 10px 2px rgb(57 170 225 / 0.7);
+  vertical-align: 0.1em;
+}
+.key a:hover .keyName,
+.key a:focus-visible .keyName {
+  color: var(--gold-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.6rem;
+  margin-top: 1.8rem;
+}
+.down {
+  transform: rotate(90deg);
+}
+
+/* ---------- Chapters ---------- */
+
+.chapterNo {
+  color: var(--gold);
+}
+.chapter h2 {
+  margin-top: 0.85rem;
+}
+.locality {
+  margin-top: 0.45rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.22rem;
+  color: var(--ink-soft);
+}
+
+/* The verified figures, set large: what a buyer reads first. */
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.4rem;
+  margin: 1.9rem 0 0;
+}
+.figures div {
+  display: flex;
+  flex-direction: column;
+}
+.figures dd {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 1.6rem + 1.3vw, 2.75rem);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: lining-nums;
+}
+.figures dt {
+  margin-bottom: 0.45rem;
+  font: 500 0.68rem/1 var(--font-sans);
+  font-stretch: 85%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.types {
+  margin-top: 1rem;
+  max-width: 30rem;
+  color: var(--ink-soft);
+}
+.tally {
+  margin: 1.8rem 0 1.2rem;
+  max-width: 30rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--gold);
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+.tally strong {
+  color: var(--gold-soft);
+  font-weight: 500;
+}
+.aside {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+.note {
+  overflow-wrap: anywhere;
+  margin: 1.5rem 0 1.2rem;
+  max-width: 30rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--ink-faint);
+}
+
+.method {
+  margin-top: 2.4rem;
+  max-width: 34rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+.method summary {
+  cursor: pointer;
+  font: 500 0.72rem/1.4 var(--font-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.method p {
+  margin-top: 0.7rem;
+}
+
+/* ---------- Still maps and photographs ---------- */
+
+.still {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.2rem;
+}
+.stillPhoto figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+.stillPhotoImage {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--paper-deep);
+  box-shadow: 0 24px 60px -28px rgb(0 0 0 / 0.8);
+}
+
+@media (min-width: 700px) {
+  .section {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+  .still {
+    margin-top: 0;
+  }
+  .opening {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    grid-template-areas:
+      "head still"
+      "key still"
+      "actions still";
+    grid-template-rows: auto auto 1fr;
+    column-gap: 3rem;
+    row-gap: 0;
+  }
+  .opening .head {
+    grid-area: head;
+  }
+  .opening .key {
+    grid-area: key;
+  }
+  .opening .actions {
+    grid-area: actions;
+    align-self: start;
+  }
+  .opening .still {
+    grid-area: still;
+    max-width: 26rem;
+    justify-self: end;
+    width: 100%;
+  }
+}
+
+/* ================= Cine: the night map ================= */
+
+.stage {
+  display: none;
+}
+
+:global(html.cine) .stage {
+  display: block;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  margin-bottom: -100svh;
+  overflow: hidden;
+  z-index: 0;
+  container-type: size;
+  background: var(--paper);
+}
+
+.probe {
+  position: absolute;
+  width: var(--panel);
+  height: var(--nav-h);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* The city view in CSS: the same framing as cityView() in lib/camera.ts, so the plate is right on
+   the first paint. The camera takes over with inline transforms once the script runs. */
+.city,
+.marks {
+  --aw: calc(100cqw - var(--panel));
+  --ah: calc(100cqh - var(--nav-h));
+  --cs: min(calc(0.9 * var(--aw) / var(--bw)), calc(0.86 * var(--ah) / var(--bh)));
+  --ox: calc(var(--panel) + 0.5 * var(--aw));
+  --oy: calc(var(--nav-h) + 0.48 * var(--ah));
+}
+
+.city {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--ww) * var(--cs));
+  height: calc(var(--wh) * var(--cs));
+  transform: translate(calc(var(--ox) - var(--bx) * var(--cs)), calc(var(--oy) - var(--by) * var(--cs)));
+  transform-origin: 0 0;
+}
+.city img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+/* The city lights come up when the page opens. */
+.city {
+  animation: lights 1600ms var(--ease-arrive) 80ms backwards;
+}
+@keyframes lights {
+  from {
+    opacity: 0;
+    filter: brightness(0.4) saturate(0.6);
+  }
+}
+
+.hood {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+  opacity: 0;
+  visibility: hidden;
+}
+.hood img {
+  position: absolute;
+  max-width: none;
+}
+
+/* Depth: the map darkens towards its edges, like a lit table at night. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  left: var(--panel);
+  pointer-events: none;
+  background:
+    radial-gradient(120% 95% at 55% 50%, transparent 55%, rgb(5 11 22 / 0.7) 100%),
+    linear-gradient(90deg, rgb(5 11 22 / 0.55), transparent 9%);
+}
+
+/* ---------- Disha's plots: glowing in the logo's blue ---------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  overflow: visible;
+}
+.stage[data-ready] .overlay {
+  visibility: visible;
+}
+.plot {
+  fill: var(--plot);
+  fill-opacity: 0.78;
+  stroke: var(--plot-light);
+  stroke-width: 1;
+  transition: fill-opacity var(--dur-move) var(--ease-arch);
+}
+.halo,
+.haloWide,
+.pulse {
+  fill: none;
+  stroke: var(--plot);
+  stroke-linejoin: round;
+}
+.halo {
+  stroke-width: 9;
+  stroke-opacity: 0.32;
+}
+.haloWide {
+  stroke-width: 24;
+  stroke-opacity: 0.1;
+}
+.pulse {
+  stroke-width: 2;
+  stroke-opacity: 0;
+}
+g[data-on] .plot {
+  fill-opacity: 0.95;
+}
+g[data-on] .halo {
+  stroke-opacity: 0.5;
+}
+/* The plot in view, and the one now selling, pulse gently: a ring of light leaving the plot. */
+g[data-on] .pulse,
+g[data-build] .pulse {
+  animation: pulse 2600ms var(--ease-arrive) infinite;
+}
+@keyframes pulse {
+  0% {
+    stroke-width: 2;
+    stroke-opacity: 0.85;
+  }
+  100% {
+    stroke-width: 46;
+    stroke-opacity: 0;
+  }
+}
+/* Pursuit of the Elements is still being built: a dashed outline over a lighter fill. */
+g[data-build] .plot {
+  fill-opacity: 0.3;
+  stroke-dasharray: 5 4;
+  stroke-width: 1.5;
+}
+
+/* ---------- Labels on the map ---------- */
+
+.marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.marks > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+.cityLabel {
+  transform: translate(
+    calc(var(--ox) + (var(--x) - var(--bx)) * var(--cs)),
+    calc(var(--oy) + (var(--y) - var(--by)) * var(--cs))
+  );
+  translate: -50% -50%;
+  /* Map annotations are capped: the same names are in the text column at the visitor's full size. */
+  font: 500 min(0.64rem, 12px) / 1 var(--font-sans);
+  font-stretch: 80%;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgb(244 236 220 / 0.5);
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 8px var(--paper);
+}
+.cityLabel[data-kind="lake"] {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: min(0.86rem, 15px);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgb(150 205 240 / 0.85);
+}
+
+.plotMark {
+  transform: translate(
+    calc(var(--ox) + (var(--x) - var(--bx)) * var(--cs)),
+    calc(var(--oy) + (var(--y) - var(--by)) * var(--cs))
+  );
+  pointer-events: auto;
+  color: var(--ink);
+  text-decoration: none;
+}
+.plotMark span {
+  position: absolute;
+  top: 0;
+  translate: 0 -50%;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: var(--font-serif);
+  font-size: min(1.12rem, 21px);
+  line-height: 1;
+  text-shadow:
+    0 0 6px var(--paper),
+    0 0 14px var(--paper),
+    0 0 2px var(--paper);
+  transition: color var(--dur-quick) ease;
+}
+.plotMark[data-side="right"] span {
+  left: 16px;
+}
+.plotMark[data-side="left"] span {
+  right: 16px;
+}
+.plotMark b {
+  font: 500 min(0.66rem, 12px) / 1 var(--font-sans);
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+.plotMark:hover span {
+  color: var(--gold-soft);
+}
+
+.hoodLabel {
+  visibility: hidden;
+}
+.hoodLabel > span {
+  position: absolute;
+  display: block;
+  font: 600 min(0.62rem, 12px) / 1 var(--font-sans);
+  font-stretch: 78%;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(240 214 160 / 0.82);
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 4px var(--paper),
+    0 0 8px var(--paper);
+}
+.hoodLabel[data-kind="place"] > span {
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: rgb(244 236 220 / 0.5);
+}
+
+/* ---------- The photograph and its leader line ---------- */
+
+.leaderLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.leader {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+.leader[data-on="true"] {
+  opacity: 0.9;
+  stroke-dashoffset: 0;
+  transition:
+    stroke-dashoffset 700ms var(--ease-arch) 900ms,
+    opacity 200ms ease 900ms;
+}
+
+.photo {
+  position: absolute;
+  z-index: 1;
+  isolation: isolate;
+  margin: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 260ms ease,
+    visibility 0s linear 260ms;
+}
+.photo[data-state="from"],
+.photo[data-state="on"] {
+  visibility: visible;
+  opacity: 1;
+  transition: none;
+}
+.photoImage {
+  position: relative;
+  transform-origin: 50% 50%;
+  background: var(--paper-deep);
+}
+.photo[data-state="on"] .photoImage {
+  transition:
+    transform 1150ms var(--ease-arch),
+    clip-path 1150ms var(--ease-arch);
+}
+/* A gold hairline around photograph and caption, and a pool of shadow, once the photograph has landed. */
+.photo::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border: 1px solid rgb(216 176 106 / 0.55);
+  box-shadow: 0 40px 90px -30px rgb(0 0 0 / 0.9);
+  background: var(--paper);
+  z-index: -1;
+  opacity: 0;
+}
+.photo[data-state="on"]::before {
+  opacity: 1;
+  transition: opacity 600ms ease 1000ms;
+}
+/* The caption reads like a museum label: on a navy band inside the frame, never on the streets. */
+.photoCaption {
+  position: relative;
+  padding: 0.7rem 0.15rem 0.1rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  opacity: 0;
+}
+.photo[data-state="on"] .photoCaption {
+  opacity: 1;
+  transition: opacity 500ms ease 900ms;
+}
+
+/* ---------- Scale, north and source: small and quiet ---------- */
+
+.legend {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 1.2rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.4rem;
+  font: 500 min(0.64rem, 12px) / 1 var(--font-sans);
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 8px var(--paper),
+    0 0 12px var(--paper);
+}
+.scale {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--gold-soft);
+}
+.scale::before {
+  content: "";
+  display: block;
+  width: var(--bar, 100px);
+  height: 4px;
+  border: 1px solid var(--gold);
+  border-top: 0;
+  transition: width 120ms linear;
+}
+.scale::after {
+  content: attr(data-label);
+}
+.north {
+  position: relative;
+  padding-top: 0.85rem;
+  color: var(--gold-soft);
+}
+.north::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 0.65rem;
+  background: var(--gold);
+}
+.source a {
+  color: inherit;
+  pointer-events: auto;
+}
+
+/* ---------- The column over the map ---------- */
+
+:global(html.cine) .flow {
+  pointer-events: none;
+}
+:global(html.cine) .flow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--panel);
+  background: radial-gradient(70% 40% at 0% 0%, rgb(216 176 106 / 0.1), transparent 70%), var(--panel-bg);
+  box-shadow:
+    1px 0 0 rgb(216 176 106 / 0.18),
+    30px 0 60px -20px rgb(0 0 0 / 0.6);
+}
+:global(html.cine) .section {
+  display: block;
+  width: var(--panel);
+  padding: 0 clamp(1.8rem, 3.2vw, 3.4rem);
+  background: none;
+}
+:global(html.cine) .section::before {
+  display: none;
+}
+:global(html.cine) .text {
+  position: relative;
+  pointer-events: auto;
+}
+:global(html.cine) .opening {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100svh;
+  padding-top: calc(var(--nav-h) + 6vh);
+  padding-bottom: 1.6rem;
+}
+:global(html.cine) .opening > * {
+  order: 0;
+}
+/* Only the chapter in view is at full strength, so the one leaving never competes with it. */
+:global(html.cine) .text {
+  transition: opacity 500ms var(--ease-arch);
+}
+:global(html.cine) .section:not([data-active]) .text:not(:focus-within) {
+  opacity: 0.16;
+}
+/* Chapters already passed leave entirely, so nothing lingers under the navigation. */
+:global(html.cine) .section[data-past] .text:not(:focus-within) {
+  opacity: 0;
+}
+:global(html.cine) .title {
+  /* Sized to the column, so it always sets on two lines. */
+  font-size: clamp(2.6rem, min(calc(var(--panel) * 0.118), 8.6vh), 4.6rem);
+}
+:global(html.cine) .chapter {
+  min-height: 165svh;
+}
+:global(html.cine) .chapter .text,
+:global(html.cine) .closing .text {
+  position: sticky;
+  top: calc(var(--nav-h) + 11vh);
+  padding-bottom: 12vh;
+}
+:global(html.cine) .closing {
+  min-height: 130svh;
+}
+/* The still maps stay in the page for search engines and screen readers only. */
+:global(html.cine) .still {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (max-height: 820px) {
+  :global(html.cine) .key a {
+    padding: 0.3rem 0;
+  }
+  :global(html.cine) .keyName {
+    font-size: 1.12rem;
+  }
+  :global(html.cine) .lede {
+    margin-top: 0.9rem;
+  }
+  :global(html.cine) .figures {
+    margin-top: 1.3rem;
+  }
+}

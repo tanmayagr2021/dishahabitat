@@ -1,0 +1,130 @@
+.nav {
+  container: nav / inline-size;
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--nav-h);
+  padding: 0 var(--gutter);
+  background: rgb(11 21 40 / 0.95);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom: 1px solid rgb(216 176 106 / 0.18);
+}
+.brand {
+  flex: none;
+  margin-right: auto;
+}
+/* The logo keeps its size when visitors enlarge text; only words need to grow. */
+.logo {
+  display: block;
+  height: min(2.3rem, 46px);
+  width: auto;
+  color: var(--ink);
+}
+
+.links {
+  display: none;
+}
+.links ul {
+  display: flex;
+  gap: clamp(1.1rem, 2vw, 2.2rem);
+}
+.links a,
+.visit,
+.menuButton {
+  font: 500 0.86rem/1 var(--font-sans);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.links a {
+  color: var(--ink-soft);
+  transition: color var(--dur-quick) ease;
+}
+.links a:hover {
+  color: var(--gold-soft);
+}
+
+.visit {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--gold);
+  color: var(--gold-soft);
+  transition:
+    background-color var(--dur-quick) ease,
+    color var(--dur-quick) ease;
+}
+.visit:hover {
+  background: var(--gold);
+  color: #0b1528;
+}
+
+.menuButton {
+  min-height: 2.5rem;
+  padding: 0 0.2rem;
+  background: none;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgb(216 176 106 / 0.6);
+  text-underline-offset: 0.4em;
+  text-decoration-thickness: 1px;
+}
+
+.panel {
+  position: absolute;
+  inset: var(--nav-h) 0 auto;
+  padding: 0.75rem var(--gutter) 1.5rem;
+  background: var(--paper);
+  border-bottom: 1px solid rgb(216 176 106 / 0.24);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+}
+.panel[hidden] {
+  display: none;
+}
+.panel a {
+  display: block;
+  padding: 0.9rem 0;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  line-height: 1.1;
+  color: var(--ink);
+  text-decoration: none;
+  border-top: 1px solid rgb(216 176 106 / 0.18);
+}
+.panel li:first-child a {
+  border-top: 0;
+}
+.panel a:hover {
+  color: var(--gold-soft);
+}
+
+/* With very little room (a phone with enlarged text), the visit link moves into the menu. */
+@container nav (max-width: 20rem) {
+  .visit {
+    display: none;
+  }
+}
+.panelVisit {
+  color: var(--gold-soft) !important;
+}
+
+/* The links show once there is room for them at the visitor's text size (rem in a container query
+   follows the page's actual text size, however it was enlarged). */
+@container nav (min-width: 50rem) {
+  .links {
+    display: block;
+  }
+  .menuButton,
+  .panel {
+    display: none;
+  }
+  .visit {
+    margin-left: 0.6rem;
+  }
+}

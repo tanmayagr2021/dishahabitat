@@ -1,0 +1,224 @@
+/*
+ * V2 (showroom): the restraint of tesla.com, in Disha's own colours. White pages, one near-black ink,
+ * one grey for panels, and a single accent for the button that matters most: Book a visit.
+ */
+:root {
+  --ink: #171a20;
+  --text: #393c41;
+  --text-2: #5c5e62;
+  --surface: #f4f4f4;
+  --line: #d0d1d2;
+
+  /*
+   * The accent: Disha's brass (V1's --color-brass). Compared with forest green and black on the real
+   * photographs, it is the one that still stands out on darkened skies and gardens. Dark text, 7.4:1.
+   */
+  --accent: #c6a46b;
+  --accent-hover: #b8955b;
+  --on-accent: #171a20;
+  --accent-ink: #86652f;
+
+  --header-h: max(56px, 3.5rem);
+  --gutter: clamp(16px, 3.4vw, 48px);
+  --radius: 4px;
+  --radius-card: 8px;
+  --ease: cubic-bezier(0.5, 0, 0, 0.75);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+[data-tone="dark"] :focus-visible {
+  outline-color: #fff;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: #fff;
+  font-weight: 500;
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
+}
+
+/* Buttons: 40 px tall, 4 px corners, 14 px medium type, as on tesla.com. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  max-width: 100%;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  text-align: center;
+  transition:
+    background-color 0.33s var(--ease),
+    color 0.33s var(--ease);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* On photographs: white, the way tesla.com sets its second button over an image. */
+.btn-light {
+  background: rgb(255 255 255 / 0.9);
+  color: var(--ink);
+}
+
+.btn-light:hover {
+  background: #fff;
+}
+
+/* On white and grey: near-black, and white on grey. */
+.btn-dark {
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn-dark:hover {
+  background: #393c41;
+}
+
+.btn-white {
+  background: #fff;
+  color: var(--ink);
+}
+
+.btn-white:hover {
+  background: #e9e9ea;
+}
+
+.btn-soft {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.btn-soft:hover {
+  background: #e9e9ea;
+}
+
+/* The second choice on a photograph: dark glass and a hairline, so the brass button stays the one
+   the eye goes to first. */
+.btn-ghost {
+  background: rgb(0 0 0 / 0.42);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6);
+}
+
+.btn-ghost:hover {
+  background: rgb(0 0 0 / 0.56);
+}
+
+/* Headlines: Disha's display serif. Text and controls stay in the sans. */
+.display {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

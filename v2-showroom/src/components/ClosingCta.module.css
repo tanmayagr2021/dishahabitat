@@ -1,0 +1,72 @@
+.section {
+  padding: 64px var(--gutter) 0;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: 96px;
+  }
+}
+
+/* A hairline above, then the invitation on the left and the two ways to act on the right. */
+.inner > div:first-child {
+  min-width: 0;
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+  max-width: 2560px;
+  margin-inline: auto;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.title {
+  max-width: 20ch;
+  font-size: 2rem;
+  line-height: 2.375rem;
+  color: var(--ink);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 2.75rem;
+    line-height: 3.125rem;
+  }
+}
+
+.line {
+  margin-top: 8px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+/* Side by side; on a phone they take the full width, one above the other if they must. */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+.buttons > a {
+  flex: 1 1 200px;
+}
+
+@media (min-width: 900px) {
+  .buttons {
+    width: auto;
+  }
+
+  .buttons > a {
+    flex: 0 0 auto;
+    min-width: 200px;
+  }
+}

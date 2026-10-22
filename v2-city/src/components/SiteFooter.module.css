@@ -1,0 +1,36 @@
+.footer {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 2rem;
+  padding: 3.5rem var(--gutter) 2.5rem;
+  background: #070f1e;
+  border-top: 1px solid rgb(216 176 106 / 0.18);
+}
+.logo {
+  height: 2.4rem;
+  width: auto;
+  color: var(--ink);
+}
+.facts {
+  display: grid;
+  gap: 1.4rem;
+}
+.facts dd {
+  margin: 0.5rem 0 0;
+}
+.facts a,
+.small a {
+  text-decoration-color: rgb(216 176 106 / 0.5);
+  text-underline-offset: 0.3em;
+}
+.small {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  max-width: 48rem;
+}
+@media (min-width: 800px) {
+  .facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
