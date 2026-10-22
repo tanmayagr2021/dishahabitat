@@ -61,7 +61,7 @@ export const company = {
 } as const;
 
 const bookVisit: Cta = { label: "Book a visit", href: links.bookVisit };
-const learnElements: Cta = { label: "Learn more", href: links.elements };
+const learnElements: Cta = { label: "Explore", href: links.elements };
 
 /* The hero: three slides that change every ten seconds, as on tesla.com. */
 export type Slide = {
@@ -134,13 +134,13 @@ export const proof = {
   title: "Innovation Real Estate Project of the Year",
   line: "A Certificate of Excellence for Pursuit of the Elements at the ET Business Awards 2025, residential category.",
   badges: [
-    { value: "1,102", label: "Homes handed over" },
+    { value: "5", label: "Communities handed over" },
     { value: "4.7/5", label: "Rated by Central Park residents on MyGate", note: "1" },
   ],
   primary: bookVisit,
   film: {
     src: "/media/brand-film.mp4",
-    poster: "/media/brand-film-poster.jpg",
+    poster: "/media/brand-film-aerial.jpg",
     label: "Disha Habitat’s brand film: residents, homes and gardens across Disha communities",
   },
 } as const;

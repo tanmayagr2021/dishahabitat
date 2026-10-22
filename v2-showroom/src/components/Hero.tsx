@@ -96,7 +96,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
                   src={slide.image.src}
                   alt={slide.image.alt}
                   fill
-                  sizes="100vw"
+                  sizes="(orientation: portrait) 160vh, 100vw"
                   quality={78}
                   loading={i === 0 ? "eager" : "lazy"}
                   fetchPriority={i === 0 ? "high" : "low"}

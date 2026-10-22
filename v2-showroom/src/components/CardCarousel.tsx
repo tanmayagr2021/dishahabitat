@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, type ReactNode, useEffect, useRef, useState } from "react";
+import { Children, type ReactNode, type Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import { ArrowRight, ChevronLeft, ChevronRight } from "./Icons";
 import s from "./CardCarousel.module.css";
@@ -18,9 +18,29 @@ type Props = {
   keyboardScroll?: boolean;
   names: string[];
   children: ReactNode;
+  /* Something that belongs beside the cards (the communities map): above them on phones, beside on computers. */
+  dock?: ReactNode;
+  /* The card nearest the start, as the row scrolls. */
+  onActive?: (i: number) => void;
+  /* A card asked for by an arrow or mark, before the row has scrolled to it. */
+  onSelect?: (i: number) => void;
+  ref?: Ref<CarouselHandle>;
 };
 
-export function CardCarousel({ title, line, link, keyboardScroll, names, children }: Props) {
+export type CarouselHandle = { show: (i: number) => void };
+
+export function CardCarousel({
+  title,
+  line,
+  link,
+  keyboardScroll,
+  names,
+  children,
+  dock,
+  onActive,
+  onSelect,
+  ref,
+}: Props) {
   const label = title;
   const track = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -62,13 +82,20 @@ export function CardCarousel({ title, line, link, keyboardScroll, names, childre
     };
   }, []);
 
+  useEffect(() => {
+    onActive?.(active);
+  }, [active, onActive]);
+
   const show = (i: number) => {
     const el = track.current;
     const card = el?.children[i] as HTMLElement | undefined;
     if (!el || !card) return;
+    onSelect?.(i);
     const pad = parseFloat(getComputedStyle(el).scrollPaddingLeft) || 0;
     el.scrollTo({ left: card.offsetLeft - pad, behavior: motionOk ? "smooth" : "auto" });
   };
+
+  useImperativeHandle(ref, () => ({ show }));
 
   return (
     <section className={s.section} aria-roledescription="carousel" aria-label={label}>
@@ -84,42 +111,47 @@ export function CardCarousel({ title, line, link, keyboardScroll, names, childre
           </a>
         )}
       </div>
-      <div className={s.viewport}>
-        <div
-          ref={track}
-          className={s.track}
-          {...(keyboardScroll ? { tabIndex: 0, role: "group", "aria-label": `${title}, scroll with the arrow keys` } : {})}
-        >
-          {items.map((child, i) => (
-            <div
-              key={names[i] ?? i}
-              className={s.item}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${names[i] ?? ""}, ${i + 1} of ${items.length}`}
-            >
-              {child}
-            </div>
-          ))}
+      <div className={dock ? s.docked : undefined}>
+        {dock && <div className={s.dock}>{dock}</div>}
+        <div className={s.viewport}>
+          <div
+            ref={track}
+            className={s.track}
+            {...(keyboardScroll
+              ? { tabIndex: 0, role: "group", "aria-label": `${title}, scroll with the arrow keys` }
+              : {})}
+          >
+            {items.map((child, i) => (
+              <div
+                key={names[i] ?? i}
+                className={s.item}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${names[i] ?? ""}, ${i + 1} of ${items.length}`}
+              >
+                {child}
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            className={`${s.arrow} ${s.prev}`}
+            onClick={() => show(Math.max(0, active - 1))}
+            disabled={edges.start}
+            aria-label={`Previous: ${label}`}
+          >
+            <ChevronLeft />
+          </button>
+          <button
+            type="button"
+            className={`${s.arrow} ${s.next}`}
+            onClick={() => show(Math.min(items.length - 1, active + 1))}
+            disabled={edges.end}
+            aria-label={`Next: ${label}`}
+          >
+            <ChevronRight />
+          </button>
         </div>
-        <button
-          type="button"
-          className={`${s.arrow} ${s.prev}`}
-          onClick={() => show(Math.max(0, active - 1))}
-          disabled={edges.start}
-          aria-label={`Previous: ${label}`}
-        >
-          <ChevronLeft />
-        </button>
-        <button
-          type="button"
-          className={`${s.arrow} ${s.next}`}
-          onClick={() => show(Math.min(items.length - 1, active + 1))}
-          disabled={edges.end}
-          aria-label={`Next: ${label}`}
-        >
-          <ChevronRight />
-        </button>
       </div>
       <div className={s.dots}>
         {names.map((name, i) => (

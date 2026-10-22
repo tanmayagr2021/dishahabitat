@@ -1,4 +1,5 @@
 .section {
+  --dock-w: clamp(280px, 30vw, 440px);
   padding-top: 48px;
 }
 
@@ -80,6 +81,50 @@
 
 .viewport {
   position: relative;
+  min-width: 0;
+}
+
+/* A dock (the communities map) sits above the cards on phones and tablets. Without scripts it has nothing to show. */
+.dock {
+  padding: 0 var(--gutter) 16px;
+}
+
+:global(html:not(.js)) .dock {
+  display: none;
+}
+
+/*
+ * From tablets up it stands beside the cards, as tall as they are, and the cards scroll in the space to
+ * its right: still 1024 wide on a large screen, narrower on a laptop or tablet.
+ */
+@media (min-width: 900px) {
+  :global(html.js) .docked {
+    display: grid;
+    grid-template-columns: var(--dock-w) minmax(0, 1fr);
+    gap: 16px;
+    padding-left: var(--gutter);
+  }
+
+  :global(html.js) .docked .dock {
+    padding: 0;
+  }
+
+  :global(html.js) .docked .track {
+    padding-left: 0;
+    scroll-padding-left: 0;
+  }
+
+  :global(html.js) .docked .item {
+    width: min(1024px, calc(100vw - 2 * var(--gutter) - var(--dock-w) - 16px - 40px));
+  }
+
+  :global(html.js) .docked .prev {
+    left: 12px;
+  }
+
+  :global(html.js) .docked + .dots {
+    padding-left: calc(var(--gutter) + var(--dock-w) + 16px);
+  }
 }
 
 .track {

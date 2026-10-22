@@ -3,7 +3,8 @@ import { type Community, type Img, links } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import s from "./Cards.module.css";
 
-const SIZES = "(min-width: 1100px) 1024px, 92vw";
+/* A card is taller than it is wide on a phone, so its landscape picture is drawn about 900px wide. */
+const SIZES = "(min-width: 1100px) 1024px, 900px";
 
 function Photo({ image }: { image: Img }) {
   return (

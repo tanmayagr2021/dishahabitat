@@ -8,17 +8,16 @@
   }
 }
 
-/* A hairline above, then the invitation on the left and the two ways to act on the right. */
+/* A hairline above, then the invitation, with the two ways to act right under it. */
 .inner > div:first-child {
   min-width: 0;
 }
 
 .inner {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px 48px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
   max-width: 2560px;
   margin-inline: auto;
   padding-top: 32px;
@@ -60,7 +59,7 @@
   flex: 1 1 200px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 600px) {
   .buttons {
     width: auto;
   }

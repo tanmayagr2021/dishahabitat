@@ -1,0 +1,249 @@
+/*
+ * The map panel: the showroom's grey, square corners like the cards, names in the page's own type.
+ * Stacked above the cards on phones and tablets; beside them, as tall as a card, on computers.
+ */
+.map {
+  position: relative;
+  overflow: hidden;
+  height: clamp(200px, 30svh, 280px);
+  border-radius: var(--radius-card);
+  background: #f2f2f2;
+  isolation: isolate;
+}
+
+@media (min-width: 900px) {
+  :global(html.js) .map {
+    height: 100%;
+  }
+}
+
+.picture,
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+.map[data-ready] .canvas {
+  opacity: 1;
+}
+
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/*
+ * Place, road and lake names: small, in the body-text grey (the lighter grey measured under 4.5:1 where a
+ * name crosses a main road), with a halo of the map's ground so lines never cut through them.
+ */
+.place {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.6875rem;
+  line-height: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text);
+  text-shadow:
+    0 0 2px #f2f2f2,
+    0 0 2px #f2f2f2,
+    0 0 4px #f2f2f2,
+    0 0 6px #f2f2f2;
+  transition:
+    opacity 0.3s var(--ease),
+    visibility 0.3s;
+}
+
+.lake,
+.road {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.lake {
+  font-style: italic;
+}
+
+/* A community's name: a white tag pointing at its plot; the one on show in ink. */
+.pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.14);
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    opacity 0.3s var(--ease),
+    visibility 0.3s,
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+
+.pin::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 0 0 2px 0;
+  z-index: -1;
+}
+
+/* Beside or below its plot when there is no room above: the pointer turns to face it. */
+.pin[data-side="below"]::after {
+  top: -5px;
+  bottom: auto;
+  border-radius: 2px 0 0 0;
+}
+
+.pin[data-side="right"]::after,
+.pin[data-side="left"]::after {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.pin[data-side="right"]::after {
+  left: -5px;
+  border-radius: 0 0 0 2px;
+}
+
+.pin[data-side="left"]::after {
+  left: auto;
+  right: -5px;
+  border-radius: 0 2px 0 0;
+}
+
+.pin:hover {
+  background: var(--surface);
+}
+
+.pin[data-active] {
+  background: var(--ink);
+  color: #fff;
+  z-index: 1;
+}
+
+/* A community just out of view: a small tag at the map's edge, its arrow pointing the way. */
+.edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 6px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.92);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.12);
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    opacity 0.3s var(--ease),
+    visibility 0.3s,
+    background-color 0.3s var(--ease);
+}
+
+.edge:hover {
+  background: #fff;
+}
+
+.edge svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--accent-ink);
+  rotate: var(--towards, 0rad);
+}
+
+.place[data-hidden="true"],
+.pin[data-hidden="true"],
+.edge[data-hidden="true"],
+.map[data-moving] .place,
+.map[data-moving] .edge,
+.map[data-moving] .pin:not([data-active]) {
+  opacity: 0;
+  visibility: hidden;
+  transition-duration: 0.15s;
+}
+
+.map[data-moving] .pin[data-active] {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Said in words when the card on show has no plot on the map. */
+.note {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  width: fit-content;
+  max-width: calc(100% - 9.5rem);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.14);
+}
+
+.credit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 2px 8px;
+  border-top-left-radius: var(--radius);
+  background: rgb(255 255 255 / 0.85);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: var(--text-2);
+}
+
+.credit a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.credit a:hover {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas,
+  .place,
+  .pin,
+  .edge {
+    transition: none;
+  }
+}
