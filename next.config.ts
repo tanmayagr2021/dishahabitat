@@ -40,9 +40,10 @@ const moved: [string, string][] = [
 ];
 
 const nextConfig: NextConfig = {
+  /* Tailwind runs on the one global stylesheet only, so every *.module.css stays a CSS Module. */
   turbopack: {
     rules: {
-      "*.css": {
+      "globals.css": {
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",
       },

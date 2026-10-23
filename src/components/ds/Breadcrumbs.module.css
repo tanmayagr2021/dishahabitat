@@ -1,0 +1,29 @@
+.nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.nav li + li::before {
+  content: "/";
+  margin-right: 4px;
+  color: var(--line);
+}
+
+.nav a {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+}
+
+.nav a:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+
+.nav [aria-current] {
+  color: var(--ink);
+}

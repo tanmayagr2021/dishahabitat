@@ -1,0 +1,47 @@
+.specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 24px 32px;
+  margin: 0;
+}
+
+.specs[data-align="center"] {
+  text-align: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 0;
+}
+
+.item dd {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  .item dd {
+    font-size: 2.25rem;
+    line-height: 2.75rem;
+  }
+}
+
+.item dt {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.note {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}

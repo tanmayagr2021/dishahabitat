@@ -1,0 +1,335 @@
+/*
+ * The hero, after tesla.com: 80% of the screen on computers and 90% on phones, one photograph per slide,
+ * the name and one line centred near the top, two buttons under them, and the slide marks at the foot.
+ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: #101214;
+  color: #fff;
+  isolation: isolate;
+}
+
+/*
+ * Every slide shares one grid cell, so the hero is as tall as its tallest slide, and never shorter than
+ * tesla.com's proportion. Larger text makes it grow rather than spill over the slide marks.
+ */
+.slides {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.slide {
+  position: relative;
+  grid-area: 1 / 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(540px, 90vh, 1100px);
+  min-height: clamp(540px, 90svh, 1100px);
+  padding-bottom: 50px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s var(--ease);
+}
+
+@media (min-width: 768px) {
+  .slide {
+    min-height: clamp(600px, 80vh, 1100px);
+    min-height: clamp(600px, 80svh, 1100px);
+  }
+}
+
+.slide[data-active] {
+  z-index: 1;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.media {
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .media {
+    object-position: var(--pos);
+  }
+}
+
+/*
+ * Darkens the sky behind the words and the foot behind the marks, as tesla.com's black scrim does, with a
+ * soft pool where the headline sits. The photographs stay bright; every line still measures AA.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.56) 0%, rgb(0 0 0 / 0.5) 36%, rgb(0 0 0 / 0.22) 54%, rgb(0 0 0 / 0) 68%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.16) 16%, rgb(0 0 0 / 0) 28%);
+}
+
+/* On the narrowest phones the words wrap onto more lines and reach further down the picture. */
+@media (max-width: 400px) {
+  .scrim {
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.58) 0%, rgb(0 0 0 / 0.56) 50%, rgb(0 0 0 / 0.24) 66%, rgb(0 0 0 / 0) 78%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.16) 16%, rgb(0 0 0 / 0) 28%);
+  }
+}
+
+@media (min-width: 768px) {
+  .scrim {
+    background:
+      radial-gradient(ellipse 46% 32% at 50% 24%, rgb(0 0 0 / 0.36), rgb(0 0 0 / 0) 100%),
+      linear-gradient(180deg, rgb(0 0 0 / 0.52) 0%, rgb(0 0 0 / 0.47) 34%, rgb(0 0 0 / 0.16) 50%, rgb(0 0 0 / 0) 60%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.16) 14%, rgb(0 0 0 / 0) 26%);
+  }
+}
+
+.copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: calc(var(--header-h) + 36px) 24px 0;
+  text-align: center;
+  isolation: isolate;
+}
+
+/* A soft shade that travels with the words, however far larger text pushes them down the picture. */
+.copy::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--header-h) + 8px) -10% -40px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.28), rgb(0 0 0 / 0));
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .copy {
+    padding-top: calc(var(--header-h) + 52px);
+  }
+}
+
+.title {
+  max-width: 18ch;
+  font-size: 2.375rem;
+  line-height: 2.75rem;
+  color: #fff;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  text-shadow: 0 1px 18px rgb(0 0 0 / 0.28);
+}
+
+@media (min-width: 1024px) {
+  .title {
+    max-width: 22ch;
+    font-size: 3.75rem;
+    line-height: 4rem;
+  }
+}
+
+.line {
+  margin-top: 4px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 1px 14px rgb(0 0 0 / 0.35);
+}
+
+@media (min-width: 1024px) {
+  .line {
+    margin-top: 8px;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* The maker and the proof, quiet, under the promise: who is behind this, in one glance. */
+.proof {
+  margin-top: 10px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.4);
+  text-wrap: balance;
+}
+
+/* The line wraps between phrases, and inside one only when a phrase is wider than the screen. */
+.phrase {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Real spaces either side of the dot: the places where the line is allowed to break. */
+.dot {
+  word-spacing: 0.35em;
+  opacity: 0.7;
+}
+
+/* On a phone the three facts would wrap with a dot starting the second line: one fact to a line instead. */
+@media (max-width: 559px) {
+  .proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+
+  .dot {
+    display: none;
+  }
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 16px;
+}
+
+.ctas > a {
+  flex: 1 1 128px;
+  padding-inline: 12px;
+}
+
+@media (min-width: 768px) {
+  .ctas {
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .ctas > a {
+    flex: 0 0 200px;
+  }
+}
+
+/*
+ * The small print sits on its own soft pill, so it reads on any photograph. It is part of the slide's
+ * flow, pushed to the foot just above the slide marks, so the headline can never run into it.
+ */
+.note {
+  position: relative;
+  align-self: center;
+  max-width: calc(100% - 48px);
+  margin-top: auto;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: #fff;
+}
+
+.controls {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  translate: -50% 0;
+}
+
+.tabs {
+  display: flex;
+}
+
+/* Each mark is an 8 px dot inside a 24 px target. */
+.tab {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.tab::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.5;
+  transition: opacity 0.3s var(--ease);
+}
+
+.tab[aria-selected="true"]::before {
+  opacity: 1;
+}
+
+.pause {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.pause svg {
+  width: 16px;
+  height: 16px;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  opacity: 0;
+  translate: 0 -50%;
+  transition:
+    opacity 0.3s var(--ease),
+    background-color 0.3s var(--ease);
+}
+
+.prev {
+  left: var(--gutter);
+}
+
+.next {
+  right: var(--gutter);
+}
+
+.hero:hover .arrow,
+.arrow:focus-visible {
+  opacity: 1;
+}
+
+.arrow:hover {
+  background: rgb(255 255 255 / 0.3);
+}
+
+@media (hover: none) {
+  .arrow {
+    display: none;
+  }
+}
+
+/* Without scripts the first slide simply stays; controls that cannot work are not shown. */
+:global(html:not(.js)) .controls,
+:global(html:not(.js)) .arrow {
+  display: none;
+}

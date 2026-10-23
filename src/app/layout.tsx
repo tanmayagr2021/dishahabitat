@@ -1,49 +1,36 @@
 import type { Metadata, Viewport } from "next";
+import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { SiteFooter } from "@/components/showroom/SiteFooter";
+import { SiteHeader } from "@/components/showroom/SiteHeader";
 import { indexing, siteUrl } from "@/lib/launch";
-import { Caveat, Hanken_Grotesk, Newsreader } from "next/font/google";
-import { Header } from "@/components/Header";
-import { Intro } from "@/components/Intro";
-import { Footer } from "@/components/Footer";
-import { RevealObserver } from "@/components/RevealObserver";
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { ActionDock } from "@/components/ActionDock";
-import { Cursor } from "@/components/Cursor";
-import { MessageComposer } from "@/components/MessageComposer";
-import { Diniee } from "@/components/Diniee";
-import "./globals.css";
 import { company } from "@/lib/site";
+import "./globals.css";
 
-/* Headlines: Newsreader, an editorial serif with optical sizes and a true italic. */
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
-  display: "swap",
-});
-
-/* Text, labels and figures: Hanken Grotesk, a calm grotesque with clear numerals and ₹. */
+/* Text and controls: Hanken Grotesk, as plain as tesla.com's own face. */
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["Helvetica Neue", "Arial", "sans-serif"],
 });
 
-/* A hand for the note card in "Our approach". */
-const caveat = Caveat({
-  variable: "--font-caveat",
+/* Headlines only: Newsreader, Disha's display serif. One static weight, so it never slows the first picture. */
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
+  weight: "400",
   display: "swap",
+  fallback: ["Georgia", "serif"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Disha Habitat | Come home to mindful living spaces",
+    default: "Disha Habitat | Homes in East Bengaluru",
     template: "%s · Disha Habitat",
   },
   description:
-    "Since 2014, Disha Habitat has built five residential communities across East Bengaluru for more than 1,000 families. Come home to mindful living spaces.",
+    "Pursuit of the Elements, now selling in Gunjur, and 1,102 homes handed over across five Disha Habitat communities in East Bengaluru since 2014.",
   openGraph: {
     type: "website",
     siteName: "Disha Habitat",
@@ -55,19 +42,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08160f",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
 };
 
-/*
- * Runs before paint:
- *  1. marks the page for scroll reveals (removed after 3s if the app never hydrates);
- *  2. picks the hero photograph for the time of day in Bengaluru (IST);
- *  3. decides whether the logo film plays: once per visit, on whichever page the visitor arrives
- *     at, in about two and a half seconds (never with reduced motion, data saver or a 2G/3G connection; `?nointro` skips it for automated
- *     checks). It autoplays from the HTML.
- */
 /* What search engines read about the company: published facts only (lib/site.ts). */
 const organisation = {
   "@context": "https://schema.org",
@@ -90,44 +69,23 @@ const organisation = {
   sameAs: company.socials.map((s) => s.href),
 };
 
-const bootstrap = `(function(){var d=document.documentElement;d.classList.add('js-reveal');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js-reveal')},3000);try{var h=Number(new Intl.DateTimeFormat('en-GB',{hour:'numeric',hourCycle:'h23',timeZone:'Asia/Kolkata'}).format(new Date()));d.dataset.daypart=h>=6&&h<16?'day':h>=16&&h<19?'dusk':'night'}catch(e){}try{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;var skip=/[?&]nointro/.test(location.search);var seen=sessionStorage.getItem('disha-intro');var c=navigator.connection;var slow=!!(c&&(c.saveData||/(^|-)2g|3g/.test(c.effectiveType||'')));d.dataset.intro=(!rm&&!skip&&!seen&&!slow)?'on':'off'}catch(e){d.dataset.intro='off'}setTimeout(function(){if(d.dataset.intro==='on')d.dataset.intro='off'},6500);})();`;
+/* Marks that scripts run, before the first paint, so controls that need them only show when they work. */
+const bootstrap = "document.documentElement.classList.add('js')";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en-IN"
-      className={`${newsreader.variable} ${hanken.variable} ${caveat.variable} antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="flex min-h-svh flex-col">
-        {/* Runs as the HTML is parsed, before anything paints (a plain inline script; Next's
-            beforeInteractive scripts only run once the app boots, which is too late here). */}
+    <html lang="en-IN" className={`${hanken.variable} ${newsreader.variable}`} suppressHydrationWarning>
+      <head>
         <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
-        <a
-          href="#main"
-          className="sr-only z-[100] rounded-full bg-ink px-5 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
-        >
+      </head>
+      <body>
+        <a className="skip" href="#main">
           Skip to content
         </a>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organisation) }} />
-        <Intro />
-        {/* The logo film downloads only when it will play (first visit, motion allowed): about 2 MB saved on every other visit. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var v=document.querySelector('.intro video');if(v&&document.documentElement.dataset.intro==='on'&&!v.getAttribute('src'))v.src=v.dataset.src})();`,
-          }}
-        />
-        <Header />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer />
-        <RevealObserver />
-        <SmoothScroll />
-        <ActionDock />
-        <Cursor />
-        <MessageComposer />
-        <Diniee />
+        <SiteHeader />
+        <main id="main">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

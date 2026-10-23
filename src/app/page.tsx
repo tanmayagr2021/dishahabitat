@@ -1,42 +1,57 @@
+import { CommunityCard, LifeCard } from "@/components/showroom/Cards";
+import { CardCarousel } from "@/components/showroom/CardCarousel";
+import { ClosingCta } from "@/components/showroom/ClosingCta";
+import { CommunitiesRow } from "@/components/showroom/CommunitiesRow";
+import { Hero } from "@/components/showroom/Hero";
+import { PromoGrid } from "@/components/showroom/PromoGrid";
+import { ProofPanel } from "@/components/showroom/ProofPanel";
 import type { Metadata } from "next";
+import { communities, heroSlides, life, rows } from "@/lib/content";
 import { pageMeta } from "@/lib/launch";
-import { Hero } from "@/components/home/Hero";
-import { BuyerNeeds } from "@/components/home/BuyerNeeds";
-import { Developments } from "@/components/home/Developments";
-import { Marquee } from "@/components/home/Marquee";
-import { RecordSection } from "@/components/home/RecordSection";
-import { DayAtDisha } from "@/components/home/DayAtDisha";
-import { HomeownersSpeak } from "@/components/home/HomeownersSpeak";
-import { CtaBand } from "@/components/home/CtaBand";
 
-/*
- * The home page follows the buyer's questions, not the company's org chart
- * (docs/RESEARCH-BRIEF.md): who are you and why should I care (hero, with proof in view) →
- * what I'm looking for, answered (BuyerNeeds) → what can I buy (Developments) → will you deliver
- * (RecordSection) → what is life like there (DayAtDisha, HomeownersSpeak) → meet the people (CtaBand).
- * Each section slides over the one before it (.layer).
- */
 export const metadata: Metadata = {
   ...pageMeta({
-    title: "Disha Habitat | Come home to mindful living spaces",
+    title: "Disha Habitat | Homes in East Bengaluru",
     description:
-      "Since 2014, Disha Habitat has built five residential communities across East Bengaluru. Pursuit of the Elements is selling now in Gunjur.",
+      "Pursuit of the Elements, now selling in Gunjur, and 1,102 homes handed over across five Disha Habitat communities in East Bengaluru since 2014.",
     path: "/",
   }),
-  title: { absolute: "Disha Habitat | Come home to mindful living spaces" },
+  title: { absolute: "Disha Habitat | Homes in East Bengaluru" },
 };
 
-export default function HomePage() {
+/*
+ * The homepage follows tesla.com's section by section: hero carousel, a proof panel with a film, a
+ * row of large cards (here with the communities map beside them), two grey cards, a second row of
+ * cards, then one clear next step.
+ */
+export default function Home() {
   return (
     <>
-      <Hero />
-      <BuyerNeeds />
-      <Developments />
-      <Marquee />
-      <RecordSection />
-      <DayAtDisha />
-      <HomeownersSpeak />
-      <CtaBand />
+      <h1 className="sr-only">Disha Habitat: Pursuit of the Elements, and five communities in East Bengaluru</h1>
+      <Hero slides={heroSlides} />
+      <ProofPanel />
+      <CommunitiesRow
+        title={rows.communities.title}
+        line={rows.communities.line}
+        items={communities.map(({ slug, name, place }) => ({ slug, name, place }))}
+      >
+        {communities.map((c) => (
+          <CommunityCard key={c.slug} c={c} />
+        ))}
+      </CommunitiesRow>
+      <PromoGrid />
+      <CardCarousel
+        title={rows.life.title}
+        line={rows.life.line}
+        link={rows.life.link}
+        keyboardScroll
+        names={life.map((l) => l.name)}
+      >
+        {life.map((item) => (
+          <LifeCard key={item.name} item={item} />
+        ))}
+      </CardCarousel>
+      <ClosingCta />
     </>
   );
 }

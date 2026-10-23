@@ -1,0 +1,48 @@
+.intro {
+  padding: 40px var(--gutter) 8px;
+  max-width: var(--page-max);
+}
+
+@media (min-width: 768px) {
+  .intro {
+    padding-top: 72px;
+  }
+}
+
+.above {
+  margin-bottom: 16px;
+}
+
+.title {
+  max-width: 20ch;
+  font-size: 2.5rem;
+  line-height: 2.875rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 4rem;
+    line-height: 4.25rem;
+  }
+}
+
+.line {
+  max-width: 42rem;
+  margin-top: 16px;
+  font-size: 1.0625rem;
+  line-height: 1.625rem;
+  color: var(--text-2);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.ctas > :global(.btn) {
+  min-width: 180px;
+}

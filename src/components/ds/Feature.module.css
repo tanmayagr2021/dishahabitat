@@ -1,0 +1,78 @@
+.feature {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .feature {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 64px;
+  }
+
+  .feature[data-ratio="wide"] {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .feature[data-reverse] .media {
+    order: 2;
+  }
+
+  .feature[data-reverse][data-ratio="wide"] {
+    grid-template-columns: 2fr 3fr;
+  }
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.img {
+  object-fit: cover;
+  object-position: var(--pos);
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+/* The words: a heading in the serif, paragraphs at reading size, then any buttons or links. */
+.body {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  max-width: 34rem;
+  font-size: 1rem;
+  line-height: 1.625rem;
+  color: var(--text);
+}
+
+.body :global(h2),
+.body :global(h3) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-size: 2rem;
+  line-height: 2.375rem;
+  color: var(--ink);
+}
+
+@media (min-width: 1024px) {
+  .body :global(h2),
+  .body :global(h3) {
+    font-size: 2.5rem;
+    line-height: 2.875rem;
+  }
+}

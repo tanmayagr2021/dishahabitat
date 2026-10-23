@@ -1,0 +1,215 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-width: 0;
+}
+
+/* The first picture leads: the full width on a phone, two columns and two rows on a computer. */
+.grid[data-layout="mosaic"] .tile:first-child {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 900px) {
+  .grid[data-layout="mosaic"] .tile:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+}
+
+.trigger {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  text-align: left;
+}
+
+.img {
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+
+.plan {
+  object-fit: contain;
+  padding: 12px;
+  background: #fff;
+}
+
+.trigger:hover .img {
+  transform: scale(1.03);
+}
+
+.tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+/* The caption shows on hover or keyboard focus, over a soft shade at the foot of the picture. */
+.caption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 40px 14px 12px;
+  background: linear-gradient(0deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
+  color: #fff;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+
+.trigger:hover .caption,
+.trigger:focus-visible .caption {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .caption {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.viewer {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(10 11 13 / 0.96);
+  color: #fff;
+}
+
+.viewer::backdrop {
+  background: rgb(0 0 0 / 0.7);
+}
+
+.viewer :focus-visible {
+  outline-color: #fff;
+}
+
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--gutter);
+}
+
+.count {
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+  transition: background-color 0.3s var(--ease);
+}
+
+.round:hover {
+  background: rgb(255 255 255 / 0.24);
+}
+
+.figure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 var(--gutter);
+}
+
+@media (min-width: 900px) {
+  .figure {
+    padding: 0 88px;
+  }
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.full {
+  object-fit: contain;
+}
+
+.figcaption {
+  padding: 16px 0 20px;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.figcaption span {
+  color: rgb(255 255 255 / 0.6);
+}
+
+.arrows {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 24px;
+}
+
+@media (min-width: 900px) {
+  .arrows {
+    position: absolute;
+    inset: 50% 24px auto;
+    justify-content: space-between;
+    padding: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .arrows .round {
+    pointer-events: auto;
+  }
+}

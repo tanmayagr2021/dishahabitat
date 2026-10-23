@@ -1,0 +1,32 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tag[data-tone="brass"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tag[data-tone="grey"] {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.tag[data-tone="ink"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.tag[data-tone="photo"] {
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-weight: 400;
+}
