@@ -1,0 +1,229 @@
+.notice {
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.tabs a {
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.tabs a[aria-current="page"] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+.linkButton {
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.counts a {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+.counts a[aria-current] {
+  box-shadow: inset 0 0 0 2px var(--ink);
+  background: #fff;
+}
+
+.countN {
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.filters label {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 10rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.filters select,
+.statusForm select,
+.statusForm input {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.statusForm select,
+.statusForm input {
+  background: var(--surface);
+}
+
+.total {
+  margin: 20px 0 8px;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+
+.list {
+  display: grid;
+  gap: 12px;
+}
+
+.item {
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.itemHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.when {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+.message {
+  font-size: 1.0625rem;
+  line-height: 1.625rem;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.where {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.path {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.quote {
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.who {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.details div {
+  display: flex;
+  gap: 6px;
+}
+
+.details dt {
+  color: var(--text-2);
+}
+
+.details dd {
+  margin: 0;
+  color: var(--ink);
+}
+
+.itemFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.statusForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusForm input {
+  flex: 1 1 14rem;
+  min-width: 0;
+}

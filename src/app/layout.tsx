@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { FeedbackWidget } from "@/components/feedback/FeedbackWidget";
 import { SiteFooter } from "@/components/showroom/SiteFooter";
 import { SiteHeader } from "@/components/showroom/SiteHeader";
 import { indexing, siteUrl } from "@/lib/launch";
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        <FeedbackWidget />
       </body>
     </html>
   );

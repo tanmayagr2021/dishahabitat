@@ -42,3 +42,8 @@ next-env.d.ts
 
 # local stand-in for the database in development (feedback, leads)
 /.data/
+
+# client documents and media, kept out of git (share via drive)
+*.docx
+*.mp4
+/documents/

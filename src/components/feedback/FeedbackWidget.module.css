@@ -1,0 +1,494 @@
+/*
+ * The Feedback tab: near-black with a white rim, so it shows on white pages and on photographs alike.
+ * On a computer it sits on the right edge, half way down; on a phone, a pill at the bottom left
+ * (the bottom right belongs to Diniee).
+ */
+.tab {
+  position: fixed;
+  z-index: 60;
+  left: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 6px 24px rgb(0 0 0 / 0.28);
+  transition:
+    background-color 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+.tab:hover {
+  background: #2c2f36;
+}
+
+.tab:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.tabIcon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  .tab {
+    left: auto;
+    right: 0;
+    bottom: auto;
+    top: 50%;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+    padding: 16px 12px;
+    border-radius: 8px 0 0 8px;
+    transform: translateY(-50%);
+  }
+
+  .tab span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .tab:hover {
+    transform: translate(-3px, -50%);
+  }
+}
+
+/* While pointing: a crosshair everywhere, and nothing on the page reacts to hover underneath. */
+:global(html[data-feedback-pointing]),
+:global(html[data-feedback-pointing] *) {
+  cursor: crosshair !important;
+}
+
+:global(html[data-feedback-pointing] [data-feedback-ui]),
+:global(html[data-feedback-pointing] [data-feedback-ui] *) {
+  cursor: auto !important;
+}
+
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+}
+
+/* The outline: brass with a soft brass wash, its name on a label above (or below, near the top). */
+.box {
+  position: absolute;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 4px rgb(255 255 255 / 0.85);
+  background: rgb(198 164 107 / 0.14);
+  transition:
+    top 0.12s var(--ease),
+    left 0.12s var(--ease),
+    width 0.12s var(--ease),
+    height 0.12s var(--ease);
+}
+
+.box[data-mode="writing"] {
+  background: rgb(198 164 107 / 0.08);
+}
+
+.box[data-mode="showing"] {
+  box-shadow:
+    0 0 0 3px var(--accent),
+    0 0 0 6px rgb(255 255 255 / 0.9),
+    0 0 0 9999px rgb(0 0 0 / 0.35);
+  background: transparent;
+}
+
+.boxLabel {
+  position: absolute;
+  left: -2px;
+  bottom: calc(100% + 6px);
+  max-width: min(480px, 90vw);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.boxLabel[data-below] {
+  top: calc(100% + 6px);
+  bottom: auto;
+}
+
+/* The instruction bar while pointing: at the top, out of the way, always readable. */
+.bar {
+  position: fixed;
+  z-index: 80;
+  top: 12px;
+  left: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  width: min(760px, calc(100vw - 24px));
+  padding: 14px 14px 14px 20px;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 0.3);
+  transform: translateX(-50%);
+}
+
+.bar :focus-visible {
+  outline-color: #fff;
+}
+
+.barText {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.barTitle {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+}
+
+.barHow {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: rgb(255 255 255 / 0.78);
+}
+
+.onlyCoarse {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .onlyCoarse {
+    display: inline;
+  }
+
+  .onlyFine {
+    display: none;
+  }
+}
+
+.barActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.close,
+.closeDark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+  cursor: pointer;
+}
+
+.closeDark {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.close svg,
+.closeDark svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* The form: a white panel on the right of a computer screen, a sheet from the bottom on a phone. */
+.panel {
+  position: fixed;
+  z-index: 80;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-height: min(88dvh, 720px);
+  overflow-y: auto;
+  padding: 20px 20px 24px;
+  border-radius: 12px 12px 0 0;
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 -10px 40px rgb(0 0 0 / 0.22);
+  overscroll-behavior: contain;
+}
+
+@media (min-width: 640px) {
+  .panel {
+    right: 24px;
+    bottom: 24px;
+    left: auto;
+    width: 420px;
+    border-radius: var(--radius-card);
+    box-shadow: 0 16px 60px rgb(0 0 0 / 0.25);
+  }
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  color: var(--ink);
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.context {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.contextLabel {
+  grid-column: 1;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--text-2);
+}
+
+.contextValue {
+  grid-column: 1;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.change {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.kinds {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.legend {
+  display: block;
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* A chosen kind turns ink with white words, and a tick-like ring: more than a colour change. */
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease);
+}
+
+.chip:hover {
+  background: var(--surface-2);
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip[data-checked] {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ink);
+}
+
+.chip:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.field {
+  display: grid;
+  min-width: 0;
+}
+
+.control {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  resize: vertical;
+}
+
+.control:focus-visible {
+  outline: none;
+  background: #fff;
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.control[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 2px var(--error);
+}
+
+.more summary {
+  min-height: 32px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.moreFields {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.error {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--error);
+}
+
+.small {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.small a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions > :global(.btn) {
+  flex: 1 1 140px;
+}
+
+.sent {
+  display: grid;
+  gap: 18px;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+}
+
+/* After a reviewer opens a note's link: a bar explaining the outlined part. */
+.showBar {
+  position: fixed;
+  z-index: 80;
+  left: 50%;
+  bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  width: min(720px, calc(100vw - 24px));
+  padding: 12px 12px 12px 18px;
+  border-radius: var(--radius-card);
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transform: translateX(-50%);
+  box-shadow: 0 10px 40px rgb(0 0 0 / 0.3);
+}
+
+.showBar span {
+  flex: 1 1 240px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    transition: none;
+  }
+}

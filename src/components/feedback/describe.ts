@@ -139,10 +139,12 @@ export function describe(el: Element): Described {
   const region = regionOf(el);
   const name = nameOf(el);
   const r = el.getBoundingClientRect();
-  const sameAsRegion = region?.el === el;
+  const word = KIND_WORD[kind] ?? "Part";
+  // When the part carries the section's own name (its heading, or the section itself), the kind says enough.
+  const echoes = !name || region?.el === el || name.toLowerCase() === region?.name.toLowerCase();
   return {
     section: region?.name,
-    target_label: sameAsRegion ? `${KIND_WORD[kind] ?? "Part"}: ${region?.name}` : `${KIND_WORD[kind] ?? "Part"}${name ? `: ${name}` : ""}`,
+    target_label: echoes ? (region?.el === el ? "The whole section" : word) : `${word}: ${name}`,
     target_kind: kind,
     target_text: text(el, 600) || undefined,
     selector: selectorFor(el),
