@@ -26,9 +26,49 @@
 
 .bar span {
   display: block;
+  width: 100%;
   height: 100%;
   background: var(--accent);
-  transition: width 0.5s var(--ease);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease);
+}
+
+/* Once all five are understood, a calm line and the one action. It opens in place and fades in. */
+.ready {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.5s var(--ease),
+    opacity 0.6s var(--ease),
+    visibility 0s linear 0.6s;
+}
+
+.ready[data-show] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.readyInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  min-height: 0;
+  /* Room for a focus ring on the button, which the clip would otherwise cut off. */
+  margin: -4px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.readyInner p {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: var(--accent-ink);
 }
 
 .points {
@@ -94,7 +134,7 @@
 
 .head {
   display: flex;
-  gap: 8px;
+  gap: 16px;
 }
 
 .title {
@@ -198,18 +238,26 @@
   transition: background-color 0.2s var(--ease);
 }
 
-.box::after {
-  content: "";
+.box svg {
   position: absolute;
-  left: 8px;
-  top: 4px;
-  width: 6px;
-  height: 11px;
-  border: solid #fff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* A brass stroke that draws itself in. */
+.box path {
+  stroke: var(--accent);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
   opacity: 0;
-  transition: opacity 0.2s var(--ease);
+  transition:
+    stroke-dashoffset 0.28s var(--ease) 0.06s,
+    opacity 0.01s linear 0.06s;
 }
 
 input:checked + .box,
@@ -218,9 +266,23 @@ input:checked ~ .box {
   box-shadow: none;
 }
 
-input:checked + .box::after,
-input:checked ~ .box::after {
+input:checked + .box path,
+input:checked ~ .box path {
+  stroke-dashoffset: 0;
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  input:checked + .box,
+  input:checked ~ .box {
+    animation: pop 0.18s var(--ease);
+  }
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.12);
+  }
 }
 
 input:focus-visible ~ .box,
@@ -234,10 +296,6 @@ input:focus-visible + .box {
   text-decoration: line-through;
 }
 
-.done {
-  margin-top: 32px;
-}
-
 .printNote {
   display: none;
   margin-top: 16px;
@@ -248,11 +306,43 @@ input:focus-visible + .box {
   .actions,
   .notes,
   .more,
-  .done {
+  .ready {
     display: none;
   }
 
   .printNote {
     display: block;
+  }
+
+  /* Black on white, and ticks that show without background colours. */
+  .item {
+    break-inside: avoid;
+    padding: 16px 0;
+  }
+
+  .count,
+  .points,
+  .step,
+  .summary,
+  .title h2,
+  .item[data-done] .title h2,
+  .check,
+  .check input:checked ~ span:last-child {
+    color: #000;
+  }
+
+  .bar {
+    display: none;
+  }
+
+  .box,
+  input:checked + .box,
+  input:checked ~ .box {
+    background: #fff;
+    box-shadow: inset 0 0 0 1.5px #000;
+  }
+
+  .box path {
+    stroke: #000;
   }
 }

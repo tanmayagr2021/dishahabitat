@@ -5,16 +5,9 @@
 
 .quote {
   margin: 0;
-  font-size: 1.75rem;
-  line-height: 2.25rem;
+  font-size: var(--display-quote);
+  line-height: var(--display-quote-lh);
   color: var(--ink);
-}
-
-@media (min-width: 1024px) {
-  .quote {
-    font-size: 2.5rem;
-    line-height: 3.125rem;
-  }
 }
 
 .caption {

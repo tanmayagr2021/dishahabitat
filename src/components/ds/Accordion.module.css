@@ -6,7 +6,18 @@
   border-bottom: 1px solid var(--line);
 }
 
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
 .summary {
+  width: 100%;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,8 +28,8 @@
   list-style: none;
 }
 
-.summary::-webkit-details-marker {
-  display: none;
+.summary:focus-visible {
+  outline-offset: -2px;
 }
 
 .title {
@@ -56,12 +67,37 @@
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
-.item[open] .icon::after {
+/* Open: the upright bar turns a quarter onto the flat one, leaving a minus. */
+.item[data-open] .icon::after {
   transform: translate(-50%, -50%) rotate(0deg);
 }
 
 .summary:hover .icon {
   background: var(--surface-2);
+}
+
+/* The panel grows from 0 to its natural height; the clip hides the content while it does. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.3s var(--ease),
+    visibility 0s linear 0.3s;
+}
+
+.item[data-open] .panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.clip {
+  min-height: 0;
+  /* Room for a focus ring on something inside, which the clip would otherwise cut off. */
+  margin: -4px;
+  padding: 4px;
+  overflow: hidden;
 }
 
 .body {

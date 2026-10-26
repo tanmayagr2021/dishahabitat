@@ -43,17 +43,12 @@
 
 .img {
   object-fit: cover;
-  transition: transform 1.2s var(--ease);
 }
 
 .plan {
   object-fit: contain;
   padding: 12px;
   background: #fff;
-}
-
-.trigger:hover .img {
-  transform: scale(1.03);
 }
 
 .tag {
@@ -172,6 +167,7 @@
 
 .stage {
   position: relative;
+  touch-action: pan-y pinch-zoom;
   flex: 1;
   min-height: 0;
 }
@@ -211,5 +207,47 @@
 
   .arrows .round {
     pointer-events: auto;
+  }
+}
+
+/* The page behind the open viewer does not scroll. */
+:global(html):has(.viewer[open]) {
+  overflow: hidden;
+}
+
+/* The viewer fades in over 250 ms while the picture settles from 98%, and leaves the same way. */
+@media (prefers-reduced-motion: no-preference) {
+  .viewer,
+  .viewer::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.25s var(--ease),
+      display 0.25s allow-discrete,
+      overlay 0.25s allow-discrete;
+  }
+
+  .viewer[open],
+  .viewer[open]::backdrop {
+    opacity: 1;
+  }
+
+  .frame {
+    transform: scale(0.98);
+    transition: transform 0.25s var(--ease);
+  }
+
+  .viewer[open] .frame {
+    transform: none;
+  }
+
+  @starting-style {
+    .viewer[open],
+    .viewer[open]::backdrop {
+      opacity: 0;
+    }
+
+    .viewer[open] .frame {
+      transform: scale(0.98);
+    }
   }
 }

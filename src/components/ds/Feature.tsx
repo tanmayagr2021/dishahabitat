@@ -18,7 +18,7 @@ type Props = {
 /* A picture and its words side by side, as tesla.com introduces each feature; stacked on a phone. */
 export function Feature({ image, tag, reverse, ratio = "half", children }: Props) {
   return (
-    <div className={s.feature} data-reverse={reverse || undefined} data-ratio={ratio}>
+    <div className={`reveal ${s.feature}`} data-reverse={reverse || undefined} data-ratio={ratio}>
       <div className={s.media}>
         <Image
           src={image.src}

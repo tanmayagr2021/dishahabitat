@@ -2,74 +2,48 @@
   scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
-/* The idea: the five elements large on the left, the figures on the right. */
-.idea {
+/* At a glance: the facts and the towers side by side, level at the top and the foot. */
+.glance {
   display: grid;
-  gap: 40px;
+  gap: 48px;
 }
 
-@media (min-width: 1024px) {
-  .idea {
-    grid-template-columns: 7fr 5fr;
+@media (min-width: 900px) {
+  .glance {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 80px;
-    align-items: start;
   }
 }
 
-.ideaText {
-  display: grid;
-  gap: 16px;
+.col {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
 
-.elements {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 24px;
-  font-size: 2.5rem;
-  line-height: 3rem;
-  color: var(--ink);
+.col > :global(.reveal) {
+  flex: none;
 }
 
-@media (min-width: 1024px) {
-  .elements {
-    font-size: 3.5rem;
-    line-height: 4rem;
-  }
-}
-
-.copy {
-  max-width: 38rem;
-  font-size: 1.0625rem;
-  line-height: 1.75rem;
-  color: var(--text);
+.colFoot {
+  display: grid;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 24px;
 }
 
 .price {
-  margin: 20px 0 16px;
+  max-width: 34rem;
   font-size: 0.9375rem;
   line-height: 1.5rem;
   color: var(--text-2);
 }
 
-/* The homes: heading and the plans button on the left, the towers listed on the right. */
-.homes {
-  display: grid;
-  gap: 32px;
-}
-
-@media (min-width: 1024px) {
-  .homes {
-    grid-template-columns: 5fr 6fr;
-    gap: 80px;
-    align-items: start;
-  }
-}
-
-.homesText {
-  display: grid;
-  justify-items: start;
-  min-width: 0;
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
 }
 
 .towers li {
@@ -98,6 +72,18 @@
   color: var(--text-2);
 }
 
+/* The gallery tiles lift like every other card on the site (the shared gallery has no class to hook). */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .gallery li {
+    transition: transform 0.6s var(--ease);
+  }
+
+  .gallery li:hover,
+  .gallery li:focus-within {
+    transform: translateY(-4px);
+  }
+}
+
 /* The master plan: the whole drawing, a link to the full-size file. */
 .plan {
   display: block;
@@ -112,19 +98,7 @@
   height: auto;
 }
 
-/* Amenities. */
-.amenities {
-  display: grid;
-  gap: 40px;
-}
-
-@media (min-width: 1024px) {
-  .amenities {
-    grid-template-columns: 5fr 6fr;
-    gap: 80px;
-  }
-}
-
+/* Amenities: the clubhouse in two columns, then the outdoor list across the full width. */
 .groupTitle {
   margin-bottom: 12px;
   font-size: 1.0625rem;
@@ -133,15 +107,28 @@
   color: var(--ink);
 }
 
-.list li {
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-  font-size: 0.9375rem;
-  color: var(--text);
+.outdoorTitle {
+  margin-top: 48px;
 }
 
-.list li:last-child {
+.list {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+@media (min-width: 768px) {
+  .list {
+    grid-auto-flow: column;
+    grid-template-rows: repeat(var(--rows), auto);
+    column-gap: 48px;
+  }
+}
+
+.list li {
+  padding: 14px 0;
   border-bottom: 1px solid var(--line);
+  font-size: 0.9375rem;
+  color: var(--text);
 }
 
 .pills {
@@ -154,7 +141,7 @@
 .strip {
   display: grid;
   gap: 8px 24px;
-  padding: 16px var(--gutter);
+  padding: 16px var(--edge);
   border-bottom: 1px solid var(--line);
   font-size: 0.8125rem;
   line-height: 1.25rem;
@@ -185,13 +172,6 @@
   overflow-wrap: anywhere;
 }
 
-.priceActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 24px;
-}
-
 /* Check us: three links and the award, one short block. */
 .check {
   display: grid;
@@ -202,12 +182,13 @@
   .check {
     grid-template-columns: 1fr auto;
     gap: 64px;
-    align-items: start;
+    align-items: stretch;
   }
 }
 
 .checkText {
   display: grid;
+  align-content: space-between;
   gap: 24px;
   min-width: 0;
 }

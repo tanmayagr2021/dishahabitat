@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { Fragment, ViewTransition } from "react";
 import { type Community, type Img, links } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import s from "./Cards.module.css";
@@ -23,8 +25,11 @@ function Photo({ image }: { image: Img }) {
 /* A community card: what it is top left, its name, one fact and the buttons at the foot. */
 export function CommunityCard({ c }: { c: Community }) {
   return (
-    <article className={s.card} data-tone="dark" aria-labelledby={`card-${c.slug}`}>
-      <Photo image={c.image} />
+    <article className={`${s.card} lift`} data-tone="dark" aria-labelledby={`card-${c.slug}`}>
+      {/* Named like the picture at the top of the community's own page, so a click morphs into it. */}
+      <ViewTransition name={`community-${c.slug}`} share="morph" default="none">
+        <Photo image={c.image} />
+      </ViewTransition>
       <div className={s.scrim} aria-hidden="true" />
       <div className={s.top}>
         <div>
@@ -37,17 +42,24 @@ export function CommunityCard({ c }: { c: Community }) {
         <h3 id={`card-${c.slug}`} className={`display ${s.name}`}>
           {c.name}
         </h3>
-        <p className={s.line}>{c.line}</p>
+        <p className={s.line}>
+          {c.line.split(" · ").map((part, k) => (
+            <Fragment key={part}>
+              {k > 0 && " · "}
+              <span className={s.phrase}>{part}</span>
+            </Fragment>
+          ))}
+        </p>
         <div className={s.ctas}>
           {c.ctas.map((cta) => (
-            <a
+            <Link
               key={cta.label}
               className={`btn ${cta.href === links.bookVisit ? "btn-primary" : "btn-ghost"}`}
               href={cta.href}
             >
               {cta.label}
               {cta.href !== links.bookVisit && <span className="sr-only">: {c.name}</span>}
-            </a>
+            </Link>
           ))}
         </div>
       </div>

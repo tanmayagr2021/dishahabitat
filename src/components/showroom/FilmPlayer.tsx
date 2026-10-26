@@ -6,12 +6,14 @@ import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import { PauseIcon, PlayIcon } from "./Icons";
 import s from "./ProofPanel.module.css";
 
-type Connection = { saveData?: boolean };
+type Connection = { saveData?: boolean; effectiveType?: string };
 
 /*
  * The brand film, silent and looping like tesla.com's: it loads nothing until it is on screen, plays only
- * while it is, and never starts by itself for visitors who reduce motion or save data.
+ * while it is, and never starts by itself on a phone, on a slow connection, or for visitors who reduce
+ * motion or save data. Those visitors see the still and can press play.
  */
+const PHONE = "(max-width: 767px)";
 export function FilmPlayer({ src, poster, label }: { src: string; poster: string; label: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -20,8 +22,9 @@ export function FilmPlayer({ src, poster, label }: { src: string; poster: string
 
   useEffect(() => {
     const v = video.current;
-    const saveData = (navigator as Navigator & { connection?: Connection }).connection?.saveData;
-    if (!v || !motionOk || stopped || saveData) return;
+    const conn = (navigator as Navigator & { connection?: Connection }).connection;
+    const slow = conn?.saveData || /^(slow-2g|2g|3g)$/.test(conn?.effectiveType ?? "");
+    if (!v || !motionOk || stopped || slow || matchMedia(PHONE).matches) return;
     const io = new IntersectionObserver(
       ([e]) => {
         if (e?.isIntersecting) {

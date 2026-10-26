@@ -53,14 +53,14 @@
 
 .layout {
   display: grid;
-  gap: 40px;
-  align-items: start;
+  gap: 24px;
+  align-items: stretch;
 }
 
 @media (min-width: 1100px) {
   .layout {
-    grid-template-columns: minmax(0, 1fr) 20rem;
-    gap: 64px;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: 24px;
   }
 }
 
@@ -68,15 +68,35 @@
   min-width: 0;
 }
 
+/* Same white card as the booker, same height beside it; the last link rests at the foot. */
 .places {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 32px;
+  padding: 24px 20px;
+  border-radius: var(--radius-card);
+  background: #fff;
+}
+
+@media (min-width: 768px) {
+  .places {
+    padding: 40px;
+  }
 }
 
 .places article {
   display: grid;
   justify-items: start;
   gap: 4px;
+}
+
+.places article + article {
+  padding-top: 32px;
+  border-top: 1px solid var(--surface-2);
+}
+
+.places > :last-child {
+  margin-top: auto;
 }
 
 .place {
@@ -92,6 +112,8 @@
 }
 
 .places :global(.text-link) {
+  display: inline-flex;
+  align-items: center;
   min-height: 44px;
   margin-top: 4px;
 }

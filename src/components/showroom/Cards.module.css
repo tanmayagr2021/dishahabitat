@@ -163,3 +163,8 @@
     margin-top: 24px;
   }
 }
+
+/* A line made of phrases breaks between them, never inside one. */
+.phrase {
+  display: inline-block;
+}

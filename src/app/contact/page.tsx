@@ -37,7 +37,7 @@ export default function ContactPage() {
       </PageIntro>
 
       <Section space="tight" label="Ways to reach us">
-        <ul className={s.reach}>
+        <ul className={`${s.reach} reveal-stagger`}>
           <li>
             <p className={s.label}>Call sales</p>
             <a href={elements.phone.href} className={s.value}>
@@ -70,11 +70,13 @@ export default function ContactPage() {
       </Section>
 
       <Section id="book" tone="surface" labelledBy="book-title">
-        <SectionHead
-          id="book-title"
-          title="Book a site visit"
-          line="Four short steps. Send the request from your own WhatsApp or email, and someone from Disha confirms the time with you."
-        />
+        <div className="reveal">
+          <SectionHead
+            id="book-title"
+            title="Book a site visit"
+            line="Four short steps. Send the request from your own WhatsApp or email, and someone from Disha confirms the time with you."
+          />
+        </div>
         <div className={s.layout}>
           <div className={s.booker}>
             <VisitBooker />
@@ -109,7 +111,9 @@ export default function ContactPage() {
       </Section>
 
       <Section tone="surface" labelledBy="follow-title">
-        <SectionHead id="follow-title" title="Follow along" line="Life at Disha, day to day." />
+        <div className="reveal">
+          <SectionHead id="follow-title" title="Follow along" line="Life at Disha, day to day." />
+        </div>
         <SocialCards />
       </Section>
     </>

@@ -6,6 +6,7 @@ import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
 import { buildMessage, cleanPhoneInput, mailtoUrl, parsePhone, phoneHelp, whatsappUrl } from "@/lib/messaging";
 import { projects } from "@/lib/projects";
+import { SuccessTick } from "./SuccessTick";
 import s from "./EnquiryForm.module.css";
 
 /*
@@ -107,6 +108,7 @@ export function EnquiryForm({ defaultInterest }: { defaultInterest?: string; ton
   if (submitted) {
     return (
       <div ref={successRef} tabIndex={-1} role="status" className={s.done}>
+        <SuccessTick />
         <h3 className={`display ${s.doneTitle}`}>Ready to send, {submitted}.</h3>
         <p className={s.doneLine}>This is the message you’ll send. Choose how to send it.</p>
         <p className={s.message}>{message}</p>

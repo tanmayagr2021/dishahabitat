@@ -19,21 +19,66 @@
   background: rgb(23 26 32 / 0.5);
 }
 
-.dialog[open] {
-  animation: fade 0.3s var(--ease) both;
+/* A phone gets a sheet that slides up (280 ms); a computer, a dialog that fades and scales in. */
+@media (prefers-reduced-motion: no-preference) {
+  .dialog[open] {
+    animation: pop 0.28s var(--ease) both;
+  }
+
+  .dialog[open]::backdrop {
+    animation: fade 0.28s var(--ease) both;
+  }
+
+  @media (max-width: 599px) {
+    .dialog[open] {
+      animation-name: sheet;
+    }
+  }
+
+  .done > * {
+    animation: fade 0.4s var(--ease) 0.6s both;
+  }
+
+  .done > svg {
+    animation: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes sheet {
+  from {
+    transform: translateY(100%);
+  }
 }
 
 @keyframes fade {
   from {
     opacity: 0;
-    transform: translateY(12px);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .dialog[open] {
-    animation: none;
-  }
+.done {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding-block: 8px;
+}
+
+.doneTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: var(--ink);
+}
+
+.doneLine {
+  color: var(--text-2);
 }
 
 .sheet {
@@ -119,7 +164,7 @@
   font-weight: 500;
 }
 
-.tab[aria-checked="true"] {
+.tab[aria-pressed="true"] {
   background: #fff;
   color: var(--ink);
   box-shadow: inset 0 0 0 1.5px var(--ink);

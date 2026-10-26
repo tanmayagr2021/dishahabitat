@@ -38,7 +38,7 @@ export default async function ChecklistItemPage({ params }: PageProps<"/checklis
 
       <Section width="measure" space="tight">
         <div className={s.photo}>
-          <Image src={c.image} alt="" fill sizes="(min-width: 768px) 42rem, 100vw" />
+          <Image src={c.image} alt="" fill sizes="(min-width: 768px) 42rem, 100vw" priority />
         </div>
         <div className={s.body}>
           {c.body.map((para) => (

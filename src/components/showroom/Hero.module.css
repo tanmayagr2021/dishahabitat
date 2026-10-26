@@ -345,11 +345,11 @@
 }
 
 .prev {
-  left: var(--gutter);
+  left: var(--edge);
 }
 
 .next {
-  right: var(--gutter);
+  right: var(--edge);
 }
 
 .hero:hover .arrow,
@@ -371,4 +371,61 @@
 :global(html:not(.js)) .controls,
 :global(html:not(.js)) .arrow {
   display: none;
+}
+
+/*
+ * Arrival: when a slide comes on, its words rise one after another (60 ms apart, the registration line last)
+ * and its photograph settles from a slight zoom. Only the text waits; the picture is on screen from the first
+ * paint. Nothing moves for visitors who reduce motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .slide[data-active] .title,
+  .slide[data-active] .line,
+  .slide[data-active] .proof,
+  .slide[data-active] .ctas,
+  .slide[data-active] .rera {
+    animation: arrive 0.7s var(--ease) both;
+  }
+
+  .slide[data-active] .line {
+    animation-delay: 60ms;
+  }
+
+  .slide[data-active] .proof {
+    animation-delay: 120ms;
+  }
+
+  .slide[data-active] .ctas {
+    animation-delay: 180ms;
+  }
+
+  .slide[data-active] .rera {
+    animation-delay: 420ms;
+  }
+
+  .slide[data-active] .media {
+    animation: settle 8s cubic-bezier(0.2, 0.6, 0.3, 1) both;
+  }
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes settle {
+  from {
+    transform: scale(1.06);
+  }
+
+  to {
+    transform: none;
+  }
 }

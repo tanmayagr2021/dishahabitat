@@ -43,6 +43,17 @@ const subscribe = (l: () => void) => {
   return () => listeners.delete(l);
 };
 
+/* The round tick: a brass check that draws itself when the box is ticked (the style is in the css). */
+function Tick() {
+  return (
+    <span aria-hidden className={s.box}>
+      <svg viewBox="0 0 24 24" fill="none">
+        <path pathLength="1" d="M7 12.6l3.4 3.4L17 8.6" />
+      </svg>
+    </span>
+  );
+}
+
 export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
   const raw = useSyncExternalStore(subscribe, read, () => "{}");
   const state: State = (() => {
@@ -89,7 +100,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
       <div className={s.progress}>
         <p className={s.count} aria-live="polite">
           <strong>{count}</strong> of {items.length} must-knows understood
-          {complete && <span> · You’re ready to see a home.</span>}
+          {complete && <span className="sr-only">{" You’re ready to visit."}</span>}
         </p>
         {points > 0 && (
           <p className={s.points}>
@@ -97,7 +108,15 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
           </p>
         )}
         <div className={s.bar} role="progressbar" aria-label="Checklist progress" aria-valuemin={0} aria-valuemax={items.length} aria-valuenow={count}>
-          <span style={{ width: `${(count / items.length) * 100}%` }} />
+          <span style={{ transform: `scaleX(${count / items.length})` }} />
+        </div>
+        <div className={s.ready} data-show={complete || undefined} inert={!complete}>
+          <div className={s.readyInner}>
+            <p>You’re ready to visit.</p>
+            <Link href={links.bookVisit} className="btn btn-primary">
+              Book a visit
+            </Link>
+          </div>
         </div>
         <div className={s.actions}>
           <a href={`https://wa.me/?text=${encodeURIComponent(summary)}`} target="_blank" rel="noopener noreferrer" className="btn btn-soft">
@@ -150,7 +169,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
                 <label className={s.tick}>
                   <input type="checkbox" checked={d} onChange={() => toggle(c.slug)} />
                   <span className="sr-only">{c.title} understood</span>
-                  <span aria-hidden className={s.box} />
+                  <Tick />
                 </label>
                 <div className={s.title}>
                   <p className={s.step}>Must-know {i + 1}</p>
@@ -166,7 +185,7 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
                   {c.checks.map((q, k) => (
                     <label key={q} className={s.check}>
                       <input type="checkbox" checked={Boolean(state[`${c.slug}:${k}`])} onChange={() => toggleCheck(c.slug, k, c.checks!.length)} />
-                      <span aria-hidden className={s.box} />
+                      <Tick />
                       <span>{q}</span>
                     </label>
                   ))}
@@ -180,13 +199,6 @@ export function ChecklistTool({ items }: { items: ChecklistItem[] }) {
         })}
       </ol>
 
-      {complete && (
-        <p className={s.done}>
-          <Link href={links.bookVisit} className="btn btn-primary">
-            Book a visit
-          </Link>
-        </p>
-      )}
       <p className={s.printNote}>From the homebuyer’s checklist at dishahabitat.com/checklist. Ticked points are marked.</p>
     </div>
   );

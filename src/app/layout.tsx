@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ViewTransition } from "react";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { MessageComposer } from "@/components/MessageComposer";
@@ -87,9 +88,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organisation) }} />
         <SiteHeader />
-        <main id="main">{children}</main>
+        <main id="main">
+          {/* Route changes cross-fade; named elements (a community photograph) morph between pages. */}
+          <ViewTransition>{children}</ViewTransition>
+        </main>
         <SiteFooter />
-        <FeedbackWidget />
+        {/* Reviewers' notes need somewhere to be stored: off in production until the database is connected. */}
+        {process.env.NEXT_PUBLIC_FEEDBACK === "on" || process.env.NODE_ENV !== "production" ? <FeedbackWidget /> : null}
         <MessageComposer />
         <ConsentBanner />
       </body>

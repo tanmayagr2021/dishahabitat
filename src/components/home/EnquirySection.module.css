@@ -7,7 +7,24 @@
   .grid {
     grid-template-columns: 5fr 6fr;
     gap: 80px;
-    align-items: start;
+    align-items: stretch;
+  }
+}
+
+/* The words sit level with the top of the form, the ways to reach us level with its foot. */
+.text {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .text {
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .reach {
+    align-self: end;
   }
 }
 

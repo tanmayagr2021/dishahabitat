@@ -75,6 +75,20 @@
   min-width: 180px;
 }
 
+/* The message and buttons wait for the tick to finish drawing. */
+@media (prefers-reduced-motion: no-preference) {
+  .message,
+  .doneActions {
+    animation: fade 0.4s var(--ease) 0.7s both;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
 .again {
   min-height: 44px;
   border: 0;

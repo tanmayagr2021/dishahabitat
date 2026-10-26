@@ -1,3 +1,61 @@
+/* The project on sale: the picture takes the larger share; the name sits level with its top, the buttons with its foot. */
+.feature {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .feature {
+    grid-template-columns: 2fr 3fr;
+    gap: 64px;
+  }
+
+  .featureMedia {
+    order: 2;
+  }
+}
+
+.featureMedia {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.featureImg {
+  object-fit: cover;
+  object-position: var(--pos);
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.72);
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.featureBody {
+  display: grid;
+  gap: 24px;
+  align-content: space-between;
+  min-width: 0;
+  max-width: 34rem;
+  color: var(--text);
+  line-height: 1.625rem;
+}
+
+.featureHead,
+.featureFoot {
+  display: grid;
+  gap: 16px;
+}
+
 .featureName {
   font-size: 2.25rem;
   line-height: 2.5rem;
@@ -37,7 +95,9 @@
 
 .card {
   display: grid;
+  grid-template-rows: auto 1fr;
   gap: 16px;
+  height: 100%;
   color: inherit;
 }
 
@@ -51,16 +111,12 @@
 
 .img {
   object-fit: cover;
-  transition: transform 1.2s var(--ease);
-}
-
-.card:hover .img {
-  transform: scale(1.03);
 }
 
 .body {
   display: grid;
   gap: 4px;
+  align-content: start;
   justify-items: start;
 }
 
@@ -83,14 +139,4 @@
 
 .body :global(.text-link) {
   margin-top: 8px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .img {
-    transition: none;
-  }
-
-  .card:hover .img {
-    transform: none;
-  }
 }

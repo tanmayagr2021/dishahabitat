@@ -1,14 +1,14 @@
 /*
- * A quiet bar at the bottom. On a computer it sits bottom left (the Feedback tab is on the right
- * edge). On a phone it floats just above the Feedback pill (bottom left, 44 px high) so neither
- * covers the other, and clear of the phone's own bottom edge.
+ * A quiet bar at the bottom. On a phone it sits just above the bottom edge (and above the Feedback
+ * pill when that is switched on); on a computer it is one slim row. While it is showing, the page
+ * adds scroll padding for it (below), so a focused field or button is never left under the bar.
  */
 .bar {
   position: fixed;
   z-index: 55;
   left: 12px;
   right: 12px;
-  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -20,23 +20,61 @@
   box-shadow:
     0 0 0 1px var(--line),
     0 12px 40px rgb(23 26 32 / 0.16);
-  animation: rise 0.45s var(--ease) both;
+  animation: up 0.4s var(--ease) 0.3s both;
+}
+
+.bar[data-leaving] {
+  animation: down 0.3s var(--ease) both;
+  pointer-events: none;
+}
+
+.bar[data-feedback] {
+  bottom: calc(68px + env(safe-area-inset-bottom, 0px));
 }
 
 @media (min-width: 900px) and (hover: hover) {
-  .bar {
+  .bar,
+  .bar[data-feedback] {
     left: var(--gutter);
     right: auto;
-    bottom: 24px;
-    width: min(34rem, calc(100vw - 2 * var(--gutter) - 56px));
-    padding: 20px;
+    bottom: 20px;
+    width: min(46rem, calc(100vw - 2 * var(--gutter) - 56px));
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 20px;
+  }
+  .choose {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .actions > :global(.btn) {
+    flex: none;
   }
 }
 
-@keyframes rise {
+:global(html[data-consent-bar]) {
+  scroll-padding-bottom: calc(var(--consent-h, 0px) + 32px);
+}
+
+/* The last lines of the page (footer, Cookie settings) can always be scrolled clear of the bar. */
+:global(html[data-consent-bar]) body {
+  padding-bottom: calc(var(--consent-h, 0px) + 24px);
+}
+
+/* It waits 300 ms after first paint, then slides up; it is fixed, so it never moves the page. */
+@keyframes up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(calc(100% + 24px));
+  }
+}
+
+@keyframes down {
+  to {
+    opacity: 0;
+    transform: translateY(calc(100% + 24px));
   }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type InputHTMLAttributes, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type InputHTMLAttributes, type ReactNode } from "react";
 import Link from "next/link";
 import { Accordion } from "@/components/ds";
 import { links } from "@/lib/content";
@@ -30,6 +30,43 @@ const fromSlider = (s: number) => {
   const unit = v >= 1_00_00_000 ? 5_00_000 : v >= 50_00_000 ? 50_000 : 10_000;
   return Math.round(v / unit) * unit;
 };
+
+/*
+ * A figure that rolls to its new value over 350 ms (at once if the visitor asks for less motion).
+ * `shown` is what is on screen each frame; `settled` only changes when the roll ends, so a screen
+ * reader hears the final figure once, not every step on the way.
+ */
+function useRoll(target: number | null) {
+  const [shown, setShown] = useState(target);
+  const [settled, setSettled] = useState(target);
+  const at = useRef(target);
+  useEffect(() => {
+    if (target === null) {
+      at.current = null;
+      const id = requestAnimationFrame(() => {
+        setShown(null);
+        setSettled(null);
+      });
+      return () => cancelAnimationFrame(id);
+    }
+    const from = at.current ?? target;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches || from === target;
+    const start = performance.now();
+    let id = 0;
+    const frame = (now: number) => {
+      const t = still ? 1 : Math.min(1, (now - start) / 350);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const value = t === 1 ? target : from + (target - from) * eased;
+      at.current = value;
+      setShown(value);
+      if (t < 1) id = requestAnimationFrame(frame);
+      else setSettled(target);
+    };
+    id = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(id);
+  }, [target]);
+  return { shown, settled };
+}
 
 function Field({
   id,
@@ -178,13 +215,15 @@ export function AffordabilityExplorer() {
       ? (input.downPayment / input.price) * 100
       : null;
   const principalShare = result ? (result.principal / result.totalRepaid) * 100 : 0;
+  const roll = useRoll(result ? result.emi : null);
+  const rolled = roll.shown === null ? "₹ –" : formatINR(Math.round(roll.shown));
 
   return (
     <div className={s.layout}>
       {/* On a phone the figure stays in view while the sliders move. */}
       <div className={s.strip} aria-hidden="true">
         <span>Monthly EMI</span>
-        <strong>{result ? formatINR(result.emi) : "₹ –"}</strong>
+        <strong>{rolled}</strong>
       </div>
 
       <form className={s.form} onSubmit={(e) => e.preventDefault()} aria-label="Loan details">
@@ -299,10 +338,11 @@ export function AffordabilityExplorer() {
       </form>
 
       <aside className={s.result} aria-label="Your estimate">
-        <div aria-live="polite" aria-atomic="true">
+        <div>
           <h2 className={s.resultLabel}>Your monthly EMI</h2>
-          <p className={`display ${s.emi}`} data-empty={result ? undefined : true}>
-            {result ? formatINR(result.emi) : "₹ –"}
+          <p className={`display ${s.emi}`} data-empty={result ? undefined : true} aria-live="polite" aria-atomic="true">
+            <span aria-hidden="true">{rolled}</span>
+            <span className="sr-only">{roll.settled === null ? "₹ –" : formatINR(Math.round(roll.settled))}</span>
           </p>
           <p className={s.emiNote}>
             {result ? (
@@ -339,7 +379,7 @@ export function AffordabilityExplorer() {
 
             <div className={s.split}>
               <div className={s.bar} aria-hidden>
-                <span style={{ width: `${principalShare}%` }} />
+                <span style={{ transform: `scaleX(${principalShare / 100})` }} />
               </div>
               <p>
                 <span>
@@ -376,7 +416,7 @@ export function AffordabilityExplorer() {
                         </thead>
                         <tbody>
                           {result.schedule.map((r) => (
-                            <tr key={r.year}>
+                            <tr key={r.year} style={{ "--n": Math.min(r.year, 12) } as CSSProperties}>
                               <th scope="row">{r.year}</th>
                               <td>{formatINR(r.principalPaid)}</td>
                               <td>{formatINR(r.interestPaid)}</td>

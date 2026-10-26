@@ -7,7 +7,7 @@
   .checker {
     grid-template-columns: 5fr 6fr;
     gap: 64px;
-    align-items: start;
+    align-items: stretch;
   }
 }
 
@@ -71,11 +71,14 @@
 }
 
 .chips {
+  display: grid;
+  grid-template-rows: auto 1fr;
   min-width: 0;
 }
 
 .links {
   display: grid;
+  align-content: start;
   margin-top: 8px;
 }
 
@@ -119,4 +122,15 @@
 /* The panel is grey, so the field sits on it in white. */
 .panel .input {
   background: #fff;
+}
+
+/* Room kept for the checker before it loads, so nothing below it moves. */
+.slot {
+  min-height: 650px;
+}
+
+@media (min-width: 1024px) {
+  .slot {
+    min-height: 320px;
+  }
 }

@@ -2,7 +2,8 @@
 
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { CardCarousel, type CarouselHandle } from "./CardCarousel";
-import { CommunityMap, type MapItem } from "./CommunityMap";
+import type { MapItem } from "./CommunityMap";
+import { LazyMap } from "./LazyMap";
 
 /*
  * The communities row with its map: the card on show and the plot on the map stay together. A card
@@ -48,7 +49,7 @@ export function CommunitiesRow({ title, line, items, children }: Props) {
       names={items.map((c) => c.name)}
       onActive={onActive}
       onSelect={onSelect}
-      dock={<CommunityMap items={items} active={shown} onPick={onPick} />}
+      dock={<LazyMap items={items} active={shown} onPick={onPick} />}
     >
       {children}
     </CardCarousel>

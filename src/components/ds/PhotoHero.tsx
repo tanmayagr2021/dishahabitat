@@ -33,7 +33,7 @@ export function PhotoHero({ title, line, eyebrow, image, specs, actions, note }:
         src={image.src}
         alt={image.alt}
         fill
-        sizes="(orientation: portrait) 160vh, 100vw"
+        sizes="(orientation: portrait) 70vh, 100vw"
         quality={78}
         loading="eager"
         fetchPriority="high"

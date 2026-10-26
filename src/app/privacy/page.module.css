@@ -54,3 +54,8 @@
   font-family: inherit;
   font-size: inherit;
 }
+
+.updated {
+  font-size: 0.875rem;
+  color: var(--text-2);
+}

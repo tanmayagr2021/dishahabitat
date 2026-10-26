@@ -1,5 +1,5 @@
 .section {
-  padding: 24px var(--gutter) 0;
+  padding: 24px var(--edge) 0;
 }
 
 @media (min-width: 768px) {
@@ -11,8 +11,6 @@
 /* tesla.com's panel: #f4f4f4, rounded, text on the left third and the film filling the rest. */
 .panel {
   display: grid;
-  max-width: 2560px;
-  margin-inline: auto;
   overflow: hidden;
   border-radius: var(--radius-card);
   background: var(--surface);
@@ -147,6 +145,7 @@
 }
 
 .badge dd {
+  position: relative;
   font-size: 2rem;
   line-height: 2.5rem;
   font-weight: 500;
@@ -177,4 +176,65 @@
 
 .badge sup a {
   text-decoration: underline;
+}
+
+/*
+ * Count-up: the figure's digits are counters driven by the scroll position, so it reaches its value as the
+ * panel comes into view. Needs scroll timelines and registered integer properties; elsewhere the plain text shows.
+ */
+.count {
+  display: none;
+}
+
+@property --a {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --b {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .real {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .count {
+      display: inline;
+      counter-reset: a var(--a) b var(--b);
+      animation: count linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 100%;
+    }
+
+    .count::before {
+      content: counter(a) var(--rest);
+    }
+
+    .count[data-decimal]::before {
+      content: counter(a) "." counter(b) var(--rest);
+    }
+  }
+}
+
+@keyframes count {
+  from {
+    --a: 0;
+    --b: 0;
+  }
+
+  to {
+    --a: var(--to-a);
+    --b: var(--to-b);
+  }
 }

@@ -96,7 +96,7 @@ export const homemakers = [
     name: "Gunaranjan J",
     short: "Guna",
     role: "Founder & Director",
-    portrait: "/images/people/gunaranjan-j.jpg",
+    portrait: "/images/people/gunaranjan-j-1000.webp",
     signature: "“Let’s meet for coffee.”",
     bio: [
       "If you know Guna, the invitation means he wants to explain something properly, until you leave as informed as any engineer, architect or site supervisor on the project.",
@@ -107,7 +107,7 @@ export const homemakers = [
     name: "K Raja Sekhar",
     short: "Raja",
     role: "Founder & Director",
-    portrait: "/images/people/k-raja-sekhar.jpg",
+    portrait: "/images/people/k-raja-sekhar-1000.webp",
     signature:
       "“Whatever you do, give it a hundred percent of yourself. Even if it’s something you have never tried before.”",
     bio: [
@@ -146,14 +146,14 @@ export const homemakerProfiles: Record<string, string[]> = {
 
 /* Photographs of the Disha family: homeowners at home and the people who build. */
 export const dishaFamily = [
-  { src: "/images/people/family-1.jpg", alt: "A Disha homeowner family at home, a father holding his young daughter", kind: "Homeowners" },
-  { src: "/images/people/family-2.jpg", alt: "Three generations of a Disha homeowner family together in their living room", kind: "Homeowners" },
-  { src: "/images/people/team-1.jpg", alt: "Women of the Disha Habitat team standing together outdoors", kind: "The team" },
-  { src: "/images/people/family-3.jpg", alt: "A Disha homeowner family of six gathered together", kind: "Homeowners" },
-  { src: "/images/people/team-2.jpg", alt: "The Disha Habitat site team seated together outdoors", kind: "The team" },
-  { src: "/images/people/family-4.jpg", alt: "A Disha homeowner family with a newborn and a toddler", kind: "Homeowners" },
-  { src: "/images/people/team-4.jpg", alt: "Members of the Disha Habitat team looking over plans together", kind: "The team" },
-  { src: "/images/people/team-3.jpg", alt: "The Disha Habitat team standing on the giant chessboard at a Disha community", kind: "The team" },
+  { src: "/images/people/family-1-1600.webp", alt: "A Disha homeowner family at home, a father holding his young daughter", kind: "Homeowners" },
+  { src: "/images/people/family-2-1600.webp", alt: "Three generations of a Disha homeowner family together in their living room", kind: "Homeowners" },
+  { src: "/images/people/team-1-1600.webp", alt: "Women of the Disha Habitat team standing together outdoors", kind: "The team" },
+  { src: "/images/people/family-3-1600.webp", alt: "A Disha homeowner family of six gathered together", kind: "Homeowners" },
+  { src: "/images/people/team-2-1600.webp", alt: "The Disha Habitat site team seated together outdoors", kind: "The team" },
+  { src: "/images/people/family-4-1600.webp", alt: "A Disha homeowner family with a newborn and a toddler", kind: "Homeowners" },
+  { src: "/images/people/team-4-1600.webp", alt: "Members of the Disha Habitat team looking over plans together", kind: "The team" },
+  { src: "/images/people/team-3-1600.webp", alt: "The Disha Habitat team standing on the giant chessboard at a Disha community", kind: "The team" },
 ] as const;
 
 export const socialHandle = "@dishahabitat";

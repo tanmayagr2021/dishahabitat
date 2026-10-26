@@ -1,6 +1,8 @@
 .booker {
   display: grid;
+  grid-template-rows: auto 1fr auto;
   gap: 28px;
+  overflow-x: clip;
   min-width: 0;
   padding: 24px 20px;
   border-radius: var(--radius-card);
@@ -35,27 +37,76 @@
   display: block;
   height: 100%;
   background: var(--ink);
-  transition: width 0.5s var(--ease);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
 }
 
 .step {
   min-height: 18rem;
-  animation: in 0.4s var(--ease) both;
 }
 
-@keyframes in {
+/* Each step slides in from the side it is heading towards: 250 ms, instant for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .step[data-dir="fwd"] {
+    animation: in-fwd 0.25s var(--ease) both;
+  }
+
+  .step[data-dir="back"] {
+    animation: in-back 0.25s var(--ease) both;
+  }
+
+  /* The chosen card gets a brass ring that grows in around its ink one. */
+  .booker label[data-checked]::after,
+  .booker .day[aria-pressed="true"]::after {
+    animation: ring 0.3s var(--ease) both;
+  }
+
+  /* On the last step the buttons wait for the tick to finish drawing. */
+  .send,
+  .send ~ .fine {
+    animation: fade 0.4s var(--ease) 0.7s both;
+  }
+}
+
+@keyframes in-fwd {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateX(24px);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .step,
-  .bar span {
-    animation: none;
-    transition: none;
+@keyframes in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
   }
+}
+
+@keyframes ring {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.booker label[data-checked]::after,
+.booker .day[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--accent);
+  border-radius: calc(var(--radius-card) + 4px);
+  pointer-events: none;
+}
+
+.tick {
+  margin-bottom: 16px;
 }
 
 .q {
@@ -94,6 +145,7 @@
 }
 
 .day {
+  position: relative;
   display: grid;
   justify-items: center;
   gap: 2px;
@@ -133,7 +185,7 @@
   gap: 16px;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 600px) {
   .pair {
     grid-template-columns: 1fr 1fr;
   }

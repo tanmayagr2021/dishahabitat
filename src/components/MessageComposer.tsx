@@ -7,6 +7,7 @@ import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
 import { buildMessage, cleanPhoneInput, destinations, mailtoUrl, parsePhone, phoneHelp, whatsappUrl, type Channel } from "@/lib/messaging";
 import { projectsNewestFirst } from "@/lib/projects";
+import { SuccessTick } from "./SuccessTick";
 import s from "./MessageComposer.module.css";
 
 /*
@@ -54,6 +55,8 @@ export function MessageComposer() {
   const [note, setNote] = useState("");
   const [tried, setTried] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sent, setSent] = useState(false);
+  const recorded = useRef("");
 
   useEffect(() => {
     const open = (e: Event) => {
@@ -63,6 +66,7 @@ export function MessageComposer() {
       setTopic(d.topic && topics.includes(d.topic) ? d.topic : topics[0]);
       setTried(false);
       setCopied(false);
+      setSent(false);
       ref.current?.showModal();
     };
     window.addEventListener("disha:compose", open);
@@ -91,6 +95,8 @@ export function MessageComposer() {
   const close = () => ref.current?.close();
 
   const handOff = () => {
+    if (recorded.current === message) return;
+    recorded.current = message;
     recordLead({
       kind: "message",
       name: name.trim(),
@@ -101,7 +107,8 @@ export function MessageComposer() {
       channel,
       consent: true,
     });
-    setTimeout(close, 300);
+    // After the hand-off has opened, so the link is not removed mid-click.
+    setTimeout(() => setSent(true), 300);
   };
 
   return (
@@ -119,9 +126,20 @@ export function MessageComposer() {
           </button>
         </header>
 
-        <div role="radiogroup" aria-label="Send with" className={s.tabs}>
+        {sent ? (
+          <div className={s.done} role="status">
+            <SuccessTick />
+            <p className={s.doneTitle}>{channel === "whatsapp" ? "Your message is open in WhatsApp." : "Your message is open in your email app."}</p>
+            <p className={s.doneLine}>Press send there to finish.</p>
+            <button type="button" className={`btn btn-dark ${s.send}`} onClick={close}>
+              Done
+            </button>
+          </div>
+        ) : (
+          <>
+        <div role="group" aria-label="Send with" className={s.tabs}>
           {(["whatsapp", "email"] as const).map((c) => (
-            <button key={c} type="button" role="radio" aria-checked={channel === c} onClick={() => setChannel(c)} className={s.tab}>
+            <button key={c} type="button" aria-pressed={channel === c} onClick={() => setChannel(c)} className={s.tab}>
               {destinations[c].label}
             </button>
           ))}
@@ -218,6 +236,8 @@ export function MessageComposer() {
             </a>
           )}
         </p>
+          </>
+        )}
       </div>
     </dialog>
   );

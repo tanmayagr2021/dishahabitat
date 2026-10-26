@@ -1,0 +1,39 @@
+@property --n {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Only where CSS can animate an integer and the visitor has not asked for less motion. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .count {
+      position: relative;
+      color: transparent;
+      counter-reset: n var(--n);
+      animation: count 1.4s var(--ease) 0.3s both;
+    }
+
+    .count::after {
+      content: counter(n) / "";
+      position: absolute;
+      inset: 0;
+      color: #fff;
+      text-align: right;
+    }
+  }
+}
+
+@keyframes count {
+  from {
+    --n: 0;
+  }
+
+  to {
+    --n: var(--to);
+  }
+}

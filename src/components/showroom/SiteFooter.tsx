@@ -29,7 +29,6 @@ const columns = [
       { label: "Our story", href: links.story },
       { label: "The founders", href: "/story#homemakers" },
       { label: "Contact", href: links.contact },
-      { label: "Privacy", href: links.privacy },
     ],
   },
   {

@@ -1,21 +1,39 @@
 /* About: the intro large on the left, the facts on the right; stacked on a phone. */
 .about {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 40px;
 }
 
 @media (min-width: 1024px) {
   .about {
-    grid-template-columns: 7fr 5fr;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: 80px;
-    align-items: start;
+    align-items: stretch;
   }
 }
 
+/* The intro starts level with the facts and its links end level with their last row. */
 .aboutText {
   display: grid;
-  gap: 16px;
+  align-content: space-between;
+  gap: 32px;
   min-width: 0;
+}
+
+.aboutLead {
+  display: grid;
+  gap: 16px;
+}
+
+.facts {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .facts > :global(dl) {
+    height: 100%;
+  }
 }
 
 .lead {
@@ -35,74 +53,37 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px 28px;
-  margin-top: 8px;
 }
 
-/* The timeline: one line, a dot at each date, the dates and what happened beneath. */
-.timeline {
-  max-width: 64rem;
-}
-
-/* Three milestones at equal spacing; the months between them are written on the line. */
-.track {
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.dot {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  border: 4px solid var(--surface);
-  border-radius: 50%;
-  background: var(--ink);
-  box-shadow: 0 0 0 1px var(--ink);
-}
-
-.seg {
-  position: relative;
-  flex: 1;
-  height: 2px;
-  background: var(--accent);
-}
-
-.gap {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
-  color: var(--text-2);
-  white-space: nowrap;
-  transform: translateX(-50%);
-}
-
+/*
+ * The timeline: three milestones in equal columns, each text under its own dot and left aligned.
+ * The line draws itself from dot to dot as the block scrolls in; the dots pop in after it.
+ * On a phone it runs down the left instead.
+ */
 .marks {
   display: grid;
-  gap: 20px;
-  margin-top: 24px;
+  gap: 0;
+  view-timeline: --tl block;
 }
 
 @media (min-width: 640px) {
   .marks {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-
-  .marks li:nth-child(2) {
-    text-align: center;
-  }
-
-  .marks li:nth-child(3) {
-    text-align: right;
-  }
 }
 
 .marks li {
+  position: relative;
   display: grid;
+  align-content: start;
   gap: 4px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  padding: 0 0 32px 40px;
+}
+
+@media (min-width: 640px) {
+  .marks li {
+    padding: 36px 24px 0 0;
+  }
 }
 
 .markLabel {
@@ -116,6 +97,162 @@
   line-height: 2rem;
   font-weight: 500;
   color: var(--ink);
+}
+
+.track {
+  position: absolute;
+  inset: 0;
+}
+
+.dot {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border: 4px solid var(--surface);
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+/* The rule from this dot to the next, with the months it spans written beside it. */
+.seg {
+  position: absolute;
+  top: 20px;
+  left: 8px;
+  width: 2px;
+  height: calc(100% - 18px);
+}
+
+.seg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: top;
+}
+
+.gap {
+  position: absolute;
+  bottom: 4px;
+  left: 32px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .dot {
+    top: 0;
+  }
+
+  .seg {
+    top: 8px;
+    left: 18px;
+    width: calc(100% - 18px);
+    height: 2px;
+  }
+
+  .seg::before {
+    transform-origin: left;
+  }
+
+  .gap {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dot {
+      animation: pop linear both;
+      animation-timeline: --tl;
+    }
+
+    .seg::before {
+      animation: grow-y linear both;
+      animation-timeline: --tl;
+    }
+
+    .gap {
+      animation: fade linear both;
+      animation-timeline: --tl;
+    }
+
+    .marks li:nth-child(1) .dot {
+      animation-range: cover 0% cover 4%;
+    }
+
+    .marks li:nth-child(1) .seg::before,
+    .marks li:nth-child(1) .gap {
+      animation-range: cover 4% cover 16%;
+    }
+
+    .marks li:nth-child(2) .dot {
+      animation-range: cover 16% cover 20%;
+    }
+
+    .marks li:nth-child(2) .seg::before,
+    .marks li:nth-child(2) .gap {
+      animation-range: cover 20% cover 32%;
+    }
+
+    .marks li:nth-child(3) .dot {
+      animation-range: cover 32% cover 36%;
+    }
+
+    @media (min-width: 640px) {
+      .seg::before {
+        animation-name: grow-x;
+      }
+    }
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Signature spaces: numbered, three across on a computer. */
@@ -172,20 +309,7 @@
   background: #fff;
 }
 
-/* Specifications: the heading on the left, the groups opening on the right. */
-.specs {
-  display: grid;
-  gap: 24px;
-}
-
-@media (min-width: 1024px) {
-  .specs {
-    grid-template-columns: 4fr 7fr;
-    gap: 80px;
-    align-items: start;
-  }
-}
-
+/* Specifications: the groups open full width, their items in two columns on a computer. */
 .specItems {
   display: grid;
   gap: 8px;
@@ -193,8 +317,47 @@
   list-style: disc;
 }
 
+@media (min-width: 900px) {
+  .specItems {
+    display: block;
+    columns: 2;
+    column-gap: 64px;
+  }
+
+  .specItems li {
+    break-inside: avoid;
+    padding-bottom: 8px;
+  }
+}
+
 .specItems li::marker {
   color: var(--accent);
+}
+
+/* The gallery: odd counts would leave empty cells in the shared three-column grid, so a count of four sits in two columns and a single picture goes full width. */
+@media (min-width: 900px) {
+  .gallery[data-count="4"] > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gallery[data-count="1"] > ul {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.gallery[data-count="1"] > ul > li {
+  aspect-ratio: 16 / 9;
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .gallery li {
+    transition: transform 0.6s var(--ease);
+  }
+
+  .gallery li:hover,
+  .gallery li:focus-within {
+    transform: translateY(-4px);
+  }
 }
 
 /* Homeowners' words: one large, or two side by side. */
@@ -212,7 +375,7 @@
 
 /* The next community: a photograph from edge to edge with its name, the whole card a link. */
 .nextWrap {
-  padding: 0 var(--gutter);
+  padding: 0 var(--edge);
   margin-top: 16px;
 }
 
@@ -293,4 +456,14 @@
 
 .next:hover .nextArrow {
   transform: translateX(4px);
+}
+
+/* A long address or RERA number wraps instead of widening the facts list. */
+.about :global(dl) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.about :global(dd) {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }

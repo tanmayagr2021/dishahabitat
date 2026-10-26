@@ -64,15 +64,7 @@
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.01em;
-  font-size: 2rem;
-  line-height: 2.375rem;
+  font-size: var(--display-feature);
+  line-height: var(--display-feature-lh);
   color: var(--ink);
-}
-
-@media (min-width: 1024px) {
-  .body :global(h2),
-  .body :global(h3) {
-    font-size: 2.5rem;
-    line-height: 2.875rem;
-  }
 }

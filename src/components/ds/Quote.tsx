@@ -3,7 +3,7 @@ import s from "./Quote.module.css";
 /* A homeowner's own words, large and in the serif, with who said it underneath. */
 export function Quote({ quote, name, detail }: { quote: string; name: string; detail?: string }) {
   return (
-    <figure className={s.figure}>
+    <figure className={`reveal ${s.figure}`}>
       <blockquote className={`display ${s.quote}`}>
         <p>“{quote.replace(/^“|”$/g, "")}”</p>
       </blockquote>

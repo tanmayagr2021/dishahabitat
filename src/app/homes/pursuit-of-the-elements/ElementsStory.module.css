@@ -1,0 +1,188 @@
+/* Without the scroll story: a heading, the five words large, the sentence. */
+.story {
+  padding: 64px var(--edge);
+}
+
+@media (min-width: 768px) {
+  .story {
+    padding-block: 96px;
+  }
+}
+
+.inner {
+  display: grid;
+  gap: 32px;
+  max-width: var(--page-max);
+}
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 80px;
+    align-items: center;
+  }
+}
+
+.words {
+  display: flex;
+  gap: 24px;
+  min-width: 0;
+}
+
+.rail {
+  display: none;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  font-size: var(--display-large);
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.copy {
+  display: grid;
+  gap: 16px;
+  align-content: center;
+  min-width: 0;
+}
+
+.sentence {
+  max-width: 30rem;
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+  color: var(--text);
+}
+
+/* The story: a tall track, a stage that sticks below the header while the words step through. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    .story {
+      padding-block: 0;
+    }
+
+    .track {
+      height: 250vh;
+      view-timeline: --story block;
+    }
+
+    .stage {
+      position: sticky;
+      top: var(--header-h);
+      display: grid;
+      align-items: center;
+      height: calc(100svh - var(--header-h));
+      min-height: 480px;
+    }
+
+    .inner {
+      align-items: center;
+    }
+
+    .words {
+      gap: 32px;
+    }
+
+    .rail {
+      display: block;
+      flex: none;
+      width: 2px;
+      background: var(--line);
+    }
+
+    .fill {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      transform-origin: top;
+      animation: grow linear both;
+      animation-timeline: --story;
+      animation-range: contain 0% contain 100%;
+    }
+
+    .list {
+      display: grid;
+      gap: 4px;
+      font-size: clamp(3rem, 2rem + 3.2vw, 4.5rem);
+      line-height: 1.1;
+    }
+
+    .word {
+      color: var(--text-2);
+      transform: scale(0.36);
+      transform-origin: left center;
+      animation: step linear both;
+      animation-timeline: --story;
+    }
+
+    /* Word n is in front from n x 20% to n x 20% + 20%; the hand-over takes 5% of the track either side. */
+    .word:nth-child(1) {
+      animation-range: contain -5% contain 20%;
+    }
+
+    .word:nth-child(2) {
+      animation-range: contain 15% contain 40%;
+    }
+
+    .word:nth-child(3) {
+      animation-range: contain 35% contain 60%;
+    }
+
+    .word:nth-child(4) {
+      animation-range: contain 55% contain 80%;
+    }
+
+    .word:nth-child(5) {
+      animation-name: step-last;
+      animation-range: contain 75% contain 80%;
+    }
+
+    .sentence {
+      font-size: 1.375rem;
+      line-height: 2rem;
+    }
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes step {
+  0% {
+    color: var(--text-2);
+    transform: scale(0.36);
+  }
+
+  20%,
+  80% {
+    color: var(--ink);
+    transform: none;
+  }
+
+  100% {
+    color: var(--text-2);
+    transform: scale(0.36);
+  }
+}
+
+@keyframes step-last {
+  from {
+    color: var(--text-2);
+    transform: scale(0.36);
+  }
+
+  to {
+    color: var(--ink);
+    transform: none;
+  }
+}

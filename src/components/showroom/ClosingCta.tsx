@@ -5,7 +5,7 @@ import s from "./ClosingCta.module.css";
 export function ClosingCta() {
   return (
     <section className={s.section} aria-labelledby="closing-title">
-      <div className={s.inner}>
+      <div className={`${s.inner} reveal`}>
         <div>
           <h2 id="closing-title" className={`display ${s.title}`}>
             {closing.title}

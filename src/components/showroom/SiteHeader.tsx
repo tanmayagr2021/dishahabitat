@@ -47,6 +47,7 @@ export function SiteHeader() {
   const barRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const timer = useRef(0);
+  const [scrolled, setScrolled] = useState(false);
   const id = useId();
   const megaId = `${id}-homes`;
   const sheetId = `${id}-menu`;
@@ -96,6 +97,14 @@ export function SiteHeader() {
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
+  /* After a little scrolling the bar turns white with a hairline, so it stays readable over any section. */
+  useEffect(() => {
+    const check = () => setScrolled(window.scrollY > 40);
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+
   /* Moving to another page closes whatever was open. */
   const [shownFor, setShownFor] = useState(pathname);
   if (shownFor !== pathname) {
@@ -138,13 +147,14 @@ export function SiteHeader() {
     if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setMega(false);
   };
 
-  const solid = mega || sheet;
+  const solid = mega || sheet || scrolled;
 
   return (
     <header
       className={s.header}
       data-surface={onPhoto ? "photo" : "page"}
       data-solid={solid || !onPhoto || undefined}
+      data-scrolled={scrolled || undefined}
       data-tone={solid || !onPhoto ? undefined : "dark"}
     >
       <div ref={barRef} className={s.bar}>

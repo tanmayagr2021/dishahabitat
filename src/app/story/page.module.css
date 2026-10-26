@@ -1,9 +1,8 @@
+/* The poem: left-aligned on the page edge, one line at a time. */
 .poem {
-  max-width: 42rem;
-  margin-inline: auto;
   display: grid;
   gap: 4px;
-  text-align: center;
+  max-width: 56rem;
   font-size: 1.5rem;
   line-height: 2.125rem;
   font-style: italic;
@@ -16,8 +15,31 @@
 
 @media (min-width: 1024px) {
   .poem {
-    font-size: 2.25rem;
-    line-height: 3rem;
+    font-size: 2.5rem;
+    line-height: 3.25rem;
+  }
+}
+
+/* Each line darkens from a quiet grey to the ink colour as it passes the middle of the screen. The
+   grey is #767676, 4.5:1 on white, so a line is readable before it is lit (an opacity fade is not).
+   Without the feature, or with reduced motion, every line is simply at full strength. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .line {
+      animation: lit linear both;
+      animation-timeline: view();
+      animation-range: cover 26% cover 48%;
+    }
+  }
+}
+
+@keyframes lit {
+  from {
+    color: #767676;
+  }
+
+  to {
+    color: var(--ink);
   }
 }
 
@@ -42,6 +64,7 @@
   }
 }
 
+/* The founders: both columns share rows, so the portraits, names and bios line up across. */
 .founders {
   display: grid;
   gap: 64px;
@@ -49,9 +72,14 @@
 
 @media (min-width: 900px) {
   .founders {
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, auto);
+    gap: 12px 64px;
+  }
+
+  .founder {
+    grid-row: span 6;
+    grid-template-rows: subgrid;
   }
 }
 
@@ -67,7 +95,7 @@
   margin-bottom: 12px;
   overflow: hidden;
   border-radius: var(--radius-card);
-  background: var(--surface);
+  background: var(--surface-2);
 }
 
 .portraitImg {
@@ -94,26 +122,54 @@
   color: var(--text-2);
 }
 
+/* The track record: a brass line that draws down the page, a dot for each community. */
+.track {
+  position: relative;
+}
+
+.rail {
+  position: absolute;
+  top: 44px;
+  bottom: 44px;
+  left: 4px;
+  width: 2px;
+  color: var(--accent);
+}
+
 .list {
+  position: relative;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.list li + li {
   border-top: 1px solid var(--line);
 }
 
-.list li {
-  border-bottom: 1px solid var(--line);
-}
-
 .row {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 4px 16px;
   align-items: center;
-  min-height: 64px;
-  padding: 16px 0;
+  min-height: 88px;
+  padding: 16px 0 16px 36px;
   color: var(--ink);
   text-decoration: none;
+}
+
+.row::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px #fff;
 }
 
 .rowName {
@@ -147,6 +203,72 @@
   }
 }
 
+/* The windsor picture and its words share a top and a bottom edge: the link sits at the foot. */
+.pair > div {
+  align-items: stretch;
+}
+
+.pair > div > div:last-child {
+  grid-template-rows: auto auto 1fr auto;
+  max-width: none;
+}
+
+.pair > div > div:last-child p:not(.eyebrow) {
+  max-width: 34rem;
+}
+
+.pair > div > div:last-child > :last-child {
+  justify-self: start;
+}
+
+.event {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .event {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 64px;
+    align-items: stretch;
+  }
+}
+
+.eventText {
+  display: grid;
+  align-content: start;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 16px;
+  min-width: 0;
+  color: var(--text);
+}
+
+.eventText p:not(.eyebrow) {
+  max-width: 34rem;
+}
+
+.certificate {
+  display: grid;
+  place-items: center;
+  min-height: 16rem;
+  padding: 32px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.certificate img {
+  width: min(100%, 360px);
+  height: auto;
+  border-radius: var(--radius);
+}
+
+/* The figures count up once when they come into view (the component arms this; see Stats.tsx). */
+@property --n {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -156,18 +278,20 @@
 
 @media (min-width: 900px) {
   .stats {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
 .stat {
   display: flex;
   flex-direction: column-reverse;
+  justify-content: flex-end;
   gap: 4px;
   min-width: 0;
 }
 
 .stat dd {
+  position: relative;
   margin: 0;
   font-size: 2rem;
   line-height: 2.5rem;
@@ -190,6 +314,53 @@
   color: var(--text-2);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  @supports (width: round(down, 5px, 1px)) and (content: "a" / "") {
+    /* The real text stays (it sets the width and is what a screen reader reads); the counter is drawn over it. */
+    .stats[data-armed] .real {
+      opacity: 0;
+    }
+
+    .stats[data-armed] dd::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      white-space: nowrap;
+    }
+
+    .stats[data-armed] dd[data-groups="1"]::after {
+      counter-reset: a var(--n);
+      content: counter(a) attr(data-suffix) / "";
+    }
+
+    .stats[data-armed] dd[data-groups="2"]::after {
+      counter-reset: l round(down, calc(var(--n) / 1000), 1) h round(down, calc(mod(var(--n), 1000) / 100), 1) t mod(var(--n), 100);
+      content: counter(l) "," counter(h) counter(t, decimal-leading-zero) attr(data-suffix) / "";
+    }
+
+    .stats[data-armed] dd[data-groups="3"]::after {
+      counter-reset:
+        l round(down, calc(var(--n) / 100000), 1) m mod(round(down, calc(var(--n) / 1000), 1), 100)
+        h round(down, calc(mod(var(--n), 1000) / 100), 1) t mod(var(--n), 100);
+      content: counter(l) "," counter(m, decimal-leading-zero) "," counter(h) counter(t, decimal-leading-zero) attr(data-suffix) / "";
+    }
+
+    .stats[data-armed]:not([data-in]) dd {
+      --n: 0 !important;
+    }
+
+    .stats[data-in] dd {
+      animation: count 1.8s var(--ease) both;
+    }
+  }
+}
+
+@keyframes count {
+  from {
+    --n: 0;
+  }
+}
+
 .promises {
   display: grid;
   gap: 40px;
@@ -200,7 +371,7 @@
 
 @media (min-width: 900px) {
   .promises {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 48px;
   }
 }
@@ -237,4 +408,50 @@
   margin-top: 16px;
   font-size: 0.875rem;
   color: var(--text-2);
+}
+
+/* The family photographs arrive one after another and lift a little under the pointer. */
+.gal button {
+  transition: transform 0.6s var(--ease);
+}
+
+.gal button img {
+  transition: transform 0.7s var(--ease);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (pointer: fine) {
+    .gal button:hover,
+    .gal button:focus-visible {
+      transform: translateY(-4px);
+    }
+
+    .gal button:hover img,
+    .gal button:focus-visible img {
+      transform: scale(1.04);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .gal ul > li {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    .gal ul > li:nth-child(3n + 2) {
+      animation-range: entry 6% entry 60%;
+    }
+
+    .gal ul > li:nth-child(3n) {
+      animation-range: entry 12% entry 65%;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 }

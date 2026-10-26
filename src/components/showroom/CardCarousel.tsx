@@ -55,7 +55,7 @@ export function CardCarousel({
     const measure = () => {
       frame = 0;
       const max = el.scrollWidth - el.clientWidth;
-      const pad = parseFloat(getComputedStyle(el).scrollPaddingLeft) || 0;
+      const pad = (el.children[0] as HTMLElement | undefined)?.offsetLeft ?? 0;
       let nearest = 0;
       let best = Infinity;
       Array.from(el.children).forEach((child, i) => {
@@ -91,7 +91,7 @@ export function CardCarousel({
     const card = el?.children[i] as HTMLElement | undefined;
     if (!el || !card) return;
     onSelect?.(i);
-    const pad = parseFloat(getComputedStyle(el).scrollPaddingLeft) || 0;
+    const pad = (el.children[0] as HTMLElement | undefined)?.offsetLeft ?? 0;
     el.scrollTo({ left: card.offsetLeft - pad, behavior: motionOk ? "smooth" : "auto" });
   };
 
@@ -100,7 +100,7 @@ export function CardCarousel({
   return (
     <section className={s.section} aria-roledescription="carousel" aria-label={label}>
       <div className={s.head}>
-        <div>
+        <div className="reveal">
           <h2 className={`display ${s.title}`}>{title}</h2>
           <p className={s.line}>{line}</p>
         </div>

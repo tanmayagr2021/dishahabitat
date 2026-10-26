@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Fragment } from "react";
+import { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Accordion, CtaBand, FactList, Gallery, PhotoHero, Quote, Section, SectionHead, Tag } from "@/components/ds";
+import { Accordion, CtaBand, FactList, Gallery, Quote, Section, SectionHead, Tag } from "@/components/ds";
+import { PhotoHero } from "@/components/ds";
 import { ArrowRight } from "@/components/showroom/Icons";
 import { links } from "@/lib/content";
 import { elements } from "@/lib/elements";
 import { pageMeta } from "@/lib/launch";
 import { getProject, projectsByHandover, projectsNewestFirst } from "@/lib/projects";
 import { homeowners } from "@/lib/site";
+import { Count } from "../Count";
 import s from "./page.module.css";
 
 export const dynamicParams = false;
@@ -34,6 +36,12 @@ export async function generateMetadata(props: PageProps<"/homes/[slug]">): Promi
 const monthIndex = (d: string) => {
   const date = new Date(`1 ${d}`);
   return date.getFullYear() * 12 + date.getMonth();
+};
+
+/* "264" or "31 months": the leading whole number counts up. Anything else stays as written. */
+const count = (text = ""): string => {
+  const m = /^(\d+)(\s.*|)$/.exec(text);
+  return m ? ((<><Count to={Number(m[1])} />{m[2]}</>) as unknown as string) : text;
 };
 
 const factValue = (facts: { label: string; value: string }[], label: string) => facts.find((f) => f.label === label)?.value;
@@ -65,29 +73,34 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
 
   return (
     <>
-      <PhotoHero
-        eyebrow={`Handed over ${p.handoverYear}`}
-        title={p.shortName}
-        line={p.locality}
-        image={p.cover}
-        specs={[
-          { label: "Homes", value: factValue(p.facts, "Homes") ?? "" },
-          { label: "Land", value: factValue(p.facts, "Project size") ?? "" },
-          { label: "Start to finish", value: `${p.timeline.months} months` },
-        ]}
-        actions={[
-          { label: `See ${elements.shortName}`, href: elements.href },
-          { label: "Book a visit", href: links.bookVisit },
-        ]}
-      />
+      <ViewTransition name={`community-${p.slug}`} share="morph" default="none">
+        <PhotoHero
+          eyebrow={`Handed over ${p.handoverYear}`}
+          title={p.shortName}
+          line={p.locality}
+          image={p.cover}
+          specs={[
+            // Whole numbers count up; PhotoHero prints each value as given.
+            { label: "Homes", value: count(factValue(p.facts, "Homes")) },
+            { label: "Land", value: factValue(p.facts, "Project size") ?? "" },
+            { label: "Start to finish", value: count(`${p.timeline.months} months`) },
+          ]}
+          actions={[
+            { label: `See ${elements.shortName}`, href: elements.href },
+            { label: "Book a visit", href: links.bookVisit },
+          ]}
+        />
+      </ViewTransition>
 
       <Section labelledBy="about-title">
         <div className={s.about}>
           <div className={s.aboutText}>
-            <h2 id="about-title" className="eyebrow">
-              About {p.shortName}
-            </h2>
-            <p className={`display ${s.lead}`}>{p.intro}</p>
+            <div className={s.aboutLead}>
+              <h2 id="about-title" className="eyebrow">
+                About {p.shortName}
+              </h2>
+              <p className={`display ${s.lead}`}>{p.intro}</p>
+            </div>
             <div className={s.links}>
               {p.website && (
                 <a className="text-link" href={p.website.href} target="_blank" rel="noopener noreferrer">
@@ -108,63 +121,69 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
               </a>
             </div>
           </div>
-          <FactList facts={[
-              ...p.facts,
-              ...(p.rera ? [{ label: "Karnataka RERA", value: p.rera }] : []),
-              ...(p.address ? [{ label: "Address", value: p.address }] : []),
-            ]} />
+          <div className={`${s.facts} reveal`}>
+            <FactList
+              facts={[
+                ...p.facts,
+                ...(p.rera ? [{ label: "Karnataka RERA", value: p.rera }] : []),
+                ...(p.address ? [{ label: "Address", value: p.address }] : []),
+              ]}
+            />
+          </div>
         </div>
       </Section>
 
       <Section tone="surface" labelledBy="timeline-title">
-        <SectionHead
-          id="timeline-title"
-          title="From ground-breaking to keys"
-          line={`${p.timeline.months} months from the start of construction to completion, as published.`}
-        />
-        <div className={s.timeline}>
-          <div className={s.track} aria-hidden="true">
-            {marks.map((m, n) => (
-              <Fragment key={m.k}>
+        <div className="reveal">
+          <SectionHead
+            id="timeline-title"
+            title="From ground-breaking to keys"
+            line={`${p.timeline.months} months from the start of construction to completion, as published.`}
+          />
+        </div>
+        <ol className={s.marks}>
+          {marks.map((m, n) => (
+            <li key={m.k}>
+              <span className={s.track} aria-hidden="true">
                 <span className={s.dot} />
                 {n < gaps.length && (
                   <span className={s.seg}>
                     <span className={s.gap}>{gaps[n] === 0 ? "Same month" : `${gaps[n]} ${gaps[n] === 1 ? "month" : "months"}`}</span>
                   </span>
                 )}
-              </Fragment>
-            ))}
-          </div>
-          <ol className={s.marks}>
-            {marks.map((m) => (
-              <li key={m.k}>
-                <span className={s.markLabel}>{m.k}</span>
-                <span className={s.markValue}>{m.v}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
+              </span>
+              <span className={s.markLabel}>{m.k}</span>
+              <span className={s.markValue}>{m.v}</span>
+            </li>
+          ))}
+        </ol>
       </Section>
 
       {p.gallery.length > 0 && (
         <Section id="gallery" labelledBy="gallery-title">
-          <SectionHead
-            id="gallery-title"
-            title={`Inside ${p.shortName}`}
-            line={`${p.gallery.length} ${p.gallery.length === 1 ? "photograph" : "photographs"}. Select one to see it larger.`}
-          />
-          <Gallery items={p.gallery} layout={p.gallery.length >= 3 ? "mosaic" : "grid"} />
+          <div className="reveal">
+            <SectionHead
+              id="gallery-title"
+              title={`Inside ${p.shortName}`}
+              line={`${p.gallery.length} ${p.gallery.length === 1 ? "photograph" : "photographs"}. Select one to see it larger.`}
+            />
+          </div>
+          <div className={s.gallery} data-count={p.gallery.length}>
+            <Gallery items={p.gallery} layout={p.gallery.length >= 3 && p.gallery.length % 3 === 0 ? "mosaic" : "grid"} />
+          </div>
         </Section>
       )}
 
       {p.highlights && (
         <Section tone="surface" labelledBy="highlights-title">
-          <SectionHead
-            id="highlights-title"
-            title="Signature spaces"
-            line="From your own sundeck to the open-air arenas, every step here is a step closer to the sun."
-          />
-          <ol className={s.highlights}>
+          <div className="reveal">
+            <SectionHead
+              id="highlights-title"
+              title="Signature spaces"
+              line="From your own sundeck to the open-air arenas, every step here is a step closer to the sun."
+            />
+          </div>
+          <ol className={`${s.highlights} reveal-stagger`}>
             {p.highlights.map((h, n) => (
               <li key={h.name}>
                 <span className={s.num}>{String(n + 1).padStart(2, "0")}</span>
@@ -190,23 +209,21 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
 
       {p.specifications && (
         <Section labelledBy="specs-title">
-          <div className={s.specs}>
-            <div>
-              <SectionHead id="specs-title" title="Specifications" line="Selected items from the published project specification." />
-            </div>
-            <Accordion
-              items={p.specifications.map((sp) => ({
-                title: sp.group,
-                body: (
-                  <ul className={s.specItems}>
-                    {sp.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ),
-              }))}
-            />
+          <div className="reveal">
+            <SectionHead id="specs-title" title="Specifications" line="Selected items from the published project specification." />
           </div>
+          <Accordion
+            items={p.specifications.map((sp) => ({
+              title: sp.group,
+              body: (
+                <ul className={s.specItems}>
+                  {sp.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              ),
+            }))}
+          />
         </Section>
       )}
 
@@ -233,17 +250,19 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
       />
 
       <nav aria-label="Next community" className={s.nextWrap}>
-        <Link href={`/homes/${next.slug}`} className={s.next} data-tone="dark">
-          <Image src={next.cover.src} alt="" fill sizes="100vw" quality={78} className={s.nextImg} />
-          <span className={s.nextShade} aria-hidden="true" />
-          <span className={s.nextText}>
-            <span className={s.nextEyebrow}>Next community · {next.locality}</span>
-            <span className={`display ${s.nextName}`}>{next.shortName}</span>
-          </span>
-          <span className={s.nextArrow} aria-hidden="true">
-            <ArrowRight />
-          </span>
-        </Link>
+        <ViewTransition name={`community-${next.slug}`} share="morph" default="none">
+          <Link href={`/homes/${next.slug}`} className={s.next} data-tone="dark">
+            <Image src={next.cover.src} alt="" fill sizes="100vw" quality={78} className={s.nextImg} />
+            <span className={s.nextShade} aria-hidden="true" />
+            <span className={s.nextText}>
+              <span className={s.nextEyebrow}>Next community · {next.locality}</span>
+              <span className={`display ${s.nextName}`}>{next.shortName}</span>
+            </span>
+            <span className={s.nextArrow} aria-hidden="true">
+              <ArrowRight />
+            </span>
+          </Link>
+        </ViewTransition>
       </nav>
     </>
   );

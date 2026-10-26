@@ -1,6 +1,6 @@
 .footer {
   margin-top: 64px;
-  padding: 48px var(--gutter) 32px;
+  padding: 48px var(--edge) 32px;
   border-top: 1px solid var(--line);
 }
 

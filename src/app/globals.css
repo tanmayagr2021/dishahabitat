@@ -52,8 +52,25 @@
   /* The widest a column of reading text or a page section gets. */
   --measure: 42rem;
   --page-max: 1440px;
+  /* The left and right edge of all content: the gutter, or on a screen wider than --page-max, the space that centres the column. Use it as padding-inline, never in a width. */
+  --edge: max(var(--gutter), calc((100% - var(--page-max)) / 2));
   --radius: var(--radius-sm);
   --ease: var(--ease-tesla);
+
+  /*
+   * The serif display scale. Each size grows smoothly from a phone (390 px) to a laptop (1024 px)
+   * and stays put after that, so no heading jumps at a breakpoint. Line heights shrink as type grows.
+   */
+  --display-hero: clamp(2.5rem, 1.58rem + 3.79vw, 4rem);
+  --display-hero-lh: 1.08;
+  --display-large: clamp(2.375rem, 1.84rem + 2.21vw, 3.25rem);
+  --display-large-lh: 1.12;
+  --display-title: clamp(2rem, 1.54rem + 1.89vw, 2.75rem);
+  --display-title-lh: 1.15;
+  --display-quote: clamp(1.75rem, 1.29rem + 1.89vw, 2.5rem);
+  --display-quote-lh: 1.25;
+  --display-feature: clamp(2rem, 1.69rem + 1.26vw, 2.5rem);
+  --display-feature-lh: 1.15;
 }
 
 @layer base {
@@ -61,7 +78,7 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     background: #fff;
-    scroll-padding-top: 24px;
+    scroll-padding-top: calc(var(--header-h) + 24px);
   }
 
   body {
@@ -153,7 +170,8 @@
     transition:
       background-color 0.33s var(--ease),
       color 0.33s var(--ease),
-      box-shadow 0.33s var(--ease);
+      box-shadow 0.33s var(--ease),
+      transform 0.12s var(--ease);
   }
 
   .btn svg {
@@ -175,14 +193,17 @@
     cursor: not-allowed;
   }
 
-  /* The one action that matters most on a page: brass. */
-  .btn-primary {
-    background: var(--accent);
-    color: var(--on-accent);
+  .btn:active:not(:disabled, [aria-disabled="true"]) {
+    transform: scale(0.98);
   }
 
-  .btn-primary:hover {
-    background: var(--accent-hover);
+  /* The one action that matters most on a page: brass. */
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
   /* On white and grey: near-black. */
@@ -191,27 +212,15 @@
     color: #fff;
   }
 
-  .btn-dark:hover {
-    background: #393c41;
-  }
-
   /* On photographs: white, the way tesla.com sets its second button over an image. */
   .btn-light {
     background: rgb(255 255 255 / 0.9);
     color: var(--ink);
   }
 
-  .btn-light:hover {
-    background: #fff;
-  }
-
   .btn-white {
     background: #fff;
     color: var(--ink);
-  }
-
-  .btn-white:hover {
-    background: var(--surface-2);
   }
 
   /* The quiet second choice on white: grey. */
@@ -220,20 +229,11 @@
     color: var(--ink);
   }
 
-  .btn-soft:hover {
-    background: var(--surface-2);
-  }
-
   /* An outline on white, for a third choice. */
   .btn-outline {
     background: transparent;
     color: var(--ink);
     box-shadow: inset 0 0 0 1.5px var(--ink);
-  }
-
-  .btn-outline:hover {
-    background: var(--ink);
-    color: #fff;
   }
 
   /* The second choice on a photograph: dark glass and a hairline, so the brass button stays the one
@@ -246,8 +246,34 @@
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6);
   }
 
-  .btn-ghost:hover {
-    background: rgb(0 0 0 / 0.56);
+  /* Hover only where a pointer can hover (a tap on a phone must not leave a button looking pressed),
+     and never on a disabled button. */
+  @media (hover: hover) {
+    .btn-primary:hover:not(:disabled, [aria-disabled="true"]) {
+      background: var(--accent-hover);
+    }
+
+    .btn-dark:hover:not(:disabled, [aria-disabled="true"]) {
+      background: var(--text);
+    }
+
+    .btn-light:hover:not(:disabled, [aria-disabled="true"]) {
+      background: #fff;
+    }
+
+    .btn-white:hover:not(:disabled, [aria-disabled="true"]),
+    .btn-soft:hover:not(:disabled, [aria-disabled="true"]) {
+      background: var(--surface-2);
+    }
+
+    .btn-outline:hover:not(:disabled, [aria-disabled="true"]) {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .btn-ghost:hover:not(:disabled, [aria-disabled="true"]) {
+      background: rgb(0 0 0 / 0.56);
+    }
   }
 
   /* A text link with an arrow: underlined in grey, ink on hover. */
@@ -270,6 +296,11 @@
     text-decoration-color: var(--ink);
   }
 
+  .text-link:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
   .text-link svg {
     flex: none;
     width: 18px;
@@ -277,8 +308,9 @@
     transition: transform 0.3s var(--ease);
   }
 
-  .text-link:hover svg {
-    transform: translateX(3px);
+  .text-link:hover svg,
+  .text-link:focus-visible svg {
+    transform: translateX(4px);
   }
 
   /* Headlines: Disha's display serif. Text and controls stay in the sans. */
@@ -314,5 +346,178 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Motion. One quiet language: --ease, 400 to 700 ms, 8 to 24 px of travel, opacity and transform only.
+ * Everything is an enhancement: content is visible without it, and none of it runs for people who ask
+ * for reduced motion. The scroll-driven ones need a browser that supports `animation-timeline`.
+ */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Fades and rises as it enters the viewport. */
+    @supports (animation-timeline: view()) {
+      .reveal {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+
+      /* A parent whose children arrive one after another. */
+      .reveal-stagger > * {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+
+      .reveal-stagger > :nth-child(2) {
+        animation-range: entry 6% entry 60%;
+      }
+
+      .reveal-stagger > :nth-child(3) {
+        animation-range: entry 12% entry 65%;
+      }
+
+      .reveal-stagger > :nth-child(n + 4) {
+        animation-range: entry 18% entry 70%;
+      }
+
+      /* A photograph that drifts a little slower than the page. */
+      .parallax-slow {
+        animation: drift linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 100%;
+      }
+
+      /* A line or path that draws itself in. Needs pathLength="1" on SVG paths. */
+      .draw {
+        stroke-dasharray: 1;
+        animation: draw linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 40%;
+      }
+    }
+
+    /* A soft sweep of light across the brass button on hover. Pointer devices only. */
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.38) 50%, transparent 65%);
+        transform: translateX(-100%);
+        pointer-events: none;
+      }
+
+      .btn-primary:hover:not(:disabled, [aria-disabled="true"])::after {
+        transform: translateX(100%);
+        transition: transform 0.6s var(--ease);
+      }
+    }
+
+    /* A card that lifts, with its picture slowly growing. Pointer devices only. */
+    @media (hover: hover) and (pointer: fine) {
+      .lift {
+        transition: transform 0.6s var(--ease);
+      }
+
+      .lift img {
+        transition: transform 0.7s var(--ease);
+      }
+
+      .lift:hover,
+      .lift:focus-visible {
+        transform: translateY(-4px);
+      }
+
+      .lift:hover img,
+      .lift:focus-visible img {
+        transform: scale(1.04);
+      }
+    }
+  }
+
+  /* Page changes cross-fade. The header keeps its own name so it does not flash. */
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 220ms;
+      animation-timing-function: cubic-bezier(0.5, 0, 0, 0.75);
+    }
+
+    ::view-transition-group(site-header) {
+      animation-duration: 0s;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: translateY(-4%);
+    }
+
+    to {
+      transform: translateY(4%);
+    }
+  }
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+/* On paper: black on white, the page's own content only (no header, footer, banners or tabs). */
+@media print {
+  body > header,
+  body > footer,
+  body > dialog,
+  .skip,
+  [data-feedback-ui],
+  [aria-label="Cookie notice"] {
+    display: none !important;
+  }
+
+  body,
+  main,
+  main section {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  main section {
+    padding-block: 12px !important;
+  }
+
+  main a,
+  main h1,
+  main h2,
+  main h3,
+  main p,
+  main dt,
+  main dd {
+    color: #000 !important;
+  }
+
+  a {
+    text-decoration: none;
   }
 }

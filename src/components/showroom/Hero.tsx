@@ -18,7 +18,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
   const [hover, setHover] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   const [onScreen, setOnScreen] = useState(true);
-  /* Slides two and three load once the first picture has, so they never compete with it. */
+  /* Slides two and three load later, so they never compete with the first picture. */
   const [rest, setRest] = useState(false);
   const motionOk = useMedia(MOTION_OK);
   const root = useRef<HTMLElement>(null);
@@ -41,9 +41,9 @@ export function Hero({ slides }: { slides: Slide[] }) {
     return () => io.disconnect();
   }, []);
 
-  /* A fallback in case the first picture's load event was missed (cached, or before hydration). */
+  /* Slides two and three are fetched a few seconds in, after the first screen has settled. */
   useEffect(() => {
-    const t = window.setTimeout(() => setRest(true), 2500);
+    const t = window.setTimeout(() => setRest(true), 4000);
     return () => window.clearTimeout(t);
   }, []);
 
@@ -96,11 +96,10 @@ export function Hero({ slides }: { slides: Slide[] }) {
                   src={slide.image.src}
                   alt={slide.image.alt}
                   fill
-                  sizes="(orientation: portrait) 160vh, 100vw"
-                  quality={78}
+                  sizes="(orientation: portrait) 80vh, 100vw"
+                  quality={i === 0 ? 75 : 78}
                   loading={i === 0 ? "eager" : "lazy"}
                   fetchPriority={i === 0 ? "high" : "low"}
-                  onLoad={i === 0 ? () => setRest(true) : undefined}
                   style={focusPoint(slide.image)}
                 />
               )}
@@ -137,7 +136,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
                       RERA:{" "}
                       {company.rera.map((r, k) => (
                         <span key={r.no} className={s.reraNo}>
-                          {k > 0 && <span className={s.reraDot}> · </span>}
+                          {k > 0 && <span className={s.reraDot}>{"\u00a0·\u00a0"}</span>}
                           {r.phase} {r.no}
                         </span>
                       ))}

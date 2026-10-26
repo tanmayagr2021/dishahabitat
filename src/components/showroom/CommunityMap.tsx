@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { area, base, mapLabels, mapPlots, tiles } from "@/lib/map.generated";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import s from "./CommunityMap.module.css";
@@ -146,6 +146,13 @@ export function CommunityMap({ items, active, onPick }: Props) {
   const motionOk = useMedia(MOTION_OK);
   const [near, setNear] = useState(false);
   const [ready, setReady] = useState(false);
+  /* For the first moments after the map appears, the names drop in one after another. */
+  const [intro, setIntro] = useState(true);
+  useEffect(() => {
+    if (!ready) return;
+    const t = window.setTimeout(() => setIntro(false), 2000);
+    return () => window.clearTimeout(t);
+  }, [ready]);
 
   /* Everything the drawing needs between frames lives here, outside React. */
   const st = useRef({
@@ -535,7 +542,7 @@ export function CommunityMap({ items, active, onPick }: Props) {
     : `Map of East Bengaluru showing Disha’s communities. ${shown?.name ?? ""} is not marked on this map.`;
 
   return (
-    <div ref={root} className={s.map} data-ready={ready || undefined}>
+    <div ref={root} className={s.map} data-ready={ready || undefined} data-intro={intro || undefined}>
       <div className={s.picture} role="img" aria-label={label}>
         <canvas ref={canvas} className={s.canvas} aria-hidden="true" />
       </div>
@@ -562,6 +569,7 @@ export function CommunityMap({ items, active, onPick }: Props) {
               type="button"
               tabIndex={-1}
               className={s.pin}
+              style={{ "--i": i } as CSSProperties}
               data-active={i === active || undefined}
               data-hidden="true"
               onClick={() => onPick(i)}

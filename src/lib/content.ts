@@ -2,7 +2,7 @@
  * The homepage, the header and the footer: what they say, where they link and which pictures they
  * show. Facts come from the verified data in site.ts, elements.ts, proof.ts and projects.ts (from
  * dishahabitat.com and the official project sites, inspected October 2026); change a fact there.
- * No prices, and every computer render is labelled an artist's impression.
+ * No prices, and every computer render is labelled an artist’s impression.
  */
 import { elements } from "@/lib/elements";
 import { company as site } from "@/lib/site";
@@ -145,7 +145,7 @@ export const rows = {
   },
   life: {
     title: "Inside Pursuit of the Elements",
-    line: "40+ amenities across 20 acres. Every image here is an artist's impression.",
+    line: "40+ amenities across 20 acres. Every image here is an artist’s impression.",
     link: { label: "See every amenity", href: links.elements },
   },
 } as const;

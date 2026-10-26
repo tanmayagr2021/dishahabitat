@@ -18,7 +18,7 @@ export function Gallery({ items, layout = "mosaic" }: { items: readonly GalleryI
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggers = useRef<(HTMLButtonElement | null)[]>([]);
   const openedFrom = useRef<number | null>(null);
-  const touch = useRef<number | null>(null);
+  const touch = useRef<{ x: number; y: number } | null>(null);
   const [index, setIndex] = useState<number | null>(null);
 
   const open = (i: number) => {
@@ -38,7 +38,6 @@ export function Gallery({ items, layout = "mosaic" }: { items: readonly GalleryI
     const onClose = () => {
       if (openedFrom.current !== null) triggers.current[openedFrom.current]?.focus();
       openedFrom.current = null;
-      setIndex(null);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") step(1);
@@ -60,7 +59,7 @@ export function Gallery({ items, layout = "mosaic" }: { items: readonly GalleryI
         {items.map((item, i) => {
           const tag = kindLabel[item.kind];
           return (
-            <li key={item.src} className={s.tile}>
+            <li key={item.src} className={`lift ${s.tile}`}>
               <button
                 ref={(el) => {
                   triggers.current[i] = el;
@@ -68,7 +67,7 @@ export function Gallery({ items, layout = "mosaic" }: { items: readonly GalleryI
                 type="button"
                 className={s.trigger}
                 onClick={() => open(i)}
-                aria-label={`View larger: ${item.caption}${item.project ? `, ${item.project}` : ""}`}
+                aria-haspopup="dialog"
               >
                 <Image
                   src={item.src}
@@ -94,14 +93,18 @@ export function Gallery({ items, layout = "mosaic" }: { items: readonly GalleryI
           if (!(e.target as HTMLElement).closest("img, button, figcaption")) close();
         }}
         onTouchStart={(e) => {
-          touch.current = e.touches[0]?.clientX ?? null;
+          const t = e.touches[0];
+          touch.current = t ? { x: t.clientX, y: t.clientY } : null;
         }}
         onTouchEnd={(e) => {
           const start = touch.current;
-          const end = e.changedTouches[0]?.clientX;
+          const end = e.changedTouches[0];
           touch.current = null;
-          if (start === null || end === undefined || Math.abs(end - start) < 50) return;
-          step(end < start ? 1 : -1);
+          if (!start || !end) return;
+          const dx = end.clientX - start.x;
+          // A mostly vertical gesture is a scroll or a pinch, not a swipe.
+          if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(end.clientY - start.y) * 1.5) return;
+          step(dx < 0 ? 1 : -1);
         }}
       >
         {current && index !== null && (

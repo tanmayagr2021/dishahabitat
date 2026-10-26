@@ -7,6 +7,7 @@ import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
 import { cleanPhoneInput, mailtoUrl, parsePhone, phoneHelp } from "@/lib/messaging";
 import { company } from "@/lib/site";
+import { SuccessTick } from "./SuccessTick";
 import s from "./VisitBooker.module.css";
 
 /*
@@ -115,6 +116,8 @@ function icsFile(title: string, where: string, day: Date, istHour: number, hours
 
 export function VisitBooker() {
   const [step, setStep] = useState(0);
+  // Which way the last move went, so the next step slides in from that side.
+  const [dir, setDir] = useState<"fwd" | "back">("fwd");
   const [place, setPlace] = useState<string | null>(null);
   const days = useSyncExternalStore(noop, clientDays, serverDays);
   const [day, setDay] = useState<number | null>(null);
@@ -123,7 +126,7 @@ export function VisitBooker() {
   const [phone, setPhone] = useState("");
   const [people, setPeople] = useState(2);
   const [tried, setTried] = useState(false);
-  // One record per way of getting in touch, however many times the buttons are pressed.
+  // One record per request, however many times or ways the buttons are pressed.
   const recorded = useRef(new Set<string>());
 
   const p = places.find((x) => x.id === place);
@@ -166,12 +169,13 @@ export function VisitBooker() {
       return;
     }
     setTried(false);
+    setDir("fwd");
     setStep((v) => Math.min(3, v + 1));
   };
 
   const record = (channel: "whatsapp" | "email" | "call") => {
-    if (!p || recorded.current.has(channel)) return;
-    recorded.current.add(channel);
+    if (!p || recorded.current.has(message)) return;
+    recorded.current.add(message);
     recordLead({
       kind: isCall ? "callback" : "site-visit",
       name: name.trim(),
@@ -224,11 +228,11 @@ export function VisitBooker() {
           <strong>{steps[step]}</strong>
         </p>
         <div className={s.bar} aria-hidden>
-          <span style={{ width: `${((step + 1) / 4) * 100}%` }} />
+          <span style={{ transform: `scaleX(${(step + 1) / 4})` }} />
         </div>
       </div>
 
-      <div key={step} ref={stepBox} className={s.step}>
+      <div key={step} ref={stepBox} className={s.step} data-dir={dir}>
         {step === 0 && (
           <div>
             <h3 data-step-title tabIndex={-1} className={`display ${s.q}`}>
@@ -334,8 +338,9 @@ export function VisitBooker() {
 
         {step === 3 && p && (
           <div>
+            <SuccessTick className={s.tick} />
             <h3 data-step-title tabIndex={-1} className={`display ${s.q}`}>
-              Almost done, {name.trim().split(" ")[0]}.
+              Ready, {name.trim().split(" ")[0]}.
             </h3>
             <p className={s.lead}>Send this to our sales team on WhatsApp or by email, and they will confirm the time with you.</p>
             <dl className={s.summary}>
@@ -382,7 +387,10 @@ export function VisitBooker() {
       </div>
 
       <div className={s.nav}>
-        <button type="button" onClick={() => setStep((v) => Math.max(0, v - 1))} disabled={step === 0} className={`text-link ${s.back}`}>
+        <button type="button" onClick={() => {
+            setDir("back");
+            setStep((v) => Math.max(0, v - 1));
+          }} disabled={step === 0} className={`text-link ${s.back}`}>
           Back
         </button>
         {step < 3 ? (
@@ -393,6 +401,7 @@ export function VisitBooker() {
           <button
             type="button"
             onClick={() => {
+              setDir("back");
               setStep(0);
               setPlace(null);
               setDay(null);

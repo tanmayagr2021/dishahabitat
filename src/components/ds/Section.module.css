@@ -1,5 +1,5 @@
 .section {
-  padding: 64px var(--gutter);
+  padding: 64px var(--edge);
 }
 
 .section[data-space="tight"] {
@@ -59,27 +59,15 @@
 }
 
 .title {
-  font-size: 2rem;
-  line-height: 2.375rem;
+  font-size: var(--display-title);
+  line-height: var(--display-title-lh);
   color: var(--ink);
   overflow-wrap: anywhere;
 }
 
 .title[data-size="large"] {
-  font-size: 2.375rem;
-  line-height: 2.75rem;
-}
-
-@media (min-width: 1024px) {
-  .title {
-    font-size: 2.75rem;
-    line-height: 3.125rem;
-  }
-
-  .title[data-size="large"] {
-    font-size: 3.25rem;
-    line-height: 3.625rem;
-  }
+  font-size: var(--display-large);
+  line-height: var(--display-large-lh);
 }
 
 .line {
