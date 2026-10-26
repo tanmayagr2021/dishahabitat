@@ -1,0 +1,122 @@
+.checker {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .checker {
+    grid-template-columns: 5fr 6fr;
+    gap: 64px;
+    align-items: start;
+  }
+}
+
+.panel {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 32px 24px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding: 40px;
+  }
+}
+
+.from {
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+
+.ask {
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  color: var(--ink);
+}
+
+.hint {
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.input {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.row :global(.btn) {
+  flex: 0 0 auto;
+}
+
+.idle {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.small {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.chips {
+  min-width: 0;
+}
+
+.links {
+  display: grid;
+  margin-top: 8px;
+}
+
+@media (min-width: 640px) {
+  .links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+  }
+}
+
+.link {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.link svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--text-2);
+  transition: transform 0.3s var(--ease);
+}
+
+.link:hover svg {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link:hover svg {
+    transform: none;
+  }
+}
+
+/* The panel is grey, so the field sits on it in white. */
+.panel .input {
+  background: #fff;
+}

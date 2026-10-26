@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { type FocusEvent, type KeyboardEvent, type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { communities, communityHref, company, homesMenuLinks, links, nav } from "@/lib/content";
 import { isCurrent, opensOnPhoto } from "@/lib/routes";
+import { openComposer } from "@/lib/messaging";
 import { ChatIcon, ChevronDown, CloseIcon, PhoneIcon } from "./Icons";
 import { Logo } from "./Logo";
 import s from "./SiteHeader.module.css";
@@ -167,6 +168,7 @@ export function SiteHeader() {
                 onClick={() => setMega((v) => !v)}
               >
                 Homes
+                <ChevronDown className={s.navChevron} />
               </button>
               {/* Without scripts the button cannot open its panel, so a plain link stands in. */}
               <a className={`${s.navItem} ${s.noJsOnly}`} href={links.homes}>
@@ -216,9 +218,15 @@ export function SiteHeader() {
           <a className={s.icon} href={company.sales.tel} aria-label={`Call sales, ${company.sales.display}`} title={`Call ${company.sales.display}`}>
             <PhoneIcon />
           </a>
-          <a className={s.icon} href={company.whatsapp} aria-label="Message Disha Habitat on WhatsApp" title="WhatsApp">
+          <button
+            type="button"
+            className={s.icon}
+            onClick={() => openComposer({ channel: "whatsapp" })}
+            aria-label="Message Disha Habitat on WhatsApp"
+            title="WhatsApp"
+          >
             <ChatIcon />
-          </a>
+          </button>
           <button
             ref={menuButton}
             type="button"
@@ -298,9 +306,13 @@ export function SiteHeader() {
           <a className="btn btn-soft" href={company.sales.tel}>
             Call {company.sales.display}
           </a>
-          <a className="btn btn-soft" href={company.whatsapp}>
+          <button type="button" className="btn btn-soft" onClick={() => {
+              setSheet(false);
+              openComposer({ channel: "whatsapp" });
+            }}
+          >
             WhatsApp
-          </a>
+          </button>
         </div>
       </div>
     </header>

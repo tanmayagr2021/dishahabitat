@@ -43,38 +43,39 @@
   max-width: 64rem;
 }
 
+/* Three milestones at equal spacing; the months between them are written on the line. */
 .track {
-  position: relative;
-  height: 24px;
-  margin: 8px 9px 0;
-}
-
-.track::before,
-.fill {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line);
-  transform: translateY(-50%);
-}
-
-.fill {
-  right: auto;
-  background: var(--accent);
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
 }
 
 .dot {
-  position: absolute;
-  top: 50%;
+  flex: none;
   width: 18px;
   height: 18px;
   border: 4px solid var(--surface);
   border-radius: 50%;
   background: var(--ink);
-  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.seg {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: var(--accent);
+}
+
+.gap {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+  white-space: nowrap;
+  transform: translateX(-50%);
 }
 
 .marks {
@@ -86,6 +87,14 @@
 @media (min-width: 640px) {
   .marks {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .marks li:nth-child(2) {
+    text-align: center;
+  }
+
+  .marks li:nth-child(3) {
+    text-align: right;
   }
 }
 
@@ -175,20 +184,6 @@
     gap: 80px;
     align-items: start;
   }
-}
-
-.rera {
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
-  color: var(--text-2);
-}
-
-.code {
-  display: block;
-  margin-top: 2px;
-  font-weight: 500;
-  color: var(--ink);
-  overflow-wrap: anywhere;
 }
 
 .specItems {

@@ -1,0 +1,72 @@
+.icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  transition: background-color 0.3s var(--ease);
+}
+
+.icon:hover {
+  background: var(--surface-2);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  padding: 16px 20px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  transition: background-color 0.3s var(--ease);
+}
+
+.card:hover {
+  background: var(--surface-2);
+}
+
+.card > span:not(.mark) {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.card strong {
+  font-size: 1rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}

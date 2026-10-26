@@ -1,0 +1,124 @@
+/*
+ * A quiet bar at the bottom. On a computer it sits bottom left (the Feedback tab is on the right
+ * edge). On a phone it floats just above the Feedback pill (bottom left, 44 px high) so neither
+ * covers the other, and clear of the phone's own bottom edge.
+ */
+.bar {
+  position: fixed;
+  z-index: 55;
+  left: 12px;
+  right: 12px;
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: min(60svh, calc(100svh - 140px));
+  padding: 12px 14px;
+  border-radius: var(--radius-card);
+  background: #fff;
+  color: var(--text);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 12px 40px rgb(23 26 32 / 0.16);
+  animation: rise 0.45s var(--ease) both;
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  .bar {
+    left: var(--gutter);
+    right: auto;
+    bottom: 24px;
+    width: min(34rem, calc(100vw - 2 * var(--gutter) - 56px));
+    padding: 20px;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+  }
+}
+
+.body {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* The two main choices are the same size and weight. */
+.actions > :global(.btn) {
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding-inline: 12px;
+  font-size: 0.875rem;
+}
+
+.chooseBtn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  flex: none;
+  padding-inline: 6px;
+  font-size: 0.875rem;
+  border: 0;
+  background: none;
+  font-family: inherit;
+}
+
+.choose {
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.always {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--ink);
+}
+
+.toggle span {
+  display: grid;
+  gap: 2px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.toggle strong {
+  font-size: 0.9375rem;
+  color: var(--ink);
+}

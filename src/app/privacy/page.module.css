@@ -1,0 +1,56 @@
+.body {
+  display: grid;
+  gap: 16px;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.625rem;
+}
+
+.body h2 {
+  margin-top: 24px;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.body h2:first-child {
+  margin-top: 0;
+}
+
+.body ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.body a:not(:global(.text-link)) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+}
+
+.body a:hover {
+  text-decoration-color: var(--ink);
+}
+
+.body code {
+  padding: 1px 6px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.875em;
+}
+
+.body :global(.text-link) {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+}

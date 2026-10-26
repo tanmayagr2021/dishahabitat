@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -29,7 +30,7 @@ export async function generateMetadata(props: PageProps<"/homes/[slug]">): Promi
   });
 }
 
-/* "January 2023" → months since year 0, for placing dates on a track drawn to scale. */
+/* "January 2023" → months since year 0, for counting the months between milestones. */
 const monthIndex = (d: string) => {
   const date = new Date(`1 ${d}`);
   return date.getFullYear() * 12 + date.getMonth();
@@ -52,16 +53,15 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
   const words = homeowners.filter((h) => h.slug === p.slug);
   const mapQuery = encodeURIComponent(p.address ?? `${p.name}, ${p.locality}`);
 
-  /* The timeline: start, handover and completion placed by date along one line. */
-  const t0 = monthIndex(p.timeline.start);
+  /* The timeline: three milestones at equal spacing, with the real months between them. */
   const marks = [
     { k: "Construction start", v: p.timeline.start },
     { k: "Handover", v: p.timeline.handover },
     { k: "Completion (as per OC)", v: p.timeline.completion },
   ]
-    .map((m) => ({ ...m, at: monthIndex(m.v) - t0 }))
+    .map((m) => ({ ...m, at: monthIndex(m.v) }))
     .sort((a, b) => a.at - b.at);
-  const span = Math.max(...marks.map((m) => m.at)) || 1;
+  const gaps = marks.slice(1).map((m, n) => m.at - marks[n].at);
 
   return (
     <>
@@ -76,8 +76,8 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
           { label: "Start to finish", value: `${p.timeline.months} months` },
         ]}
         actions={[
-          { label: "Book a visit", href: links.bookVisit },
           { label: `See ${elements.shortName}`, href: elements.href },
+          { label: "Book a visit", href: links.bookVisit },
         ]}
       />
 
@@ -108,7 +108,11 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
               </a>
             </div>
           </div>
-          <FactList facts={[...p.facts, ...(p.address ? [{ label: "Address", value: p.address }] : [])]} />
+          <FactList facts={[
+              ...p.facts,
+              ...(p.rera ? [{ label: "Karnataka RERA", value: p.rera }] : []),
+              ...(p.address ? [{ label: "Address", value: p.address }] : []),
+            ]} />
         </div>
       </Section>
 
@@ -120,9 +124,15 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
         />
         <div className={s.timeline}>
           <div className={s.track} aria-hidden="true">
-            <span className={s.fill} style={{ width: "100%" }} />
-            {marks.map((m) => (
-              <span key={m.k} className={s.dot} style={{ left: `${(m.at / span) * 100}%` }} />
+            {marks.map((m, n) => (
+              <Fragment key={m.k}>
+                <span className={s.dot} />
+                {n < gaps.length && (
+                  <span className={s.seg}>
+                    <span className={s.gap}>{gaps[n] === 0 ? "Same month" : `${gaps[n]} ${gaps[n] === 1 ? "month" : "months"}`}</span>
+                  </span>
+                )}
+              </Fragment>
             ))}
           </div>
           <ol className={s.marks}>
@@ -183,11 +193,6 @@ export default async function CommunityPage(props: PageProps<"/homes/[slug]">) {
           <div className={s.specs}>
             <div>
               <SectionHead id="specs-title" title="Specifications" line="Selected items from the published project specification." />
-              {p.rera && (
-                <p className={s.rera}>
-                  Karnataka RERA <span className={s.code}>{p.rera}</span>
-                </p>
-              )}
             </div>
             <Accordion
               items={p.specifications.map((sp) => ({

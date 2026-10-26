@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { pageMeta } from "@/lib/launch";
+import { Accordion, Breadcrumbs, PageIntro, Section, SectionHead } from "@/components/ds";
 import { AffordabilityExplorer } from "@/components/AffordabilityExplorer";
-import { PageHero } from "@/components/PageHero";
-import { Label, Reveal } from "@/components/ui";
+import { pageMeta } from "@/lib/launch";
 
 export const metadata: Metadata = pageMeta({
   title: "EMI calculator",
@@ -13,56 +12,33 @@ export const metadata: Metadata = pageMeta({
 const notes = [
   {
     title: "How the EMI is calculated",
-    text: "We use the standard reducing-balance formula: EMI = P × r × (1 + r)ⁿ ÷ ((1 + r)ⁿ − 1), where P is the loan amount, r the monthly interest rate and n the number of monthly payments. At 0% interest, the EMI is simply P ÷ n.",
+    body: "We use the standard reducing-balance formula: EMI = P × r × (1 + r)ⁿ ÷ ((1 + r)ⁿ − 1), where P is the loan amount, r the monthly interest rate and n the number of monthly payments. At 0% interest, the EMI is simply P ÷ n.",
   },
   {
     title: "What it doesn’t include",
-    text: "GST, processing fees, insurance, stamp duty, registration, maintenance deposits and changes in floating rates are not included. Banks usually lend at most 75 to 90% of a home’s value, depending on the loan size. Lenders may round or schedule payments differently.",
+    body: "GST, processing fees, insurance, stamp duty, registration, maintenance deposits and changes in floating rates are not included. Banks usually lend at most 75 to 90% of a home’s value, depending on the loan size. Lenders may round or schedule payments differently.",
   },
   {
     title: "What it is not",
-    text: "This is an illustrative planning tool, not an offer of finance, a loan approval or an eligibility check by Disha Habitat or any lender. Speak to your bank for an actual quote.",
+    body: "This is an illustrative planning tool, not an offer of finance, a loan approval or an eligibility check by Disha Habitat or any lender. Speak to your bank for an actual quote.",
   },
 ];
 
 export default function PlanPage() {
   return (
     <>
-      <PageHero
-        compact
-        label="EMI calculator"
-        title={
-          <>
-            What would your <em>monthly EMI</em> be?
-          </>
-        }
-        intro="Enter a home price, down payment, interest rate and tenure. The estimate updates as you type, and your figures never leave your browser."
+      <PageIntro
+        above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "EMI calculator" }]} />}
+        title="What would your monthly EMI be?"
+        line="Enter a home price, down payment, interest rate and tenure. The estimate updates as you type, and your figures never leave your browser."
       />
-
-      <section data-tone="light" aria-label="EMI calculator" className="surface-ivory py-12 md:py-16">
-        <div className="shell">
-          <AffordabilityExplorer headingLevel={1} />
-        </div>
-      </section>
-
-      <section data-tone="light" aria-labelledby="notes-title" className="surface-stone py-16 md:py-20">
-        <div className="shell">
-          <Label n="01" className="text-mute">
-            The fine print
-          </Label>
-          <h2 id="notes-title" className="serif mt-6 t-section">
-            About these <em>estimates</em>
-          </h2>
-          <div className="mt-10 grid gap-x-8 md:grid-cols-3">
-            {notes.map((n, i) => (
-              <Reveal key={n.title} delay={i * 100} className="border-t border-ink py-8">
-                <h3 className="text-lg font-medium tracking-tight text-ink">{n.title}</h3>
-                <p className="mt-3 leading-relaxed text-mute">{n.text}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Section label="EMI calculator" space="tight">
+        <AffordabilityExplorer />
+      </Section>
+      <Section tone="surface" width="measure" labelledBy="notes-title">
+        <SectionHead id="notes-title" title="About these estimates" />
+        <Accordion items={notes} defaultOpen={null} />
+      </Section>
     </>
   );
 }

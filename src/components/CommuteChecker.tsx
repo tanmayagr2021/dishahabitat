@@ -1,8 +1,14 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import { ArrowUpRight, Car, MapPin, Navigation } from "lucide-react";
-import { commuteDestinations, commuteFrom, directionsUrl, mapsSearchUrl, nearbySearches, siteDirectionsUrl } from "@/lib/proof";
+import { fieldClasses } from "@/components/ds";
+import { ArrowRight } from "@/components/showroom/Icons";
+import { commuteDestinations, commuteFrom, directionsUrl } from "@/lib/proof";
+import s from "./CommuteChecker.module.css";
+
+const shortcuts = commuteDestinations.slice(0, 4);
+
+const NEW_TAB = <span className="sr-only">(opens Google Maps in a new tab)</span>;
 
 /*
  * Commute is a top worry for Bengaluru buyers, and travel times change by the hour. Rather than
@@ -21,89 +27,52 @@ export function CommuteChecker() {
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-      <form onSubmit={onSubmit} className="card flex min-w-0 flex-col p-6 md:p-8">
-        <p className="flex items-center gap-2 text-sm text-mute">
-          <MapPin aria-hidden className="size-4 text-forest" strokeWidth={1.8} /> From {commuteFrom.label}, Gunjur
-        </p>
-        <label htmlFor="office" className="serif mt-4 text-[1.7rem] leading-tight">
+    <div className={s.checker}>
+      <form onSubmit={onSubmit} className={s.panel}>
+        <p className={s.from}>From {commuteFrom.label}, Gunjur</p>
+        <label htmlFor="office" className={`display ${s.ask}`}>
           Where do you go every day?
         </label>
-        <p className="mt-2 text-[0.95rem] leading-relaxed text-mute">
-          Type your office or your children’s school. We’ll open today’s live route in Google Maps, so you see the real time, not
-          our estimate.
-        </p>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <p className={s.hint}>Type your office or a school. We open today’s live route in Google Maps.</p>
+        <div className={s.row}>
           <input
             id="office"
             value={office}
             onChange={(e) => setOffice(e.target.value)}
             placeholder="Your office, or a school"
             autoComplete="off"
-            className="min-h-12 w-full min-w-0 flex-1 rounded-lg border border-ink/45 bg-white/70 px-4 text-[1rem] outline-none transition-colors placeholder:text-ink/55 focus:border-forest"
+            className={`${fieldClasses.control} ${s.input}`}
           />
           {href ? (
-            <a
-              ref={go}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper transition-colors hover:bg-forest-2"
-            >
-              <Navigation aria-hidden className="size-4" /> Show my route
+            <a ref={go} href={href} target="_blank" rel="noopener noreferrer" className="btn btn-dark">
+              Show my route
               <span className="sr-only">(opens Google Maps in a new tab)</span>
             </a>
           ) : (
-            <button type="submit" aria-disabled className="inline-flex min-h-12 cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-forest px-5 font-semibold text-paper opacity-40">
-              <Navigation aria-hidden className="size-4" /> Show my route
+            <button type="submit" aria-disabled="true" className={`btn btn-dark ${s.idle}`}>
+              Show my route
             </button>
           )}
         </div>
-        <p className="mt-3 text-xs text-mute">Opens Google Maps in a new tab. We don’t store what you type; Google Maps receives it to show the route.</p>
+        <p className={s.small}>Opens in a new tab. We don’t store what you type; Google Maps receives it.</p>
       </form>
 
-      <div className="min-w-0">
-        <p className="label text-mute">Or try a common one</p>
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-          {commuteDestinations.map((d) => (
+      <section aria-labelledby="common-routes" className={s.chips}>
+        <h3 id="common-routes" className="eyebrow">
+          Or try a common one
+        </h3>
+        <ul className={s.links}>
+          {shortcuts.map((d) => (
             <li key={d.label}>
-              <a
-                href={directionsUrl(d.query)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex min-h-14 items-center justify-between gap-3 rounded-xl border border-ink/10 bg-white/50 px-4 py-3 transition-colors hover:border-forest hover:bg-forest hover:text-paper"
-              >
-                <span className="flex min-w-0 items-center gap-3">
-                  <Car aria-hidden className="size-4 text-forest transition-colors group-hover:text-paper" strokeWidth={1.7} />
-                  <span className="font-medium">{d.label}</span>
-                </span>
-                <ArrowUpRight aria-hidden className="size-4 opacity-60" />
-                <span className="sr-only">(opens Google Maps in a new tab)</span>
+              <a href={directionsUrl(d.query)} target="_blank" rel="noopener noreferrer" className={s.link}>
+                {d.label}
+                <ArrowRight />
+                {NEW_TAB}
               </a>
             </li>
           ))}
         </ul>
-        <p className="label mt-8 text-mute">Around the site</p>
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-          {[...nearbySearches.map((n) => ({ label: n.label, href: mapsSearchUrl(n.query) })), { label: "Directions to the site", href: siteDirectionsUrl }].map((n) => (
-            <li key={n.label}>
-              <a
-                href={n.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex min-h-14 items-center justify-between gap-3 rounded-xl border border-ink/10 bg-white/50 px-4 py-3 transition-colors hover:border-forest hover:bg-forest hover:text-paper"
-              >
-                <span className="flex min-w-0 items-center gap-3">
-                  <MapPin aria-hidden className="size-4 text-forest transition-colors group-hover:text-paper" strokeWidth={1.7} />
-                  <span className="font-medium">{n.label}</span>
-                </span>
-                <ArrowUpRight aria-hidden className="size-4 opacity-60" />
-                <span className="sr-only">(opens Google Maps in a new tab)</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      </section>
     </div>
   );
 }

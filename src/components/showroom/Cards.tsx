@@ -54,21 +54,3 @@ export function CommunityCard({ c }: { c: Community }) {
     </article>
   );
 }
-
-/* A place inside Pursuit of the Elements: its name and one line. The row's heading and link do the rest. */
-export function LifeCard({ item }: { item: { name: string; line: string; image: Img } }) {
-  return (
-    <article className={s.card} data-tone="dark">
-      <Photo image={item.image} />
-      <div className={s.scrim} aria-hidden="true" />
-      <div className={s.top}>
-        <span />
-        <p className={s.tag}>Artist’s impression</p>
-      </div>
-      <div className={s.bottom}>
-        <h3 className={`display ${s.name}`}>{item.name}</h3>
-        <p className={s.line}>{item.line}</p>
-      </div>
-    </article>
-  );
-}

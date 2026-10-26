@@ -1,0 +1,83 @@
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.pair {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 4px;
+}
+
+.submit .btn {
+  min-width: 180px;
+  min-height: 48px;
+}
+
+.submit p {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.done {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  outline: none;
+}
+
+.doneTitle {
+  font-size: 2rem;
+  line-height: 2.375rem;
+  color: var(--ink);
+}
+
+.doneLine {
+  color: var(--text-2);
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+}
+
+.message {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.doneActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.doneActions .btn {
+  min-height: 48px;
+  min-width: 180px;
+}
+
+.again {
+  min-height: 44px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+}

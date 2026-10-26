@@ -1,12 +1,11 @@
-import { CommunityCard, LifeCard } from "@/components/showroom/Cards";
-import { CardCarousel } from "@/components/showroom/CardCarousel";
+import { CommunityCard } from "@/components/showroom/Cards";
 import { ClosingCta } from "@/components/showroom/ClosingCta";
 import { CommunitiesRow } from "@/components/showroom/CommunitiesRow";
 import { Hero } from "@/components/showroom/Hero";
 import { PromoGrid } from "@/components/showroom/PromoGrid";
 import { ProofPanel } from "@/components/showroom/ProofPanel";
 import type { Metadata } from "next";
-import { communities, heroSlides, life, rows } from "@/lib/content";
+import { communities, heroSlides, rows } from "@/lib/content";
 import { pageMeta } from "@/lib/launch";
 
 export const metadata: Metadata = {
@@ -20,16 +19,14 @@ export const metadata: Metadata = {
 };
 
 /*
- * The homepage follows tesla.com's section by section: hero carousel, a proof panel with a film, a
- * row of large cards (here with the communities map beside them), two grey cards, a second row of
- * cards, then one clear next step.
+ * Hero, the communities with their map, the award, two grey cards (story, checklist), one closing step.
+ * The amenity carousel is gone: the project page shows the same pictures.
  */
 export default function Home() {
   return (
     <>
       <h1 className="sr-only">Disha Habitat: Pursuit of the Elements, and five communities in East Bengaluru</h1>
       <Hero slides={heroSlides} />
-      <ProofPanel />
       <CommunitiesRow
         title={rows.communities.title}
         line={rows.communities.line}
@@ -39,18 +36,8 @@ export default function Home() {
           <CommunityCard key={c.slug} c={c} />
         ))}
       </CommunitiesRow>
+      <ProofPanel />
       <PromoGrid />
-      <CardCarousel
-        title={rows.life.title}
-        line={rows.life.line}
-        link={rows.life.link}
-        keyboardScroll
-        names={life.map((l) => l.name)}
-      >
-        {life.map((item) => (
-          <LifeCard key={item.name} item={item} />
-        ))}
-      </CardCarousel>
       <ClosingCta />
     </>
   );

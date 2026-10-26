@@ -65,16 +65,16 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgb(0 0 0 / 0.56) 0%, rgb(0 0 0 / 0.5) 36%, rgb(0 0 0 / 0.22) 54%, rgb(0 0 0 / 0) 68%),
-    linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.16) 16%, rgb(0 0 0 / 0) 28%);
+    linear-gradient(180deg, rgb(0 0 0 / 0.56) 0%, rgb(0 0 0 / 0.52) 40%, rgb(0 0 0 / 0.42) 58%, rgb(0 0 0 / 0.14) 72%, rgb(0 0 0 / 0) 82%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.5) 22%, rgb(0 0 0 / 0.2) 40%, rgb(0 0 0 / 0) 52%);
 }
 
 /* On the narrowest phones the words wrap onto more lines and reach further down the picture. */
 @media (max-width: 400px) {
   .scrim {
     background:
-      linear-gradient(180deg, rgb(0 0 0 / 0.58) 0%, rgb(0 0 0 / 0.56) 50%, rgb(0 0 0 / 0.24) 66%, rgb(0 0 0 / 0) 78%),
-      linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.16) 16%, rgb(0 0 0 / 0) 28%);
+      linear-gradient(180deg, rgb(0 0 0 / 0.58) 0%, rgb(0 0 0 / 0.56) 52%, rgb(0 0 0 / 0.44) 68%, rgb(0 0 0 / 0.14) 80%, rgb(0 0 0 / 0) 88%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.5) 22%, rgb(0 0 0 / 0.2) 40%, rgb(0 0 0 / 0) 52%);
   }
 }
 
@@ -83,7 +83,7 @@
     background:
       radial-gradient(ellipse 46% 32% at 50% 24%, rgb(0 0 0 / 0.36), rgb(0 0 0 / 0) 100%),
       linear-gradient(180deg, rgb(0 0 0 / 0.52) 0%, rgb(0 0 0 / 0.47) 34%, rgb(0 0 0 / 0.16) 50%, rgb(0 0 0 / 0) 60%),
-      linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.16) 14%, rgb(0 0 0 / 0) 26%);
+      linear-gradient(0deg, rgb(0 0 0 / 0.62) 0%, rgb(0 0 0 / 0.36) 18%, rgb(0 0 0 / 0) 34%);
   }
 }
 
@@ -136,9 +136,10 @@
   margin-top: 4px;
   font-size: 1.0625rem;
   line-height: 1.5rem;
+  font-weight: 500;
   color: #fff;
   text-wrap: balance;
-  text-shadow: 0 1px 14px rgb(0 0 0 / 0.35);
+  text-shadow: 0 1px 14px rgb(0 0 0 / 0.45);
 }
 
 @media (min-width: 1024px) {
@@ -159,6 +160,44 @@
   color: #fff;
   text-shadow: 0 1px 10px rgb(0 0 0 / 0.4);
   text-wrap: balance;
+}
+
+/* The registration numbers, small and quiet under the buttons, with a link to check them. */
+.rera {
+  max-width: 46rem;
+  margin-top: 14px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: #fff;
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.5);
+}
+
+.reraNo {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.reraDot {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .reraNo {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .reraDot {
+    display: inline;
+  }
+
+}
+
+.rera a {
+  display: inline-block;
+  padding-block: 4px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* The line wraps between phrases, and inside one only when a phrase is wider than the screen. */

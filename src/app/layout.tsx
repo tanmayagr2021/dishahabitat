@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { ConsentBanner } from "@/components/consent/ConsentBanner";
+import { MessageComposer } from "@/components/MessageComposer";
 import { FeedbackWidget } from "@/components/feedback/FeedbackWidget";
 import { SiteFooter } from "@/components/showroom/SiteFooter";
 import { SiteHeader } from "@/components/showroom/SiteHeader";
@@ -88,6 +90,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main">{children}</main>
         <SiteFooter />
         <FeedbackWidget />
+        <MessageComposer />
+        <ConsentBanner />
       </body>
     </html>
   );

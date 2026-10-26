@@ -1,90 +1,54 @@
 import { ComposeButton } from "@/components/ComposeButton";
-import Image from "next/image";
 import { EnquiryForm } from "@/components/EnquiryForm";
-import { Label, Lines, Reveal } from "@/components/ui";
+import { Panel, Section } from "@/components/ds";
 import { elements } from "@/lib/elements";
 import { company, homemakers } from "@/lib/site";
+import s from "./EnquirySection.module.css";
 
-export function EnquirySection({ defaultInterest, n = "09" }: { defaultInterest?: string; n?: string }) {
+/* `n` is the old section number; it is accepted so existing callers keep working. */
+export function EnquirySection({ defaultInterest }: { defaultInterest?: string; n?: string }) {
   // On the project on sale, enquiries go to its own sales line and inbox; elsewhere, to the office.
   const forElements = defaultInterest === elements.name;
   const phones = forElements ? [elements.phone] : company.phones;
   const email = forElements ? elements.email : company.email;
   const guna = homemakers[0];
   return (
-    <section
-      id="enquire"
-      data-tone="dark"
-      aria-labelledby="enquire-title"
-      className="surface-forest relative isolate overflow-hidden"
-    >
-      <div className="absolute inset-0 -z-10">
-        <div className="parallax absolute inset-0">
-          <Image
-            src="/images/central-park/clubhouse-night.jpg"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover object-[60%_50%]"
-          />
+    <Section id="enquire" tone="surface" labelledBy="enquire-title">
+      <div className={s.grid}>
+        <div className={s.text}>
+          <h2 id="enquire-title" className={`display ${s.title}`}>
+            Let’s meet for coffee.
+          </h2>
+          <p className={s.line}>
+            It’s the favourite invitation of our founder {guna.short}. It means he wants to explain things properly, as plainly as you need.
+          </p>
+          <dl className={s.reach}>
+            <div>
+              <dt>Call</dt>
+              <dd>
+                {phones.map((p) => (
+                  <a key={p.href} href={p.href}>
+                    {p.display}
+                  </a>
+                ))}
+              </dd>
+            </div>
+            <div>
+              <dt>Write</dt>
+              <dd>
+                <ComposeButton channel="email" topic={forElements ? elements.name : undefined} className={s.write}>
+                  {email}
+                </ComposeButton>
+              </dd>
+            </div>
+          </dl>
         </div>
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-forest-deep/60" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-r from-forest-deep via-forest-deep/80 to-forest-deep/20" />
+        <Panel className={s.form}>
+          <h3 className={`display ${s.formTitle}`}>Book a site visit</h3>
+          <p className={s.formLine}>Tell us a little about what you’re looking for. You’ll see the message before you send it.</p>
+          <EnquiryForm defaultInterest={defaultInterest} />
+        </Panel>
       </div>
-
-      <div className="shell pointer-events-none relative grid gap-16 py-16 md:py-14 lg:grid-cols-12 lg:items-center lg:gap-8 [&>*]:pointer-events-auto">
-        <div className="flex flex-col justify-between gap-12 lg:col-span-6">
-          <div>
-            <Label n={n} className="text-paper/60">
-              Visit us
-            </Label>
-            <Lines
-              id="enquire-title"
-              className="serif mt-8 t-section leading-[0.9]"
-              lines={["“Let’s meet", <em key="c">for coffee.”</em>]}
-            />
-            <Reveal delay={200} className="mt-8 max-w-md">
-              <p className="text-[1.05rem] leading-relaxed text-paper/75">
-                It’s the favourite invitation of our founder Guna. It means he wants to explain things properly, as plainly as you need.
-              </p>
-              <p className="label mt-5 text-paper/55">
-                {guna.name} · {guna.role}
-              </p>
-            </Reveal>
-          </div>
-
-          <Reveal delay={300}>
-            <dl className="grid max-w-md gap-6 text-sm sm:grid-cols-2">
-              <div>
-                <dt className="label text-paper/50">Call</dt>
-                <dd className="mt-2 space-y-1">
-                  {phones.map((p) => (
-                    <a key={p.href} href={p.href} className="block py-0.5 text-[1.1rem] text-paper transition-colors hover:text-cyan">
-                      {p.display}
-                    </a>
-                  ))}
-                </dd>
-              </div>
-              <div>
-                <dt className="label text-paper/50">Write</dt>
-                <dd className="mt-2">
-                  <ComposeButton channel="email" topic={forElements ? elements.name : undefined} className="text-left text-[1.1rem] text-paper transition-colors hover:text-cyan">
-                    {email}
-                  </ComposeButton>
-                </dd>
-              </div>
-            </dl>
-          </Reveal>
-        </div>
-
-        <Reveal delay={150} className="order-first lg:order-none lg:col-span-5 lg:col-start-8">
-          <div className="card-dark relative p-6 text-paper sm:p-8">
-            <p className="serif text-[2.4rem] leading-none">Book a site visit</p>
-            <p className="mb-6 mt-2 text-sm text-paper/65">Tell us a little about what you’re looking for. You’ll see the message before you send it. Fields marked * are required.</p>
-            <EnquiryForm defaultInterest={defaultInterest} tone="dark" />
-          </div>
-        </Reveal>
-      </div>
-    </section>
+    </Section>
   );
 }

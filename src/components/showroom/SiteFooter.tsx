@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
+import { CookieSettingsLink } from "@/components/consent/ConsentBanner";
 import { communities, communityHref, company, links } from "@/lib/content";
 import { company as site } from "@/lib/site";
 import s from "./SiteFooter.module.css";
@@ -37,7 +38,6 @@ const columns = [
       { label: "Book a site visit", href: links.bookVisit },
       { label: "Homebuyer’s checklist", href: links.checklist },
       { label: "EMI calculator", href: links.emi },
-      { label: "Compare communities", href: "/homes#compare" },
       { label: "Construction updates", href: links.updates },
     ],
   },
@@ -114,6 +114,9 @@ export function SiteFooter() {
         </li>
         <li>
           <Link href={links.privacy}>Privacy</Link>
+        </li>
+        <li>
+          <CookieSettingsLink />
         </li>
         {company.socials.map((x) => (
           <li key={x.label}>

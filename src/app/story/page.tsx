@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { pageMeta } from "@/lib/launch";
 import Image from "next/image";
 import Link from "next/link";
-import { AmbientFilm } from "@/components/AmbientFilm";
-import { PageHero } from "@/components/PageHero";
-import { ArrowLink, ButtonLink, Lines, Reveal } from "@/components/ui";
-import { CountUp } from "@/components/CountUp";
-import { FamilyStacks } from "@/components/story/FamilyStacks";
-import { GigWall } from "@/components/story/GigWall";
-import { ChapterRibbon } from "@/components/story/ChapterRibbon";
-import { company, homemakerProfiles, homemakers, poem, stats } from "@/lib/site";
+import { Accordion, CtaBand, Feature, Gallery, PhotoHero, Section, SectionHead } from "@/components/ds";
+import { ArrowRight } from "@/components/showroom/Icons";
+import { company, dishaFamily, formatIndian, homemakerProfiles, homemakers, poem, stats } from "@/lib/site";
+import { links } from "@/lib/content";
+import { pageMeta } from "@/lib/launch";
 import { projects, projectsByHandover } from "@/lib/projects";
+import s from "./page.module.css";
 
 export const metadata: Metadata = pageMeta({
   title: "Our story",
@@ -19,442 +16,236 @@ export const metadata: Metadata = pageMeta({
   path: "/story",
 });
 
-/*
- * A memoir in seven short chapters, told by the two founders. People identify with a brand that
- * started small and kept going (Paharia et al. 2011), and a story that absorbs the reader shifts
- * belief more than claims do (Green & Brock 2000). See docs/RESEARCH-BRIEF.md.
- *
- * DRAFT FOR THE FOUNDERS' APPROVAL: the first-person passages are written from their published
- * profiles and Disha's own pages (dishahabitat.com/our-journey, /homemakers, /the-core). No event
- * is invented; the founders should read and approve the wording before launch.
- */
-const toYear = (s: string) => {
-  const d = new Date(`1 ${s}`);
-  return d.getFullYear() + d.getMonth() / 12;
+/* First-person passages are drafted from the founders’ published profiles; they should approve the wording. */
+const voices: Record<string, string> = {
+  "Gunaranjan J":
+    "Fifteen years in software, consulting for businesses in the USA, and a practising horticulturist: you will find that in every garden we plant.",
+  "K Raja Sekhar":
+    "Built mobile-tower infrastructure for Airtel, Vodafone, Idea and Reliance, then years with HCL Technologies. He explains the structure plainly until the maths is clear.",
 };
-const AXIS = { from: 2014, to: 2026 };
-const pct = (y: number) => ((y - AXIS.from) / (AXIS.to - AXIS.from)) * 100;
-const axisYears = Array.from({ length: AXIS.to - AXIS.from + 1 }, (_, i) => AXIS.from + i);
 
-const chapters = [
-  { id: "ch-1", n: "One", title: "We were homebuyers first" },
-  { id: "homemakers", n: "Two", title: "Two very different careers" },
-  { id: "ch-3", n: "Three", title: "Ninety-two homes among the palms" },
-  { id: "ch-4", n: "Four", title: "Five communities, start to finish" },
-  { id: "ch-5", n: "Five", title: "What we promised ourselves" },
-  { id: "this-is-us", n: "Six", title: "This is us" },
-  { id: "ch-7", n: "Seven", title: "Come and have coffee" },
-];
+const promises = [
+  ["Explain everything.", "No question is too small. If something needs explaining, we sit down and explain it."],
+  ["Build it properly.", "Build quality has always been our biggest strength, and our residents are the ones who tell people so."],
+  ["Price it mindfully.", "Every home, from an apartment to an independent villa, is created, and priced, with the same care."],
+] as const;
 
-function ChapterHead({ i, tone = "light", id }: { i: number; tone?: "light" | "dark"; id: string }) {
-  const c = chapters[i];
-  return (
-    <div>
-      <p className={`font-[family-name:var(--font-caveat)] text-[1.7rem] leading-none ${tone === "dark" ? "text-brass" : "text-earth"}`}>
-        Chapter {c.n.toLowerCase()}
-      </p>
-      <h2 id={id} className="serif mt-3 t-section leading-[1.04] text-balance">
-        {c.title}
-      </h2>
-    </div>
-  );
-}
+const artists = ["Shankar Ehsaan Loy", "Shreya Ghoshal", "Armaan Malik", "Piyush Mishra", "K S Chithra", "Sunil Grover"];
+
+const family = dishaFamily.slice(0, 6).map((f) => ({
+  src: f.src,
+  width: 1920,
+  height: f.src.endsWith("team-1.jpg") ? 1445 : 1280,
+  alt: f.alt,
+  caption: f.kind,
+  kind: "photo" as const,
+}));
+
+const homesOf = (p: (typeof projects)[number]) => p.facts.find((f) => f.label === "Homes")?.value;
 
 export default function StoryPage() {
-  const [guna, raja] = homemakers;
   const windsor = projects.find((p) => p.slug === "disha-windsor-gardens")!;
+  const families = stats.find((st) => st.label === "Happy families")!;
+  const communities = stats.find((st) => st.label === "Communities created")!;
 
   return (
     <>
-      <PageHero
-        label="Our story, in the founders’ words"
-        title={
-          <>
-            We began where <em>you are now.</em>
-          </>
-        }
-        intro="Seven short chapters by Gunaranjan J and K Raja Sekhar: how two homebuyers became builders, and what they promised themselves along the way."
+      <PhotoHero
+        title="Our story"
+        line="We began where you are now: looking for a house that would become a home."
         image={{
           src: "/images/community/site-team.jpg",
+          width: 1920,
+          height: 1280,
           alt: "The Disha Habitat site and engineering team gathered on a landscaped lawn",
-          caption: "The Disha Habitat family",
-          kind: "photo",
+          position: "50% 35%",
         }}
-        imagePosition="50% 35%"
+        specs={[
+          { value: String(company.founded), label: "Building since" },
+          { value: String(communities.value), label: communities.label },
+          { value: `${formatIndian(families.value)}${families.suffix}`, label: families.label },
+        ]}
+        actions={[{ label: "Book a visit", href: links.bookVisit }]}
       />
 
-      <ChapterRibbon chapters={chapters} />
+      <Section label="Our poem">
+        <p className={`display ${s.poem}`}>
+          {poem.opening.map((l) => (
+            <span key={l}>{l}</span>
+          ))}
+          <span className={s.dots} aria-hidden="true">
+            …
+          </span>
+          <span>{poem.closing}</span>
+        </p>
+      </Section>
 
-      {/* Epigraph: the company's own poem */}
-      <section aria-label="Our poem" className="surface-ivory pb-4 pt-16 md:pt-24">
-        <div className="shell">
-          <Reveal className="mx-auto max-w-2xl text-center">
-            <p className="serif text-[clamp(1.5rem,2.4vw,2rem)] italic leading-snug text-ink/80">
-              {poem.opening.map((l) => (
-                <span key={l} className="block">
-                  {l}
+      <Section space="tight" labelledBy="five-title">
+        <SectionHead
+          id="five-title"
+          title="Five communities, start to finish."
+          line="Our first four sold out by word of mouth: our homebuyers told their friends."
+        />
+        <ol className={s.list}>
+          {projectsByHandover.map((p) => (
+            <li key={p.slug}>
+              <Link href={`/homes/${p.slug}`} className={s.row}>
+                <span className={`display ${s.rowName}`}>{p.shortName}</span>
+                <span className={s.rowMeta}>
+                  {p.timeline.start} to {p.timeline.completion}
                 </span>
-              ))}
-              <span className="block text-ink/40">…</span>
-              <span className="block text-ink">{poem.closing}</span>
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Chapter one */}
-      <section id="ch-1" data-chapter="ch-1" data-tone="light" aria-labelledby="ch-1-title" className="surface-ivory scroll-mt-24 py-16 md:py-24">
-        <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-4">
-            <ChapterHead i={0} id="ch-1-title" />
-            <p className="mt-4 text-sm text-mute">Where it began</p>
-          </div>
-          <div className="memoir space-y-6 text-[1.15rem] leading-[1.75] text-ink/80 lg:col-span-6 lg:col-start-7">
-            <Reveal>
-              <p className="drop-cap">
-                We began where you are now: looking for a house that would become a home. We asked the questions every
-                buyer asks.
-              </p>
-            </Reveal>
-            <Reveal delay={80}>
-              <p>
-                We became homebuyers first, then investors, and then, taking the plunge, developers and builders. We learnt
-                all of it coming from a place of not knowing. Every stumble opened a new window of understanding, and we
-                realised what it takes to keep a promise and meet an expectation.
-              </p>
-            </Reveal>
-            <Reveal delay={160}>
-              <p>
-                That is why every home we plan starts from the buyer’s side of the table. We still remember what it felt like
-                to be looking.
-              </p>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Chapter two: the founders */}
-      <section id="homemakers" data-chapter="homemakers" data-tone="light" aria-labelledby="ch-2-title" className="layer surface-stone scroll-mt-24 py-16 md:py-24">
-        <div className="shell">
-          <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <ChapterHead i={1} id="ch-2-title" />
-            </div>
-            <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
-              Neither of us started out building homes. We think that is exactly why we explain everything.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {[
-              {
-                h: guna,
-                voice: [
-                  "I spent a decade and a half as a software professional: ERP, SAP, data warehousing, project management, consulting for businesses in the USA. I am also a practising horticulturist, and you will find that in every garden we plant.",
-                  "If I ask you to meet me for coffee, it means one of two things. An explanation is owed and I want to give it, or you have a concern and I am bringing a solution. Either way, I want you to leave as informed as any engineer, architect or site supervisor on the project.",
-                ],
-              },
-              {
-                h: raja,
-                voice: [
-                  "I built mobile-tower infrastructure for telecom companies such as Airtel, Vodafone, Idea and Reliance: turnkey civil, electrical, tower and generator commissioning. Then came a long association with HCL Technologies.",
-                  "I am a man of few words until the talk turns to what it means to create a mindful living space. Precision is how I work. I will explain the structure plainly until the simple maths of the building is clear, and if you ask, I will tell you I am still learning.",
-                ],
-              },
-            ].map(({ h, voice }, i) => (
-              <Reveal as="article" key={h.name} delay={i * 120} className="card overflow-hidden">
-                <div className="grid sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
-                  <div className="relative aspect-[4/5] sm:aspect-auto">
-                    <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="(min-width: 768px) 22vw, 100vw" className="object-cover" />
-                  </div>
-                  <div className="flex flex-col p-6 md:p-7">
-                    <p className="text-sm text-mute">{h.role}</p>
-                    <h3 className="serif mt-1 text-[2rem] leading-tight">{h.name}</h3>
-                    <blockquote className="serif mt-4 text-[1.25rem] leading-snug text-earth">
-                      <em>{h.signature}</em>
-                    </blockquote>
-                    <div className="mt-4 space-y-3 text-[0.98rem] leading-relaxed text-ink/75">
-                      {voice.map((t) => (
-                        <p key={t}>{t}</p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <details className="group border-t border-ink/10">
-                  <summary className="flex cursor-pointer list-none items-center justify-between px-6 py-4 text-[0.95rem] font-semibold text-forest [&::-webkit-details-marker]:hidden md:px-7">
-                    How the team describes {h.short}
-                    <span aria-hidden className="text-lg transition-transform group-open:rotate-45">
-                      +
-                    </span>
-                  </summary>
-                  <div className="space-y-4 px-6 pb-6 text-[0.98rem] leading-relaxed text-ink/75 md:px-7">
-                    {homemakerProfiles[h.name].map((t) => (
-                      <p key={t}>{t}</p>
-                    ))}
-                  </div>
-                </details>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* The family, under the homemakers (as the revamp proposal asks) */}
-      <section data-tone="dark" aria-labelledby="family-title" className="layer surface-forest grain overflow-x-clip py-16 md:py-24">
-        <div className="shell grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="lg:col-span-4">
-            <p className="eyebrow text-paper/65">Our homemakers · The Disha family</p>
-            <Lines id="family-title" className="serif mt-5 t-section leading-[1.04]" lines={["One big family,", <em key="e">close-knit and mindful.</em>]} />
-            <p className="mt-6 max-w-sm leading-relaxed text-paper/70">
-              The families who live in our homes, and the people who build them. Pull up a chair and go through the album.
-            </p>
-            <p className="mt-6 text-[0.95rem] font-medium text-brass">Tap or click a photo for the next one →</p>
-          </div>
-          <div className="lg:col-span-8">
-            <FamilyStacks />
-          </div>
-        </div>
-      </section>
-
-      {/* Chapter three: the first community */}
-      <section id="ch-3" data-chapter="ch-3" data-tone="dark" aria-labelledby="ch-3-title" className="layer surface-forest grain scroll-mt-24 py-16 md:py-24">
-        <div className="shell grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
-          <Reveal variant="mask" className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:col-span-6">
-            <Image src={windsor.cover.src} alt={windsor.cover.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
-          </Reveal>
-          <div className="lg:col-span-5 lg:col-start-8">
-            <ChapterHead i={2} tone="dark" id="ch-3-title" />
-            <div className="mt-6 space-y-5 text-[1.1rem] leading-[1.75] text-paper/80">
-              <p>
-                Our first community was Windsor Gardens, on Panathur–Varthur Road: {windsor.facts.find((f) => f.label === "Homes")?.value} homes
-                on 1.25 acres, among coconut palms.
-              </p>
-              <p>
-                We broke ground in {windsor.timeline.start} and handed over the keys in {windsor.timeline.handover}. It is where everything
-                we know began.
-              </p>
-            </div>
-            <ArrowLink href={`/homes/${windsor.slug}`} className="mt-7 text-paper">
-              See Windsor Gardens
-            </ArrowLink>
-          </div>
-        </div>
-      </section>
-
-      {/* Chapter four: built one at a time, drawn to scale */}
-      <section id="ch-4" data-chapter="ch-4" data-tone="dark" aria-labelledby="ch-4-title" className="layer surface-deep grain scroll-mt-24 py-16 md:py-24">
-        <div className="shell">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <ChapterHead i={3} tone="dark" id="ch-4-title" />
-            </div>
-            <p className="max-w-md leading-relaxed text-paper/70 lg:col-span-4 lg:col-start-9">
-              Our first four communities sold out by word of mouth: our homebuyers told their friends. Each bar runs from construction start to completion, as
-              published.
-            </p>
-          </div>
-
-          {/* Phones: one row per community, each bar on the same 2014 to 2026 scale, full width. */}
-          <ol className="mt-12 space-y-5 md:hidden">
-            {projectsByHandover.map((p) => {
-              const a = toYear(p.timeline.start);
-              const b = toYear(p.timeline.completion);
-              return (
-                <li key={p.slug} className="border-t border-paper/12 pt-4">
-                  <Link href={`/homes/${p.slug}`} className="flex items-baseline justify-between gap-3">
-                    <span className="serif text-[1.5rem] leading-tight">{p.shortName}</span>
-                    <span className="label shrink-0 tabular-nums text-paper/55">{p.timeline.months} months</span>
-                  </Link>
-                  <span className="relative mt-3 block h-2.5 rounded-full bg-paper/10">
-                    <span aria-hidden className="absolute inset-y-0 rounded-full" style={{ left: `${pct(a)}%`, width: `${pct(b) - pct(a)}%`, background: p.hue }} />
-                  </span>
-                  <span className="label mt-2 block tabular-nums text-paper/55">
-                    {p.timeline.start} to {p.timeline.completion} · {p.facts.find((f) => f.label === "Homes")?.value} homes
-                  </span>
-                </li>
-              );
-            })}
-            <li className="label flex justify-between pt-1 tabular-nums text-paper/65" aria-hidden>
-              <span>{AXIS.from}</span>
-              <span>{AXIS.to}</span>
+                <span className={s.rowMeta}>
+                  {homesOf(p)} homes · {p.timeline.months} months
+                </span>
+                <ArrowRight />
+              </Link>
             </li>
-          </ol>
+          ))}
+        </ol>
+      </Section>
 
-          <div className="mt-14 hidden overflow-x-auto pb-2 md:mt-20 md:block">
-            <div className="grid min-w-[46rem] grid-cols-[12rem_1fr] gap-x-6">
-              <ol className="contents">
-                {projectsByHandover.map((p, i) => {
-                  const a = toYear(p.timeline.start);
-                  const b = toYear(p.timeline.completion);
-                  return (
-                    <Reveal as="li" key={p.slug} delay={i * 120} className="col-span-2 grid grid-cols-subgrid items-center border-t border-paper/12 py-4">
-                      <Link href={`/homes/${p.slug}`} className="group block">
-                        <span className="serif block text-[1.7rem] leading-none group-hover:italic">{p.shortName}</span>
-                        <span className="label mt-1.5 block text-paper/50">
-                          {p.timeline.months} months · {p.facts.find((f) => f.label === "Homes")?.value} homes
-                        </span>
-                      </Link>
-                      <span className="relative block h-10">
-                        {axisYears.map((y) => (
-                          <span key={y} aria-hidden className="absolute inset-y-[-1rem] w-px bg-paper/8" style={{ left: `${pct(y)}%` }} />
+      <Section width="measure" space="tight" labelledBy="begin-title">
+        <SectionHead id="begin-title" title="We were homebuyers first." />
+        <div className={s.prose}>
+          <p>We asked the questions every buyer asks.</p>
+          <p>
+            We became homebuyers first, then investors, and then, taking the plunge, developers and builders. We learnt all of it
+            coming from a place of not knowing. Every stumble opened a new window of understanding, and we realised what it takes
+            to keep a promise and meet an expectation.
+          </p>
+          <p>
+            That is why every home we plan starts from the buyer’s side of the table. We still remember what it felt like to be
+            looking.
+          </p>
+        </div>
+      </Section>
+
+      <Section tone="surface" labelledBy="founders-title">
+        <SectionHead id="founders-title" title="Two very different careers." line="Neither of us started out building homes. We think that is exactly why we explain everything." />
+        <div className={s.founders}>
+          {homemakers.map((h) => (
+            <article key={h.name} className={s.founder}>
+              <div className={s.portrait}>
+                <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="(min-width: 900px) 40vw, 100vw" className={s.portraitImg} />
+              </div>
+              <p className="eyebrow">{h.role}</p>
+              <h3 className={`display ${s.name}`}>{h.name}</h3>
+              <p className={`display ${s.signature}`}>{h.signature}</p>
+              <p className={s.bio}>{voices[h.name]}</p>
+              <Accordion
+                defaultOpen={null}
+                items={[
+                  {
+                    title: `How the team describes ${h.short}`,
+                    body: (
+                      <div className={s.prose}>
+                        {homemakerProfiles[h.name].map((t) => (
+                          <p key={t}>{t}</p>
                         ))}
-                        <span aria-hidden className="absolute inset-y-1" style={{ left: `${pct(a)}%`, width: `${pct(b) - pct(a)}%`, background: p.hue }} />
-                        <span className="sr-only">
-                          {p.timeline.start} to {p.timeline.completion}
-                        </span>
-                      </span>
-                    </Reveal>
-                  );
-                })}
-              </ol>
-              <span aria-hidden />
-              <div aria-hidden className="relative h-10 border-t border-paper/20">
-                {axisYears.map((y) => (
-                  <span key={y} className="label absolute top-3 -translate-x-1/2 tabular-nums text-paper/50" style={{ left: `${pct(y)}%` }}>
-                    {y % 2 === 0 && y < AXIS.to ? y : ""}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Chapter five: the promises, as a letter from the founders */}
-      <section id="ch-5" data-chapter="ch-5" data-tone="light" aria-labelledby="ch-5-title" className="layer surface-stone scroll-mt-24 py-16 md:py-24">
-        <div className="shell">
-          <div className="mx-auto max-w-3xl">
-            <ChapterHead i={4} id="ch-5-title" />
-          </div>
-          <Reveal className="mx-auto mt-10 max-w-3xl">
-            <article className="letter relative px-6 pb-10 pt-12 md:px-14 md:pb-14 md:pt-16">
-              <span aria-hidden className="letter-tape" />
-              <p className="font-[family-name:var(--font-caveat)] text-[1.7rem] leading-none text-ink/80">Dear future neighbour,</p>
-              <p className="mt-5 text-[1.08rem] leading-[1.9] text-ink/80">
-                Everyone who builds homes makes promises. We wanted ours to be few and plain. So these are the three we
-                made ourselves, and still hold ourselves to:
-              </p>
-              <ol className="mt-6 space-y-5">
-                {[
-                  ["Explain everything.", "No question is too small. If something needs explaining, we sit down and explain it, over coffee if we can."],
-                  ["Build it properly.", "Build quality has always been our biggest strength, and our residents are the ones who tell people so."],
-                  ["Price it mindfully.", "Every home, from an apartment to an independent villa, is created, and priced, with the same care."],
-                ].map(([t, d], i) => (
-                  <li key={t} className="grid grid-cols-[2.2rem_1fr] gap-x-3">
-                    <span className="serif text-[2rem] leading-none text-earth">{i + 1}.</span>
-                    <span>
-                      <span className="serif block text-[1.55rem] leading-tight text-ink">{t}</span>
-                      <span className="mt-1 block text-[1rem] leading-[1.8] text-ink/70">{d}</span>
-                    </span>
-                  </li>
-                ))}
-              </ol>
-              <p className="mt-8 text-[1.08rem] leading-[1.9] text-ink/80">
-                Life is colourful, and every colour is open to interpretation. Your turmeric yellow could be someone’s mustard.
-                That is why, when it comes to promises, we only deal in two:
-              </p>
-              <p className="serif mt-4 text-[clamp(1.6rem,2.6vw,2.1rem)] leading-snug text-ink">
-                Our promises are inked in <span className="font-semibold">Black</span>. Our approach is clear White.
-              </p>
-              <div className="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-dashed border-ink/20 pt-6">
-                <div>
-                  <p className="text-sm text-mute">With warm regards,</p>
-                  <p className="mt-1 font-[family-name:var(--font-caveat)] text-[2.3rem] leading-none text-forest">Guna &amp; Raja</p>
-                  <p className="mt-2 text-sm text-mute">Gunaranjan J and K Raja Sekhar, founders</p>
-                </div>
-                <div className="flex -space-x-3">
-                  {homemakers.map((h) => (
-                    <span key={h.name} className="relative inline-block size-16 overflow-hidden rounded-full ring-4 ring-[#fbf8f1]">
-                      <Image src={h.portrait} alt={`Portrait of ${h.name}`} fill sizes="64px" className="object-cover" />
-                    </span>
-                  ))}
-                </div>
-              </div>
+                      </div>
+                    ),
+                  },
+                ]}
+              />
             </article>
-          </Reveal>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      {/* Chapter six: the people */}
-      <section id="this-is-us" data-chapter="this-is-us" data-tone="dark" aria-labelledby="ch-6-title" className="layer surface-deep grain scroll-mt-24 py-16 md:py-24">
-        <div className="shell">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <ChapterHead i={5} tone="dark" id="ch-6-title" />
-            </div>
-            <p className="max-w-md leading-relaxed text-paper/70 lg:col-span-4 lg:col-start-9">
-              Our homebuyers have been our brand ambassadors from the start. Today more than a thousand families live in Disha
-              homes, and the community grows with every project.
-            </p>
-          </div>
-          <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-paper/10 bg-paper/10 md:grid-cols-5">
-            {stats.map((st, i) => (
-              <Reveal key={st.label} delay={i * 70} className="flex flex-col-reverse bg-forest-deep/80 p-6">
-                <dt className="mt-2 text-sm text-paper/60">{st.label}</dt>
-                <dd className="serif text-[clamp(1.8rem,2.8vw,2.6rem)] leading-none tabular-nums">
-                  <CountUp value={st.value} suffix={st.suffix} />
-                </dd>
-              </Reveal>
-            ))}
-          </dl>
-        </div>
-      </section>
+      <Section labelledBy="first-title">
+        <Feature image={windsor.cover} ratio="wide">
+          <p className="eyebrow">Where everything we know began</p>
+          <h2 id="first-title" className={`display ${s.h2}`}>
+            Ninety-two homes among the palms.
+          </h2>
+          <p>
+            Our first community was {windsor.name}, on Panathur–Varthur Road: {homesOf(windsor)} homes on 1.25 acres, among coconut
+            palms. We broke ground in {windsor.timeline.start} and handed over the keys in {windsor.timeline.handover}.
+          </p>
+          <Link href={`/homes/${windsor.slug}`} className="text-link">
+            See {windsor.shortName}
+            <ArrowRight />
+          </Link>
+        </Feature>
+      </Section>
 
-      {/* The evenings (part of chapter six) */}
-      <section data-tone="light" aria-labelledby="events-title" className="layer surface-stone overflow-x-clip py-16 md:py-24">
-        <div className="shell">
-          <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <p className="eyebrow text-mute">Events and collaborations</p>
-              <Lines id="events-title" className="serif mt-5 t-section leading-[1.04]" lines={["Concerts we’ve brought", <em key="e">to Bengaluru.</em>]} />
+      <Section tone="surface" labelledBy="numbers-title">
+        <SectionHead
+          id="numbers-title"
+          title="This is us."
+          line="Our homebuyers have been our brand ambassadors from the start. The community grows with every project."
+        />
+        <dl className={s.stats}>
+          {stats.map((st) => (
+            <div key={st.label} className={s.stat}>
+              <dd>
+                {formatIndian(st.value)}
+                {st.suffix}
+              </dd>
+              <dt>{st.label}</dt>
             </div>
-            <p className="max-w-md leading-relaxed text-mute lg:col-span-4 lg:col-start-9">
-              Disha Habitat has presented or supported concerts in Bengaluru by some of India’s best-loved artists.
-            </p>
-          </div>
-          <div className="mt-12">
-            <GigWall />
-          </div>
-        </div>
-      </section>
+          ))}
+        </dl>
+      </Section>
 
-      {/* Chapter seven: the invitation */}
-      <section id="ch-7" data-chapter="ch-7" data-tone="light" aria-labelledby="ch-7-title" className="layer surface-ivory scroll-mt-24 py-16 md:py-24">
-        <div className="shell grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="lg:col-span-5">
-            <ChapterHead i={6} id="ch-7-title" />
-            <div className="mt-6 space-y-5 text-[1.12rem] leading-[1.75] text-ink/80">
-              <p>
-                Thank you for reading this far. If you are looking for a home, we would like to meet you, at Pursuit of the
-                Elements in Gunjur or at our office on Whitefield Main Road.
-              </p>
-              <p className="serif text-[1.8rem] leading-snug text-ink">
-                Bring every question. <em>You will find a home with us.</em>
-              </p>
-            </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <ButtonLink href="/contact#book" className="font-semibold">
-                Book a site visit
-              </ButtonLink>
-              <ArrowLink href="/homes" className="text-ink">
-                See our homes
-              </ArrowLink>
-            </div>
-            <p className="mt-3 text-sm text-mute">Gunaranjan J and K Raja Sekhar, founders</p>
-          </div>
-          <div className="lg:col-span-6 lg:col-start-7">
-            <Reveal variant="bloom" className="relative aspect-video overflow-hidden rounded-2xl bg-ink">
-              <AmbientFilm label="Disha Habitat brand film, playing silently" />
-            </Reveal>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-mute">
-              <p>Our brand film: residents, gardens and everyday life, playing silently.</p>
-              <ArrowLink href={company.brandFilm.youtubeUrl} external className="text-ink">
-                Watch with sound
-              </ArrowLink>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Section labelledBy="promise-title">
+        <SectionHead id="promise-title" title="What we promised ourselves." />
+        <ol className={s.promises}>
+          {promises.map(([t, d], i) => (
+            <li key={t}>
+              <span className={s.num} aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3 className={`display ${s.promise}`}>{t}</h3>
+              <p>{d}</p>
+            </li>
+          ))}
+        </ol>
+        <p className={`display ${s.ink}`}>
+          Life is colourful, and every colour is open to interpretation. That is why, when it comes to promises, we only deal in
+          two: our promises are inked in black, and our approach is clear white.
+        </p>
+        <p className={s.sign}>Gunaranjan J and K Raja Sekhar, founders</p>
+      </Section>
+
+      <Section tone="surface" labelledBy="family-title">
+        <SectionHead id="family-title" title="One big family." line="The families who live in our homes, and the people who build them." />
+        <Gallery items={family} layout="grid" />
+      </Section>
+
+      <Section labelledBy="events-title">
+        <Feature
+          image={{
+            src: "/images/events/et-award-certificate.webp",
+            width: 315,
+            height: 227,
+            alt: "ET Business Awards 2025 Certificate of Excellence for Disha Pursuit of the Elements, Innovation Real Estate Project of the Year",
+          }}
+          reverse
+        >
+          <p className="eyebrow">Recognition and evenings</p>
+          <h2 id="events-title" className={`display ${s.h2}`}>
+            Innovation Real Estate Project of the Year.
+          </h2>
+          <p>
+            Disha Pursuit of the Elements won this at the ET Business Awards 2025. We have also presented or supported concerts in
+            Bengaluru by {artists.slice(0, -1).join(", ")} and {artists.at(-1)}.
+          </p>
+          <a href={company.brandFilm.youtubeUrl} className="text-link" target="_blank" rel="noopener noreferrer">
+            Watch our brand film
+            <ArrowRight />
+          </a>
+        </Feature>
+      </Section>
+
+      <CtaBand
+        title="Bring every question."
+        line="You will find a home with us. Meet us at Pursuit of the Elements in Gunjur or at our office on Whitefield Main Road."
+        actions={[
+          { label: "Book a visit", href: links.bookVisit },
+          { label: "See our homes", href: links.homes },
+        ]}
+      />
     </>
   );
 }

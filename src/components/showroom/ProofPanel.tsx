@@ -37,11 +37,6 @@ export function ProofPanel() {
               </div>
             ))}
           </dl>
-          <div className={s.buttons}>
-            <a className="btn btn-primary" href={proof.primary.href}>
-              {proof.primary.label}
-            </a>
-          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,236 @@
+.anchor {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+/* The idea: the five elements large on the left, the figures on the right. */
+.idea {
+  display: grid;
+  gap: 40px;
+}
+
+@media (min-width: 1024px) {
+  .idea {
+    grid-template-columns: 7fr 5fr;
+    gap: 80px;
+    align-items: start;
+  }
+}
+
+.ideaText {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  font-size: 2.5rem;
+  line-height: 3rem;
+  color: var(--ink);
+}
+
+@media (min-width: 1024px) {
+  .elements {
+    font-size: 3.5rem;
+    line-height: 4rem;
+  }
+}
+
+.copy {
+  max-width: 38rem;
+  font-size: 1.0625rem;
+  line-height: 1.75rem;
+  color: var(--text);
+}
+
+.price {
+  margin: 20px 0 16px;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+/* The homes: heading and the plans button on the left, the towers listed on the right. */
+.homes {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .homes {
+    grid-template-columns: 5fr 6fr;
+    gap: 80px;
+    align-items: start;
+  }
+}
+
+.homesText {
+  display: grid;
+  justify-items: start;
+  min-width: 0;
+}
+
+.towers li {
+  display: grid;
+  gap: 4px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+
+.towers li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.towerName {
+  font-size: 1.625rem;
+  line-height: 2rem;
+  color: var(--ink);
+}
+
+.which {
+  margin-left: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+
+/* The master plan: the whole drawing, a link to the full-size file. */
+.plan {
+  display: block;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: #fff;
+}
+
+.planImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Amenities. */
+.amenities {
+  display: grid;
+  gap: 40px;
+}
+
+@media (min-width: 1024px) {
+  .amenities {
+    grid-template-columns: 5fr 6fr;
+    gap: 80px;
+  }
+}
+
+.groupTitle {
+  margin-bottom: 12px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.list li {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.list li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The RERA numbers, quietly, straight under the hero. */
+.strip {
+  display: grid;
+  gap: 8px 24px;
+  padding: 16px var(--gutter);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+@media (min-width: 900px) {
+  .strip {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
+.stripText {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  min-width: 0;
+}
+
+.stripText > span {
+  min-width: 0;
+}
+
+.no {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.priceActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+/* Check us: three links and the award, one short block. */
+.check {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .check {
+    grid-template-columns: 1fr auto;
+    gap: 64px;
+    align-items: start;
+  }
+}
+
+.checkText {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+.checkLinks {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+}
+
+.award {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  width: min(100%, 315px);
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: var(--text-2);
+}
+
+.awardImg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}

@@ -1,4 +1,5 @@
 import { company, socialHandle } from "@/lib/site";
+import s from "./Socials.module.css";
 
 /* Disha Habitat's social channels (from the dishahabitat.com footer), with simple drawn marks. */
 function Mark({ label, className = "size-5" }: { label: string; className?: string }) {
@@ -44,19 +45,14 @@ const notes: Record<string, string> = {
   YouTube: "Films and walkthroughs",
 };
 
+/* A row of round icon links, for a footer or a corner of a page. */
 export function SocialIcons({ className = "", itemClassName = "" }: { className?: string; itemClassName?: string }) {
   return (
-    <ul className={`flex flex-wrap gap-2 ${className}`} aria-label="Disha Habitat on social media">
-      {company.socials.map((s) => (
-        <li key={s.href}>
-          <a
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${s.label} (opens in a new tab)`}
-            className={`inline-flex size-10 items-center justify-center rounded-full border border-current/20 transition-colors hover:border-current/60 ${itemClassName}`}
-          >
-            <Mark label={s.label} />
+    <ul className={`${s.icons} ${className}`} aria-label="Disha Habitat on social media">
+      {company.socials.map((l) => (
+        <li key={l.href}>
+          <a href={l.href} target="_blank" rel="noopener noreferrer" aria-label={`${l.label} (opens in a new tab)`} className={`${s.icon} ${itemClassName}`}>
+            <Mark label={l.label} />
           </a>
         </li>
       ))}
@@ -64,21 +60,18 @@ export function SocialIcons({ className = "", itemClassName = "" }: { className?
   );
 }
 
-export function SocialCards({ tone = "light" }: { tone?: "light" | "dark" }) {
-  const card = tone === "dark" ? "card-dark hover:border-paper/30" : "card hover:border-ink/25";
-  const muted = tone === "dark" ? "text-paper/60" : "text-mute";
+/* The four channels as grey tiles: the mark, the name, and what is posted there. */
+export function SocialCards() {
   return (
-    <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      {company.socials.map((s) => (
-        <li key={s.href} className="min-w-0">
-          <a href={s.href} target="_blank" rel="noopener noreferrer" className={`${card} group flex min-w-0 items-center gap-4 p-4 transition-[transform,border-color] duration-300 hover:-translate-y-0.5`}>
-            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-current/[0.07]">
-              <Mark label={s.label} />
-            </span>
-            <span className="min-w-0">
-              <span className="block font-semibold">{s.label}</span>
-              <span className={`block text-sm [overflow-wrap:anywhere] ${muted}`}>
-                {s.label === "YouTube" || s.label === "LinkedIn" ? "Disha Habitat" : socialHandle} · {notes[s.label]}
+    <ul className={s.cards}>
+      {company.socials.map((l) => (
+        <li key={l.href}>
+          <a href={l.href} target="_blank" rel="noopener noreferrer" className={s.card}>
+            <Mark label={l.label} className={s.mark} />
+            <span>
+              <strong>{l.label}</strong>
+              <span>
+                {l.label === "YouTube" || l.label === "LinkedIn" ? "Disha Habitat" : socialHandle} · {notes[l.label]}
               </span>
             </span>
             <span className="sr-only">(opens in a new tab)</span>

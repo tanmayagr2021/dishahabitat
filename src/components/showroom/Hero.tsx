@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Fragment, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import type { Slide } from "@/lib/content";
+import { company, links, type Slide } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import { ChevronLeft, ChevronRight, PauseIcon, PlayIcon } from "./Icons";
@@ -131,6 +131,22 @@ export function Hero({ slides }: { slides: Slide[] }) {
                     <span className="sr-only">: {slide.title}</span>
                   </a>
                 </div>
+                {slide.proof?.includes("RERA") && (
+                  <p className={s.rera}>
+                    <span className={s.reraNos}>
+                      RERA:{" "}
+                      {company.rera.map((r, k) => (
+                        <span key={r.no} className={s.reraNo}>
+                          {k > 0 && <span className={s.reraDot}> · </span>}
+                          {r.phase} {r.no}
+                        </span>
+                      ))}
+                    </span>{" "}
+                    <a href={links.rera} target="_blank" rel="noopener noreferrer">
+                      Check on the RERA portal<span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  </p>
+                )}
               </div>
               <p className={s.note}>{slide.note}</p>
             </div>

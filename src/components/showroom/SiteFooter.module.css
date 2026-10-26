@@ -105,14 +105,58 @@
   padding-block: 3px;
 }
 
-.links a {
+.links a,
+.links button {
   display: inline-block;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding-inline: 0;
   padding-block: 3px;
   margin-block: -3px;
 }
 
-.links a:hover {
+.links a:hover,
+.links button:hover {
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+/* On a touchscreen every footer link has a 44 px tap height; the type and the look stay as they are. */
+@media (pointer: coarse) {
+  .col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 0;
+  }
+
+  .col ul {
+    gap: 0;
+  }
+
+  .notes a {
+    display: inline-block;
+    padding-block: 12px;
+    margin-block: -12px;
+  }
+
+  .links {
+    gap: 0 20px;
+  }
+
+  .links li {
+    padding-block: 0;
+  }
+
+  .links a,
+  .links button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 0;
+    margin-block: 0;
+  }
 }

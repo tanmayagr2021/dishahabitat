@@ -27,3 +27,12 @@
 .nav [aria-current] {
   color: var(--ink);
 }
+
+/* A thumb-sized target without changing how the line looks. */
+@media (pointer: coarse) {
+  .nav a {
+    display: inline-block;
+    padding-block: 13px;
+    margin-block: -13px;
+  }
+}

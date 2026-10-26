@@ -1,0 +1,13 @@
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+  /* Keeps the footer below the fold on a tall screen. */
+  padding-bottom: 20svh;
+}
+
+.links > :global(.btn) {
+  min-width: 180px;
+  min-height: 48px;
+}

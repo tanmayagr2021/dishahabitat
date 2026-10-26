@@ -40,6 +40,8 @@ const moved: [string, string][] = [
 ];
 
 const nextConfig: NextConfig = {
+  /* The image qualities the pages ask for (the default list allows only 75). */
+  images: { qualities: [75, 78, 82] },
   /* Tailwind runs on the one global stylesheet only, so every *.module.css stays a CSS Module. */
   turbopack: {
     rules: {

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { pageMeta } from "@/lib/launch";
 import Link from "next/link";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { CookieSettingsLink } from "@/components/consent/ConsentBanner";
+import { Breadcrumbs, PageIntro, Section } from "@/components/ds";
+import { pageMeta } from "@/lib/launch";
 import { company } from "@/lib/site";
+import s from "./page.module.css";
 
 export const metadata: Metadata = pageMeta({
   title: "Privacy",
@@ -11,60 +13,70 @@ export const metadata: Metadata = pageMeta({
 });
 
 /* A plain statement of what this website actually does with information. It describes the site as built. */
-const points = [
-  {
-    title: "We do not store what you type",
-    text: "The site visit booker, the message form and the enquiry forms do not send anything to a server. When you press Send, your own WhatsApp or email app opens with the message, and you choose whether to send it.",
-  },
-  {
-    title: "Your checklist stays on your device",
-    text: "Progress on the homebuyer’s checklist is saved in your browser only, so you can come back to it. “Start over” clears it, as does clearing your browser’s site data.",
-  },
-  {
-    title: "The EMI calculator runs in your browser",
-    text: "Figures you enter are calculated on your device and are never sent anywhere.",
-  },
-  {
-    title: "When you send us a message",
-    text: "If you choose to send a WhatsApp message or an email, it reaches Disha Habitat like any other message. We use your name, number and email only to reply to you about your enquiry or site visit, and we do not sell or share them.",
-  },
-  {
-    title: "The opening film",
-    text: "So the logo film plays only once per visit, your browser remembers for that visit that you have seen it. Nothing else is recorded.",
-  },
-  {
-    title: "Maps and links",
-    text: "The contact page shows a Google Map, and some links open WhatsApp, Instagram, Facebook, LinkedIn or YouTube. Those services have their own privacy policies.",
-  },
-];
-
 export default function PrivacyPage() {
   return (
-    <section data-tone="light" className="surface-ivory pb-20 pt-32 md:pb-28 md:pt-40">
-      <div className="shell max-w-3xl">
-        <Breadcrumbs tone="light" trail={[{ label: "Home", href: "/" }, { label: "Privacy" }]} />
-        <h1 className="serif mt-6 t-hero-sm leading-[1.04]">Privacy</h1>
-        <p className="mt-4 text-[1.08rem] leading-relaxed text-mute">What this website does, and does not do, with your information.</p>
-        <ul className="mt-10 space-y-4">
-          {points.map((p) => (
-            <li key={p.title} className="card p-6">
-              <h2 className="serif text-[1.5rem] leading-tight">{p.title}</h2>
-              <p className="mt-2 leading-relaxed text-ink/75">{p.text}</p>
+    <>
+      <PageIntro
+        above={<Breadcrumbs trail={[{ label: "Home", href: "/" }, { label: "Privacy" }]} />}
+        title="Privacy"
+        line="What this website does, and does not do, with your information."
+      />
+      <Section width="measure">
+        <div className={s.body}>
+          <h2>Cookies and analytics</h2>
+          <p>
+            This website runs no analytics and no advertising or tracking tools. If we ever add one, it will stay switched off until you accept it
+            in the notice at the bottom of the page. Your choice is saved in your browser, and you can change it at any time.{" "}
+            <CookieSettingsLink className="text-link" />
+          </p>
+
+          <h2>What is saved in your browser</h2>
+          <p>The site saves a few small items on your device only. None of them is a tracking cookie.</p>
+          <ul>
+            <li>
+              <code>disha-consent</code>: your cookie choice and the date you made it.
             </li>
-          ))}
-        </ul>
-        <p className="mt-10 text-sm text-mute">
-          Questions, or want us to delete your messages? Write to{" "}
-          <a href={`mailto:${company.email}`} className="underline underline-offset-4">
-            {company.email}
-          </a>{" "}
-          or see our{" "}
-          <Link href="/contact" className="underline underline-offset-4">
-            contact page
-          </Link>
-          .
-        </p>
-      </div>
-    </section>
+            <li>
+              <code>disha-checklist-v1</code>: the points you have ticked on the homebuyer’s checklist, so you can come back to it. “Start over”
+              clears it, as does clearing your browser’s site data.
+            </li>
+            <li>
+              <code>disha-visitor</code>: a random number, saved only when you send a note with the Feedback tab, so we can see which notes came
+              from the same person.
+            </li>
+          </ul>
+
+          <h2>When you send us a message</h2>
+          <p>
+            The site visit booker, the message form and the enquiry form open WhatsApp or your email app with the message ready, and you choose
+            whether to send it. When you press Send, or Continue on the enquiry form, we also keep the details you entered (your name, number, email,
+            what you asked about and the date and time you chose) so that we can reply even if the message does not reach us. We use them only to
+            reply to you about your enquiry or site visit, and we do not sell or share them. A message you send on WhatsApp or by email reaches
+            Disha Habitat like any other message.
+          </p>
+
+          <h2>The Feedback tab</h2>
+          <p>
+            If you use the Feedback tab, your note is sent to us with the page and the part of the page you pointed at, your screen size and, if
+            you add them, your name and email. We use it to improve the website.
+          </p>
+
+          <h2>Calculators</h2>
+          <p>The EMI calculator and the other planning tools work out their figures on your device. What you enter is never sent anywhere.</p>
+
+          <h2>Maps and links</h2>
+          <p>
+            Some links open Google Maps, WhatsApp, Instagram, Facebook, LinkedIn or YouTube in a new tab. Those services have their own privacy
+            policies. Nothing from them loads on this site until you follow the link.
+          </p>
+
+          <h2>Your rights</h2>
+          <p>
+            Questions, or want us to delete your messages? Write to <a href={`mailto:${company.email}`}>{company.email}</a> or see our{" "}
+            <Link href="/contact">contact page</Link>.
+          </p>
+        </div>
+      </Section>
+    </>
   );
 }
