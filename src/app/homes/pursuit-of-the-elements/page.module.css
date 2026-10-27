@@ -1,31 +1,112 @@
+/* Sections the bar links to land under the header (56 px) and the bar (48 px): the page already pads 24 px. */
 .anchor {
-  scroll-margin-top: calc(var(--header-h) + 16px);
+  scroll-margin-top: 48px;
 }
 
-/* At a glance: the facts and the towers side by side, level at the top and the foot. */
+.page :global(#enquire) {
+  scroll-margin-top: 48px;
+}
+
+/* At a glance: four figures in equal columns, hairlines between, one baseline. */
 .glance {
   display: grid;
-  gap: 48px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 16px;
 }
 
 @media (min-width: 900px) {
   .glance {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.fig {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 0;
+  padding: 24px 0 24px 24px;
+  border-left: 1px solid var(--line);
+  --count-ink: var(--ink);
+}
+
+.fig:nth-child(odd) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+@media (min-width: 900px) {
+  .fig:nth-child(odd) {
+    padding-left: 32px;
+    border-left: 1px solid var(--line);
+  }
+
+  .fig {
+    padding-left: 32px;
+  }
+
+  .fig:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+.fig dt {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.fig dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.4em;
+  margin: 0;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 1024px) {
+  .fig dd {
+    font-size: 2.75rem;
+    line-height: 3.25rem;
+  }
+}
+
+.unit {
+  font-size: 0.9375rem;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-2);
+}
+
+/* Homes: the words and the buttons on the left, the towers as spec rows on the right, level at top and foot. */
+.homes {
+  display: grid;
+  gap: 40px;
+}
+
+@media (min-width: 900px) {
+  .homes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 80px;
   }
 }
 
-.col {
+.homesText {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.col > :global(.reveal) {
-  flex: none;
-}
-
-.colFoot {
+.foot {
   display: grid;
   gap: 16px;
   margin-top: auto;
@@ -43,7 +124,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 24px;
+  gap: 12px 16px;
+}
+
+.actions :global(.text-link) {
+  margin-left: 8px;
 }
 
 .towers li {
@@ -84,31 +169,13 @@
   }
 }
 
-/* The master plan: the whole drawing, a link to the full-size file. */
-.plan {
-  display: block;
-  padding: 16px;
-  border-radius: var(--radius-card);
-  background: #fff;
-}
-
-.planImg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Amenities: the clubhouse in two columns, then the outdoor list across the full width. */
+/* The full amenity lists sit under their pictures: the clubhouse in two columns, the outdoors in columns of their own. */
 .groupTitle {
   margin-bottom: 12px;
   font-size: 1.0625rem;
   line-height: 1.5rem;
   font-weight: 500;
   color: var(--ink);
-}
-
-.outdoorTitle {
-  margin-top: 48px;
 }
 
 .list {
@@ -132,47 +199,19 @@
 }
 
 .pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  columns: 16rem;
+  column-gap: 48px;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text);
 }
 
-/* The RERA numbers, quietly, straight under the hero. */
-.strip {
-  display: grid;
-  gap: 8px 24px;
-  padding: 16px var(--edge);
-  border-bottom: 1px solid var(--line);
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
-  color: var(--text-2);
+.pills li {
+  break-inside: avoid;
+  padding-block: 3px;
 }
 
-@media (min-width: 900px) {
-  .strip {
-    grid-template-columns: 1fr auto;
-    align-items: center;
-  }
-}
-
-.stripText {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 24px;
-  min-width: 0;
-}
-
-.stripText > span {
-  min-width: 0;
-}
-
-.no {
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-  overflow-wrap: anywhere;
-}
-
-/* Check us: three links and the award, one short block. */
+/* Check us: the RERA numbers, the links, and the award beside them. */
 .check {
   display: grid;
   gap: 32px;
@@ -180,7 +219,7 @@
 
 @media (min-width: 768px) {
   .check {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) 315px;
     gap: 64px;
     align-items: stretch;
   }
@@ -188,9 +227,49 @@
 
 .checkText {
   display: grid;
-  align-content: space-between;
+  align-content: start;
   gap: 24px;
   min-width: 0;
+}
+
+.checkText > :global(.reveal) :global(.display) {
+  margin-bottom: 0;
+}
+
+.rera {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  padding-block: 20px;
+  border-block: 1px solid var(--line);
+}
+
+.reraTitle {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.reraList {
+  display: grid;
+  gap: 4px;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+.no {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+@media (min-width: 640px) {
+  .no {
+    display: inline;
+    margin-left: 8px;
+  }
 }
 
 .checkLinks {

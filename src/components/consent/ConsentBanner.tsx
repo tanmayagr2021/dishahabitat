@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { type Consent, COOKIE_SETTINGS_EVENT, getConsent, onConsentChange, openCookieSettings, saveConsent } from "@/lib/consent";
 import s from "./ConsentBanner.module.css";
 
@@ -48,25 +48,39 @@ export function ConsentBanner() {
     return () => window.removeEventListener(COOKIE_SETTINGS_EVENT, open);
   }, []);
 
+  /* Someone who already chose never sees the bar, so the space reserved for it is released. */
+  useEffect(() => {
+    if (choice !== "unknown" && !visible) document.documentElement.classList.remove("consent-pending");
+  }, [choice, visible]);
+
   /* Keyboard users: when the choices open, focus moves to them (the button that was pressed is gone). */
   useEffect(() => {
     if (choosing) bar.current?.querySelector<HTMLElement>("input")?.focus({ preventScroll: true });
   }, [choosing]);
 
-  /* While the bar is up, the page knows its height: scrolling to a focused control keeps it clear of the bar. */
-  useEffect(() => {
+  /*
+   * While the bar is up, the page knows its height (--consent-h): every photo panel adds it to its foot,
+   * and scrolling to a focused control keeps clear of it. Set before the bar's first paint, so nothing moves.
+   */
+  useLayoutEffect(() => {
     const el = bar.current;
     if (!visible || !el) return;
     const root = document.documentElement;
-    const measure = () => root.style.setProperty("--consent-h", `${Math.ceil(el.getBoundingClientRect().height)}px`);
+    /* Height plus the gap under the bar; unaffected by the slide-in transform. */
+    const measure = () => root.style.setProperty("--consent-h", `${Math.ceil(el.offsetHeight + (parseFloat(getComputedStyle(el).bottom) || 0))}px`);
     measure();
+    root.classList.remove("consent-pending");
     root.dataset.consentBar = "";
     const ro = new ResizeObserver(measure);
     ro.observe(el);
+    // Its offset from the bottom changes with the screen width too, which the observer does not see.
+    addEventListener("resize", measure);
     return () => {
       ro.disconnect();
+      removeEventListener("resize", measure);
       delete root.dataset.consentBar;
       root.style.removeProperty("--consent-h");
+      root.classList.remove("consent-pending");
     };
   }, [visible]);
 
@@ -87,10 +101,20 @@ export function ConsentBanner() {
   return (
     <section ref={bar} className={s.bar} aria-label="Cookie notice" data-feedback={feedbackOn || undefined} data-leaving={leaving || undefined}>
       <p className={s.body}>
-        Nothing that tracks you loads unless you accept.{" "}
-        <Link href="/privacy" className="text-link">
-          Privacy
-        </Link>
+        No tracking unless you accept.{" "}
+        <span className={s.nowrap}>
+          <Link href="/privacy" className={s.link}>
+            Privacy
+          </Link>
+          {!choosing && (
+            <>
+              {" · "}
+              <button type="button" className={s.link} onClick={() => setChoosing(true)}>
+                Choose
+              </button>
+            </>
+          )}
+        </span>
       </p>
 
       {choosing && (
@@ -127,11 +151,6 @@ export function ConsentBanner() {
               Accept
             </button>
           </>
-        )}
-        {!choosing && (
-          <button type="button" className={`text-link ${s.chooseBtn}`} onClick={() => setChoosing(true)}>
-            Choose
-          </button>
         )}
       </div>
     </section>

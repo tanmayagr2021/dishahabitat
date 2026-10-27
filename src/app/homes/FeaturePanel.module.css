@@ -1,0 +1,101 @@
+.panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: max(560px, 100vh);
+  min-height: max(560px, 100svh);
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
+}
+
+.media {
+  z-index: -2;
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .media {
+    object-position: var(--pos);
+  }
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 200px, rgb(0 0 0 / 0.28) 360px, rgb(0 0 0 / 0) 52%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.62) 30%, rgb(0 0 0 / 0.2) 44%, rgb(0 0 0 / 0) 54%);
+}
+
+@media (min-width: 768px) {
+  .scrim {
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 200px, rgb(0 0 0 / 0.28) 360px, rgb(0 0 0 / 0) 52%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.55) 18%, rgb(0 0 0 / 0.2) 32%, rgb(0 0 0 / 0) 42%);
+  }
+}
+
+.copy {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: calc(var(--header-h) + 48px + clamp(16px, 4svh, 40px)) var(--edge) 0;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 18ch;
+  font-size: var(--display-large);
+  line-height: var(--display-large-lh);
+}
+
+.line {
+  max-width: 34rem;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+/* The link at the foot, clear of the cookie bar. */
+.link {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--edge) calc(clamp(40px, 7svh, 64px) + var(--consent-h, 0px));
+}
+
+.link :where(a, button) {
+  min-height: 44px;
+  color: #fff;
+  text-decoration-color: rgb(255 255 255 / 0.55);
+}
+
+.link :where(a, button):hover {
+  text-decoration-color: #fff;
+}
+
+.note {
+  position: absolute;
+  bottom: calc(16px + var(--consent-h, 0px));
+  right: var(--edge);
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.6);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}

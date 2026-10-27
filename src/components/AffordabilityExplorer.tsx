@@ -216,6 +216,10 @@ export function AffordabilityExplorer() {
       : null;
   const principalShare = result ? (result.principal / result.totalRepaid) * 100 : 0;
   const roll = useRoll(result ? result.emi : null);
+  // A long loan is a long table on a phone: the first five years show, the rest on request.
+  const [allYears, setAllYears] = useState(false);
+  const FIRST = 5;
+  const years = result ? (allYears ? result.schedule : result.schedule.slice(0, FIRST)) : [];
   const rolled = roll.shown === null ? "₹ –" : formatINR(Math.round(roll.shown));
 
   return (
@@ -332,7 +336,7 @@ export function AffordabilityExplorer() {
           <MoneyInput id={id("income")} value={v.income} onChange={set("income")} error={errors.monthlyIncome} placeholder="Leave blank to skip" />
         </Field>
 
-        <button type="button" onClick={() => setV(EXAMPLE)} className="text-link">
+        <button type="button" onClick={() => setV(EXAMPLE)} className={`text-link ${s.more}`}>
           Reset to the example
         </button>
       </form>
@@ -403,29 +407,42 @@ export function AffordabilityExplorer() {
                 {
                   title: "Year-by-year breakdown",
                   body: (
-                    <div className={s.tableWrap} tabIndex={0} role="region" aria-label="Year-by-year breakdown, scrollable">
-                      <table className={s.table}>
-                        <caption className="sr-only">Estimated repayment for each year of the loan</caption>
-                        <thead>
-                          <tr>
-                            <th scope="col">Year</th>
-                            <th scope="col">Principal</th>
-                            <th scope="col">Interest</th>
-                            <th scope="col">Balance</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {result.schedule.map((r) => (
-                            <tr key={r.year} style={{ "--n": Math.min(r.year, 12) } as CSSProperties}>
-                              <th scope="row">{r.year}</th>
-                              <td>{formatINR(r.principalPaid)}</td>
-                              <td>{formatINR(r.interestPaid)}</td>
-                              <td>{formatINR(r.balance)}</td>
+                    <>
+                      <div className={s.tableWrap} tabIndex={0} role="region" aria-label="Year-by-year breakdown, scrollable">
+                        <table id={id("years-table")} className={s.table}>
+                          <caption className="sr-only">Estimated repayment for each year of the loan</caption>
+                          <thead>
+                            <tr>
+                              <th scope="col">Year</th>
+                              <th scope="col">Principal</th>
+                              <th scope="col">Interest</th>
+                              <th scope="col">Balance</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                          </thead>
+                          <tbody>
+                            {years.map((r) => (
+                              <tr key={r.year} style={{ "--n": Math.min(r.year, 12) } as CSSProperties}>
+                                <th scope="row">{r.year}</th>
+                                <td>{formatINR(r.principalPaid)}</td>
+                                <td>{formatINR(r.interestPaid)}</td>
+                                <td>{formatINR(r.balance)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      {result.schedule.length > FIRST && (
+                        <button
+                          type="button"
+                          className={`text-link ${s.more}`}
+                          aria-expanded={allYears}
+                          aria-controls={id("years-table")}
+                          onClick={() => setAllYears((x) => !x)}
+                        >
+                          {allYears ? `Show the first ${FIRST} years` : `Show all ${result.schedule.length} years`}
+                        </button>
+                      )}
+                    </>
                   ),
                 },
               ]}

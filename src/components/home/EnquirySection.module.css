@@ -1,31 +1,5 @@
-.grid {
-  display: grid;
-  gap: 40px;
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 5fr 6fr;
-    gap: 80px;
-    align-items: stretch;
-  }
-}
-
-/* The words sit level with the top of the form, the ways to reach us level with its foot. */
-.text {
-  display: grid;
-  align-content: start;
-  min-width: 0;
-}
-
-@media (min-width: 1024px) {
-  .text {
-    grid-template-rows: auto auto 1fr;
-  }
-
-  .reach {
-    align-self: end;
-  }
+.intro {
+  margin-bottom: 40px;
 }
 
 .title {
@@ -35,40 +9,102 @@
 }
 
 .line {
-  max-width: 28rem;
+  max-width: 36rem;
   margin-top: 16px;
   font-size: 1.0625rem;
   line-height: 1.625rem;
   color: var(--text-2);
 }
 
-.reach {
-  display: grid;
-  gap: 24px;
-  margin: 32px 0 0;
+.byline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  color: var(--ink);
 }
 
-@media (min-width: 480px) {
-  .reach {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.reach dt {
+.byline small {
+  display: block;
   font-size: 0.8125rem;
   color: var(--text-2);
 }
 
-.reach dd {
-  display: grid;
-  margin: 4px 0 0;
+.face {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.reach a,
-.write {
-  display: block;
+/* Two white cards of equal height: a narrow one with the three ways to reach us, and the form. */
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+}
+
+.reach {
+  display: grid;
+  margin: 0;
+  padding: 8px 24px;
+  border-radius: var(--radius-card);
+  background: #fff;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .reach {
+    padding: 16px 40px;
+  }
+}
+
+/* On a computer the three share the card's height equally, each starting at the top of its third. */
+@media (min-width: 1024px) {
+  .reach {
+    grid-template-rows: repeat(3, 1fr);
+  }
+}
+
+.reach li {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 2px;
+  padding: 20px 0;
+}
+
+.reach li + li {
+  border-top: 1px solid var(--line);
+}
+
+@media (min-width: 1024px) {
+  .reach li {
+    padding: 32px 0;
+  }
+}
+
+.label {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
   min-height: 44px;
-  padding: 10px 0;
+  padding: 0;
   border: 0;
   background: none;
   color: var(--ink);
@@ -76,13 +112,30 @@
   font-size: 1.125rem;
   line-height: 1.5rem;
   text-align: left;
-  overflow-wrap: anywhere;
+  cursor: pointer;
 }
 
-.reach a:hover,
-.write:hover {
+@media (min-width: 768px) {
+  .value {
+    font-size: 1.25rem;
+    line-height: 1.625rem;
+  }
+}
+
+.value:hover {
   text-decoration: underline;
   text-underline-offset: 5px;
+}
+
+.value:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.note {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: var(--text-2);
 }
 
 /* The form sits on white inside the grey section. */

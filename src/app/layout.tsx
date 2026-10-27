@@ -74,7 +74,9 @@ const organisation = {
 };
 
 /* Marks that scripts run, before the first paint, so controls that need them only show when they work. */
-const bootstrap = "document.documentElement.classList.add('js')";
+/* A first visit also gets "consent-pending", which reserves the cookie bar's height (globals.css) so the bar never covers or moves anything. */
+const bootstrap =
+  "var d=document.documentElement;d.classList.add('js');try{var c=localStorage.getItem('disha-consent');if(!c||c.indexOf('\"version\":1')<0)d.classList.add('consent-pending')}catch(e){d.classList.add('consent-pending')}";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

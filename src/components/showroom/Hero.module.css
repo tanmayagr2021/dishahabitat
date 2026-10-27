@@ -1,6 +1,7 @@
 /*
  * The hero, after tesla.com: 80% of the screen on computers and 90% on phones, one photograph per slide,
- * the name and one line centred near the top, two buttons under them, and the slide marks at the foot.
+ * the name and one line at the top under the header, the buttons and the trust line at the foot, then the slide marks.
+ * The cookie bar's height (--consent-h) is added to the foot, so nothing is ever covered.
  */
 .hero {
   position: relative;
@@ -8,6 +9,8 @@
   background: #101214;
   color: #fff;
   isolation: isolate;
+  scroll-snap-align: start;
+  scroll-margin-top: calc(-1 * (var(--header-h) + 24px));
 }
 
 /*
@@ -25,19 +28,14 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  min-height: clamp(540px, 90vh, 1100px);
-  min-height: clamp(540px, 90svh, 1100px);
-  padding-bottom: 50px;
+  min-height: 100vh;
+  min-height: 100svh;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: calc(50px + var(--consent-h, 0px));
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.9s var(--ease);
-}
-
-@media (min-width: 768px) {
-  .slide {
-    min-height: clamp(600px, 80vh, 1100px);
-    min-height: clamp(600px, 80svh, 1100px);
-  }
 }
 
 .slide[data-active] {
@@ -58,167 +56,138 @@
 }
 
 /*
- * Darkens the sky behind the words and the foot behind the marks, as tesla.com's black scrim does, with a
- * soft pool where the headline sits. The photographs stay bright; every line still measures AA.
+ * One scrim for every slide: a soft shade behind the header and a firmer one behind the words and buttons at
+ * the foot, which reaches higher on a phone where the words stack taller. The upper photograph stays bright.
+ * Measured on the lightest 5% of pixels behind each line, white text holds 4.5:1 on all three slides.
  */
 .scrim {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgb(0 0 0 / 0.56) 0%, rgb(0 0 0 / 0.52) 40%, rgb(0 0 0 / 0.42) 58%, rgb(0 0 0 / 0.14) 72%, rgb(0 0 0 / 0) 82%),
-    linear-gradient(0deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.5) 22%, rgb(0 0 0 / 0.2) 40%, rgb(0 0 0 / 0) 52%);
+    linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.64) 34%, rgb(0 0 0 / 0.3) 48%, rgb(0 0 0 / 0) 60%);
 }
 
-/* On the narrowest phones the words wrap onto more lines and reach further down the picture. */
-@media (max-width: 400px) {
-  .scrim {
-    background:
-      linear-gradient(180deg, rgb(0 0 0 / 0.58) 0%, rgb(0 0 0 / 0.56) 52%, rgb(0 0 0 / 0.44) 68%, rgb(0 0 0 / 0.14) 80%, rgb(0 0 0 / 0) 88%),
-      linear-gradient(0deg, rgb(0 0 0 / 0.7) 0%, rgb(0 0 0 / 0.5) 22%, rgb(0 0 0 / 0.2) 40%, rgb(0 0 0 / 0) 52%);
-  }
-}
-
+/* On a computer the buttons and the trust line take less height, so the shade at the foot is lower. */
 @media (min-width: 768px) {
   .scrim {
     background:
-      radial-gradient(ellipse 46% 32% at 50% 24%, rgb(0 0 0 / 0.36), rgb(0 0 0 / 0) 100%),
-      linear-gradient(180deg, rgb(0 0 0 / 0.52) 0%, rgb(0 0 0 / 0.47) 34%, rgb(0 0 0 / 0.16) 50%, rgb(0 0 0 / 0) 60%),
-      linear-gradient(0deg, rgb(0 0 0 / 0.62) 0%, rgb(0 0 0 / 0.36) 18%, rgb(0 0 0 / 0) 34%);
+      linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+      linear-gradient(0deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.6) 22%, rgb(0 0 0 / 0.3) 36%, rgb(0 0 0 / 0) 52%);
   }
 }
 
+/* The words sit at the top, under the header, and the middle of the photograph is left clear. */
 .copy {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
-  padding: calc(var(--header-h) + 36px) 24px 0;
+  padding: calc(var(--header-h) + clamp(16px, 5svh, 48px)) 24px 0;
   text-align: center;
-  isolation: isolate;
 }
 
-/* A soft shade that travels with the words, however far larger text pushes them down the picture. */
-.copy::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--header-h) + 8px) -10% -40px;
-  z-index: -1;
-  background: radial-gradient(closest-side, rgb(0 0 0 / 0.28), rgb(0 0 0 / 0));
-  pointer-events: none;
-}
-
-@media (min-width: 768px) {
-  .copy {
-    padding-top: calc(var(--header-h) + 52px);
-  }
+.eyebrow {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
 }
 
 .title {
   max-width: 18ch;
-  font-size: 2.375rem;
+  margin-top: 8px;
+  font-size: 2.5rem;
   line-height: 2.75rem;
   color: #fff;
   text-wrap: balance;
   overflow-wrap: anywhere;
-  text-shadow: 0 1px 18px rgb(0 0 0 / 0.28);
 }
 
 @media (min-width: 1024px) {
   .title {
     max-width: 22ch;
-    font-size: 3.75rem;
-    line-height: 4rem;
+    margin-top: 12px;
+    font-size: 4rem;
+    line-height: 4.25rem;
   }
 }
 
 .line {
-  margin-top: 4px;
+  max-width: 30ch;
+  margin-top: 12px;
   font-size: 1.0625rem;
   line-height: 1.5rem;
-  font-weight: 500;
   color: #fff;
   text-wrap: balance;
-  text-shadow: 0 1px 14px rgb(0 0 0 / 0.45);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .line {
-    margin-top: 8px;
+    max-width: none;
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
 }
 
-/* The maker and the proof, quiet, under the promise: who is behind this, in one glance. */
-.proof {
-  margin-top: 10px;
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: #fff;
-  text-shadow: 0 1px 10px rgb(0 0 0 / 0.4);
-  text-wrap: balance;
+.ctas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
-/* The registration numbers, small and quiet under the buttons, with a link to check them. */
-.rera {
-  max-width: 46rem;
-  margin-top: 14px;
-  font-size: 0.75rem;
-  line-height: 1.125rem;
-  color: #fff;
-  text-shadow: 0 1px 10px rgb(0 0 0 / 0.5);
-}
-
-.reraNo {
-  display: block;
-  overflow-wrap: anywhere;
-}
-
-.reraDot {
-  display: none;
+.ctas > :global(.btn) {
+  width: 100%;
+  max-width: 320px;
 }
 
 @media (min-width: 768px) {
-  .reraNo {
-    display: inline-block;
-    white-space: nowrap;
+  .ctas {
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
   }
 
-  .reraDot {
-    display: inline;
+  .ctas > :global(.btn) {
+    width: 220px;
   }
-
 }
 
-.rera a {
+/* The foot: the buttons, one trust line, the small print, then the slide marks below. */
+.foot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+}
+
+.trust {
+  max-width: 34rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.fact {
   display: inline-block;
-  padding-block: 4px;
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
-/* The line wraps between phrases, and inside one only when a phrase is wider than the screen. */
-.phrase {
-  display: inline-block;
-  max-width: 100%;
-}
-
-/* Real spaces either side of the dot: the places where the line is allowed to break. */
-.dot {
-  word-spacing: 0.35em;
-  opacity: 0.7;
-}
-
-/* On a phone the three facts would wrap with a dot starting the second line: one fact to a line instead. */
+/* On a phone each fact gets its own line, so no line starts with a dot. */
 @media (max-width: 559px) {
-  .proof {
+  .trust {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1px;
   }
 
   .dot {
@@ -226,55 +195,36 @@
   }
 }
 
-.ctas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 420px;
-  margin-top: 16px;
+.trust a {
+  display: inline-block;
+  padding-block: 12px;
+  margin-block: -12px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.ctas > a {
-  flex: 1 1 128px;
-  padding-inline: 12px;
+/* A quiet small rectangle: the label every impression carries. */
+.note {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.4);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: #fff;
 }
 
 @media (min-width: 768px) {
-  .ctas {
-    gap: 16px;
-    margin-top: 24px;
+  .note {
+    position: absolute;
+    right: var(--edge);
+    bottom: -36px;
   }
-
-  .ctas > a {
-    flex: 0 0 200px;
-  }
-}
-
-/*
- * The small print sits on its own soft pill, so it reads on any photograph. It is part of the slide's
- * flow, pushed to the foot just above the slide marks, so the headline can never run into it.
- */
-.note {
-  position: relative;
-  align-self: center;
-  max-width: calc(100% - 48px);
-  margin-top: auto;
-  padding: 2px 8px;
-  border-radius: var(--radius);
-  background: rgb(0 0 0 / 0.5);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  text-align: center;
-  font-size: 0.75rem;
-  line-height: 1.125rem;
-  color: #fff;
 }
 
 .controls {
   position: absolute;
-  bottom: 14px;
+  bottom: calc(14px + var(--consent-h, 0px));
   left: 50%;
   z-index: 2;
   display: flex;
@@ -379,28 +329,23 @@
  * paint. Nothing moves for visitors who reduce motion.
  */
 @media (prefers-reduced-motion: no-preference) {
+  .slide[data-active] .eyebrow,
   .slide[data-active] .title,
   .slide[data-active] .line,
-  .slide[data-active] .proof,
-  .slide[data-active] .ctas,
-  .slide[data-active] .rera {
+  .slide[data-active] .ctas {
     animation: arrive 0.7s var(--ease) both;
   }
 
-  .slide[data-active] .line {
+  .slide[data-active] .title {
     animation-delay: 60ms;
   }
 
-  .slide[data-active] .proof {
+  .slide[data-active] .line {
     animation-delay: 120ms;
   }
 
   .slide[data-active] .ctas {
     animation-delay: 180ms;
-  }
-
-  .slide[data-active] .rera {
-    animation-delay: 420ms;
   }
 
   .slide[data-active] .media {

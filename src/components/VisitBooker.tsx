@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { type FocusEvent, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Building2, Coffee, PhoneCall } from "lucide-react";
 import { ChoiceCards, TextField } from "@/components/ds";
+import { fieldClasses } from "@/components/ds/Field";
 import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
-import { cleanPhoneInput, mailtoUrl, parsePhone, phoneHelp } from "@/lib/messaging";
+import { mailtoUrl, parsePhone, phoneHelp, shownPhone } from "@/lib/messaging";
 import { company } from "@/lib/site";
+import { PhoneField } from "./PhoneField";
 import { SuccessTick } from "./SuccessTick";
 import s from "./VisitBooker.module.css";
 
@@ -34,10 +36,10 @@ const places: Place[] = [
   },
   {
     id: "call",
-    title: "A call first",
+    title: "A call or video call first",
     detail: "Not ready to visit yet? Send us your number and ask for a call.",
     Icon: PhoneCall,
-    where: "Phone call",
+    where: "Phone or video call",
   },
 ];
 const slots = [
@@ -114,6 +116,14 @@ function icsFile(title: string, where: string, day: Date, istHour: number, hours
   );
 }
 
+/* On a phone the on-screen keyboard covers the lower half: once it is open, bring the field to the middle. */
+const keepInView = (e: FocusEvent) => {
+  const el = e.target;
+  if (el instanceof HTMLInputElement && el.type !== "radio" && window.matchMedia("(pointer: coarse)").matches) {
+    setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 300);
+  }
+};
+
 export function VisitBooker() {
   const [step, setStep] = useState(0);
   // Which way the last move went, so the next step slides in from that side.
@@ -125,7 +135,10 @@ export function VisitBooker() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [people, setPeople] = useState(2);
+  const [callNote, setCallNote] = useState("");
   const [tried, setTried] = useState(false);
+  // Counts failed Continue presses, so each one moves focus to what needs an answer.
+  const [tries, setTries] = useState(0);
   // One record per request, however many times or ways the buttons are pressed.
   const recorded = useRef(new Set<string>());
 
@@ -134,6 +147,7 @@ export function VisitBooker() {
   const isCall = place === "call";
   const parsed = parsePhone(phone);
   const phoneOk = parsed.ok;
+  const root = useRef<HTMLDivElement>(null);
   const stepBox = useRef<HTMLDivElement>(null);
   const firstStep = useRef(true);
   useEffect(() => {
@@ -143,29 +157,43 @@ export function VisitBooker() {
       return;
     }
     stepBox.current?.querySelector<HTMLElement>("[data-step-title]")?.focus({ preventScroll: true });
+    // On a phone the Continue button sits below a tall step: bring the new step's top back into view.
+    const card = root.current;
+    if (card && card.getBoundingClientRect().top < 0) card.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }, [step]);
+  useEffect(() => {
+    if (!tries) return;
+    const box = stepBox.current;
+    // The first unanswered question in reading order: a field, the day group, or a set of cards.
+    const target = box?.querySelector<HTMLElement>("[aria-invalid=true], [data-unanswered], fieldset[aria-describedby] input");
+    target?.focus();
+  }, [tries]);
   const nameOk = name.trim().length >= 2;
+  const shown = shownPhone(phone);
 
   const canNext = [Boolean(place), isCall ? Boolean(slot) : day !== null && Boolean(slot), nameOk && phoneOk, true][step];
+  const dayError = tried && step === 1 && !isCall && day === null ? "Choose a day to continue." : undefined;
   const when = day !== null && days[day] ? longFmt.format(days[day]) : "";
 
   const message = useMemo(() => {
     if (!p) return "";
     const lines = [
-      `Hello Disha Habitat, I’d like to ${isCall ? "request a call back" : "book a visit"}.`,
+      `Hello Disha Habitat, I’d like to ${isCall ? "ask for a call or video call" : "book a visit"}.`,
       `${isCall ? "About" : "Visit"}: ${p.title}`,
       !isCall && when ? `Date: ${when}` : "",
       time ? `Preferred time: ${time.label} (${time.hint})` : "",
       !isCall ? `People: ${people}` : "",
       `Name: ${name.trim()}`,
-      `Phone: ${parsed.display}`,
+      `Phone: ${shown}`,
+      isCall && callNote.trim() ? `Time zone or best time to call: ${callNote.trim()}` : "",
     ].filter(Boolean);
     return lines.join("\n");
-  }, [p, isCall, when, time, people, name, parsed.display]);
+  }, [p, isCall, when, time, people, name, shown, callNote]);
 
   const next = () => {
     if (!canNext) {
       setTried(true);
+      setTries((n) => n + 1);
       return;
     }
     setTried(false);
@@ -185,6 +213,7 @@ export function VisitBooker() {
       details: {
         ...(isCall ? {} : { date: when, people: String(people) }),
         ...(time ? { time: `${time.label} (${time.hint})` } : {}),
+        ...(isCall && callNote.trim() ? { callNote: callNote.trim() } : {}),
         place: p.where,
       },
       consent: true,
@@ -215,12 +244,13 @@ export function VisitBooker() {
         ["Time", time ? `${time.label}, ${time.hint}` : ""],
         ...(isCall ? [] : ([["People", String(people)]] as [string, string][])),
         ["Name", name.trim()],
-        ["Mobile", parsed.display],
+        ["Mobile", shown],
+        ...(isCall && callNote.trim() ? ([["Best time", callNote.trim()]] as [string, string][]) : []),
       ]
     : [];
 
   return (
-    <div className={s.booker}>
+    <div ref={root} className={s.booker}>
       <div className={s.progress}>
         <p>
           <span className="sr-only">Booking step </span>
@@ -232,7 +262,7 @@ export function VisitBooker() {
         </div>
       </div>
 
-      <div key={step} ref={stepBox} className={s.step} data-dir={dir}>
+      <div key={step} ref={stepBox} className={s.step} data-dir={dir} onFocus={keepInView}>
         {step === 0 && (
           <div>
             <h3 data-step-title tabIndex={-1} className={`display ${s.q}`}>
@@ -257,7 +287,14 @@ export function VisitBooker() {
                 <legend data-step-title tabIndex={-1} className={`display ${s.q}`}>
                   Pick a day
                 </legend>
-                <div className={s.days} role="group" aria-label="The next 14 days">
+                <div
+                  className={s.days}
+                  role="group"
+                  aria-label="The next 14 days"
+                  tabIndex={-1}
+                  data-unanswered={dayError ? true : undefined}
+                  aria-describedby={dayError ? "visit-day-error" : undefined}
+                >
                   {days.map((dt, i) => (
                     <button
                       key={dt.toISOString()}
@@ -273,6 +310,11 @@ export function VisitBooker() {
                     </button>
                   ))}
                 </div>
+                {dayError && (
+                  <p id="visit-day-error" className={fieldClasses.error} role="alert">
+                    {dayError}
+                  </p>
+                )}
               </fieldset>
             )}
             <div>
@@ -287,7 +329,7 @@ export function VisitBooker() {
                 value={slot}
                 onChange={setSlot}
                 columns={3}
-                error={tried && !canNext ? `Choose ${isCall ? "a time" : "a day and a time"} to continue.` : undefined}
+                error={tried && !slot ? `Choose a time${isCall ? "" : " of day"} to continue.` : undefined}
                 options={slots.map((x) => ({ value: x.id, title: x.label, detail: x.hint }))}
               />
             </div>
@@ -307,17 +349,20 @@ export function VisitBooker() {
                 autoComplete="name"
                 error={tried && !nameOk ? "Please enter your name." : undefined}
               />
-              <TextField
-                label="Mobile number"
-                value={phone}
-                onChange={(e) => setPhone(cleanPhoneInput(e.target.value))}
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder="98765 43210"
-                hint={tried && !phoneOk ? undefined : "Outside India? Add your country code, e.g. +971."}
-                error={tried && !phoneOk ? phoneHelp : undefined}
-              />
+              <PhoneField value={phone} onChange={setPhone} error={tried && !phoneOk ? phoneHelp : undefined} helpClassName={s.phoneHelp} />
             </div>
+            {isCall && (
+              <div className={s.callNote}>
+                <TextField
+                  label="Your time zone or best time to call"
+                  optional
+                  value={callNote}
+                  onChange={(e) => setCallNote(e.target.value)}
+                  maxLength={60}
+                  autoComplete="off"
+                />
+              </div>
+            )}
             {!isCall && (
               <div className={s.people}>
                 <p id="visit-people">How many people are coming?</p>
@@ -363,7 +408,7 @@ export function VisitBooker() {
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
               <a
-                href={mailtoUrl(`${isCall ? "Call back request" : "Site visit request"}: ${p.title}`, message, place === "elements" ? elements.email : undefined)}
+                href={mailtoUrl(`${isCall ? "Call request" : "Site visit request"}: ${p.title}`, message, place === "elements" ? elements.email : undefined)}
                 onClick={() => record("email")}
                 className="btn btn-soft"
               >

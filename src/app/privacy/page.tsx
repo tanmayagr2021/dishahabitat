@@ -23,7 +23,7 @@ export default function PrivacyPage() {
       />
       <Section width="measure">
         <div className={s.body}>
-          <p className={s.updated}>Last updated 26 October 2026.</p>
+          <p className={s.updated}>Last updated 27 October 2026.</p>
 
           <h2>Cookies and analytics</h2>
           <p>
@@ -43,12 +43,17 @@ export default function PrivacyPage() {
               clears it, as does clearing your browser’s site data.
             </li>
           </ul>
+          <p>
+            While the site is being reviewed, a Feedback tab may appear. If you send feedback with it, the site also saves a random number (
+            <code>disha-visitor</code>) so that notes from the same browser can be read together. It is sent only with your feedback.
+          </p>
 
           <h2>When you send us a message</h2>
           <p>
             The site visit booker, the message form and the enquiry form open WhatsApp or your email app with the message ready, and you choose
             whether to send it. When you press a Send button (or Continue on the enquiry form), we also keep what you entered: your name, number,
-            email if you gave one, what you asked about, and the date and time you chose. We keep it on our website’s servers so that we can reply
+            email if you gave one, what you asked about, the date and time you chose, the page you sent it from, the page that linked you there and
+            your browser type. We keep it on our website’s servers so that we can reply
             even if your message does not reach us. We use it only to reply to you about your enquiry or site visit, and we do not sell it or give it
             to anyone else. A message you send on WhatsApp or by email reaches Disha Habitat like any other message, and WhatsApp and your email
             provider handle it under their own policies.
@@ -56,8 +61,11 @@ export default function PrivacyPage() {
 
           <h2>Our website host</h2>
           <p>
-            Like any website, ours is served by a hosting company, which keeps routine server logs (such as your IP address, the pages asked for and
-            your browser type) to run the site and keep it secure. The fonts you see are served from this site itself, not from Google.
+            Like any website, ours is served by a hosting company, whose servers log every request (such as your IP address, the pages asked for
+            and your browser type) to run the site and keep it secure. When you send a request, your IP address is also used for a short while,
+            in memory only, to stop the same connection sending too many; it is not stored with your request. The fonts, photographs and the map
+            of our communities are served from this site itself (the map is drawn from OpenStreetMap data), so opening a page contacts no other
+            company.
           </p>
 
           <h2>Calculators</h2>
@@ -68,8 +76,9 @@ export default function PrivacyPage() {
 
           <h2>Maps and links</h2>
           <p>
-            Some links open Google Maps, WhatsApp, Instagram, Facebook, LinkedIn or YouTube in a new tab. Those services have their own privacy
-            policies. Nothing from them loads on this site until you follow the link.
+            Other services are contacted only when you tap a link to them: Google Maps (directions and the commute checker), WhatsApp, your email
+            app, Instagram, Facebook, LinkedIn, YouTube, MyGate, the Pursuit of the Elements project website and the Karnataka RERA website. They open in a new tab or app and have their own
+            privacy policies. Nothing from them loads on this site until you follow the link.
           </p>
 
           <h2>Your rights</h2>

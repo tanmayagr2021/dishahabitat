@@ -22,7 +22,7 @@
       content: counter(n) / "";
       position: absolute;
       inset: 0;
-      color: #fff;
+      color: var(--count-ink, #fff);
       text-align: right;
     }
   }

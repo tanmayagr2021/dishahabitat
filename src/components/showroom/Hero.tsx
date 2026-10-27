@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Fragment, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import { company, links, type Slide } from "@/lib/content";
+import Link from "next/link";
+import { type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type Slide, trust } from "@/lib/content";
 import { focusPoint } from "@/lib/focus";
 import { MOTION_OK, useMedia } from "@/lib/useMedia";
 import { ChevronLeft, ChevronRight, PauseIcon, PlayIcon } from "./Icons";
@@ -104,23 +105,12 @@ export function Hero({ slides }: { slides: Slide[] }) {
                 />
               )}
               <div className={s.scrim} aria-hidden="true" />
-              <div className={s.copy}>
+              <div className={`photo-copy ${s.copy}`}>
+                <p className={s.eyebrow}>{slide.eyebrow}</p>
                 <h2 className={`display ${s.title}`}>{slide.title}</h2>
                 <p className={s.line}>{slide.line}</p>
-                {slide.proof && (
-                  <p className={s.proof}>
-                    {slide.proof.split("·").map((part, k) => (
-                      <Fragment key={k}>
-                        {k > 0 && (
-                          <span className={s.dot} aria-hidden="true">
-                            {" · "}
-                          </span>
-                        )}
-                        <span className={s.phrase}>{part.trim()}</span>
-                      </Fragment>
-                    ))}
-                  </p>
-                )}
+              </div>
+              <div className={`photo-foot ${s.foot}`}>
                 <div className={s.ctas}>
                   <a className="btn btn-primary" href={slide.primary.href}>
                     {slide.primary.label}
@@ -130,24 +120,20 @@ export function Hero({ slides }: { slides: Slide[] }) {
                     <span className="sr-only">: {slide.title}</span>
                   </a>
                 </div>
-                {slide.proof?.includes("RERA") && (
-                  <p className={s.rera}>
-                    <span className={s.reraNos}>
-                      RERA:{" "}
-                      {company.rera.map((r, k) => (
-                        <span key={r.no} className={s.reraNo}>
-                          {k > 0 && <span className={s.reraDot}>{"\u00a0·\u00a0"}</span>}
-                          {r.phase} {r.no}
-                        </span>
-                      ))}
-                    </span>{" "}
-                    <a href={links.rera} target="_blank" rel="noopener noreferrer">
-                      Check on the RERA portal<span className="sr-only"> (opens in a new tab)</span>
-                    </a>
-                  </p>
-                )}
+                <p className={s.trust}>
+                  <span className={s.fact}>{trust.record}</span>
+                  <span className={s.dot} aria-hidden="true">
+                    {" · "}
+                  </span>
+                  <span className={s.fact}>
+                    {trust.rera}{" "}
+                    <Link href={trust.verify}>
+                      Verify<span className="sr-only"> the RERA registration</span>
+                    </Link>
+                  </span>
+                </p>
+                <p className={s.note}>{slide.note}</p>
               </div>
-              <p className={s.note}>{slide.note}</p>
             </div>
           );
         })}

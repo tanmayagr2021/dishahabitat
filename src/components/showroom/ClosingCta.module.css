@@ -1,11 +1,11 @@
 /* A centred closing band: the invitation, then the two ways to act, on one axis. */
 .section {
-  padding: 80px var(--edge) 96px;
+  padding: 64px var(--edge) 0;
 }
 
 @media (min-width: 768px) {
   .section {
-    padding-block: 120px 128px;
+    padding-block: 96px 0;
   }
 }
 

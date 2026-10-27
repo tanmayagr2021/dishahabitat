@@ -1,25 +1,23 @@
 /*
- * A quiet bar at the bottom. On a phone it sits just above the bottom edge (and above the Feedback
- * pill when that is switched on); on a computer it is one slim row. While it is showing, the page
- * adds scroll padding for it (below), so a focused field or button is never left under the bar.
+ * One slim strip along the bottom edge: a row on a computer (44 px of content), two compact rows on a
+ * phone (the words, then the two buttons). Its height is published as --consent-h (see the banner),
+ * and every full-screen photograph adds it to its bottom padding, so the bar never covers a button.
+ * Before scripts run, globals.css reserves the same height, so nothing moves when the bar appears.
  */
 .bar {
   position: fixed;
   z-index: 55;
-  left: 12px;
-  right: 12px;
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-  display: flex;
-  flex-direction: column;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
   gap: 8px;
-  max-height: min(60svh, calc(100svh - 140px));
-  padding: 12px 14px;
-  border-radius: var(--radius-card);
+  max-height: 70svh;
+  padding: 8px var(--edge) calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--line);
   background: #fff;
   color: var(--text);
-  box-shadow:
-    0 0 0 1px var(--line),
-    0 12px 40px rgb(23 26 32 / 0.16);
+  box-shadow: 0 -6px 24px rgb(23 26 32 / 0.06);
   animation: up 0.4s var(--ease) 0.3s both;
 }
 
@@ -28,22 +26,23 @@
   pointer-events: none;
 }
 
+/* With the Feedback pill on (development), the bar sits above it on a phone. */
 .bar[data-feedback] {
-  bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
 }
 
-@media (min-width: 900px) and (hover: hover) {
+@media (min-width: 600px) {
   .bar,
   .bar[data-feedback] {
-    left: var(--gutter);
-    right: auto;
-    bottom: 20px;
-    width: min(46rem, calc(100vw - 2 * var(--gutter) - 56px));
-    padding: 12px 16px;
-    display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: 20px;
+    column-gap: 24px;
+    padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .bar[data-feedback] {
+    bottom: 0;
   }
   .choose {
     grid-column: 1 / -1;
@@ -51,6 +50,7 @@
   }
   .actions > :global(.btn) {
     flex: none;
+    min-width: 104px;
   }
 }
 
@@ -60,21 +60,21 @@
 
 /* The last lines of the page (footer, Cookie settings) can always be scrolled clear of the bar. */
 :global(html[data-consent-bar]) body {
-  padding-bottom: calc(var(--consent-h, 0px) + 24px);
+  padding-bottom: var(--consent-h, 0px);
 }
 
 /* It waits 300 ms after first paint, then slides up; it is fixed, so it never moves the page. */
 @keyframes up {
   from {
     opacity: 0;
-    transform: translateY(calc(100% + 24px));
+    transform: translateY(100%);
   }
 }
 
 @keyframes down {
   to {
     opacity: 0;
-    transform: translateY(calc(100% + 24px));
+    transform: translateY(100%);
   }
 }
 
@@ -90,30 +90,47 @@
   color: var(--text-2);
 }
 
+/* "Privacy" and "Choose" are part of the sentence: same size, underlined. */
+.link {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.link:hover {
+  text-decoration-color: var(--ink);
+}
+
 .actions {
   display: flex;
   align-items: stretch;
   gap: 8px;
 }
 
-/* The two main choices are the same size and weight. */
+/* The two main choices are the same size and weight: 40 px to look at, 44 px to touch. */
 .actions > :global(.btn) {
-  flex: 1 1 auto;
-  min-height: 44px;
-  padding-inline: 12px;
+  position: relative;
+  flex: 1 1 0;
+  min-height: 40px;
+  padding: 0 12px;
   font-size: 0.875rem;
 }
 
-.chooseBtn {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  flex: none;
-  padding-inline: 6px;
-  font-size: 0.875rem;
-  border: 0;
-  background: none;
-  font-family: inherit;
+.actions > :global(.btn)::after {
+  content: "";
+  position: absolute;
+  inset: -2px 0;
 }
 
 .choose {

@@ -55,6 +55,13 @@ export const company = {
 const bookVisit: Cta = { label: "Book a visit", href: links.bookVisit };
 const learnElements: Cta = { label: "Explore", href: links.elements };
 
+/* The one quiet line at the foot of every hero slide. "verify" goes to the RERA strip on the project page. */
+export const trust = {
+  record: "1,102 homes handed over since 2014",
+  rera: "Karnataka RERA registered",
+  verify: `${elements.href}#rera`,
+} as const;
+
 /* The hero: three slides that change every ten seconds, as on tesla.com. */
 export type Slide = {
   id: string;
@@ -63,17 +70,17 @@ export type Slide = {
   image: Img;
   primary: Cta;
   secondary: Cta;
-  /* Who stands behind the slide, in one line: the maker and the proof. */
-  proof?: string;
+  /* One small line above the title: what is on offer and where. */
+  eyebrow: string;
   note: string;
 };
 
 export const heroSlides: Slide[] = [
   {
     id: "elements",
+    eyebrow: "Now selling · Gunjur, East Bengaluru",
     title: "Pursuit of the Elements",
-    line: "Last few 2, 3 & 4 BHK homes on 20 acres in Gunjur, East Bengaluru",
-    proof: "By Disha Habitat  ·  1,102 homes handed over  ·  Karnataka RERA registered",
+    line: "2, 3\u00a0&\u00a04 BHK homes and 4\u00a0&\u00a05 BHK villas on 20\u00a0acres",
     image: {
       src: "/images/pursuit-of-the-elements/towers.webp",
       width: 1600,
@@ -88,6 +95,7 @@ export const heroSlides: Slide[] = [
   },
   {
     id: "record",
+    eyebrow: "Since 2014 · East Bengaluru",
     title: "1,102 homes handed over",
     line: "Across five Disha communities in East Bengaluru",
     image: {
@@ -104,9 +112,9 @@ export const heroSlides: Slide[] = [
   },
   {
     id: "villas",
+    eyebrow: "Now selling · Gunjur, East Bengaluru",
     title: "The Villas",
-    line: "4 & 5 BHK independent villas at Pursuit of the Elements, Gunjur",
-    proof: "By Disha Habitat  ·  Karnataka RERA registered",
+    line: "4 & 5 BHK independent villas at Pursuit of the Elements",
     image: {
       src: "/images/pursuit-of-the-elements/villas.webp",
       width: 1440,
@@ -140,7 +148,7 @@ export const proof = {
 /* Headings for the two rows of cards: what the row is, in a few words. */
 export const rows = {
   communities: {
-    title: "Our communities",
+    title: "Find a community",
     line: "One selling now, five handed over across East Bengaluru.",
   },
   life: {
@@ -219,7 +227,7 @@ export const communities: Community[] = [
     place: "Panathur–Varthur Road",
     line: "306 homes on 3.5 acres",
     image: {
-      src: "/images/central-park/clubhouse-night.jpg",
+      src: "/images/central-park/clubhouse-night.webp",
       width: 1920,
       height: 1174,
       alt: "Night aerial of the clubhouse and illuminated pool at Disha Central Park",
@@ -268,22 +276,38 @@ export const closing = {
   line: "Book a site visit to Gunjur, or call the sales team on +91 95053 33333.",
 };
 
-/* Two cards, where tesla.com shows current offers and its inventory. */
+/* The story panel: the team photograph, as tesla.com gives each topic a full screen. */
+export const story = {
+  eyebrow: "Since 2014",
+  title: "Our story",
+  line: "How two homebuyers became builders, in the founders’ own words.",
+  image: {
+    src: "/images/community/site-team-1600.webp",
+    width: 1600,
+    height: 1067,
+    alt: "The Disha Habitat site and engineering team gathered on a landscaped lawn",
+    position: "50% 45%",
+    mobilePosition: "50% 50%",
+  } satisfies Img,
+  ctas: [{ label: "Read our story", href: links.story }, bookVisit] as Cta[],
+};
+
+/* Two half-width tiles, where tesla.com shows its offers: the two tools a buyer uses before a visit. */
 export const promos = [
   {
-    title: "Our story",
-    line: "How two homebuyers became builders, in the founders’ own words.",
-    cta: { label: "Read our story", href: links.story },
+    title: "Estimate your EMI",
+    line: "Work out a monthly EMI from your own figures. Nothing you enter leaves your browser.",
+    cta: { label: "Open the calculator", href: links.emi },
     image: {
-      src: "/images/people/founders.jpg",
-      width: 1920,
-      height: 1280,
-      alt: "Disha Habitat founders Gunaranjan J and K Raja Sekhar",
-      position: "62% 40%",
-    },
+      src: "/images/people/family-1-1600.webp",
+      width: 1600,
+      height: 1067,
+      alt: "A Disha homeowner at home, a father holding his young daughter",
+      position: "50% 40%",
+    } satisfies Img,
   },
   {
-    title: "The checklist",
+    title: "The buyer’s checklist",
     line: "Khata, occupancy certificate, carpet area and more, explained before you buy.",
     cta: { label: "Open the checklist", href: links.checklist },
     image: {
@@ -292,9 +316,9 @@ export const promos = [
       height: 1920,
       alt: "The front door of a home at Disha Central Park",
       position: "50% 40%",
-    },
+    } satisfies Img,
   },
-] as const;
+];
 
 /* Life at Pursuit of the Elements, where tesla.com shows its energy products. All renders. */
 export const life: { name: string; line: string; image: Img }[] = [

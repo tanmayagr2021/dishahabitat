@@ -1,6 +1,7 @@
 /*
- * Fixed at the top: clear over the hero, then white with a hairline and a soft blur once the page has
- * scrolled a little (the veil is a layer of its own, so the full-screen menus inside keep their place).
+ * Fixed at the top: clear over the hero, then near-opaque white with a hairline and a 14 px blur once the
+ * page has scrolled a little, so no body text ghosts through behind the logo or the menu. The veil is
+ * a layer of its own, so the full-screen menus inside keep their place.
  */
 .header {
   position: fixed;
@@ -10,9 +11,13 @@
   transition: color 0.3s var(--ease);
 }
 
-/* The header stays put while pages cross-fade (see the view-transition rules in globals.css). */
+/*
+ * The header stays put while pages cross-fade (see the view-transition rules in globals.css). The name
+ * is given only during a transition: a named element is a backdrop root, which would stop the veil
+ * below from blurring the page behind it.
+ */
 @media (prefers-reduced-motion: no-preference) {
-  .header {
+  :global(html:active-view-transition) .header {
     view-transition-name: site-header;
   }
 }
@@ -24,9 +29,9 @@
   z-index: -2;
   height: var(--header-h);
   border-bottom: 1px solid var(--line);
-  background: rgb(255 255 255 / 0.88);
-  -webkit-backdrop-filter: saturate(1.6) blur(14px);
-  backdrop-filter: saturate(1.6) blur(14px);
+  background: rgb(255 255 255 / 0.96);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   opacity: 0;
   transition: opacity 0.3s var(--ease);
   pointer-events: none;

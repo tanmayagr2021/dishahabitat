@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: elements.href, priority: 0.9 },
     { path: "/homes", priority: 0.8 },
     { path: "/contact", priority: 0.8 },
+    { path: "/compare", priority: 0.7 },
     { path: "/story", priority: 0.7 },
     { path: "/checklist", priority: 0.6 },
     { path: "/plan", priority: 0.5 },

@@ -1,39 +1,13 @@
-/* About: the intro large on the left, the facts on the right; stacked on a phone. */
+/* The bar's links land under the header (56 px) and the bar (48 px): the page already pads 24 px. */
+.anchor {
+  scroll-margin-top: 48px;
+}
+
+/* Overview: the eyebrow, the intro large, its links. */
 .about {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 40px;
-}
-
-@media (min-width: 1024px) {
-  .about {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: 80px;
-    align-items: stretch;
-  }
-}
-
-/* The intro starts level with the facts and its links end level with their last row. */
-.aboutText {
-  display: grid;
-  align-content: space-between;
-  gap: 32px;
-  min-width: 0;
-}
-
-.aboutLead {
-  display: grid;
   gap: 16px;
-}
-
-.facts {
-  min-width: 0;
-}
-
-@media (min-width: 1024px) {
-  .facts > :global(dl) {
-    height: 100%;
-  }
+  max-width: 60rem;
 }
 
 .lead {
@@ -53,6 +27,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px 28px;
+  margin-top: 16px;
+}
+
+/* Facts: the heading on the left, the rows on the right, level at the top. */
+.factsGrid {
+  display: grid;
+  gap: 8px 80px;
+}
+
+@media (min-width: 1024px) {
+  .factsGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+
+  .factsGrid > div:first-child :global(h2) {
+    margin-top: 0;
+  }
 }
 
 /*
@@ -300,13 +292,16 @@
 }
 
 .also ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  columns: 16rem;
+  column-gap: 48px;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  color: var(--text);
 }
 
-.also :global(span) {
-  background: #fff;
+.also li {
+  break-inside: avoid;
+  padding-block: 3px;
 }
 
 /* Specifications: the groups open full width, their items in two columns on a computer. */

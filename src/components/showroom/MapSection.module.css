@@ -1,0 +1,101 @@
+/* On white: the list on the left and the map on the right, sharing the page's edges. */
+.section {
+  padding: 72px var(--edge);
+  background: #fff;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: 112px;
+  }
+}
+
+.inner {
+  display: grid;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 48px;
+    align-items: stretch;
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--display-title);
+  line-height: var(--display-title-lh);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.line {
+  margin-top: 8px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  color: var(--text-2);
+}
+
+.list {
+  width: 100%;
+  border-top: 1px solid var(--line);
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 16px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  color: var(--text-2);
+  transition: color 0.3s var(--ease);
+}
+
+.item:hover,
+.item[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.name {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.item[aria-pressed="true"] .name {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.meta {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+}
+
+.map {
+  min-width: 0;
+  min-height: 360px;
+}
+
+@media (min-width: 900px) {
+  .map {
+    min-height: 520px;
+  }
+}

@@ -210,6 +210,13 @@
   justify-content: center;
 }
 
+/* The circle stays 36 px; the area that takes a tap is 44 px. */
+.tick::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
 .check {
   align-items: flex-start;
   min-height: 44px;

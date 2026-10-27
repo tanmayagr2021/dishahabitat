@@ -314,7 +314,7 @@ export function SiteHeader() {
             Book a visit
           </NavLink>
           <a className="btn btn-soft" href={company.sales.tel}>
-            Call {company.sales.display}
+            Call <span className="whitespace-nowrap">{company.sales.display}</span>
           </a>
           <button type="button" className="btn btn-soft" onClick={() => {
               setSheet(false);

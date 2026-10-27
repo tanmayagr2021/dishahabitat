@@ -1,22 +1,9 @@
 import Link from "next/link";
-import { Fragment } from "react";
 import { CookieSettingsLink } from "@/components/consent/ConsentBanner";
+import { SlashBreak } from "@/components/ds/SlashBreak";
 import { communities, communityHref, company, links } from "@/lib/content";
 import { company as site } from "@/lib/site";
 import s from "./SiteFooter.module.css";
-
-/* A RERA number may wrap only at its slashes, never mid-figure. */
-const breakable = (code: string) =>
-  code.split("/").map((part, i, all) => (
-    <Fragment key={i}>
-      {part}
-      {i < all.length - 1 && (
-        <>
-          /<wbr />
-        </>
-      )}
-    </Fragment>
-  ));
 
 const columns = [
   {
@@ -37,6 +24,7 @@ const columns = [
       { label: "Book a site visit", href: links.bookVisit },
       { label: "Homebuyer’s checklist", href: links.checklist },
       { label: "EMI calculator", href: links.emi },
+      { label: "Compare communities", href: "/compare" },
       { label: "Construction updates", href: links.updates },
     ],
   },
@@ -57,7 +45,6 @@ export function SiteFooter() {
               {col.links.map((l) => (
                 <li key={l.label}>
                   {l.href.startsWith("/") ? <Link href={l.href}>{l.label}</Link> : <a href={l.href}>{l.label}</a>}
-                  {"meta" in l && l.meta === "Now selling" && <span className={s.badge}>{l.meta}</span>}
                 </li>
               ))}
             </ul>
@@ -67,18 +54,18 @@ export function SiteFooter() {
           <h2 className={s.head}>Talk to us</h2>
           <ul>
             <li>
-              <a href={company.sales.tel}>Sales {company.sales.display}</a>
+              <a href={company.sales.tel}>Sales <span className="whitespace-nowrap">{company.sales.display}</span></a>
             </li>
             {site.phones.map((p) => (
               <li key={p.href}>
-                <a href={p.href}>Office {p.display}</a>
+                <a href={p.href}>Office <span className="whitespace-nowrap">{p.display}</span></a>
               </li>
             ))}
             <li>
               <a href={company.whatsapp}>WhatsApp</a>
             </li>
             <li>
-              <a href={`mailto:${company.email}`}>{company.email}</a>
+              <a href={`mailto:${company.email}`}><span className="whitespace-nowrap">{company.email}</span></a>
             </li>
             <li>
               <a href={site.office.mapUrl}>{company.office}</a>
@@ -99,7 +86,7 @@ export function SiteFooter() {
           Pursuit of the Elements is registered with Karnataka RERA:{" "}
           {company.rera.map((r, i) => (
             <span key={r.no}>
-              {r.phase} <span className={s.code}>{breakable(r.no)}</span>
+              {r.phase} <span className={s.code}><SlashBreak code={r.no} /></span>
               {i < company.rera.length - 1 ? ", " : ". "}
             </span>
           ))}

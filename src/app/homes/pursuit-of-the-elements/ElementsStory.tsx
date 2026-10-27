@@ -8,7 +8,7 @@ import s from "./ElementsStory.module.css";
  */
 export function ElementsStory() {
   return (
-    <section className={s.story} aria-labelledby="idea-title">
+    <section className={s.story} data-tone="dark" aria-labelledby="idea-title">
       <div className={s.track}>
         <div className={s.stage}>
           <div className={s.inner}>

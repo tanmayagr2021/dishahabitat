@@ -1,0 +1,287 @@
+.tool {
+  --label-w: 0px;
+  --label-gap: 0px;
+  --gap: 12px;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+.slots {
+  align-items: start;
+}
+
+.rowLabelSpace {
+  display: none;
+}
+
+.slot[data-empty] {
+  opacity: 0.9;
+}
+
+.pickLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--text-2);
+}
+
+.select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 28px 0 10px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--ink);
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%23171a20' stroke-width='1.5'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  appearance: none;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: border-color 0.3s var(--ease);
+}
+
+.select:hover {
+  border-color: var(--line);
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  margin-top: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.375rem;
+  color: var(--ink);
+}
+
+.where {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--text-2);
+}
+
+.empty {
+  padding: 48px 0;
+  color: var(--text-2);
+}
+
+/* A real table: hairline rows, the label column on the left, values on one left edge per column. */
+/* Every column carries the gap on its right, so all value columns are equal and start under their pickers;
+   the last gap overhangs the page edge and is clipped. */
+.tableWrap {
+  margin-top: 32px;
+  overflow-x: clip;
+}
+
+.table {
+  width: calc(100% + var(--gap));
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  padding: 0 var(--gap) 0 0;
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+.labelCol {
+  width: calc(var(--label-w) + var(--label-gap));
+}
+
+.hLabel {
+  padding: 0;
+}
+
+/* The names stay in view while the rows scroll under them. */
+.head th,
+.head td {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 2;
+  padding-block: 12px;
+  background: #fff;
+  box-shadow: inset 0 -1px 0 var(--ink);
+}
+
+.hName {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.table .hName {
+  font-weight: 500;
+}
+
+/* Phone: each label has its own line above its values, so three columns share the width without side scrolling. */
+.labelRow td {
+  padding: 14px 0 2px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--text-2);
+}
+
+.labelRow:not(:first-child) td {
+  border-top: 1px solid var(--line);
+}
+
+.table .label {
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.cell {
+  padding-bottom: 14px;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.table .cell {
+  padding-bottom: 14px;
+}
+
+.cell[data-empty] {
+  color: var(--text-2);
+}
+
+.actions td {
+  border-top: 1px solid var(--line);
+}
+
+.table .actions .cell {
+  padding-top: 8px;
+}
+
+.act,
+.actSoft {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s var(--ease);
+}
+
+.act {
+  font-weight: 500;
+}
+
+.actSoft {
+  color: var(--text-2);
+}
+
+.act:hover,
+.actSoft:hover {
+  text-decoration-color: var(--ink);
+}
+
+.act:focus-visible,
+.actSoft:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.note {
+  margin-top: 16px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-2);
+}
+
+@media (min-width: 768px) {
+  .tool {
+    --label-w: 180px;
+    --label-gap: 24px;
+    --gap: 24px;
+  }
+
+  .slots {
+    grid-template-columns: var(--label-w) repeat(3, minmax(0, 1fr));
+  }
+
+  .rowLabelSpace {
+    display: block;
+  }
+
+  .pickLabel {
+    font-size: 0.8125rem;
+  }
+
+  .select {
+    font-size: 1rem;
+  }
+
+  .name {
+    font-size: 1.125rem;
+  }
+
+  .hName {
+    font-size: 1rem;
+  }
+
+  .labelRow {
+    display: none;
+  }
+
+  .table .label {
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    color: var(--text-2);
+  }
+
+  .table .label,
+  .table .cell {
+    padding-block: 16px;
+  }
+
+  .table .label {
+    padding-right: var(--gap);
+  }
+
+  .row:not(:nth-child(2)) > * {
+    border-top: 1px solid var(--line);
+  }
+
+  .table .actions .cell {
+    padding-top: 12px;
+  }
+}

@@ -331,3 +331,32 @@
   align-items: center;
   min-height: 44px;
 }
+
+.callNote {
+  margin-top: 16px;
+}
+
+.days:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.days + p {
+  margin-top: 12px;
+}
+
+/* A field a phone keyboard would cover is scrolled to sit clear of it. */
+.booker input {
+  scroll-margin-block: 96px;
+}
+
+/* The phone's help line sits under its input, so the name and phone inputs stay level. */
+.phoneHelp {
+  margin-top: -8px;
+}
+
+@media (min-width: 600px) {
+  .phoneHelp {
+    grid-column: 2;
+  }
+}

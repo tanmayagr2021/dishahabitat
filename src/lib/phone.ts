@@ -3,7 +3,9 @@
  * 098765 43210, +91 98765 43210, 0091…), and any other country written with its code (+971…, 001…)
  * so buyers abroad can send a request too. Kept free of other imports so it can be unit-tested.
  */
-export const phoneHelp = "Enter a 10-digit Indian mobile number, or your number with its country code, e.g. +971 50 123 4567.";
+export const phoneHelp = "Enter a 10-digit Indian mobile number, or start with your country code, for example +971 50 123 4567.";
+export const phonePlaceholder = "+91 98765 43210";
+export const phoneHint = "From outside India? Start with your country code, for example +971 …";
 
 /* Digits typed on an Indian-language or Arabic keyboard (०-९, ೦-೯, ௦-௯, ٠-٩…) become 0-9. */
 const zeros = [0x0660, 0x06f0, 0x0966, 0x09e6, 0x0a66, 0x0ae6, 0x0b66, 0x0be6, 0x0c66, 0x0ce6, 0x0d66, 0xff10];
@@ -26,7 +28,15 @@ export function parsePhone(input: string): { ok: boolean; empty: boolean; displa
   if (/^(\+|00)/.test(compact)) {
     const d = compact.replace(/^(\+|00)/, "").replace(/\D/g, "");
     if (d.startsWith("91")) return indian(d.slice(2));
-    return d.length >= 8 && d.length <= 15 ? { ok: true, empty: false, display: `+${d}` } : { ok: false, empty: false, display: "" };
+    /* A country code of 1 to 3 digits, then 6 to 14 digits of number. */
+    return d.length >= 7 && d.length <= 15 && !d.startsWith("0") ? { ok: true, empty: false, display: `+${d}` } : { ok: false, empty: false, display: "" };
   }
   return indian(compact.replace(/\D/g, "").replace(/^(?:91|0)(?=\d{10}$)/, ""));
+}
+
+/* How a valid number is shown back and sent in messages: Indian numbers in one tidy form, numbers from abroad as typed. */
+export function shownPhone(input: string): string {
+  const p = parsePhone(input);
+  if (!p.ok) return "";
+  return p.display.startsWith("+91 ") ? p.display : toAsciiDigits(input).trim().replace(/\s+/g, " ");
 }

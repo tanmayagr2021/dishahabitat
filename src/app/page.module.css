@@ -1,0 +1,9 @@
+/*
+ * On a computer with a mouse the panels pull gently into place once the visitor stops near one. "proximity"
+ * never forces it: keys, touch, the scrollbar and links to #anchors all move freely. Phones do not snap.
+ */
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  :global(html):has(.page) {
+    scroll-snap-type: y proximity;
+  }
+}

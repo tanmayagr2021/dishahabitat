@@ -23,3 +23,13 @@ test("digits typed in Devanagari, Kannada or Tamil", () => {
   assert.equal(parsePhone("೯೮೭೬೫ ೪೩೨೧೦").display, "+91 98765 43210");
   assert.equal(parsePhone("+௯௭௧ ௫௦ ௧௨௩ ௪௫௬௭").display, "+971501234567");
 });
+
+test("international boundaries and separators", () => {
+  assert.equal(parsePhone("+44 7911 123456").display, "+447911123456");
+  assert.equal(parsePhone("+65-9123-4567").display, "+6591234567");
+  assert.equal(parsePhone("+1 206 555 0134").ok, true);
+  assert.equal(parsePhone("+971 50").ok, false); // too short
+  assert.equal(parsePhone("+9715012345678901").ok, false); // too long
+  assert.equal(parsePhone("+0 123 456 7890").ok, false); // no country code starts with 0
+  assert.equal(parsePhone("+").ok, false);
+});

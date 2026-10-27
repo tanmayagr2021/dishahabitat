@@ -1,0 +1,92 @@
+/* The drawing on its grey card; a click anywhere on it opens the viewer. */
+.thumb {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  cursor: zoom-in;
+}
+
+.thumbImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+  margin-top: 24px;
+}
+
+/* Solid, so nothing of the page shows through behind the buttons. */
+.viewer {
+  background: rgb(10 11 13);
+}
+
+.zoom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoom span {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.hint {
+  margin-left: 8px;
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.72);
+}
+
+@media (max-width: 479px) {
+  .hint {
+    display: none;
+  }
+}
+
+/*
+ * The scrolling area: at zoom 1 the plan fits the screen; --z scales its width, and the area scrolls.
+ * Phones pinch natively (touch-action), computers use the wheel or the buttons.
+ */
+.scroller {
+  --z: 1;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  padding: 0 var(--gutter) var(--gutter);
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y pinch-zoom;
+  container-type: size;
+  cursor: grab;
+}
+
+.scroller:active {
+  cursor: grabbing;
+}
+
+.full {
+  flex: none;
+  max-width: none;
+  width: calc(var(--z) * min(100cqw - 2 * var(--gutter), (100cqh - var(--gutter)) * var(--ar)));
+  height: auto;
+  margin: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+  background: #fff;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* On a phone held upright the plan opens at the screen's full height, legend first; swipe across for the rest. */
+@media (orientation: portrait) and (max-width: 767px) {
+  .full {
+    width: calc(var(--z) * (100cqh - var(--gutter)) * var(--ar));
+  }
+}

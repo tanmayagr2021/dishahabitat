@@ -4,7 +4,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Checkbox, SelectField, TextArea, TextField } from "@/components/ds";
 import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
-import { buildMessage, cleanPhoneInput, mailtoUrl, parsePhone, phoneHelp, whatsappUrl } from "@/lib/messaging";
+import { buildMessage, mailtoUrl, parsePhone, phoneHelp, shownPhone, whatsappUrl } from "@/lib/messaging";
+import { PhoneField } from "./PhoneField";
 import { projects } from "@/lib/projects";
 import { SuccessTick } from "./SuccessTick";
 import s from "./EnquiryForm.module.css";
@@ -99,7 +100,7 @@ export function EnquiryForm({ defaultInterest }: { defaultInterest?: string; ton
     `I’d like to know more about ${values.interest}.`,
     [
       ["Name", values.name],
-      ["Mobile", parsePhone(values.phone).display || values.phone],
+      ["Mobile", shownPhone(values.phone) || values.phone],
       ["Email", values.email],
     ],
     values.message,
@@ -144,18 +145,7 @@ export function EnquiryForm({ defaultInterest }: { defaultInterest?: string; ton
     <form ref={formRef} noValidate onSubmit={onSubmit} className={s.form}>
       <TextField label="Full name" name="name" autoComplete="name" required value={values.name} onChange={(e) => set("name", e.target.value)} error={errors.name} />
       <div className={s.pair}>
-        <TextField
-          label="Mobile number"
-          name="phone"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          required
-          placeholder="98765 43210"
-          value={values.phone}
-          onChange={(e) => set("phone", cleanPhoneInput(e.target.value))}
-          error={errors.phone}
-        />
+        <PhoneField name="phone" required value={values.phone} onChange={(v) => set("phone", v)} error={errors.phone} helpClassName={s.phoneHelp} />
         <TextField
           label="Email"
           optional
@@ -184,7 +174,7 @@ export function EnquiryForm({ defaultInterest }: { defaultInterest?: string; ton
         checked={values.consent}
         onChange={(e) => set("consent", e.target.checked)}
         error={errors.consent}
-        label="I agree to be contacted by Disha Habitat by phone, WhatsApp or email about this enquiry, and to Disha Habitat storing these details to reply to me."
+        label="I agree that Disha Habitat may contact me by phone, WhatsApp or email about this enquiry and store these details to reply."
       />
       <div className={s.submit}>
         <button type="submit" className="btn btn-dark">

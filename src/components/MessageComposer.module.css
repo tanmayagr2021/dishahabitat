@@ -233,3 +233,19 @@
   background: none;
   font-family: inherit;
 }
+
+/* The phone's help line sits under its input; the field beside it stays level with the phone input. */
+.phoneHelp {
+  margin-top: -8px;
+}
+
+@media (min-width: 600px) {
+  .pair > :nth-child(3) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .phoneHelp {
+    grid-column: 1;
+  }
+}

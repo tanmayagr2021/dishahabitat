@@ -52,6 +52,9 @@
   /* The widest a column of reading text or a page section gets. */
   --measure: 42rem;
   --page-max: 1440px;
+  /* The shade that sits over every full-bleed photograph so white text and the header stay readable. */
+  --scrim-top: linear-gradient(to bottom, rgb(0 0 0 / 0.58), rgb(0 0 0 / 0));
+  --scrim-bottom: linear-gradient(to top, rgb(0 0 0 / 0.66), rgb(0 0 0 / 0));
   /* The left and right edge of all content: the gutter, or on a screen wider than --page-max, the space that centres the column. Use it as padding-inline, never in a width. */
   --edge: max(var(--gutter), calc((100% - var(--page-max)) / 2));
   --radius: var(--radius-sm);
@@ -71,6 +74,17 @@
   --display-quote-lh: 1.25;
   --display-feature: clamp(2rem, 1.69rem + 1.26vw, 2.5rem);
   --display-feature-lh: 1.15;
+}
+
+/* The cookie bar's height on a first visit, reserved before scripts run; the bar then publishes its real height. */
+html.consent-pending {
+  --consent-h: 54px;
+}
+
+@media (max-width: 599px) {
+  html.consent-pending {
+    --consent-h: calc(85px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 @layer base {
@@ -346,6 +360,63 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * The title block at the top of every photo panel: a feathered shade sits behind the words only (no
+ * edges, the photograph stays bright around it), with a soft halo on the letters, so white text holds
+ * 4.5:1 even over a pale facade or sky. Use it on the block that holds the eyebrow, title and line.
+ */
+@layer components {
+  .photo-copy {
+    position: relative;
+    isolation: isolate;
+    text-shadow:
+      0 0 24px rgb(0 0 0 / 0.4),
+      0 1px 2px rgb(0 0 0 / 0.35);
+  }
+
+  /* The same for the figures, buttons and trust line at the foot. */
+  .photo-foot {
+    position: relative;
+    isolation: isolate;
+    text-shadow: 0 0 16px rgb(0 0 0 / 0.5);
+  }
+
+  .photo-foot::before {
+    content: "";
+    position: absolute;
+    inset: -56px -8% -24px;
+    z-index: -1;
+    background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.5) 55%, rgb(0 0 0 / 0) 100%);
+    pointer-events: none;
+  }
+
+  .photo-foot :where(.btn) {
+    text-shadow: none;
+  }
+
+  .photo-copy::before {
+    content: "";
+    position: absolute;
+    inset: 0 -8% -96px;
+    z-index: -1;
+    background: radial-gradient(closest-side at 50% 54%, rgb(0 0 0 / 0.58), rgb(0 0 0 / 0.5) 55%, rgb(0 0 0 / 0.22) 82%, rgb(0 0 0 / 0) 100%);
+    pointer-events: none;
+  }
+
+  /* On the narrowest phones the words run to more lines and cover more of the picture: a firmer shade. */
+  @media (max-width: 400px) {
+    .photo-copy::before {
+      inset-block-end: -128px;
+      background: radial-gradient(closest-side at 50% 52%, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.56) 60%, rgb(0 0 0 / 0.3) 85%, rgb(0 0 0 / 0) 100%);
+    }
+
+    .photo-foot::before {
+      inset-inline: -40%;
+      background: radial-gradient(closest-side, rgb(0 0 0 / 0.66), rgb(0 0 0 / 0.56) 60%, rgb(0 0 0 / 0) 100%);
+    }
   }
 }
 

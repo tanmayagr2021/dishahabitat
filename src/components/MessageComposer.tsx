@@ -5,7 +5,8 @@ import { SelectField, TextArea, TextField } from "@/components/ds";
 import { CloseIcon } from "@/components/showroom/Icons";
 import { elements } from "@/lib/elements";
 import { recordLead } from "@/lib/leads";
-import { buildMessage, cleanPhoneInput, destinations, mailtoUrl, parsePhone, phoneHelp, whatsappUrl, type Channel } from "@/lib/messaging";
+import { buildMessage, destinations, mailtoUrl, parsePhone, phoneHelp, shownPhone, whatsappUrl, type Channel } from "@/lib/messaging";
+import { PhoneField } from "./PhoneField";
 import { projectsNewestFirst } from "@/lib/projects";
 import { SuccessTick } from "./SuccessTick";
 import s from "./MessageComposer.module.css";
@@ -84,7 +85,7 @@ export function MessageComposer() {
     opening(topic),
     [
       ["Name", name],
-      ["Mobile", parsed.ok ? parsed.display : undefined],
+      ["Mobile", parsed.ok ? shownPhone(phone) : undefined],
       ["Email", email],
     ],
     note,
@@ -155,15 +156,13 @@ export function MessageComposer() {
             error={tried && !nameOk ? "Please add your name." : undefined}
           />
           <div className={s.pair}>
-            <TextField
+            <PhoneField
               label="Mobile"
               optional
               value={phone}
-              onChange={(e) => setPhone(cleanPhoneInput(e.target.value))}
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder="98765 43210"
+              onChange={setPhone}
               error={tried && !phoneOk ? phoneHelp : undefined}
+              helpClassName={s.phoneHelp}
             />
             <TextField
               label="Email"

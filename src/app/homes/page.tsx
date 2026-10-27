@@ -39,7 +39,7 @@ export default function HomesPage() {
         <div className={s.feature}>
           <ViewTransition name={`community-${elements.slug}`} share="morph" default="none">
             <div className={s.featureMedia}>
-            <Image
+              <Image
               src={elements.cover.src}
               alt={elements.cover.alt}
               fill
@@ -53,22 +53,18 @@ export default function HomesPage() {
             </div>
           </ViewTransition>
           <div className={s.featureBody}>
-            <div className={s.featureHead}>
-              <p className="eyebrow">
-                {elements.status} · {elements.locality}
-              </p>
-              <p className={`display ${s.featureName}`}>{elements.shortName}</p>
-            </div>
-            <div className={s.featureFoot}>
-              <p>{elements.offer} and 4 &amp; 5 BHK villas, on 20 acres with over 40 amenities.</p>
-              <div className={s.actions}>
-                <Link href={elements.href} className="btn btn-dark">
-                  See the project
-                </Link>
-                <Link href={links.bookVisit} className="btn btn-primary">
-                  Book a visit
-                </Link>
-              </div>
+            <p className="eyebrow">
+              {elements.status} · {elements.locality}
+            </p>
+            <p className={`display ${s.featureName}`}>{elements.shortName}</p>
+            <p className={s.featureLine}>{elements.offer} and 4 &amp; 5 BHK villas, on 20 acres with over 40 amenities.</p>
+            <div className={s.actions}>
+              <Link href={links.bookVisit} className="btn btn-primary">
+                Book a visit
+              </Link>
+              <Link href={elements.href} className="text-link">
+                See the project <ArrowRight />
+              </Link>
             </div>
           </div>
         </div>

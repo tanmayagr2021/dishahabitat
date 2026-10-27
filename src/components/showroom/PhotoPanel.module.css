@@ -1,0 +1,143 @@
+/*
+ * A full-screen photograph panel. Every one carries the same two shades as the hero (the top one holds
+ * the header and the title, the bottom one the buttons), so white text stays legible.
+ */
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #101214;
+  color: #fff;
+  isolation: isolate;
+  scroll-snap-align: start;
+  /* cancels the page's scroll-padding, so a snap or an anchor lands with the picture at the very top */
+  scroll-margin-top: calc(-1 * (var(--header-h) + 24px));
+}
+
+/* Promo tiles are shorter than a screen, and sit two to a row on computers. */
+.panel[data-half] {
+  min-height: 75vh;
+  min-height: 75svh;
+}
+
+.media {
+  z-index: -2;
+  object-fit: cover;
+  object-position: var(--pos-m);
+}
+
+@media (min-width: 768px) {
+  .media {
+    object-position: var(--pos);
+  }
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.62) 0, rgb(0 0 0 / 0.5) 150px, rgb(0 0 0 / 0.28) 300px, rgb(0 0 0 / 0) 46%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.6) 0%, rgb(0 0 0 / 0.3) 18%, rgb(0 0 0 / 0) 34%);
+  pointer-events: none;
+}
+
+/* Title and one line at the top, below the header; the buttons at the foot, clear of the cookie bar. */
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(var(--header-h) + clamp(16px, 5svh, 48px)) 24px 0;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 20ch;
+  margin-top: 8px;
+  font-size: var(--display-hero);
+  line-height: var(--display-hero-lh);
+  color: #fff;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.panel[data-half] .title {
+  font-size: var(--display-title);
+  line-height: var(--display-title-lh);
+}
+
+.line {
+  max-width: 34ch;
+  margin-top: 12px;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .line {
+    max-width: 52ch;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .panel[data-half] .line {
+    max-width: 36ch;
+    font-size: 1.0625rem;
+    line-height: 1.5rem;
+  }
+}
+
+/* On a phone each part of the line gets its own row, so no row ends on a dot. */
+.part {
+  display: block;
+}
+
+@media (min-width: 600px) {
+  .part {
+    display: inline;
+  }
+
+  .part + .part::before {
+    content: " · ";
+  }
+}
+
+.ctas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0 24px calc(clamp(32px, 6svh, 56px) + var(--consent-h, 0px));
+}
+
+.ctas > :global(.btn) {
+  width: 100%;
+  max-width: 320px;
+}
+
+@media (min-width: 600px) {
+  .ctas {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .ctas > :global(.btn) {
+    width: 220px;
+  }
+}

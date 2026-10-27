@@ -5,9 +5,26 @@
   margin-top: 28px;
 }
 
+/* One button pair: full width and stacked on a phone, content width side by side from 600 px; same height. */
+.hero {
+  flex-direction: column;
+}
+
 .hero > :global(.btn) {
-  min-width: 200px;
+  width: 100%;
   min-height: 48px;
+  justify-content: center;
+}
+
+@media (min-width: 600px) {
+  .hero {
+    flex-direction: row;
+  }
+
+  .hero > :global(.btn) {
+    width: auto;
+    padding-inline: 28px;
+  }
 }
 
 .reach {
@@ -68,7 +85,12 @@
   min-width: 0;
 }
 
-/* Same white card as the booker, same height beside it; the last link rests at the foot. */
+/* The booking card fills its column, so it ends level with the card beside it. */
+.booker > * {
+  height: 100%;
+}
+
+/* Same white card as the booker, same height beside it; its content reads from the top. */
 .places {
   display: flex;
   flex-direction: column;
@@ -93,10 +115,6 @@
 .places article + article {
   padding-top: 32px;
   border-top: 1px solid var(--surface-2);
-}
-
-.places > :last-child {
-  margin-top: auto;
 }
 
 .place {

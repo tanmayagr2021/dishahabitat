@@ -17,7 +17,7 @@ export function ClosingCta() {
             Book a visit
           </a>
           <a className="btn btn-soft" href={company.sales.tel}>
-            Call {company.sales.display}
+            Call <span className="whitespace-nowrap">{company.sales.display}</span>
           </a>
         </div>
       </div>

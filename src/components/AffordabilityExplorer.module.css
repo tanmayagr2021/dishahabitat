@@ -432,16 +432,24 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Sideways scroll only if a very narrow phone needs it; the rows themselves are never a scroll box. */
 .tableWrap {
-  max-height: 20rem;
-  overflow: auto;
+  overflow-x: auto;
+}
+
+.more {
+  justify-self: start;
+  min-height: 44px;
+  margin-top: 8px;
+  border: 0;
+  background: none;
+  font-family: inherit;
 }
 
 .table {
   width: 100%;
-  min-width: 22rem;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -464,6 +472,21 @@
 
 .table th:first-child {
   text-align: left;
+}
+
+/* On a phone the four columns fit the card without scrolling sideways. */
+@media (max-width: 479px) {
+  .table th,
+  .table td {
+    padding-inline: 2px;
+  }
+}
+
+@media (min-width: 480px) {
+  .table {
+    min-width: 22rem;
+    font-size: 0.875rem;
+  }
 }
 
 .cta {

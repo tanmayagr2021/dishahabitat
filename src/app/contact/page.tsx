@@ -69,7 +69,7 @@ export default function ContactPage() {
         </ul>
       </Section>
 
-      <Section id="book" tone="surface" labelledBy="book-title">
+      <Section tone="surface" labelledBy="book-title">
         <div className="reveal">
           <SectionHead
             id="book-title"
@@ -78,7 +78,7 @@ export default function ContactPage() {
           />
         </div>
         <div className={s.layout}>
-          <div className={s.booker}>
+          <div id="book" className={s.booker}>
             <VisitBooker />
           </div>
           <aside className={s.places} aria-labelledby="find-title">

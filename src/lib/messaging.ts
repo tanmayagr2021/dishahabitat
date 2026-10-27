@@ -30,4 +30,4 @@ export function openComposer(detail: { channel?: Channel; topic?: string } = {})
   window.dispatchEvent(new CustomEvent("disha:compose", { detail }));
 }
 
-export { cleanPhoneInput, parsePhone, phoneHelp } from "./phone";
+export { cleanPhoneInput, parsePhone, phoneHelp, phoneHint, phonePlaceholder, shownPhone } from "./phone";
